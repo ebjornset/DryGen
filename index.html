@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-social@1/bin/bulma-social.min.css">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>DryGen | A .Net tool to generate other representations of a piece of knowledge from one representation.</title>
+<meta name="generator" content="Jekyll v4.2.2" />
+<meta property="og:title" content="DryGen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A .Net tool to generate other representations of a piece of knowledge from one representation." />
+<meta property="og:description" content="A .Net tool to generate other representations of a piece of knowledge from one representation." />
+<meta property="og:site_name" content="DryGen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="DryGen" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","description":"A .Net tool to generate other representations of a piece of knowledge from one representation.","headline":"DryGen","name":"DryGen","url":"/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                DryGen
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item is-active">Home</a>
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-medium  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2"></h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    
+<div class="content">
+    <h1 id="getting-started">Getting started</h1>
+
+<p>DryGen is a .Net tool to generate other representations of a piece of knowledge from one representation.</p>
+
+<p>It’s inspired by the <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">“Don’t repeat yourself” (DRY) prinsiple</a> “Every piece of knowledge must have a single, unambiguous, authoritative representation within a system”</p>
+
+<p>Beeing a .Net tool (with tool name <code class="language-plaintext highlighter-rouge">dry-gen</code>), you’ll need a <a href="https://dotnet.microsoft.com/en-us/download">.NET SDK</a> installed on your machine to use it. With a .Net SDK in place <code class="language-plaintext highlighter-rouge">dry-gen</code> is installed and used like any other <a href="https://aka.ms/global-tools">.Net tool</a>.</p>
+
+<p><strong>A little warning befor you start</strong>: As with all .Net tools, you run <code class="language-plaintext highlighter-rouge">dry-gen</code> as an application with full trust, so make sure you know exactly where you write your output files.</p>
+
+<h2 id="installation">Installation</h2>
+<h4 id="install-as-a-global-tool">Install as a global tool</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet tool install --global dry-gen
+</code></pre></div></div>
+<h4 id="install-as-a-local-tool">Install as a local tool</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new tool-manifest # if you haven't set up the .Net tools for this project already.
+dotnet tool install --local dry-gen
+</code></pre></div></div>
+<h2 id="use">Use</h2>
+<p>You invoke DryGen from the commandline as <code class="language-plaintext highlighter-rouge">dry-gen</code> when its installed as a global tool, and with <code class="language-plaintext highlighter-rouge">dotnet dry-gen</code> when its installed as a local tool.</p>
+
+<p>The general structure of the command line is <code class="language-plaintext highlighter-rouge">dry-gen &lt;verb&gt; [options]</code></p>
+
+<h5 id="verb">Verb</h5>
+<p>The verb defines your target and source representation. The supported verbs are using the pattern <code class="language-plaintext highlighter-rouge">&lt;target-representation&gt;-from-&lt;source-representation&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">mermaid-class-diagram-from-csharp</code>. Execute <code class="language-plaintext highlighter-rouge">dry-gen</code> without any parameters to get a list of the supported verbs.</p>
+
+<h5 id="options">Options</h5>
+<p>The options are spesific to each verb, and are used to fine tune the result representation. Most options uses the standard long notation of <code class="language-plaintext highlighter-rouge">--&lt;option-name&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">--input-file</code>. Some options also supports the shorthand notation of <code class="language-plaintext highlighter-rouge">-&lt;letter&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">-i</code> for input file, but we suggest you use the long format.  Execute <code class="language-plaintext highlighter-rouge">dry-gen &lt;verb&gt; --help</code> to get the list of options for a specific verb, e.g. <code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --help</code></p>
+
+<h5 id="going-further">Going further</h5>
+<p>Until we’ve got generation of documentation of each verb and its options from the commandline help up and running, you’ll need to use the commandline help to get going. (After all, we should live as we preach…)</p>
+
+</div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+        
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+        </div>
+    </div>
+</footer>
+
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts --></body>
+</html>
