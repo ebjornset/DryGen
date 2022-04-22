@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.22" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.22" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" Condition="'$(TargetFramework)' == 'net6.0'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.2" Condition="'$(TargetFramework)' == 'net6.0'" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />
+	</ItemGroup>
+
+</Project>

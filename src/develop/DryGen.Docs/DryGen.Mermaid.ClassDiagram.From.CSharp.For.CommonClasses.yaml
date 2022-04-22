@@ -1,0 +1,17 @@
+﻿output-file: ../../docs/DrygGen.Mermaid.ClassDiagram.From.CSharp.For.CommonClasses.mmd
+include-namespaces:
+- ^DryGen\.MermaidFromCSharp.*
+#include-typenames:
+#- .*ClassDiagram.*
+exclude-typenames: 
+- ^ErDiagram.*
+- ^ClassDiagram.*
+#name-replace-from: 
+#name-replace-to: 
+#exclude-propertynames:
+#- ^ExcludedProp$
+attribute-level: public
+method-level: all
+exclude-static-methods: true
+exclude-method-params: true
+direction: lr

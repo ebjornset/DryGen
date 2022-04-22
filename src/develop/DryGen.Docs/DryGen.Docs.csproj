@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DryGen\DryGen.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DryGen.Mermaid.ClassDiagram.From.CSharp.For.ClassDiagram.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DryGen.Mermaid.ClassDiagram.From.CSharp.For.CommonClasses.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DryGen.Mermaid.ClassDiagram.From.CSharp.For.EfCore.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DryGen.Mermaid.ClassDiagram.From.CSharp.For.ErDiagram.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

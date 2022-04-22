@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<ImplicitUsings>false</ImplicitUsings>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>dry-gen</ToolCommandName>
+		<PackageId>dry-gen</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="Properties\README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.8.0" />
+		<PackageReference Include="YamlDotNet" Version="11.2.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />
+		<ProjectReference Include="..\DryGen.MermaidFromCSharp.EfCore\DryGen.MermaidFromCSharp.EfCore.csproj" />
+	</ItemGroup>
+
+</Project>

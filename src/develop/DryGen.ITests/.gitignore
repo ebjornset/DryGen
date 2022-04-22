@@ -1,0 +1,2 @@
+# Ignore the local tool-manifest folder as this is only used to verify that we can install and run the .Net tool locally
+.config

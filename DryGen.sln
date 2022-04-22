@@ -1,0 +1,106 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32002.185
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen", "src\DryGen\DryGen.csproj", "{BDA7420D-4FD3-48E9-A1FA-4BF4447892E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.MermaidFromCSharp", "src\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj", "{63724739-A634-4C9D-B701-4523D99BA4FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.MermaidFromCSharp.EfCore", "src\DryGen.MermaidFromCSharp.EfCore\DryGen.MermaidFromCSharp.EfCore.csproj", "{24EE6839-AE91-4668-AA0D-07DB581C5225}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.UTests", "src\develop\DryGen.UTests\DryGen.UTests.csproj", "{BEF6D468-7798-4BEF-9AAD-2A83608EF2F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{032040CA-2A5F-4F54-9C26-DEED72309B05}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		build.cmd = build.cmd
+		build.ps1 = build.ps1
+		build.sh = build.sh
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		GitVersion.yml = GitVersion.yml
+		global.json = global.json
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build", "build\Build.csproj", "{847415D2-3030-46C0-8245-C5E86059B4BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{B78CA97F-3879-4D51-8F74-8D4BBD7E82AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{2B23AFDF-0304-4DC2-BD8F-DA2A1C5F0726}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\pr.yml = .github\workflows\pr.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Docs", "src\develop\DryGen.Docs\DryGen.Docs.csproj", "{0A437C8D-E321-4AA2-8195-AD259BF63C7F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "develop", "develop", "{729F6B2E-E6FC-43A3-A614-6E6E59B24F25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuke", ".nuke", "{99CB8B94-976D-41E1-9E78-6433AEC9AE37}"
+	ProjectSection(SolutionItems) = preProject
+		.nuke\build.schema.json = .nuke\build.schema.json
+		.nuke\parameters.json = .nuke\parameters.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryGen.ITests", "src\develop\DryGen.ITests\DryGen.ITests.csproj", "{AC8B8CD3-5397-46C7-B518-37016926EEFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryGen.DevUtils", "src\develop\DryGen.DevUtils\DryGen.DevUtils.csproj", "{DC273CC1-2EED-45A9-88DB-7B4E853E7186}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDA7420D-4FD3-48E9-A1FA-4BF4447892E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA7420D-4FD3-48E9-A1FA-4BF4447892E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA7420D-4FD3-48E9-A1FA-4BF4447892E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA7420D-4FD3-48E9-A1FA-4BF4447892E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63724739-A634-4C9D-B701-4523D99BA4FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63724739-A634-4C9D-B701-4523D99BA4FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63724739-A634-4C9D-B701-4523D99BA4FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63724739-A634-4C9D-B701-4523D99BA4FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24EE6839-AE91-4668-AA0D-07DB581C5225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24EE6839-AE91-4668-AA0D-07DB581C5225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24EE6839-AE91-4668-AA0D-07DB581C5225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24EE6839-AE91-4668-AA0D-07DB581C5225}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF6D468-7798-4BEF-9AAD-2A83608EF2F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF6D468-7798-4BEF-9AAD-2A83608EF2F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF6D468-7798-4BEF-9AAD-2A83608EF2F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF6D468-7798-4BEF-9AAD-2A83608EF2F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{847415D2-3030-46C0-8245-C5E86059B4BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{847415D2-3030-46C0-8245-C5E86059B4BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A437C8D-E321-4AA2-8195-AD259BF63C7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A437C8D-E321-4AA2-8195-AD259BF63C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A437C8D-E321-4AA2-8195-AD259BF63C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A437C8D-E321-4AA2-8195-AD259BF63C7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC8B8CD3-5397-46C7-B518-37016926EEFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC8B8CD3-5397-46C7-B518-37016926EEFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC8B8CD3-5397-46C7-B518-37016926EEFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC8B8CD3-5397-46C7-B518-37016926EEFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC273CC1-2EED-45A9-88DB-7B4E853E7186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC273CC1-2EED-45A9-88DB-7B4E853E7186}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC273CC1-2EED-45A9-88DB-7B4E853E7186}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC273CC1-2EED-45A9-88DB-7B4E853E7186}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BEF6D468-7798-4BEF-9AAD-2A83608EF2F6} = {729F6B2E-E6FC-43A3-A614-6E6E59B24F25}
+		{847415D2-3030-46C0-8245-C5E86059B4BF} = {729F6B2E-E6FC-43A3-A614-6E6E59B24F25}
+		{B78CA97F-3879-4D51-8F74-8D4BBD7E82AE} = {032040CA-2A5F-4F54-9C26-DEED72309B05}
+		{2B23AFDF-0304-4DC2-BD8F-DA2A1C5F0726} = {B78CA97F-3879-4D51-8F74-8D4BBD7E82AE}
+		{0A437C8D-E321-4AA2-8195-AD259BF63C7F} = {729F6B2E-E6FC-43A3-A614-6E6E59B24F25}
+		{99CB8B94-976D-41E1-9E78-6433AEC9AE37} = {032040CA-2A5F-4F54-9C26-DEED72309B05}
+		{AC8B8CD3-5397-46C7-B518-37016926EEFF} = {729F6B2E-E6FC-43A3-A614-6E6E59B24F25}
+		{DC273CC1-2EED-45A9-88DB-7B4E853E7186} = {729F6B2E-E6FC-43A3-A614-6E6E59B24F25}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1F12F60A-0463-4E15-B974-BBE5771B39A0}
+	EndGlobalSection
+EndGlobal

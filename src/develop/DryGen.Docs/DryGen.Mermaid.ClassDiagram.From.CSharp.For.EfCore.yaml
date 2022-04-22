@@ -1,0 +1,16 @@
+﻿output-file: ../../docs/DrygGen.Mermaid.ClassDiagram.From.CSharp.For.EfCore.mmd
+include-namespaces:
+- ^DryGen\.MermaidFromCSharp\.EfCore.*
+#include-typenames:
+#- .*ClassDiagram.*
+#exclude-typenames: 
+#- ^ExcludedOne$ 
+#name-replace-from: 
+#name-replace-to: 
+#exclude-propertynames:
+#- ^ExcludedProp$
+attribute-level: all
+#method-level: public
+exclude-static-methods: true
+exclude-method-params: true
+direction: bt
