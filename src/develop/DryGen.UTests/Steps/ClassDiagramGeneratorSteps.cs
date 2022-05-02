@@ -13,7 +13,7 @@ namespace DryGen.UTests.Steps
         private readonly TypeFiltersContext typeFiltersContext;
         private readonly PropertyFiltersContext propertyFiltersContext;
         private readonly INameRewriter nameRewriter;
-        private readonly MermaidCodeContext mermaidCodeContext;
+        private readonly GeneratedRepresentationContext generatedRepresentationContext;
         private readonly ClassDiagramGenerator generator;
 
         public ClassDiagramGeneratorSteps(
@@ -22,20 +22,20 @@ namespace DryGen.UTests.Steps
             TypeFiltersContext typeFiltersContext,
             PropertyFiltersContext propertyFiltersContext,
             INameRewriter nameRewriter,
-            MermaidCodeContext mermaidCodeContext)
+            GeneratedRepresentationContext generatedRepresentationContext)
         {
             this.assemblyContext = assemblyContext;
             this.typeFiltersContext = typeFiltersContext;
             this.propertyFiltersContext = propertyFiltersContext;
             this.nameRewriter = nameRewriter;
-            this.mermaidCodeContext = mermaidCodeContext;
+            this.generatedRepresentationContext = generatedRepresentationContext;
             this.generator = generator;
         }
 
         [When(@"I generate a Class diagram")]
         public void WhenIGenerateAClassDiagram()
         {
-            mermaidCodeContext.MermaidCode = generator.Generate(
+            generatedRepresentationContext.GeneratedRepresentation = generator.Generate(
                 assemblyContext.Assembly,
                 typeFiltersContext.Filters,
                 propertyFiltersContext.Filters,

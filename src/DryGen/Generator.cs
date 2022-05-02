@@ -2,7 +2,7 @@
 using CommandLine.Text;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
-using DryGen.MermaidFromCSharp.EfCore;
+using DryGen.MermaidFromEfCore;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using DryGen.MermaidFromCSharp.NameRewriters;
 using DryGen.MermaidFromCSharp.PropertyFilters;
@@ -15,6 +15,7 @@ using System.Linq;
 using System.Reflection;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using DryGen.CSharpFromJsonSchema;
 
 namespace DryGen
 {
@@ -36,11 +37,12 @@ namespace DryGen
 
         public int Run(string[] args)
         {
-            var parserResult = parser.ParseArguments<MermaidErDiagramFromCSharpOptions, MermaidErDiagramFromEfCoreOptions, MermaidClassDiagramFromCSharpOptions>(args);
+            var parserResult = parser.ParseArguments<MermaidErDiagramFromCSharpOptions, MermaidErDiagramFromEfCoreOptions, MermaidClassDiagramFromCSharpOptions, CSharpFromJsonSchemaOptions>(args);
             return parserResult.MapResult(
               (MermaidErDiagramFromCSharpOptions options) => GenerateErDiagramFromCSharp(options, args),
               (MermaidErDiagramFromEfCoreOptions options) => GenerateErDiagramFromEfCore(options, args),
               (MermaidClassDiagramFromCSharpOptions options) => GenerateClassDiagramFropmCSharp(options, args),
+              (CSharpFromJsonSchemaOptions options) => GenerateCSharpFromJsonSchema(options, args),
               errors => DisplayHelp(parserResult));
         }
 
@@ -142,7 +144,7 @@ namespace DryGen
             {
                 outWriter.WriteLine($"Generating mermaid diagram to file '{cSharpOptions.OutputFile}'");
             }
-            var assembly = Assembly.LoadFrom(cSharpOptions.AssemblyFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
+            var assembly = Assembly.LoadFrom(cSharpOptions.InputFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
             var namespaceFilters = cSharpOptions.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
             var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };
             if (cSharpOptions.IncludeTypeNames?.Any() == true)
@@ -158,8 +160,24 @@ namespace DryGen
             var excludePropertyNamesFilters = cSharpOptions.ExcludePropertyNames?.Select(x => new ExcludePropertyNamePropertyFilter(x)).ToArray() ?? Array.Empty<IPropertyFilter>();
             var nameRewriter = new ReplaceNameRewriter(cSharpOptions.NameReplaceFrom ?? string.Empty, cSharpOptions.NameReplaceTo ?? string.Empty);
             var mermaid = diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter);
-            WriteMermaidToConsoleOrFile(cSharpOptions, mermaid);
+            WriteGeneratedRepresentationToConsoleOrFile(cSharpOptions, mermaid);
             return 0;
+        }
+
+        private int GenerateCSharpFromJsonSchema(CSharpFromJsonSchemaOptions options, string[] args)
+        {
+            return ExecureWithExceptionAndHelpDisplay(options, options =>
+            {
+                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
+                if (!string.IsNullOrEmpty(options.OutputFile))
+                {
+                    outWriter.WriteLine($"Generating C# code to file '{options.OutputFile}'");
+                }
+                var generator = new CSharpFromJsonSchemaGenerator();
+                var cSharpCode = generator.Generate(options.InputFile, options.SchemaFileFormat).Result;
+                WriteGeneratedRepresentationToConsoleOrFile(options, cSharpCode);
+                return 0;
+            });
         }
 
         private TOptions GetOptionsFromFileWithCommandlineOptionsAsOverrides<TOptions>(TOptions commandlineOptions, string[] args) where TOptions : BaseOptions
@@ -206,11 +224,11 @@ namespace DryGen
             }
         }
 
-        private void WriteMermaidToConsoleOrFile(BaseOptions options, string mermaid)
+        private void WriteGeneratedRepresentationToConsoleOrFile(BaseOptions options, string generatedRepresentation)
         {
             if (string.IsNullOrEmpty(options.OutputFile))
             {
-                outWriter.Write(mermaid);
+                outWriter.Write(generatedRepresentation);
             }
             else
             {
@@ -224,7 +242,7 @@ namespace DryGen
                 {
                     Directory.CreateDirectory(mermaidDirectory);
                 }
-                File.WriteAllText(outputFile, mermaid);
+                File.WriteAllText(outputFile, generatedRepresentation);
             }
         }
 

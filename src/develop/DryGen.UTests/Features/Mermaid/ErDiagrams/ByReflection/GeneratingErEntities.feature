@@ -15,7 +15,7 @@ Scenario: Generates ER entities for all public classes
 		}
 		"""
 	When I generate an ER diagram using reflection
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Customer
@@ -34,7 +34,7 @@ Scenario: Excludes inner classes from ER diagram
 		}
 		"""
 	When I generate an ER diagram using reflection
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Customer

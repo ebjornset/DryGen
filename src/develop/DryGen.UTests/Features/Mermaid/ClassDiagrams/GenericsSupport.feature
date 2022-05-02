@@ -17,7 +17,7 @@ Scenario: Generates class for generic type
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 	# Mermaid only support one level of generics, so the <> in any nested generic types are replaced with "Of" as a workaround
 		"""
 		classDiagram
@@ -45,7 +45,7 @@ Scenario: Generates dependency for all generic constructor arguments with known 
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -74,7 +74,7 @@ Scenario: Generates data types for all generic properties
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 	# Mermaid only support one level of generics, so the <> in any nested generic types are replaced with "Of" as a workaround
 		"""
 		classDiagram
@@ -96,7 +96,7 @@ Scenario: Generates data types for all generic method params and return types
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 	# Mermaid only support one level of generics, so the <> in any nested generic types are replaced with "Of" as a workaround
 		"""
 		classDiagram

@@ -12,7 +12,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="Properties\README.md" Pack="true" PackagePath="\"/>
+		<None Include="Properties\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -21,8 +21,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj" />
 		<ProjectReference Include="..\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />
-		<ProjectReference Include="..\DryGen.MermaidFromCSharp.EfCore\DryGen.MermaidFromCSharp.EfCore.csproj" />
+		<ProjectReference Include="..\DryGen.MermaidFromEfCore\DryGen.MermaidFromEfCore.csproj" />
 	</ItemGroup>
 
 </Project>

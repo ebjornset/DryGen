@@ -33,7 +33,7 @@ Scenario: Should generate Er diagram from erdiagram command
 		| Arg                            |
 		| mermaid-er-diagram-from-csharp |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		erDiagram
 			Customer {
@@ -52,7 +52,7 @@ Scenario: Should generate Er diagram with type inclusion from argument
 		| --include-typenames            |
 		| ^Customer$                     |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		erDiagram
 			Customer {
@@ -69,7 +69,7 @@ Scenario: Should generate Er diagram with attributes excluded from argument
 		| --exclude-all-attributes       |
 		| true                           |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		erDiagram
 			Customer
@@ -85,7 +85,7 @@ Scenario: Should generate Er diagram with attribute key type excluded from argum
 		| --exclude-attribute-keytypes   |
 		| true                           |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		erDiagram
 			Customer {
@@ -104,7 +104,7 @@ Scenario: Should generate Er diagram with attribute comment excluded from argume
 		| --exclude-attribute-comments   |
 		| true                           |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		erDiagram
 			Customer {
@@ -159,7 +159,7 @@ Scenario: Should generate Er diagram with foreign key attributes excluded from a
 		| --exclude-foreignkey-attributes |
 		| true                            |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		erDiagram
 			A {
@@ -183,7 +183,7 @@ Scenario: Should generate Er diagram with attribute excluded by property name fr
 		| --exclude-propertynames        |
 		| Nullable.*                     |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		erDiagram
 			Customer {
@@ -202,7 +202,7 @@ Scenario: Should generate Er diagram with relationships excluded from argument
 		| --exclude-all-relationships    |
 		| true                           |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		erDiagram
 			Customer {

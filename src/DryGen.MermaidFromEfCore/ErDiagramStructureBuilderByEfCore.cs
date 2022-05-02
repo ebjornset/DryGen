@@ -1,4 +1,5 @@
-﻿using DryGen.MermaidFromCSharp.ErDiagram;
+﻿using DryGen.MermaidFromCSharp;
+using DryGen.MermaidFromCSharp.ErDiagram;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
@@ -7,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace DryGen.MermaidFromCSharp.EfCore
+namespace DryGen.MermaidFromEfCore
 {
     public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
     {
@@ -16,7 +17,7 @@ namespace DryGen.MermaidFromCSharp.EfCore
             var efCoreEntityTypes = new List<IEntityType>();
             var dbContextTypesFromAssembly = assembly
                 .GetTypes()
-                .Where(t => typeof(DbContext).IsAssignableFrom(t) && ! t.IsAbstract)
+                .Where(t => typeof(DbContext).IsAssignableFrom(t) && !t.IsAbstract)
                 .ToList();
             foreach (var dbContextType in dbContextTypesFromAssembly)
             {
@@ -154,7 +155,7 @@ namespace DryGen.MermaidFromCSharp.EfCore
         {
             public bool Equals(IEntityType? x, IEntityType? y)
             {
-                return (x?.ClrType == y?.ClrType) == true;
+                return x?.ClrType == y?.ClrType == true;
             }
 
             public int GetHashCode(IEntityType? obj)

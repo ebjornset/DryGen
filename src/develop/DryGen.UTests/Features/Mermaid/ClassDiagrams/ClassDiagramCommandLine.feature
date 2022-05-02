@@ -55,7 +55,7 @@ Scenario: Should generate Class diagram from classdiagram command
 		| --method-level                    |
 		| all                               |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -97,7 +97,7 @@ Scenario: Should generate Class diagram with type inclusion from argument
 		| --include-typenames               |
 		| ^Customer$                        |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Customer {
@@ -116,7 +116,7 @@ Scenario: Should generate Class diagram with all attributes and methods excluded
 		| --method-level                    |
 		| none                              |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -139,7 +139,7 @@ Scenario: Should generate Class diagram with private, protected and internal att
 		| --method-level                    |
 		| none                              |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -169,7 +169,7 @@ Scenario: Should generate Class diagram with private and protected attributes ex
 		| --method-level                    |
 		| none                              |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -201,7 +201,7 @@ Scenario: Should generate Class diagram with private attributes excluded from ar
 		| --method-level                    |
 		| none                              |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -235,7 +235,7 @@ Scenario: Should generate Class diagram with attributes excluded by property nam
 		| --method-level                    |
 		| none                              |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -261,7 +261,7 @@ Scenario: Should generate Class diagram with private, protected and internal met
 		| --method-level                    |
 		| public                            |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -286,7 +286,7 @@ Scenario: Should generate Class diagram with private and protected methods exclu
 		| --method-level                    |
 		| internal                          |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -313,7 +313,7 @@ Scenario: Should generate Class diagram with private methods excluded from argum
 		| --method-level                    |
 		| protected                         |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -344,7 +344,7 @@ Scenario: Should generate Class diagram with direction from argument
 		| --method-level                    |
 		| none                              |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			direction <Direction>
@@ -376,7 +376,7 @@ Scenario: Should exclude static attributes from Class diagram from argument
 		| --method-level                    |
 		| none                              |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -408,7 +408,7 @@ Scenario: Should exclude static methods from Class diagram from argument
 		| --exclude-static-methods          |
 		| true                              |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class Color {
@@ -445,7 +445,7 @@ Scenario: Should exclude methods parameters from Class diagram from argument
 		| --exclude-method-params           |
 		| true                              |
 	Then I should get exit code '0'
-	And I should get this Mermaid code file
+	And I should get this generated representation file
 		"""
 		classDiagram
 			class A {

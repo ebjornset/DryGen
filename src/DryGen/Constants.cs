@@ -18,5 +18,10 @@
         {
             public const string Verb = "mermaid-er-diagram-from-efcore";
         }
+
+        public static class CSharpFromJsonSchema
+        {
+            public const string Verb = "csharp-from-json-schema";
+        }
     }
 }

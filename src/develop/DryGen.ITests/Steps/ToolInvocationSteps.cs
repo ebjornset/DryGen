@@ -6,12 +6,12 @@ using System.IO;
 using System.Linq;
 using TechTalk.SpecFlow;
 
-namespace DryGen.UTests.Steps
+namespace DryGen.ITests.Steps
 {
     [Binding]
     public sealed class ToolInvocationSteps
     {
-        private readonly AssemblyContext assemblyContext;
+        private readonly InputFileContext inputFileContext;
         private readonly OptionsFileContext optionsFileContext;
         private int exitCode = 1;
         private string? commandArgs;
@@ -19,11 +19,11 @@ namespace DryGen.UTests.Steps
         private string processOutput = string.Empty;
 
         public ToolInvocationSteps(
-            AssemblyContext assemblyContext,
+            InputFileContext inputFileContext,
             OptionsFileContext optionsFileContext
             )
         {
-            this.assemblyContext = assemblyContext;
+            this.inputFileContext = inputFileContext;
             this.optionsFileContext = optionsFileContext;
         }
 
@@ -31,10 +31,10 @@ namespace DryGen.UTests.Steps
         public void WhenICallTheToolWithThisCommandLineArguments(Table table)
         {
             var argList = table.Rows.Select(x => x["Arg"]).ToList();
-            if (assemblyContext.HasAssemblyFileName)
+            if (inputFileContext.HasInputFileName)
             {
                 argList.Add("-i");
-                argList.Add(assemblyContext.AssemblyFileName);
+                argList.Add(inputFileContext.InputFileName);
             }
             if (optionsFileContext.HasOptionsFile)
             {

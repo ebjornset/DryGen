@@ -31,7 +31,8 @@ namespace DryGen.UTests.Steps
         [Then(@"console out should contain the text")]
         public void ThenConsoleOutShouldContainTheText(string multilineText)
         {
-            var outputs = consoleContext.OutWriter.ToString();
+            var outputs = consoleContext.OutWriter.ToString()?.Replace("\r\n", "\n");
+            multilineText = multilineText.Replace("\r\n", "\n");
             outputs.Should().Be(multilineText);
         }
     }

@@ -24,7 +24,7 @@ Scenario: Generates ER entities for IEntity in the DbContexts Model
 		}
 		"""
 	When I generate an ER diagram using EF Core
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Customer
@@ -57,7 +57,7 @@ Scenario: Generates ER entities for an IEntity used in several DBContexts only o
 		}
 		"""
 	When I generate an ER diagram using EF Core
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Customer
@@ -88,7 +88,7 @@ Scenario: Generates ER entities for an IEntity from inherited DBContext only onc
 		}
 		"""
 	When I generate an ER diagram using EF Core
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Customer

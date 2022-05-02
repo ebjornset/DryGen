@@ -21,5 +21,13 @@ namespace DryGen
         [YamlMember(Alias = "exclude-propertynames", ApplyNamingConventions = false)]
         [Option("exclude-propertynames", Separator = ';', HelpText = "A list of regular expressions for property names to exclude from each type.")]
         public IEnumerable<string>? ExcludePropertyNames { get; set; }
+
+        [YamlMember(Alias = "name-replace-from", ApplyNamingConventions = false)]
+        [Option("name-replace-from", HelpText = "A string to replace in all class/entity names.")]
+        public string? NameReplaceFrom { get; set; }
+
+        [YamlMember(Alias = "name-replace-to", ApplyNamingConventions = false)]
+        [Option("name-replace-to", HelpText = "The string to replace with in all class/entity names.")]
+        public string? NameReplaceTo { get; set; }
     }
 }

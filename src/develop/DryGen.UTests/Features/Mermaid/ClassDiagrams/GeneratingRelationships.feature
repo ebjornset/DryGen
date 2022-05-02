@@ -17,7 +17,7 @@ Scenario: Generates realization for classes implemeting interfaces
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class BaseOrder {
@@ -47,7 +47,7 @@ Scenario: Generates inheritance for interfaces extending other interfaces
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class IDeliverable {
@@ -75,7 +75,7 @@ Scenario: Generates inheritance for subclasses
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -108,7 +108,7 @@ Scenario: Generates associations for scalar instance properties with a getter re
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -141,7 +141,7 @@ Scenario: Generates composition for instance collection properties with a getter
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Customer {
@@ -180,7 +180,7 @@ Scenario: Generates aggregation for instance collection properties with bidirect
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Customer {
@@ -227,7 +227,7 @@ Scenario: Generates dependency for scalar constructor parameters that are not an
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -268,7 +268,7 @@ Scenario: Generates relationships for nullable scalar properties to other diagra
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -302,7 +302,7 @@ Scenario: Generates one relationship for bidirectional scalar properties between
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -334,7 +334,7 @@ Scenario: Generates relationships for nullable collection properties to other di
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -363,7 +363,7 @@ Scenario: Generates relationships to enums
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Color {
@@ -393,7 +393,7 @@ Scenario: Generates undefined to one or zero for optional scalar unidirectional 
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -419,7 +419,7 @@ Scenario: Generates one or zero to one or zero for non required scalar bidirecti
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -446,7 +446,7 @@ Scenario: Generates undefined to exactly one for scalar non required scalar unid
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -475,7 +475,7 @@ Scenario: Generates exactly one to exactly one for scalar non required scalar bi
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -501,7 +501,7 @@ Scenario: Generates undefined to zero or more composition for collection unidire
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -531,7 +531,7 @@ Scenario: Generates zero or one to zero or more aggregation for collection to op
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -567,7 +567,7 @@ Scenario: Generates exactly one to zero or more aggregation for collection to ma
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -604,7 +604,7 @@ Scenario: Generates scalar relationship with JsonProperty attribute, with Requir
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -649,7 +649,7 @@ Scenario: Generates ER relations with labels when the property name and type nam
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Address {
