@@ -61,9 +61,9 @@ public class SonarCloudGitHubActionsAttribute : DotNetGitHubActionsAttribute
         var job = base.GetJobs(image, relevantTargets);
         var newSteps = new List<GitHubActionsStep>(job.Steps);
         newSteps.Insert(newSteps.Count - 2, new GitHubActionsSetupJavaStep());
-        //newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudPackagesStep());
-        //newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudScannerStep());
         newSteps.Insert(newSteps.Count - 2, new GitHubActionsInstallSonarCloudScannerStep());
+        newSteps.Insert(newSteps.Count - 2, new GitHubActionsBeginSonarCloudScanStep());
+        newSteps.Add(new GitHubActionsEndSonarCloudScanStep());
         job.Steps = newSteps.ToArray();
         return job;
     }
@@ -77,8 +77,8 @@ public class ReleaseGitHubActionsAttribute : SonarCloudGitHubActionsAttribute
     {
         var job = base.GetJobs(image, relevantTargets);
         var newSteps = new List<GitHubActionsStep>(job.Steps);
-        newSteps.Insert(newSteps.Count - 2, new GitHubActionsSetupRubyStep());
-        newSteps.Insert(newSteps.Count - 2, new GitHubActionsGenerateDocsWithJekyllStep());
+        newSteps.Insert(newSteps.Count - 4, new GitHubActionsSetupRubyStep());
+        newSteps.Add(new GitHubActionsGenerateDocsWithJekyllStep());
         newSteps.Add(new GitHubActionsPrepareGeneratedDocsForDeploymentOnBranchGhPagesStep());
         job.Steps = newSteps.ToArray();
         return job;
@@ -145,40 +145,49 @@ public class GitHubActionsCacheSonarCloudPackagesStep : GitHubActionsStep
     }
 }
 
-public class GitHubActionsCacheSonarCloudScannerStep : GitHubActionsStep
+public class GitHubActionsInstallSonarCloudScannerStep : GitHubActionsStep
 {
     public override void Write(CustomFileWriter writer)
     {
-        writer.WriteLine("- name: Cache SonarCloud scanner");
-        writer.WriteLine("  id: cache-sonar-scanner");
-        writer.WriteLine("  uses: actions/cache@v2");
+        writer.WriteLine("- name: Install/Update SonarCloud scanner");
         using (writer.Indent())
         {
-            writer.WriteLine("with:");
+            writer.WriteLine("run:");
             using (writer.Indent())
             {
-                writer.WriteLine(@"path: ~/.sonar/scanner");
-                writer.WriteLine("key: ${{ runner.os }}-sonar-scanner");
-                writer.WriteLine("restore-keys: ${{ runner.os }}-sonar-scanner");
+                writer.WriteLine("dotnet tool update dotnet-sonarscanner --global");
             }
         }
     }
 }
 
-public class GitHubActionsInstallSonarCloudScannerStep : GitHubActionsStep
+public class GitHubActionsBeginSonarCloudScanStep : GitHubActionsStep
 {
     public override void Write(CustomFileWriter writer)
     {
-        writer.WriteLine("- name: Install SonarCloud scanner");
-        writer.WriteLine("  if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'");
-        writer.WriteLine("  shell: powershell");
+        writer.WriteLine("- name: Begin SonarCloud scan");
         using (writer.Indent())
         {
-            writer.WriteLine("run: |");
+            writer.WriteLine("run:");
             using (writer.Indent())
             {
-                writer.WriteLine(@"New-Item -Path ./.sonar/scanner -ItemType Directory");
-                writer.WriteLine(@"dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner");
+                writer.WriteLine("dotnet-sonarscanner begin /k:\"ebjornset_DryGen\" /o:\"ebjornset\" /d:sonar.login=\"${{ secrets.SONAR_TOKEN }}\" /d:sonar.host.url=\"https://sonarcloud.io\"");
+            }
+        }
+    }
+}
+
+public class GitHubActionsEndSonarCloudScanStep : GitHubActionsStep
+{
+    public override void Write(CustomFileWriter writer)
+    {
+        writer.WriteLine("- name: End SonarCloud scan");
+        using (writer.Indent())
+        {
+            writer.WriteLine("run:");
+            using (writer.Indent())
+            {
+                writer.WriteLine("dotnet-sonarscanner end /d:sonar.login=\"${{ secrets.SONAR_TOKEN }}\"");
             }
         }
     }
