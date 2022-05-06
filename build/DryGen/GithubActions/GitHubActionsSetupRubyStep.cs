@@ -8,9 +8,9 @@ namespace DryGen.GithubActions
         public override void Write(CustomFileWriter writer)
         {
             writer.WriteLine("- name: Setup Ruby v 3.1 (for docs generation with Jekyll)");
-            writer.WriteLine("  uses: ruby/setup-ruby@v1");
             using (writer.Indent())
             {
+                writer.WriteLine("uses: ruby/setup-ruby@v1");
                 writer.WriteLine("with:");
                 using (writer.Indent())
                 {

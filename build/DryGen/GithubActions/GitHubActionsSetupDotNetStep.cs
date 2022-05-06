@@ -15,9 +15,9 @@ namespace DryGen.GithubActions
         public override void Write(CustomFileWriter writer)
         {
             writer.WriteLine($"- name: Setup .Net {Version}");
-            writer.WriteLine("  uses: actions/setup-dotnet@v1");
             using (writer.Indent())
             {
+                writer.WriteLine("uses: actions/setup-dotnet@v1");
                 writer.WriteLine("with:");
                 using (writer.Indent())
                 {

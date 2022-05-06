@@ -8,9 +8,9 @@ namespace DryGen.GithubActions
         public override void Write(CustomFileWriter writer)
         {
             writer.WriteLine("- name: Setup JDK v 11 (for SonarCloud)");
-            writer.WriteLine("  uses: actions/setup-java@v1");
             using (writer.Indent())
             {
+                writer.WriteLine("uses: actions/setup-java@v1");
                 writer.WriteLine("with:");
                 using (writer.Indent())
                 {

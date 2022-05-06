@@ -15,6 +15,11 @@ namespace DryGen.GithubActions
                 {
                     writer.WriteLine("dotnet-sonarscanner end /d:sonar.login=\"${{ secrets.SONAR_TOKEN }}\"");
                 }
+                writer.WriteLine("env:");
+                using (writer.Indent())
+                {
+                    writer.WriteLine("GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}");
+                }
             }
         }
     }
