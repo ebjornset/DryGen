@@ -37,12 +37,9 @@ namespace DryGen.MermaidFromCSharp
             }
             if (replaceEntityNameAtEndOfPropertyName)
             {
-                foreach (var endCandidate in endCandidates)
+                foreach (var endCandidate in endCandidates.Where(endCandidate => propertyName.EndsWith(endCandidate)))
                 {
-                    if (propertyName.EndsWith(endCandidate))
-                    {
-                        propertyName = propertyName.Substring(0, propertyName.Length - endCandidate.Length);
-                    }
+                    propertyName = propertyName.Substring(0, propertyName.Length - endCandidate.Length);
                 }
             }
             // Rexex code from https://dotnetfiddle.net/VBuoy7

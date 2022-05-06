@@ -124,9 +124,8 @@ namespace DryGen.MermaidFromEfCore
             }
             var ctorParameters = new object?[contextCtor.GetParameters().Length];
             var offset = 0;
-            foreach (var parameterInfo in contextCtor.GetParameters())
+            foreach (var parameterType in contextCtor.GetParameters().Select(parameterInfo => parameterInfo.ParameterType))
             {
-                var parameterType = parameterInfo.ParameterType;
                 if (dbContextOptionsType.IsAssignableFrom(parameterType))
                 {
                     ctorParameters[offset] = options;

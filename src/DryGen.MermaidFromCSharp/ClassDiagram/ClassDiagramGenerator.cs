@@ -141,17 +141,14 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
 
         private static void GenerateClassInheritanceOrRealizationForInterfaces(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
         {
-            foreach (var directInterface in classDiagramClass.Type.GetDirectInterfaces())
+            foreach (var directInterface in classDiagramClass.Type.GetDirectInterfaces().Where(directInterface => classLookup.ContainsKey(directInterface)))
             {
-                if (classLookup.ContainsKey(directInterface))
-                {
-                    var relationshipType = classDiagramClass.Type.IsInterface ? ClassDiagramRelationshipType.Inheritance : ClassDiagramRelationshipType.Realization;
-                    classDiagramClass.AddRelationship(
-                        ClassDiagramRelationshipCardinality.Unspecified,
-                        relationshipType,
-                        ClassDiagramRelationshipCardinality.Unspecified,
-                        classLookup[directInterface], string.Empty, string.Empty);
-                }
+                var relationshipType = classDiagramClass.Type.IsInterface ? ClassDiagramRelationshipType.Inheritance : ClassDiagramRelationshipType.Realization;
+                classDiagramClass.AddRelationship(
+                    ClassDiagramRelationshipCardinality.Unspecified,
+                    relationshipType,
+                    ClassDiagramRelationshipCardinality.Unspecified,
+                    classLookup[directInterface], string.Empty, string.Empty);
             }
         }
 
@@ -175,9 +172,8 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                 BindingFlags.NonPublic |
                 BindingFlags.DeclaredOnly))
             {
-                foreach (var parameter in constructor.GetParameters())
+                foreach (var parameterType in constructor.GetParameters().Select(parameter => parameter.ParameterType))
                 {
-                    var parameterType = parameter.ParameterType;
                     AddDependency(classLookup, classDiagramClass, parameterType);
                 }
             }
@@ -219,29 +215,26 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             {
                 bindingFlags |= BindingFlags.NonPublic;
             }
-            foreach (var property in classDiagramClass.Type.GetProperties(bindingFlags).Where(p => attributeFilters.All(f => f.Accepts(p))))
+            foreach (var property in classDiagramClass.Type.GetProperties(bindingFlags).Where(p => attributeFilters.All(f => f.Accepts(p))).Where(property => IsAttributePropertyType(classLookup, property)))
             {
-                if (IsAttributePropertyType(classLookup, property))
+                var attributeType = GetDataType(property.PropertyType);
+                var attributeName = property.Name;
+                var getAccessor = property.GetAccessors(true)[0];
+                if (getAccessor.IsPrivate && attributeLevel != ClassDiagramAttributeLevel.All)
                 {
-                    var attributeType = GetDataType(property.PropertyType);
-                    var attributeName = property.Name;
-                    var getAccessor = property.GetAccessors(true)[0];
-                    if (getAccessor.IsPrivate && attributeLevel != ClassDiagramAttributeLevel.All)
-                    {
-                        continue;
-                    }
-                    if (getAccessor.IsFamily && (attributeLevel == ClassDiagramAttributeLevel.Public || attributeLevel == ClassDiagramAttributeLevel.Internal))
-                    {
-                        continue;
-                    }
-                    if (getAccessor.IsAssembly && attributeLevel == ClassDiagramAttributeLevel.Public)
-                    {
-                        continue;
-                    }
-                    var visibility = GetVisibility(getAccessor);
-                    var isStatic = getAccessor.IsStatic;
-                    classDiagramClass.AddAttribute(new ClassDiagramAttribute(attributeType, attributeName, visibility, isStatic));
+                    continue;
                 }
+                if (getAccessor.IsFamily && (attributeLevel == ClassDiagramAttributeLevel.Public || attributeLevel == ClassDiagramAttributeLevel.Internal))
+                {
+                    continue;
+                }
+                if (getAccessor.IsAssembly && attributeLevel == ClassDiagramAttributeLevel.Public)
+                {
+                    continue;
+                }
+                var visibility = GetVisibility(getAccessor);
+                var isStatic = getAccessor.IsStatic;
+                classDiagramClass.AddAttribute(new ClassDiagramAttribute(attributeType, attributeName, visibility, isStatic));
             }
         }
 
