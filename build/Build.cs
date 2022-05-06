@@ -109,7 +109,7 @@ public partial class Build : NukeBuild
             DotNetTest(c => c
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
-                .SetDataCollector("Code Coverage")
+                .SetDataCollector("XPlat Code Coverage")
                 .CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
                     settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
         });
