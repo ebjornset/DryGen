@@ -5,7 +5,7 @@
 #
 #     - To turn off auto-generation set:
 #
-#         [CustomGitHubActions (AutoGenerate = false)]
+#         [SonarCloudGitHubActions (AutoGenerate = false)]
 #
 #     - To trigger manual generation invoke:
 #
@@ -40,6 +40,23 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.*
+      - name: Setup JDK v 11 (for SonarCloud)
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v2
+        with:
+          path: ~/sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v2
+        with:
+          path: ~/.sonar/scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
       - name: Cache .nuke/temp, ~/.nuget/packages
         uses: actions/cache@v2
         with:

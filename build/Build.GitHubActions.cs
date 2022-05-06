@@ -4,7 +4,7 @@ using Nuke.Common.CI.GitHubActions.Configuration;
 using Nuke.Common.Execution;
 using Nuke.Common.Utilities;
 
-[CustomGitHubActions(
+[SonarCloudGitHubActions(
     "pr",
     GitHubActionsImage.UbuntuLatest,
     OnPullRequestBranches = new[] { "main" },
@@ -12,7 +12,7 @@ using Nuke.Common.Utilities;
     InvokedTargets = new[] { nameof(Clean), nameof(UTests), nameof(ITests), nameof(Docs), nameof(Specs) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" }),
 ]
-[CustomGitHubActions(
+[SonarCloudGitHubActions(
     "build",
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
@@ -22,7 +22,7 @@ using Nuke.Common.Utilities;
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
 ]
 
-[ReleaseGitHubActionsAttribute(
+[ReleaseGitHubActions(
     "release",
     GitHubActionsImage.UbuntuLatest,
     OnPushTags = new[] { "v*.*.*" },
@@ -35,9 +35,9 @@ public partial class Build
 {
 }
 
-public class CustomGitHubActionsAttribute : GitHubActionsAttribute
+public class DotNetGitHubActionsAttribute : GitHubActionsAttribute
 {
-    public CustomGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
+    public DotNetGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
 
     protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
@@ -52,7 +52,23 @@ public class CustomGitHubActionsAttribute : GitHubActionsAttribute
     }
 }
 
-public class ReleaseGitHubActionsAttribute : CustomGitHubActionsAttribute
+public class SonarCloudGitHubActionsAttribute : DotNetGitHubActionsAttribute
+{
+    public SonarCloudGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
+
+    protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
+    {
+        var job = base.GetJobs(image, relevantTargets);
+        var newSteps = new List<GitHubActionsStep>(job.Steps);
+        newSteps.Insert(newSteps.Count - 2, new GitHubActionsSetupJavaStep());
+        newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudPackagesStep());
+        newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudScannerStep());
+        job.Steps = newSteps.ToArray();
+        return job;
+    }
+}
+
+public class ReleaseGitHubActionsAttribute : SonarCloudGitHubActionsAttribute
 {
     public ReleaseGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
 
@@ -60,7 +76,7 @@ public class ReleaseGitHubActionsAttribute : CustomGitHubActionsAttribute
     {
         var job = base.GetJobs(image, relevantTargets);
         var newSteps = new List<GitHubActionsStep>(job.Steps);
-        newSteps.Insert(newSteps.Count - 2, new GitHubActionsSetupRubyStep("3.1"));
+        newSteps.Insert(newSteps.Count - 2, new GitHubActionsSetupRubyStep());
         newSteps.Insert(newSteps.Count - 2, new GitHubActionsGenerateDocsWithJekyllStep());
         newSteps.Add(new GitHubActionsPrepareGeneratedDocsForDeploymentOnBranchGhPagesStep());
         job.Steps = newSteps.ToArray();
@@ -92,29 +108,98 @@ public class GitHubActionsSetupDotNetStep : GitHubActionsStep
     }
 }
 
-public class GitHubActionsSetupRubyStep : GitHubActionsStep
+public class GitHubActionsSetupJavaStep : GitHubActionsStep
 {
-    public string Version { get; init; }
-
-    public GitHubActionsSetupRubyStep(string version)
-    {
-        Version = version;
-    }
-
     public override void Write(CustomFileWriter writer)
     {
-        writer.WriteLine($"- name: Setup Ruby v {Version} (for docs generation with Jekyll)");
+        writer.WriteLine("- name: Setup JDK v 11 (for SonarCloud)");
+        writer.WriteLine("  uses: actions/setup-java@v1");
+        using (writer.Indent())
+        {
+            writer.WriteLine("with:");
+            using (writer.Indent())
+            {
+                writer.WriteLine("java-version: 1.11");
+            }
+        }
+    }
+}
+
+public class GitHubActionsCacheSonarCloudPackagesStep : GitHubActionsStep
+{
+    public override void Write(CustomFileWriter writer)
+    {
+        writer.WriteLine("- name: Cache SonarCloud packages");
+        writer.WriteLine("  uses: actions/cache@v2");
+        using (writer.Indent())
+        {
+            writer.WriteLine("with:");
+            using (writer.Indent())
+            {
+                writer.WriteLine(@"path: ~/sonar/cache");
+                writer.WriteLine("key: ${{ runner.os }}-sonar");
+                writer.WriteLine("restore-keys: ${{ runner.os }}-sonar");
+            }
+        }
+    }
+}
+
+public class GitHubActionsCacheSonarCloudScannerStep : GitHubActionsStep
+{
+    public override void Write(CustomFileWriter writer)
+    {
+        writer.WriteLine("- name: Cache SonarCloud scanner");
+        writer.WriteLine("  id: cache-sonar-scanner");
+        writer.WriteLine("  uses: actions/cache@v2");
+        using (writer.Indent())
+        {
+            writer.WriteLine("with:");
+            using (writer.Indent())
+            {
+                writer.WriteLine(@"path: ~/.sonar/scanner");
+                writer.WriteLine("key: ${{ runner.os }}-sonar-scanner");
+                writer.WriteLine("restore-keys: ${{ runner.os }}-sonar-scanner");
+            }
+        }
+    }
+}
+
+public class GitHubActionsInstallSonarCloudScannerStep : GitHubActionsStep
+{
+    public override void Write(CustomFileWriter writer)
+    {
+        writer.WriteLine("- name: Install SonarCloud scanner");
+        writer.WriteLine("  if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'");
+        writer.WriteLine("  shell: powershell");
+        using (writer.Indent())
+        {
+            writer.WriteLine("run: |");
+            using (writer.Indent())
+            {
+                writer.WriteLine(@"New-Item -Path ./.sonar/scanner -ItemType Directory");
+                writer.WriteLine(@"dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner");
+            }
+        }
+    }
+}
+
+public class GitHubActionsSetupRubyStep : GitHubActionsStep
+{
+    public override void Write(CustomFileWriter writer)
+    {
+        writer.WriteLine("- name: Setup Ruby v 3.1 (for docs generation with Jekyll)");
         writer.WriteLine("  uses: ruby/setup-ruby@v1");
         using (writer.Indent())
         {
             writer.WriteLine("with:");
             using (writer.Indent())
             {
-                writer.WriteLine($"ruby-version: {Version}");
+                writer.WriteLine("ruby-version: 3.1");
             }
         }
     }
 }
+
 
 public class GitHubActionsGenerateDocsWithJekyllStep : GitHubActionsStep
 {
