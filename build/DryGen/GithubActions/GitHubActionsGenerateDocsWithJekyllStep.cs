@@ -8,9 +8,9 @@ namespace DryGen.GithubActions
         public override void Write(CustomFileWriter writer)
         {
             writer.WriteLine("- name: Generate docs with Jekyll");
-            writer.WriteLine("  uses: limjh16/jekyll-action-ts@v2");
             using (writer.Indent())
             {
+                writer.WriteLine("uses: limjh16/jekyll-action-ts@v2");
                 writer.WriteLine("with:");
                 using (writer.Indent())
                 {

@@ -63,6 +63,8 @@ jobs:
       - name: End SonarCloud scan
         run:
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate docs with Jekyll
         uses: limjh16/jekyll-action-ts@v2
         with:
@@ -73,5 +75,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site
-      # If the Github Pages for the repository is configured correctly
-      # the gh-pages branch should be published automatically within a minute or so...
+        # If the Github Pages for the repository is configured correctly
+        # the gh-pages branch should be published automatically within a minute or so...

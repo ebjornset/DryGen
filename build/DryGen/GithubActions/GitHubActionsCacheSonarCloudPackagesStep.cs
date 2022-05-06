@@ -8,9 +8,9 @@ namespace DryGen.GithubActions
         public override void Write(CustomFileWriter writer)
         {
             writer.WriteLine("- name: Cache SonarCloud packages");
-            writer.WriteLine("  uses: actions/cache@v2");
             using (writer.Indent())
             {
+                writer.WriteLine("uses: actions/cache@v2");
                 writer.WriteLine("with:");
                 using (writer.Indent())
                 {
