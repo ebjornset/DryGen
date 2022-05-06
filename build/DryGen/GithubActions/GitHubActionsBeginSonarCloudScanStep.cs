@@ -13,7 +13,7 @@ namespace DryGen.GithubActions
                 writer.WriteLine("run:");
                 using (writer.Indent())
                 {
-                    writer.WriteLine("dotnet-sonarscanner begin /k:\"ebjornset_DryGen\" /o:\"ebjornset\" /d:sonar.login=\"${{ secrets.SONAR_TOKEN }}\" /d:sonar.host.url=\"https://sonarcloud.io\"");
+                    writer.WriteLine("dotnet-sonarscanner begin /k:\"ebjornset_DryGen\" /o:\"ebjornset\" /d:sonar.login=\"${{ secrets.SONAR_TOKEN }}\" /d:sonar.host.url=\"https://sonarcloud.io\" /d:sonar.cs.xunit.reportsPaths=\"**/coverage.cobertura.xml\"");
                 }
             }
         }
