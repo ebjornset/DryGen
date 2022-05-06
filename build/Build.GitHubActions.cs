@@ -5,7 +5,7 @@ using Nuke.Common.Execution;
 using Nuke.Common.Utilities;
 
 [SonarCloudGitHubActions(
-    "pr",
+    name: "pr",
     GitHubActionsImage.UbuntuLatest,
     OnPullRequestBranches = new[] { "main" },
     PublishArtifacts = false,
@@ -13,7 +13,7 @@ using Nuke.Common.Utilities;
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" }),
 ]
 [SonarCloudGitHubActions(
-    "build",
+    name: "build",
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = new[] { "main" },
     OnWorkflowDispatchOptionalInputs = new[] { "dummy" },
@@ -23,7 +23,7 @@ using Nuke.Common.Utilities;
 ]
 
 [ReleaseGitHubActions(
-    "release",
+    name: "release",
     GitHubActionsImage.UbuntuLatest,
     OnPushTags = new[] { "v*.*.*" },
     PublishArtifacts = true,
@@ -63,6 +63,7 @@ public class SonarCloudGitHubActionsAttribute : DotNetGitHubActionsAttribute
         newSteps.Insert(newSteps.Count - 2, new GitHubActionsSetupJavaStep());
         newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudPackagesStep());
         newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudScannerStep());
+        newSteps.Insert(newSteps.Count - 2, new GitHubActionsInstallSonarCloudScannerStep());
         job.Steps = newSteps.ToArray();
         return job;
     }
