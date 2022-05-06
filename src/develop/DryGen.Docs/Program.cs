@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using DryGen;
+using DryGen.Docs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -73,15 +74,18 @@ static string[] BuildCommandline(GeneratorData generatorData, string outputFolde
     };
 }
 
-class GeneratorData
+namespace DryGen.Docs
 {
-    public string InputFile { get; set; }
-    public string OptionsFile { get; set; }
-    public string Verb { get; set; }
-}
+    class GeneratorData
+    {
+        public string InputFile { get; set; }
+        public string OptionsFile { get; set; }
+        public string Verb { get; set; }
+    }
 
-class Options
-{
-    [Option('o', "output", Required = true, HelpText = "Set output folder.")]
-    public string Output { get; set; }
+    class Options
+    {
+        [Option('o', "output", Required = true, HelpText = "Set output folder.")]
+        public string Output { get; set; }
+    }
 }
