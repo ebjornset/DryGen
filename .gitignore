@@ -389,3 +389,6 @@ FodyWeavers.xsd
 
 # SpecFlow generated test files
 *.feature.cs
+
+# Coverlet SonarQube coverarge report
+.sonarqubecoverage/

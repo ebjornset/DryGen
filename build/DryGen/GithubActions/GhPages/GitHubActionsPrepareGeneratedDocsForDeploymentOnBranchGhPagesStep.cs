@@ -1,7 +1,7 @@
 ﻿using Nuke.Common.CI.GitHubActions.Configuration;
 using Nuke.Common.Utilities;
 
-namespace DryGen.GithubActions
+namespace DryGen.GithubActions.GhPages
 {
     public class GitHubActionsPrepareGeneratedDocsForDeploymentOnBranchGhPagesStep : GitHubActionsStep
     {

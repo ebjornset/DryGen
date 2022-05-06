@@ -51,13 +51,15 @@ public partial class Build : NukeBuild
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     AbsolutePath DocsDirectory => RootDirectory / "docs";
+    AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
 
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+            SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
+            EnsureCleanDirectory(SonarQubeCoverageDirectory);
         });
 
     Target Init => _ => _

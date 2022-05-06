@@ -1,4 +1,5 @@
-using DryGen.GithubActions;
+using DryGen.GithubActions.GhPages;
+using DryGen.GithubActions.SonarCloud;
 using Nuke.Common.CI.GitHubActions;
 
 [SonarCloudGitHubActions(
@@ -19,7 +20,7 @@ using Nuke.Common.CI.GitHubActions;
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
 ]
 
-[ReleaseGitHubActions(
+[GhPagesGitHubActions(
     name: "release",
     GitHubActionsImage.UbuntuLatest,
     OnPushTags = new[] { "v*.*.*" },
