@@ -29,7 +29,7 @@ namespace DryGen
 
         public ErStructureBuilderType StructureBuilder { get; private set; }
 
-        public MermaidErDiagramFromCSharpBaseOptions(ErStructureBuilderType structureBuilder)
+        protected MermaidErDiagramFromCSharpBaseOptions(ErStructureBuilderType structureBuilder)
         {
             StructureBuilder = structureBuilder;
         }

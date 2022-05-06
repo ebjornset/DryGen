@@ -19,10 +19,10 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
             relationships = new List<ErDiagramRelationship>();
         }
 
-        public IReadOnlyList<ErDiagramAttribute> Attributes => attributes.OrderBy(x => x.IsPrimaryKey ? 0 : 1).ThenBy(x => x.IsAlternateKey ? 0 : 1)
+        public IReadOnlyList<ErDiagramAttribute> GetAttributes() => attributes.OrderBy(x => x.IsPrimaryKey ? 0 : 1).ThenBy(x => x.IsAlternateKey ? 0 : 1)
             .ThenBy(x => x.IsForeignKey ? 0 : 1).ThenBy(x => x.IsNullable ? 1 : 0).ThenBy(x => x.AttributeName).ToArray();
 
-        public IReadOnlyList<ErDiagramRelationship> Relationships => relationships.OrderBy(x => x.PropertyName).ToArray();
+        public IReadOnlyList<ErDiagramRelationship> GetRelationships() => relationships.OrderBy(x => x.PropertyName).ToArray();
 
         public void AddAttribute(ErDiagramAttribute attribute)
         {
@@ -40,8 +40,8 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
             relationships.RemoveAll(r =>
                 r.ToCardinality.IsNotMany()
                 && string.IsNullOrEmpty(r.Label)
-                && (Relationships.Any(x => x != r && x.To == r.To)
-                    || r.To.Relationships.Any(x => x.To == this)));
+                && (GetRelationships().Any(x => x != r && x.To == r.To)
+                    || r.To.GetRelationships().Any(x => x.To == this)));
         }
     }
 }

@@ -130,7 +130,7 @@ public partial class Build : NukeBuild
                     .SetRepositoryUrl(GitRepository.ToString())
                     // TODO. Where should this point to?
                     //.SetPackageProjectUrl()
-                    .SetVersion(GitVersion.NuGetVersionV2)); ;
+                    .SetVersion(GitVersion.NuGetVersionV2));
             });
 
     Target ITests => _ => _

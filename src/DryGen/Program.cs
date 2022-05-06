@@ -4,7 +4,7 @@ using System.IO;
 
 namespace DryGen
 {
-    public class Program
+    public static class Program
     {
         [ExcludeFromCodeCoverage] // No need to test this simple (but a bit test unfrendly) call
         public static int Main(string[] args)

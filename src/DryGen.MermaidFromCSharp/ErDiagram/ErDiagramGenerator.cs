@@ -39,10 +39,10 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
             foreach (var entity in entities)
             {
                 // Append entities with any attributes
-                if (attributeTypeExclusion != ErDiagramAttributeTypeExclusion.All && entity.Attributes.Any())
+                if (attributeTypeExclusion != ErDiagramAttributeTypeExclusion.All && entity.GetAttributes().Any())
                 {
                     sb.Append("\t").Append(entity.Name).AppendLine(" {");
-                    foreach (var attribute in entity.Attributes)
+                    foreach (var attribute in entity.GetAttributes())
                     {
                         if (attributeTypeExclusion == ErDiagramAttributeTypeExclusion.Foreignkeys && attribute.IsForeignKey)
                         {
@@ -85,7 +85,7 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
                 foreach (var entity in entities)
                 {
                     // Append relations 
-                    foreach (var relationship in entity.Relationships)
+                    foreach (var relationship in entity.GetRelationships())
                     {
                         sb.Append("\t").Append(entity.Name).Append(' ')
                             .Append(relationship.FromCardinality.GetFromCardinalityValue()).Append(relationship.GetRelationshipLine()).Append(relationship.ToCardinality.GetToCardinalityValue())
