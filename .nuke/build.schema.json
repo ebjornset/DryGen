@@ -49,7 +49,7 @@
         "NuGetApiKey": {
           "type": "string",
           "description": "The api key to use when pushing to Nuget",
-          "default": "Secrets must be entered via 'nuke :secret [profile]'"
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "NuGetSource": {
           "type": "string",

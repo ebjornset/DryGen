@@ -109,7 +109,7 @@ public partial class Build : NukeBuild
             DotNetTest(c => c
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
-                .SetDataCollector("XPlat Code Coverage")
+                .SetDataCollector("Code Coverage")
                 .CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
                     settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
         });
@@ -153,7 +153,7 @@ public partial class Build : NukeBuild
                 DotNetTest(c => c
                     .SetConfiguration(Configuration)
                     .EnableNoBuild()
-                    .SetDataCollector("XPlat Code Coverage")
+                    .SetDataCollector("Code Coverage")
                     .CombineWith(SourceDirectory.GlobFiles("**/*.ITests.csproj"), (settings, path) =>
                             settings
                                 .SetProjectFile(path)
