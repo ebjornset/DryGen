@@ -61,8 +61,8 @@ public class SonarCloudGitHubActionsAttribute : DotNetGitHubActionsAttribute
         var job = base.GetJobs(image, relevantTargets);
         var newSteps = new List<GitHubActionsStep>(job.Steps);
         newSteps.Insert(newSteps.Count - 2, new GitHubActionsSetupJavaStep());
-        newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudPackagesStep());
-        newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudScannerStep());
+        //newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudPackagesStep());
+        //newSteps.Insert(newSteps.Count - 2, new GitHubActionsCacheSonarCloudScannerStep());
         newSteps.Insert(newSteps.Count - 2, new GitHubActionsInstallSonarCloudScannerStep());
         job.Steps = newSteps.ToArray();
         return job;
