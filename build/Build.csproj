@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
@@ -16,4 +16,10 @@
 		<PackageDownload Include="GitVersion.Tool" Version="[5.8.0]" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<SonarQubeSetting Include="sonar.coverage.exclusions">
+			<Value>**</Value>
+		</SonarQubeSetting>
+	</ItemGroup>
+	
 </Project>

@@ -35,15 +35,20 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.*
+      - name: Setup JDK v 11 (for SonarCloud)
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+      - name: Install/Update SonarCloud scanner
+        run:
+          dotnet tool update dotnet-sonarscanner --global
       - name: Setup Ruby v 3.1 (for docs generation with Jekyll)
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1
-      - name: Generate docs with Jekyll
-        uses: limjh16/jekyll-action-ts@v2
-        with:
-          enable_cache: true
-          jekyll_src: ./docs
+      - name: Begin SonarCloud scan
+        run:
+          dotnet-sonarscanner begin /k:"ebjornset_DryGen" /o:"ebjornset" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
       - name: Cache .nuke/temp, ~/.nuget/packages
         uses: actions/cache@v2
         with:
@@ -55,6 +60,14 @@ jobs:
         run: ./build.cmd Clean Push
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      - name: End SonarCloud scan
+        run:
+          dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      - name: Generate docs with Jekyll
+        uses: limjh16/jekyll-action-ts@v2
+        with:
+          enable_cache: true
+          jekyll_src: ./docs
       - name: Prepare generated docs for deployment on branch gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
