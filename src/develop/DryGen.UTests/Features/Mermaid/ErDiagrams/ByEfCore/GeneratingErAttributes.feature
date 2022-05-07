@@ -27,7 +27,7 @@ Scenario: Generates ER attributes as PK mapped fluent with Ef Core
 		}
 		"""
 	When I generate an ER diagram using EF Core
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			A {
@@ -74,7 +74,7 @@ Scenario: Generates ER attributes as FK for properties used in foreign keys
 		}
 		"""
 	When I generate an ER diagram using EF Core
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			A {
@@ -134,7 +134,7 @@ Scenario: Sort ER attributes by PK, AK, FK, nullable and name
 		}
 		"""
 	When I generate an ER diagram using EF Core
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			A {

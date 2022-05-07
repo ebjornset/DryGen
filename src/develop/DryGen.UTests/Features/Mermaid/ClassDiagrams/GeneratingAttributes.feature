@@ -19,7 +19,7 @@ Scenario: Generates attributes for properties that has a getter
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Order {
@@ -45,7 +45,7 @@ Scenario: Generates attributes with visibility modifier for properties
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Order {
@@ -74,7 +74,7 @@ Scenario: Generates attributes with static modifier for properties
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Order {
@@ -103,7 +103,7 @@ Scenario: Generates attributes only for properties declared directly in the type
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -132,7 +132,7 @@ Scenario: Generates private attributes for explicit implemented interface proper
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -160,7 +160,7 @@ Scenario: Generates enum vales
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Color {

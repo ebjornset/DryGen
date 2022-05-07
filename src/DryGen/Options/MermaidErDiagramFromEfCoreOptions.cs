@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace DryGen
+namespace DryGen.Options
 {
 
     [Verb(Constants.MermaidErDiagramFromEfCore.Verb, HelpText = "Generate a Mermaid Entity Relationship diagram from a C# assembly using Entity Framework Core.")]

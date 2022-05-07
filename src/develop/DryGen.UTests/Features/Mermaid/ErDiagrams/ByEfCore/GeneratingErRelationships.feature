@@ -41,7 +41,7 @@ Scenario: Generates ER relations as identifying for key relationsskips and non-i
 		}
 		"""
 	When I generate an ER diagram using EF Core
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			A
@@ -84,7 +84,7 @@ Scenario: Generates ER relations for mandatory bidirectional one to one relation
 		}
 		"""
 	When I generate an ER diagram using EF Core
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Address
@@ -145,7 +145,7 @@ Scenario: Generates ER relations with labels when the property name and type nam
 		}
 		"""
 	When I generate an ER diagram using EF Core
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Address

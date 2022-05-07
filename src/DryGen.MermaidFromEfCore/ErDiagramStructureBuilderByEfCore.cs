@@ -1,4 +1,5 @@
-﻿using DryGen.MermaidFromCSharp.ErDiagram;
+﻿using DryGen.MermaidFromCSharp;
+using DryGen.MermaidFromCSharp.ErDiagram;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
@@ -7,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace DryGen.MermaidFromCSharp.EfCore
+namespace DryGen.MermaidFromEfCore
 {
     public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
     {
@@ -16,7 +17,7 @@ namespace DryGen.MermaidFromCSharp.EfCore
             var efCoreEntityTypes = new List<IEntityType>();
             var dbContextTypesFromAssembly = assembly
                 .GetTypes()
-                .Where(t => typeof(DbContext).IsAssignableFrom(t) && ! t.IsAbstract)
+                .Where(t => typeof(DbContext).IsAssignableFrom(t) && !t.IsAbstract)
                 .ToList();
             foreach (var dbContextType in dbContextTypesFromAssembly)
             {
@@ -113,19 +114,18 @@ namespace DryGen.MermaidFromCSharp.EfCore
             var dbContextOptionsType = typeof(DbContextOptions);
             var optionsBuilderOpenType = typeof(DbContextOptionsBuilder<>);
             var optionsBuilderType = optionsBuilderOpenType.MakeGenericType(dbContextType);
-            var optionsBuilderCtor = optionsBuilderType.GetConstructors().Where(x => x.GetParameters().Length == 0).Single();
+            var optionsBuilderCtor = optionsBuilderType.GetConstructors().Single(x => x.GetParameters().Length == 0);
             var optionsBuilder = (DbContextOptionsBuilder)optionsBuilderCtor.Invoke(null);
             var options = optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-            var contextCtor = dbContextType.GetConstructors().Where(x => x.GetParameters().Any(y => dbContextOptionsType.IsAssignableFrom(y.ParameterType))).FirstOrDefault();
+            var contextCtor = dbContextType.GetConstructors().FirstOrDefault(x => x.GetParameters().Any(y => dbContextOptionsType.IsAssignableFrom(y.ParameterType)));
             if (contextCtor == null)
             {
                 throw new Exception($"{dbContextType.Name} has no public constructor with DbContextOptions as a parameter");
             }
             var ctorParameters = new object?[contextCtor.GetParameters().Length];
             var offset = 0;
-            foreach (var parameterInfo in contextCtor.GetParameters())
+            foreach (var parameterType in contextCtor.GetParameters().Select(parameterInfo => parameterInfo.ParameterType))
             {
-                var parameterType = parameterInfo.ParameterType;
                 if (dbContextOptionsType.IsAssignableFrom(parameterType))
                 {
                     ctorParameters[offset] = options;
@@ -140,7 +140,7 @@ namespace DryGen.MermaidFromCSharp.EfCore
             return dbContext.Model.GetEntityTypes().Where(et => typeFilters.All(filter => filter.Accepts(et.ClrType)));
         }
 
-        private class EfCoreErEntity : ErDiagramEntity
+        private sealed class EfCoreErEntity : ErDiagramEntity
         {
             public EfCoreErEntity(string name, IEntityType entityType) : base(name, entityType.ClrType)
             {
@@ -150,11 +150,11 @@ namespace DryGen.MermaidFromCSharp.EfCore
             public IEntityType EntityType { get; }
         }
 
-        private class EntityTypeEqualityComparer : IEqualityComparer<IEntityType>
+        private sealed class EntityTypeEqualityComparer : IEqualityComparer<IEntityType>
         {
             public bool Equals(IEntityType? x, IEntityType? y)
             {
-                return (x?.ClrType == y?.ClrType) == true;
+                return x?.ClrType == y?.ClrType;
             }
 
             public int GetHashCode(IEntityType? obj)

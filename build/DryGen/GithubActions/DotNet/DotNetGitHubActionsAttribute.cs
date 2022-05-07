@@ -3,7 +3,7 @@ using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.CI.GitHubActions.Configuration;
 using Nuke.Common.Execution;
 
-namespace DryGen.GithubActions
+namespace DryGen.GithubActions.DotNet
 {
     public class DotNetGitHubActionsAttribute : GitHubActionsAttribute
     {

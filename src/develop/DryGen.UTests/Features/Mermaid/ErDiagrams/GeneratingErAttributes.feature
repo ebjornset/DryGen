@@ -31,7 +31,7 @@ Scenario: Generates ER attributes only for public properties
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Order
@@ -64,7 +64,7 @@ Scenario: Generates ER attributes only for properties with getter and setter
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Order
@@ -101,7 +101,7 @@ Scenario: Generates ER attributes only for non collection properties
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Order
@@ -142,7 +142,7 @@ Scenario: Generates ER attributes for well known type properties
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Order {
@@ -192,7 +192,7 @@ Scenario: Generates ER attributes with null comment for nullable well known type
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Order {
@@ -236,7 +236,7 @@ Scenario: Generates ER attributes as PK for properties with key attribute
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			A {

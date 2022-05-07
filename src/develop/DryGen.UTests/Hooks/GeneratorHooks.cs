@@ -1,7 +1,7 @@
 ﻿using BoDi;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
-using DryGen.MermaidFromCSharp.EfCore;
+using DryGen.MermaidFromEfCore;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using TechTalk.SpecFlow;
 

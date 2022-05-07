@@ -15,7 +15,7 @@ Scenario: Generates classes for all public classes
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Customer {
@@ -35,7 +35,7 @@ Scenario: Excludes inner classes from Class diagram
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Customer {
@@ -52,7 +52,7 @@ Scenario: Generates interface annotation for interfaces
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class ICustomer {
@@ -70,7 +70,7 @@ Scenario: Generates enumeration annotation for enums
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class CustomerType {
@@ -88,7 +88,7 @@ Scenario: Generates abstract annotation for abstract classes
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Customer {
@@ -111,7 +111,7 @@ Scenario: Exclude object and enum automatic
 		| ^Test$   |
 		| ^System$ |
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class Customer {

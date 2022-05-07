@@ -51,13 +51,15 @@ public partial class Build : NukeBuild
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     AbsolutePath DocsDirectory => RootDirectory / "docs";
+    AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
 
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+            SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
+            EnsureCleanDirectory(SonarQubeCoverageDirectory);
         });
 
     Target Init => _ => _
@@ -109,6 +111,7 @@ public partial class Build : NukeBuild
             DotNetTest(c => c
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
+                .SetDataCollector("XPlat Code Coverage")
                 .CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
                     settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
         });
@@ -130,7 +133,7 @@ public partial class Build : NukeBuild
                     .SetRepositoryUrl(GitRepository.ToString())
                     // TODO. Where should this point to?
                     //.SetPackageProjectUrl()
-                    .SetVersion(GitVersion.NuGetVersionV2)); ;
+                    .SetVersion(GitVersion.NuGetVersionV2));
             });
 
     Target ITests => _ => _
@@ -152,6 +155,7 @@ public partial class Build : NukeBuild
                 DotNetTest(c => c
                     .SetConfiguration(Configuration)
                     .EnableNoBuild()
+                    .SetDataCollector("XPlat Code Coverage")
                     .CombineWith(SourceDirectory.GlobFiles("**/*.ITests.csproj"), (settings, path) =>
                             settings
                                 .SetProjectFile(path)

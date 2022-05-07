@@ -11,8 +11,8 @@ namespace DryGen.UTests.Steps
     [Binding]
     public sealed class CommandLineSteps
     {
-        private readonly AssemblyContext assemblyContext;
-        private readonly MermaidCodeContext mermaidCodeContext;
+        private readonly InputFileContext inputFileContext;
+        private readonly GeneratedRepresentationContext generatedRepresentationContext;
         private readonly OptionsFileContext optionsFileContext;
         private readonly ConsoleContext consoleContext;
         private int? exitCode;
@@ -20,13 +20,13 @@ namespace DryGen.UTests.Steps
         private bool outputIsSpesified;
 
         public CommandLineSteps(
-            AssemblyContext assemblyContext,
-            MermaidCodeContext mermaidCodeContext,
+            InputFileContext inputFileContext,
+            GeneratedRepresentationContext generatedRepresentationContext,
             OptionsFileContext optionsFileContext,
             ConsoleContext consoleContext)
         {
-            this.assemblyContext = assemblyContext;
-            this.mermaidCodeContext = mermaidCodeContext;
+            this.inputFileContext = inputFileContext;
+            this.generatedRepresentationContext = generatedRepresentationContext;
             this.optionsFileContext = optionsFileContext;
             this.consoleContext = consoleContext;
         }
@@ -41,15 +41,15 @@ namespace DryGen.UTests.Steps
         public void WhenICallTheProgramWithThisCommandLineArguments(Table table)
         {
             var argList = table.Rows.Select(x => x["Arg"]).ToList();
-            if (assemblyContext.HasAssemblyFileName)
+            if (inputFileContext.HasInputFileName)
             {
                 argList.Add("-i");
-                argList.Add(assemblyContext.AssemblyFileName);
+                argList.Add(inputFileContext.InputFileName);
             }
             if (outputIsSpesified)
             {
                 argList.Add("-o");
-                argList.Add(mermaidCodeContext.MermaidFileName);
+                argList.Add(generatedRepresentationContext.GeneratedRepresentationFileName);
             }
             if (optionsFileContext.HasOptionsFile)
             {

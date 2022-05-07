@@ -16,7 +16,7 @@ namespace DryGen.MermaidFromCSharp.TypeFilters
 
         public bool Accepts(Type type)
         {
-            return children.Count() == 0 || children.Any(x => x.Accepts(type));
+            return !children.Any() || children.Any(x => x.Accepts(type));
         }
     }
 }

@@ -21,7 +21,7 @@ Scenario: Generates methods with visibility modifier for methods
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -50,7 +50,7 @@ Scenario: Generates methods with static modifier for methods
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -77,7 +77,7 @@ Scenario: Generates methods with abstract modifier for methods
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -105,7 +105,7 @@ Scenario: Generates methods only for methods declared directly in the type
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -130,7 +130,7 @@ Scenario: Generates void methods without return type
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -151,7 +151,7 @@ Scenario: Does not generate methods for getters and setters
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -174,7 +174,7 @@ Scenario: Does not generate methods for local functions
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {
@@ -196,7 +196,7 @@ Scenario: Generates methods parameters
 		}
 		"""
 	When I generate a Class diagram
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		classDiagram
 			class A {

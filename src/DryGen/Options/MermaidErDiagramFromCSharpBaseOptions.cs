@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using YamlDotNet.Serialization;
 
-namespace DryGen
+namespace DryGen.Options
 {
 
     public abstract class MermaidErDiagramFromCSharpBaseOptions : MermaidFromCSharpBaseOptions
@@ -29,7 +29,7 @@ namespace DryGen
 
         public ErStructureBuilderType StructureBuilder { get; private set; }
 
-        public MermaidErDiagramFromCSharpBaseOptions(ErStructureBuilderType structureBuilder)
+        protected MermaidErDiagramFromCSharpBaseOptions(ErStructureBuilderType structureBuilder)
         {
             StructureBuilder = structureBuilder;
         }

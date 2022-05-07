@@ -38,7 +38,7 @@ Scenario: Generates ER relations for all public properties referencing other kno
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Address
@@ -81,7 +81,7 @@ Scenario: Generates ER relations for mandatory unidirectional relationship to on
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Address
@@ -123,7 +123,7 @@ Scenario: Generates ER relations with property name as label
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Address
@@ -165,7 +165,7 @@ Scenario: Generates ER relations for all public collection properties referencin
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Customer
@@ -218,7 +218,7 @@ Scenario: Generates ER bidiractional relations for one to many relations only fr
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Customer
@@ -262,7 +262,7 @@ Scenario: Generates no ER relations when Er diagram relationship level is none
 		"""
 	And the Er diagram relationship exclusion 'All'
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			Address
@@ -317,7 +317,7 @@ Scenario: Does not generate ER relation when one of the enitites is filtered out
 		}
 		"""
 	When I generate an ER diagram using '<Structure builder>'
-	Then I should get this Mermaid code
+	Then I should get this generated representation
 		"""
 		erDiagram
 			IncludedOne

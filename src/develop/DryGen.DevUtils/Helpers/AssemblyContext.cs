@@ -12,16 +12,17 @@ using System.Reflection;
 
 namespace DryGen.DevUtils.Helpers
 {
-    public class AssemblyContext : IDisposable
+    public class AssemblyContext
     {
         private Assembly? assembly;
-        private string? assemblyFileName;
+        private readonly InputFileContext inputFileContext;
+
+        public AssemblyContext(InputFileContext inputFileContext)
+        {
+            this.inputFileContext = inputFileContext;
+        }
 
         public Assembly Assembly => assembly ?? throw new ArgumentNullException(nameof(assembly));
-
-        public string AssemblyFileName => assemblyFileName ?? throw new ArgumentNullException(nameof(assemblyFileName));
-
-        public bool HasAssemblyFileName => !string.IsNullOrEmpty(assemblyFileName);
 
         public void CompileCodeToMemory(string code)
         {
@@ -39,7 +40,7 @@ namespace DryGen.DevUtils.Helpers
             var assemblyName = Path.GetFileName(assemblyFileName);
             using var fs = new FileStream(assemblyFileName, FileMode.OpenOrCreate, FileAccess.Write);
             CompileCodeToStream(code, assemblyName, fs);
-            this.assemblyFileName = assemblyFileName;
+            inputFileContext.InputFileName = assemblyFileName;
         }
 
         private static void CompileCodeToStream(string code, string assemblyName, Stream stream)
@@ -67,22 +68,6 @@ namespace DryGen.DevUtils.Helpers
                 var errors = string.Join(Environment.NewLine, compilationResult.Diagnostics.Select(codeIssue => $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()}, Location: { codeIssue.Location.GetLineSpan()}, Severity: { codeIssue.Severity} "));
                 throw new ArgumentException(errors);
             }
-        }
-
-        public void Dispose()
-        {
-            if (!string.IsNullOrEmpty(assemblyFileName) && File.Exists(assemblyFileName))
-            {
-                try
-                {
-                    File.Delete(assemblyFileName);
-                }
-                catch
-                {
-                    // Best effort to clean up...
-                }
-            }
-            GC.SuppressFinalize(this);
         }
     }
 }
