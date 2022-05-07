@@ -1,4 +1,4 @@
-﻿Feature: Command line for generating Mermaid class diagram from Json schema
+﻿Feature: Generating Mermaid class diagram from Json schema
 
 A short summary of the feature
 

@@ -5,7 +5,6 @@ namespace DryGen.Options
 {
     public abstract class MermaidErDiagramFromCSharpBaseOptions : MermaidFromCSharpBaseOptions
     {
-
         [YamlMember(Alias = "exclude-all-attributes", ApplyNamingConventions = false)]
         [Option("exclude-all-attributes", HelpText = "Should all attributes be excluded from the diagram?")]
         public bool? ExcludeAllAttributes { get; set; }

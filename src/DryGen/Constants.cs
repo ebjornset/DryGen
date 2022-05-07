@@ -20,9 +20,15 @@
         {
             public const string Verb = "mermaid-er-diagram-from-csharp";
         }
+
         public static class MermaidErDiagramFromEfCore
         {
             public const string Verb = "mermaid-er-diagram-from-efcore";
+        }
+
+        public static class MermaidErDiagramFromJsonSchema
+        {
+            public const string Verb = "mermaid-er-diagram-from-json-schema";
         }
 
         public static class CSharpFromJsonSchema
