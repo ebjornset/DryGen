@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
-namespace DryGen
+namespace DryGen.Options
 {
     public abstract class MermaidFromCSharpBaseOptions : BaseOptions
     {

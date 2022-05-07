@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using YamlDotNet.Serialization;
 
-namespace DryGen
+namespace DryGen.Options
 {
     public abstract class BaseOptions
     {

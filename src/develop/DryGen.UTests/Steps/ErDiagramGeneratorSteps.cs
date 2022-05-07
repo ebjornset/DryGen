@@ -6,7 +6,7 @@ using DryGen.UTests.Helpers;
 using DryGen.UTests.Hooks;
 using System;
 using TechTalk.SpecFlow;
-using static DryGen.MermaidErDiagramFromCSharpBaseOptions;
+using static DryGen.Options.MermaidErDiagramFromCSharpBaseOptions;
 
 namespace DryGen.UTests.Steps
 {

@@ -2,7 +2,7 @@
 using DryGen.MermaidFromCSharp.ClassDiagram;
 using YamlDotNet.Serialization;
 
-namespace DryGen
+namespace DryGen.Options
 {
 
     [Verb(Constants.MermaidClassDiagramFromCsharp.Verb, HelpText = "Generate a Mermaid Class diagram from a C# assembly using reflection.")]

@@ -8,26 +8,35 @@ namespace DryGen.CSharpFromJsonSchema
 {
     public class CSharpFromJsonSchemaGenerator
     {
-        public async Task<string> Generate(string? jsonSchemaFileName, JsonSchemaFileFormat jsonSchemaFileFormat)
+        public async Task<string> Generate(string? jsonSchemaFileName, JsonSchemaFileFormat jsonSchemaFileFormat, string? theNamespace, string? rootClassname)
         {
             var jsonSchema = await LoadJsonSchemaFromFile(jsonSchemaFileName, jsonSchemaFileFormat);
             RemoveSynteticSchemaProperty(jsonSchema);
-            string cSharpCode = GenerateCSharpCode(jsonSchema);
+            string cSharpCode = GenerateCSharpCode(jsonSchema, theNamespace, rootClassname);
             return cSharpCode;
         }
 
-        private static string GenerateCSharpCode(JsonSchema jsonSchema)
+        private static string GenerateCSharpCode(JsonSchema jsonSchema, string? theNamespace, string? rootClassname)
         {
             var classGenerator = new CSharpGenerator(jsonSchema, new CSharpGeneratorSettings
             {
                 ClassStyle = CSharpClassStyle.Poco,
-                Namespace = "TestNameSpace", // TODO
+                Namespace = GetNamespace(theNamespace),
                 ArrayInstanceType = "System.Collections.Generic.List",
                 GenerateOptionalPropertiesAsNullable = true,
             });
-            var rootClassName = jsonSchema.Title.Replace(" ", string.Empty);// TODO
-            var cSharpCode = classGenerator.GenerateFile(rootClassName);
+            var cSharpCode = classGenerator.GenerateFile(GetRootClassName(jsonSchema, rootClassname));
             return cSharpCode;
+
+            static string GetNamespace(string? theNamespace)
+            {
+                return string.IsNullOrWhiteSpace(theNamespace) ? "CSharpFromJsonSchema" : theNamespace;
+            }
+
+            static string GetRootClassName(JsonSchema jsonSchema, string? rootClassname)
+            {
+                return string.IsNullOrWhiteSpace(rootClassname) ? jsonSchema.Title.Replace(" ", string.Empty) : rootClassname;
+            }
         }
 
         private static void RemoveSynteticSchemaProperty(JsonSchema jsonSchema)

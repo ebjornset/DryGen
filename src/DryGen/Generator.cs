@@ -16,6 +16,7 @@ using System.Reflection;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using DryGen.CSharpFromJsonSchema;
+using DryGen.Options;
 
 namespace DryGen
 {
@@ -174,7 +175,7 @@ namespace DryGen
                     outWriter.WriteLine($"Generating C# code to file '{options.OutputFile}'");
                 }
                 var generator = new CSharpFromJsonSchemaGenerator();
-                var cSharpCode = generator.Generate(options.InputFile, options.SchemaFileFormat).Result;
+                var cSharpCode = generator.Generate(options.InputFile, options.SchemaFileFormat, options.Namespace, options.RootClassname).Result;
                 WriteGeneratedRepresentationToConsoleOrFile(options, cSharpCode);
                 return 0;
             });
