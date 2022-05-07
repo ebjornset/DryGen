@@ -29,6 +29,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Features\CSharpFromJsonSchema\" />
+	  <Folder Include="Features\Mermaid\FromJsonSchema\" />
 	</ItemGroup>
 </Project>
