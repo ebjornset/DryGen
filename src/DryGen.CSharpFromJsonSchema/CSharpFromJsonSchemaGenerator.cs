@@ -48,7 +48,7 @@ namespace DryGen.CSharpFromJsonSchema
                     return rootClassname;
                 }
                 var schemaTitle = jsonSchema.Title?.Replace(" ", string.Empty);
-                return string.IsNullOrWhiteSpace(schemaTitle) ? "CSharpFromJsonSchema" : schemaTitle;
+                return string.IsNullOrWhiteSpace(schemaTitle) ? "ClassFromJsonSchema" : schemaTitle;
             }
         }
 

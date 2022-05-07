@@ -1,4 +1,4 @@
-﻿Feature: Command line for Er diagrams
+﻿Feature: Command line for generation Mermaid Er diagrams from C#, both by reflection and from EF Core
 
 A short summary of the feature
 

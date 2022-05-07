@@ -11,32 +11,32 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
     public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         private readonly ITypeLoader typeloader;
+        private readonly ClassDiagramDirection? direction;
         private readonly ClassDiagramAttributeLevel attributeLevel;
         private readonly ClassDiagramMethodLevel methodLevel;
-        private readonly ClassDiagramDirection direction;
         private readonly bool excludeStaticAttributes;
         private readonly bool excludeStaticMethods;
         private readonly bool excludeMethodParams;
 
         public ClassDiagramGenerator(
             ITypeLoader typeloader,
+            ClassDiagramDirection? direction,
             ClassDiagramAttributeLevel attributeLevel,
             ClassDiagramMethodLevel methodLevel,
-            ClassDiagramDirection direction,
             bool excludeStaticAttributes,
             bool excludeStaticMethods,
             bool excludeMethodParams)
         {
             this.typeloader = typeloader;
+            this.direction = direction;
             this.attributeLevel = attributeLevel;
             this.methodLevel = methodLevel;
-            this.direction = direction;
             this.excludeStaticAttributes = excludeStaticAttributes;
             this.excludeStaticMethods = excludeStaticMethods;
             this.excludeMethodParams = excludeMethodParams;
         }
 
-        public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter nameRewriter)
+        public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter)
         {
             var classes = typeloader.Load(assembly, ClassDiagramFilters(typeFilters), nameRewriter).Select(x => new ClassDiagramClass(x)).ToList();
             GenerateClassDiagramStructure(classes, attributeFilters);
@@ -279,17 +279,18 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             }
         }
 
-        private string GenerateClassDiagramMermaid(IEnumerable<ClassDiagramClass> classes, INameRewriter nameRewriter)
+        private string GenerateClassDiagramMermaid(IEnumerable<ClassDiagramClass> classes, INameRewriter? nameRewriter)
         {
             var sb = new StringBuilder().AppendLine("classDiagram");
-            if (direction != ClassDiagramDirection.Default)
+            if (direction != null && direction != ClassDiagramDirection.Default)
             {
                 sb.Append("\tdirection ").AppendLine(direction.ToString());
             }
             foreach (var classDiagramClass in classes)
             {
                 // Append class with any attributes
-                sb.Append("\tclass ").Append(nameRewriter.Rewrite(GetDataType(classDiagramClass.Type))).AppendLine(" {");
+                var dataType = GetDataType(classDiagramClass.Type);
+                sb.Append("\tclass ").Append(nameRewriter?.Rewrite(dataType) ?? dataType).AppendLine(" {");
                 if (classDiagramClass.Type.IsInterface)
                 {
                     sb.AppendLine("\t\t<<interface>>");
@@ -423,7 +424,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                 if (type.IsGenericType)
                 {
                     var sb = new StringBuilder();
-                    sb.Append(type.Name.Substring(0, type.Name.IndexOf('`'))).Append(genericStartBracket);
+                    sb.Append(type.Name[..type.Name.IndexOf('`')]).Append(genericStartBracket);
                     var delimiter = string.Empty;
                     foreach (var genericArgument in type.GetGenericArguments())
                     {

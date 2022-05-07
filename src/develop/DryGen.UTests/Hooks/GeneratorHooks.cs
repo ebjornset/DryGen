@@ -24,7 +24,6 @@ namespace DryGen.UTests.Hooks
         public void InitializeImplementations()
         {
             objectContainer.RegisterTypeAs<TypeLoaderByReflection, ITypeLoader>();
-            objectContainer.RegisterInstanceAs<INameRewriter>(new NoopNameRewriter());
             objectContainer.RegisterFactoryAs(oc => new ErDiagramGenerator(
                                                             new ErDiagramStructureBuilderByReflection(),
                                                             ErDiagramAttributeTypeExclusion,
@@ -39,21 +38,12 @@ namespace DryGen.UTests.Hooks
                                                     "ErDiagramGeneratorByEfCore");
             objectContainer.RegisterFactoryAs(oc => new ClassDiagramGenerator(
                                                             oc.Resolve<ITypeLoader>(),
+                                                            ClassDiagramDirection.Default,
                                                             ClassDiagramAttributeLevel.All,
                                                             ClassDiagramMethodLevel.All,
-                                                            ClassDiagramDirection.Default,
                                                             excludeStaticAttributes: false,
                                                             excludeStaticMethods: false,
                                                             excludeMethodParams: false));
-        }
-
-        //TODO Can we get rid of this?
-        private class NoopNameRewriter : INameRewriter
-        {
-            public string Rewrite(string name)
-            {
-                return name;
-            }
         }
     }
 }

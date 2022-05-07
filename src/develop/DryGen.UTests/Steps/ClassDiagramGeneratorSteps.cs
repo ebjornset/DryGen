@@ -12,7 +12,6 @@ namespace DryGen.UTests.Steps
         private readonly AssemblyContext assemblyContext;
         private readonly TypeFiltersContext typeFiltersContext;
         private readonly PropertyFiltersContext propertyFiltersContext;
-        private readonly INameRewriter nameRewriter;
         private readonly GeneratedRepresentationContext generatedRepresentationContext;
         private readonly ClassDiagramGenerator generator;
 
@@ -21,13 +20,11 @@ namespace DryGen.UTests.Steps
             AssemblyContext assemblyContext,
             TypeFiltersContext typeFiltersContext,
             PropertyFiltersContext propertyFiltersContext,
-            INameRewriter nameRewriter,
             GeneratedRepresentationContext generatedRepresentationContext)
         {
             this.assemblyContext = assemblyContext;
             this.typeFiltersContext = typeFiltersContext;
             this.propertyFiltersContext = propertyFiltersContext;
-            this.nameRewriter = nameRewriter;
             this.generatedRepresentationContext = generatedRepresentationContext;
             this.generator = generator;
         }
@@ -39,7 +36,7 @@ namespace DryGen.UTests.Steps
                 assemblyContext.Assembly,
                 typeFiltersContext.Filters,
                 propertyFiltersContext.Filters,
-                nameRewriter);
+                nameRewriter: null);
         }
     }
 }

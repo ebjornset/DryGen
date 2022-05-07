@@ -7,7 +7,7 @@ namespace DryGen.MermaidFromCSharp
 {
     public class TypeLoaderByReflection : ITypeLoader
     {
-        public IReadOnlyList<NamedType> Load(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, INameRewriter nameRewriter)
+        public IReadOnlyList<NamedType> Load(Assembly assembly, IReadOnlyList<ITypeFilter>? typeFilters, INameRewriter? nameRewriter)
         {
             var classLookup = new Dictionary<Type, Type>();
             var classesFromAssembly = assembly
@@ -19,14 +19,14 @@ namespace DryGen.MermaidFromCSharp
                 AddClassHierarchy(typeFilters, classLookup, type);
             }
             return classLookup
-                .Select(entry => new NamedType(nameRewriter.Rewrite(entry.Value.Name), entry.Value))
+                .Select(entry => new NamedType(nameRewriter?.Rewrite(entry.Value.Name) ?? entry.Value.Name, entry.Value))
                 .OrderBy(nt => nt.Name)
                 .ThenBy(nt => nt.Type.Name)
                 .ThenBy(nt => nt.Type.Namespace).ToArray();
 
-            static void AddClassHierarchy(IReadOnlyList<ITypeFilter> typeFilters, Dictionary<Type, Type> classLookup, Type type)
+            static void AddClassHierarchy(IReadOnlyList<ITypeFilter>? typeFilters, Dictionary<Type, Type> classLookup, Type type)
             {
-                if (type == null || classLookup.ContainsKey(type) || typeFilters.Any(filter => !filter.Accepts(type)))
+                if (type == null || classLookup.ContainsKey(type) || typeFilters?.Any(filter => !filter.Accepts(type)) == true)
                 {
                     return;
                 }

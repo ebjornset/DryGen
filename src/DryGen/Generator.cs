@@ -17,6 +17,7 @@ using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using DryGen.CSharpFromJsonSchema;
 using DryGen.Options;
+using DryGen.MermaidFromJsonSchema;
 
 namespace DryGen
 {
@@ -38,12 +39,21 @@ namespace DryGen
 
         public int Run(string[] args)
         {
-            var parserResult = parser.ParseArguments<MermaidErDiagramFromCSharpOptions, MermaidErDiagramFromEfCoreOptions, MermaidClassDiagramFromCSharpOptions, CSharpFromJsonSchemaOptions>(args);
+            var parserResult = parser.ParseArguments<
+                CSharpFromJsonSchemaOptions,
+                MermaidClassDiagramFromCSharpOptions,
+                MermaidClassDiagramFromJsonSchemaOptions,
+                MermaidErDiagramFromCSharpOptions,
+                MermaidErDiagramFromEfCoreOptions,
+                MermaidErDiagramFromJsonSchemaOptions
+                 > (args);
             return parserResult.MapResult(
-              (MermaidErDiagramFromCSharpOptions options) => GenerateErDiagramFromCSharp(options, args),
-              (MermaidErDiagramFromEfCoreOptions options) => GenerateErDiagramFromEfCore(options, args),
-              (MermaidClassDiagramFromCSharpOptions options) => GenerateClassDiagramFropmCSharp(options, args),
               (CSharpFromJsonSchemaOptions options) => GenerateCSharpFromJsonSchema(options, args),
+              (MermaidClassDiagramFromCSharpOptions options) => GenerateMermaidClassDiagramFropmCSharp(options, args),
+              (MermaidClassDiagramFromJsonSchemaOptions options) => GenerateMermaidClassDiagramFromJsonSchema(options, args),
+              (MermaidErDiagramFromCSharpOptions options) => GenerateMermaidErDiagramFromCSharp(options, args),
+              (MermaidErDiagramFromEfCoreOptions options) => GenerateMermaidErDiagramFromEfCore(options, args),
+              (MermaidErDiagramFromJsonSchemaOptions options) => GenerateMermaidErDiagramFromJsonSchema(options, args),
               errors => DisplayHelp(parserResult));
         }
 
@@ -67,7 +77,7 @@ namespace DryGen
             return 1;
         }
 
-        private int ExecureWithExceptionAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions, new()
+        private int ExecuteWithExceptionAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions, new()
         {
             try
             {
@@ -87,9 +97,9 @@ namespace DryGen
             }
         }
 
-        private int GenerateErDiagramFromCSharp(MermaidErDiagramFromCSharpOptions options, string[] args)
+        private int GenerateMermaidErDiagramFromCSharp(MermaidErDiagramFromCSharpOptions options, string[] args)
         {
-            return ExecureWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithExceptionAndHelpDisplay(options, options =>
             {
                 options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
                 var structureBuilder =
@@ -100,13 +110,13 @@ namespace DryGen
                 var attributeDetailExclusions = GetAttributeDetailExclusions(options);
                 var relationshipLevel = options.ExcludeAllRelationships ?? default ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None;
                 var diagramGenerator = new ErDiagramGenerator(structureBuilder, attributeTypeExclusion, attributeDetailExclusions, relationshipLevel);
-                return GenerateDiagramFromCSharp(options, diagramGenerator);
+                return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
             });
         }
 
-        private int GenerateErDiagramFromEfCore(MermaidErDiagramFromEfCoreOptions options, string[] args)
+        private int GenerateMermaidErDiagramFromEfCore(MermaidErDiagramFromEfCoreOptions options, string[] args)
         {
-            return ExecureWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithExceptionAndHelpDisplay(options, options =>
             {
                 options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
                 var structureBuilder =
@@ -117,29 +127,29 @@ namespace DryGen
                 var attributeDetailExclusions = GetAttributeDetailExclusions(options);
                 var relationshipLevel = options.ExcludeAllRelationships ?? default ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None;
                 var diagramGenerator = new ErDiagramGenerator(structureBuilder, attributeTypeExclusion, attributeDetailExclusions, relationshipLevel);
-                return GenerateDiagramFromCSharp(options, diagramGenerator);
+                return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
             });
 
         }
 
-        private int GenerateClassDiagramFropmCSharp(MermaidClassDiagramFromCSharpOptions options, string[] args)
+        private int GenerateMermaidClassDiagramFropmCSharp(MermaidClassDiagramFromCSharpOptions options, string[] args)
         {
-            return ExecureWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithExceptionAndHelpDisplay(options, options =>
             {
                 options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
                 var diagramGenerator = new ClassDiagramGenerator(
                     new TypeLoaderByReflection(),
+                    options.Direction ?? default,
                     options.AttributeLevel ?? default,
                     options.MethodLevel ?? default,
-                    options.Direction ?? default,
                     excludeStaticAttributes: options.ExcludeStaticAttributes ?? default,
                     excludeStaticMethods: options.ExcludeStaticMethods ?? default,
                     excludeMethodParams: options.ExcludeMethodParams ?? default);
-                return GenerateDiagramFromCSharp(options, diagramGenerator);
+                return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
             });
         }
 
-        private int GenerateDiagramFromCSharp(MermaidFromCSharpBaseOptions cSharpOptions, IDiagramGenerator diagramGenerator)
+        private int GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions cSharpOptions, IDiagramGenerator diagramGenerator)
         {
             if (!string.IsNullOrEmpty(cSharpOptions.OutputFile))
             {
@@ -167,7 +177,7 @@ namespace DryGen
 
         private int GenerateCSharpFromJsonSchema(CSharpFromJsonSchemaOptions options, string[] args)
         {
-            return ExecureWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithExceptionAndHelpDisplay(options, options =>
             {
                 options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
                 if (!string.IsNullOrEmpty(options.OutputFile))
@@ -177,6 +187,38 @@ namespace DryGen
                 var generator = new CSharpFromJsonSchemaGenerator();
                 var cSharpCode = generator.Generate(options.InputFile, options.SchemaFileFormat, options.Namespace, options.RootClassname, options.ArrayType, options.ArrayInstanceType).Result;
                 WriteGeneratedRepresentationToConsoleOrFile(options, cSharpCode);
+                return 0;
+            });
+        }
+
+        private int GenerateMermaidClassDiagramFromJsonSchema(MermaidClassDiagramFromJsonSchemaOptions options, string[] args)
+        {
+            return ExecuteWithExceptionAndHelpDisplay(options, options =>
+            {
+                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
+                if (!string.IsNullOrEmpty(options.OutputFile))
+                {
+                    outWriter.WriteLine($"Generating Mermaid class diagram to file '{options.OutputFile}'");
+                }
+                var generator = new MermaidClassDiagramFromJsonSchemaGenerator();
+                var mermaid = generator.Generate(options.InputFile, options.SchemaFileFormat, options.RootClassname, options.Direction).Result;
+                WriteGeneratedRepresentationToConsoleOrFile(options, mermaid);
+                return 0;
+            });
+        }
+
+        private int GenerateMermaidErDiagramFromJsonSchema(MermaidErDiagramFromJsonSchemaOptions options, string[] args)
+        {
+            return ExecuteWithExceptionAndHelpDisplay(options, options =>
+            {
+                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
+                if (!string.IsNullOrEmpty(options.OutputFile))
+                {
+                    outWriter.WriteLine($"Generating Mermaid ER diagram to file '{options.OutputFile}'");
+                }
+                var generator = new MermaidErDiagramFromJsonSchemaGenerator();
+                var mermaid = generator.Generate(options.InputFile, options.SchemaFileFormat, options.RootClassname, options.ExcludeAllAttributes, options.ExcludeAllRelationships).Result;
+                WriteGeneratedRepresentationToConsoleOrFile(options, mermaid);
                 return 0;
             });
         }

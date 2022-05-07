@@ -1,4 +1,4 @@
-﻿Feature: Command line for Class diagrams
+﻿Feature: Command line for generating Mermaid Class diagrams from C#
 
 A short summary of the feature
 
