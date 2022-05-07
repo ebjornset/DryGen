@@ -8,7 +8,7 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
 {
     public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IErDiagramStructureBuilder
     {
-        public IReadOnlyList<ErDiagramEntity> GenerateErStructure(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter nameRewriter)
+        public IReadOnlyList<ErDiagramEntity> GenerateErStructure(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter)
         {
             var entities = Load(assembly, typeFilters, nameRewriter).Select(x => new ErDiagramEntity(x)).ToList();
             GeneratieErStructure(entities, attributeFilters);

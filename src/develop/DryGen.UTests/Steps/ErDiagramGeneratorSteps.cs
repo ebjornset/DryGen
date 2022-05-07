@@ -17,7 +17,6 @@ namespace DryGen.UTests.Steps
         private readonly AssemblyContext assemblyContext;
         private readonly TypeFiltersContext typeFiltersContext;
         private readonly PropertyFiltersContext propertyFiltersContext;
-        private readonly INameRewriter nameRewriter;
         private readonly GeneratedRepresentationContext generatedRepresentationContext;
         private readonly GeneratorHooks generatorHooks;
         private readonly ExceptionContext exceptionContext;
@@ -27,7 +26,6 @@ namespace DryGen.UTests.Steps
             AssemblyContext assemblyContext,
             TypeFiltersContext typeFiltersContext,
             PropertyFiltersContext propertyFiltersContext,
-            INameRewriter nameRewriter,
             GeneratedRepresentationContext generatedRepresentationContext,
             GeneratorHooks generatorHooks,
             ExceptionContext exceptionContext)
@@ -36,7 +34,6 @@ namespace DryGen.UTests.Steps
             this.assemblyContext = assemblyContext;
             this.typeFiltersContext = typeFiltersContext;
             this.propertyFiltersContext = propertyFiltersContext;
-            this.nameRewriter = nameRewriter;
             this.generatedRepresentationContext = generatedRepresentationContext;
             this.generatorHooks = generatorHooks;
             this.exceptionContext = exceptionContext;
@@ -63,7 +60,7 @@ namespace DryGen.UTests.Steps
                     assemblyContext.Assembly,
                     typeFiltersContext.Filters,
                     propertyFiltersContext.Filters,
-                    nameRewriter));
+                    nameRewriter: null));
         }
 
         [When(@"I generate an ER diagram using EF Core")]
@@ -75,7 +72,7 @@ namespace DryGen.UTests.Steps
                     assemblyContext.Assembly,
                     typeFiltersContext.Filters,
                     propertyFiltersContext.Filters,
-                    nameRewriter));
+                    nameRewriter: null));
         }
 
         [When(@"I generate an ER diagram using '([^']*)'")]

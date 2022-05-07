@@ -5,7 +5,7 @@ namespace DryGen.UTests.Helpers
 {
     public class TypeFiltersContext
     {
-        private readonly List<ITypeFilter> filters = new List<ITypeFilter>();
+        private readonly List<ITypeFilter> filters = new();
 
         public IReadOnlyList<ITypeFilter> Filters => filters;
 

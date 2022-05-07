@@ -10,6 +10,12 @@
         {
             public const string Verb = "mermaid-class-diagram-from-csharp";
         }
+
+        public static class MermaidClassDiagramFromJsonSchema
+        {
+            public const string Verb = "mermaid-class-diagram-from-json-schema";
+        }
+
         public static class MermaidErDiagramFromCsharp
         {
             public const string Verb = "mermaid-er-diagram-from-csharp";

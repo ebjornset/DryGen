@@ -12,7 +12,7 @@ namespace DryGen.MermaidFromEfCore
 {
     public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
     {
-        public IReadOnlyList<ErDiagramEntity> GenerateErStructure(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter nameRewriter)
+        public IReadOnlyList<ErDiagramEntity> GenerateErStructure(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter)
         {
             var efCoreEntityTypes = new List<IEntityType>();
             var dbContextTypesFromAssembly = assembly
@@ -24,7 +24,7 @@ namespace DryGen.MermaidFromEfCore
                 efCoreEntityTypes.AddRange(LoadEfCoreEntitiesFromDbContextType(dbContextType, typeFilters));
             }
             var result = efCoreEntityTypes.Distinct(new EntityTypeEqualityComparer())
-                .Select(et => new EfCoreErEntity(nameRewriter.Rewrite(et.ClrType.Name), et))
+                .Select(et => new EfCoreErEntity(nameRewriter?.Rewrite(et.ClrType.Name) ?? et.ClrType.Name, et))
                 .OrderBy(nt => nt.Name)
                 .ThenBy(nt => nt.Type.Name)
                 .ThenBy(nt => nt.Type.Namespace).ToArray();

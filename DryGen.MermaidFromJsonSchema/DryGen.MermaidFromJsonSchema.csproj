@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
+	  <ProjectReference Include="..\src\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj" />
+	  <ProjectReference Include="..\src\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />
+	</ItemGroup>
+
+</Project>

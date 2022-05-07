@@ -14,11 +14,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{032040CA-2A5F-4F54-9C26-DEED72309B05}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		.whitesource = .whitesource
 		build.cmd = build.cmd
 		build.ps1 = build.ps1
 		build.sh = build.sh
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
+		DryGen.v3.ncrunchsolution = DryGen.v3.ncrunchsolution
 		GitVersion.yml = GitVersion.yml
 		global.json = global.json
 		LICENSE.md = LICENSE.md
@@ -50,7 +52,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.ITests", "src\develo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.DevUtils", "src\develop\DryGen.DevUtils\DryGen.DevUtils.csproj", "{DC273CC1-2EED-45A9-88DB-7B4E853E7186}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryGen.CSharpFromJsonSchema", "src\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj", "{64777132-BBB0-46D5-8736-0EE496E91A7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.CSharpFromJsonSchema", "src\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj", "{64777132-BBB0-46D5-8736-0EE496E91A7D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.MermaidFromJsonSchema", "DryGen.MermaidFromJsonSchema\DryGen.MermaidFromJsonSchema.csproj", "{A7557D3C-CCE3-4F26-8AAF-D06FC0E7877E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryGen.Core", "DryGen.Core\DryGen.Core.csproj", "{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +98,14 @@ Global
 		{64777132-BBB0-46D5-8736-0EE496E91A7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64777132-BBB0-46D5-8736-0EE496E91A7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64777132-BBB0-46D5-8736-0EE496E91A7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7557D3C-CCE3-4F26-8AAF-D06FC0E7877E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7557D3C-CCE3-4F26-8AAF-D06FC0E7877E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7557D3C-CCE3-4F26-8AAF-D06FC0E7877E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7557D3C-CCE3-4F26-8AAF-D06FC0E7877E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

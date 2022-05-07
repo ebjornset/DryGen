@@ -3,7 +3,6 @@ using YamlDotNet.Serialization;
 
 namespace DryGen.Options
 {
-
     public abstract class MermaidErDiagramFromCSharpBaseOptions : MermaidFromCSharpBaseOptions
     {
 
