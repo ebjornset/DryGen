@@ -41,13 +41,14 @@ Scenario: Should generate Mermaid class diagram with direction from 'direction' 
 		    type: string
 		additionalProperties: false
 		"""
+	And output is spesified as a command line argument
 	When I call the program with this command line arguments
 		| Arg                                    |
 		| mermaid-class-diagram-from-json-schema |
 		| --direction                       |
 		| <Direction>                       |
 	Then I should get exit code '0'
-	And console out should contain the text
+	And I should get this generated representation file
 		"""
 		classDiagram
 			direction <Direction>

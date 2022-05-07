@@ -46,13 +46,14 @@ Scenario: Should generate Mermaid ER diagram code to console from 'mermaid-er-di
 		"""
 
 Scenario: Should generate Er diagram from json schema with attributes excluded from argument
+	Given output is spesified as a command line argument
 	When I call the program with this command line arguments
 		| Arg                                 |
 		| mermaid-er-diagram-from-json-schema |
 		| --exclude-all-attributes            |
 		| true                                |
 	Then I should get exit code '0'
-	And console out should contain the text
+	And I should get this generated representation file
 		"""
 		erDiagram
 			ClassFromJsonSchema
