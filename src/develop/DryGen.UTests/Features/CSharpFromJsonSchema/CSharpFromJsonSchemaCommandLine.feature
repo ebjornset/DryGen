@@ -2,12 +2,11 @@
 
 A short summary of the feature
 
-Scenario: Should generate c# code to console from csharp-from-json-schema verb
+Scenario: Should generate c# code to console from 'csharp-from-json-schema' verb
 	Given this json schema input file with the extension "yaml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
 		id: https://drygen.net/test-json-schemas/some.json
-		title: Test Schema
 		type: object
 		properties:
 		  prop1:
@@ -32,7 +31,7 @@ Scenario: Should generate c# code to console from csharp-from-json-schema verb
 		    #pragma warning disable // Disable all warnings
 		
 		    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.10.0 (Newtonsoft.Json v13.0.0.0)")]
-		    public partial class TestSchema
+		    public partial class CSharpFromJsonSchema
 		    {
 		        [Newtonsoft.Json.JsonProperty("prop1", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
 		        public string Prop1 { get; set; }
@@ -42,13 +41,12 @@ Scenario: Should generate c# code to console from csharp-from-json-schema verb
 		}
 		"""
 
-Scenario: Should generate c# code to file from csharp-from-json-schema verb
+Scenario: Should generate c# code to file from 'csharp-from-json-schema' verb
 	Given this json schema input file with the extension "json"
 		"""
 		{
 			"$schema": "https://json-schema.org/draft/2020-12/schema",
 			"id": "https://drygen.net/test-json-schemas/some.json",
-			"title": "Test Schema",
 			"type": "object",
 			"properties": {
 				"prop1": {
@@ -77,7 +75,7 @@ Scenario: Should generate c# code to file from csharp-from-json-schema verb
 		    #pragma warning disable // Disable all warnings
 		
 		    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.10.0 (Newtonsoft.Json v13.0.0.0)")]
-		    public partial class TestSchema
+		    public partial class CSharpFromJsonSchema
 		    {
 		        [Newtonsoft.Json.JsonProperty("prop1", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
 		        public string Prop1 { get; set; }
@@ -87,12 +85,11 @@ Scenario: Should generate c# code to file from csharp-from-json-schema verb
 		}
 		"""
 
-Scenario: Should use option schema-file-format
+Scenario: Should use option 'schema-file-format'
 	Given this json schema input file with the extension "json"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
 		id: https://drygen.net/test-json-schemas/some.json
-		title: Test Schema
 		type: object
 		properties:
 		  prop1:
@@ -111,12 +108,11 @@ Examples:
 	| json               | 1         |
 	| yaml               | 0         |
 
-Scenario: Should use option namespace
+Scenario: Should use option 'namespace'
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
 		id: https://drygen.net/test-json-schemas/some.json
-		title: Test Schema
 		type: object
 		properties:
 		  prop1:
@@ -135,12 +131,11 @@ Examples:
 	| Test.Namespace.One |
 	| Test.Namespace.Two |
 
-Scenario: Should use CSharpFromJsonSchema as namespace when run without option namespace
+Scenario: Should use CSharpFromJsonSchema as namespace when option 'namespace' is not provided
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
 		id: https://drygen.net/test-json-schemas/some.json
-		title: Test Schema
 		type: object
 		properties:
 		  prop1:
@@ -153,12 +148,11 @@ Scenario: Should use CSharpFromJsonSchema as namespace when run without option n
 	Then I should get exit code '0'
 	And I should find the text "namespace CSharpFromJsonSchema" in console out
 
-Scenario: Should use option root-classname
+Scenario: Should use option 'root-classname'
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
 		id: https://drygen.net/test-json-schemas/some.json
-		title: Test Schema
 		type: object
 		properties:
 		  prop1:
@@ -177,7 +171,7 @@ Examples:
 	| Test_Root_Classname_One |
 	| Test_Root_Classname_Two |
 
-Scenario: Should use schema title as root classname when run without option root-classname
+Scenario: Should use schema title as root classname when option r'oot-classname' is not provided
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
@@ -211,3 +205,53 @@ Scenario: Should use CSharpFromJsonSchema as root classname when run without opt
 		| csharp-from-json-schema |
 	Then I should get exit code '0'
 	And I should find the text "public partial class CSharpFromJsonSchema" in console out
+
+Scenario: Should use options 'array-type' and 'array-instance-type'
+	Given this json schema input file with the extension "yml"
+		"""
+		$schema: https://json-schema.org/draft/2020-12/schema
+		id: https://drygen.net/test-json-schemas/some.json
+		type: object
+		properties:
+		  prop1:
+		    type: array
+		    items:
+		      type: string
+		required:
+		  - prop1
+		additionalProperties: false
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| csharp-from-json-schema |
+		| --array-type            |
+		| <Array type>            |
+		| --array-instance-type   |
+		| <Array instance type>   |
+	Then I should get exit code '0'
+	And I should find the text "public <Array type><string> Prop1 { get; set; } = new <Array instance type><string>();" in console out
+Examples:
+	| Array type                             | Array instance type                       |
+	| System.Collections.Generic.IList       | System.Collections.Generic.List           |
+	| System.Collections.Generic.ICollection | System.Collections.ObjectModel.Collection |
+
+Scenario: Should use ICollection and Collection when options 'array-type' and 'array-instance-type' are not provided
+	Given this json schema input file with the extension "yml"
+		"""
+		$schema: https://json-schema.org/draft/2020-12/schema
+		id: https://drygen.net/test-json-schemas/some.json
+		type: object
+		properties:
+		  prop1:
+		    type: array
+		    items:
+		      type: string
+		required:
+		  - prop1
+		additionalProperties: false
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| csharp-from-json-schema |
+	Then I should get exit code '0'
+	And I should find the text "public System.Collections.Generic.ICollection<string> Prop1 { get; set; } = new System.Collections.ObjectModel.Collection<string>();" in console out

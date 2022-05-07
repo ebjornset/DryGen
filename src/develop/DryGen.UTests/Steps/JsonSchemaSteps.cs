@@ -76,7 +76,7 @@ namespace DryGen.UTests.Steps
         {
             var generator = new CSharpFromJsonSchemaGenerator();
             generatedRepresentationContext.GeneratedRepresentation = exceptionContext.HarvestExceptionFrom(() =>
-               generator.Generate(inputFileContext.InputFileName, jsonSchemaFileFormat, theNamespace: null, rootClassname: null).Result);
+               generator.Generate(inputFileContext.InputFileName, jsonSchemaFileFormat, theNamespace: null, rootClassname: null, arrayType: null, arrayInstanceType: null).Result);
         }
     }
 }

@@ -175,7 +175,7 @@ namespace DryGen
                     outWriter.WriteLine($"Generating C# code to file '{options.OutputFile}'");
                 }
                 var generator = new CSharpFromJsonSchemaGenerator();
-                var cSharpCode = generator.Generate(options.InputFile, options.SchemaFileFormat, options.Namespace, options.RootClassname).Result;
+                var cSharpCode = generator.Generate(options.InputFile, options.SchemaFileFormat, options.Namespace, options.RootClassname, options.ArrayType, options.ArrayInstanceType).Result;
                 WriteGeneratedRepresentationToConsoleOrFile(options, cSharpCode);
                 return 0;
             });

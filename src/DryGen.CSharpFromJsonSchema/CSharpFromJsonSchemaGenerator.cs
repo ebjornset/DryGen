@@ -8,23 +8,31 @@ namespace DryGen.CSharpFromJsonSchema
 {
     public class CSharpFromJsonSchemaGenerator
     {
-        public async Task<string> Generate(string? jsonSchemaFileName, JsonSchemaFileFormat jsonSchemaFileFormat, string? theNamespace, string? rootClassname)
+        public async Task<string> Generate(string? jsonSchemaFileName, JsonSchemaFileFormat jsonSchemaFileFormat, string? theNamespace, string? rootClassname, string? arrayType, string? arrayInstanceType )
         {
             var jsonSchema = await LoadJsonSchemaFromFile(jsonSchemaFileName, jsonSchemaFileFormat);
             RemoveSynteticSchemaProperty(jsonSchema);
-            string cSharpCode = GenerateCSharpCode(jsonSchema, theNamespace, rootClassname);
+            string cSharpCode = GenerateCSharpCode(jsonSchema, theNamespace, rootClassname, arrayType, arrayInstanceType);
             return cSharpCode;
         }
 
-        private static string GenerateCSharpCode(JsonSchema jsonSchema, string? theNamespace, string? rootClassname)
+        private static string GenerateCSharpCode(JsonSchema jsonSchema, string? theNamespace, string? rootClassname, string? arrayType, string? arrayInstanceType)
         {
-            var classGenerator = new CSharpGenerator(jsonSchema, new CSharpGeneratorSettings
+            var settings = new CSharpGeneratorSettings
             {
                 ClassStyle = CSharpClassStyle.Poco,
                 Namespace = GetNamespace(theNamespace),
-                ArrayInstanceType = "System.Collections.Generic.List",
                 GenerateOptionalPropertiesAsNullable = true,
-            });
+            };
+            if (!string.IsNullOrWhiteSpace(arrayType))
+            {
+                settings.ArrayType = arrayType;
+            }
+            if (!string.IsNullOrWhiteSpace(arrayInstanceType))
+            {
+                settings.ArrayInstanceType = arrayInstanceType;
+            }
+            var classGenerator = new CSharpGenerator(jsonSchema, settings);
             var cSharpCode = classGenerator.GenerateFile(GetRootClassName(jsonSchema, rootClassname));
             return cSharpCode;
 
