@@ -134,7 +134,7 @@ namespace DryGen.MermaidFromEfCore
             var contextCtor = dbContextType.GetConstructors().FirstOrDefault(x => x.GetParameters().Any(y => dbContextOptionsType.IsAssignableFrom(y.ParameterType)));
             if (contextCtor == null)
             {
-                throw new Exception($"{dbContextType.Name} has no public constructor with DbContextOptions as a parameter");
+                throw new ArgumentException($"{dbContextType.Name} has no public constructor with DbContextOptions as a parameter");
             }
             var ctorParameters = new object?[contextCtor.GetParameters().Length];
             var offset = 0;
