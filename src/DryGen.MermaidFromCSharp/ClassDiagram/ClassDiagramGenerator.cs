@@ -423,30 +423,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             {
                 if (type.IsGenericType)
                 {
-                    var sb = new StringBuilder();
-                    sb.Append(type.Name[..type.Name.IndexOf('`')]).Append(genericStartBracket);
-                    var delimiter = string.Empty;
-                    foreach (var genericArgument in type.GetGenericArguments())
-                    {
-                        sb.Append(delimiter);
-                        var genericParameterConstraints = genericArgument.IsGenericParameter ? genericArgument.GetGenericParameterConstraints().ToArray() : Array.Empty<Type>();
-                        if (genericParameterConstraints.Length > 0)
-                        {
-                            var constraintDelimiter = string.Empty;
-                            foreach (var genericParameterConstraint in genericParameterConstraints)
-                            {
-                                sb.Append(constraintDelimiter).Append(GetDataType(type: genericParameterConstraint, genericStartBracket: "Of", genericEndBracket: string.Empty));
-                                constraintDelimiter = "'";
-                            }
-                        }
-                        else
-                        {
-                            sb.Append(GetDataType(type: genericArgument, genericStartBracket: "Of", genericEndBracket: string.Empty));
-                        }
-                        delimiter = ",";
-                    }
-                    sb.Append(genericEndBracket);
-                    typeName = sb.ToString();
+                    typeName = GetDataTypeForGenericType(type, genericStartBracket, genericEndBracket);
                 }
                 else
                 {
@@ -476,6 +453,46 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                     "Double" => "double",
                     _ => typeName,
                 };
+            }
+
+            static string GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket)
+            {
+                string typeName;
+                var sb = new StringBuilder();
+                sb.Append(type.Name[..type.Name.IndexOf('`')]).Append(genericStartBracket);
+                var delimiter = string.Empty;
+                foreach (var genericArgument in type.GetGenericArguments())
+                {
+                    sb.Append(delimiter);
+                    var genericParameterConstraints = GetGenericParameterConstraints(genericArgument);
+                    if (genericParameterConstraints.Length > 0)
+                    {
+                        AppendGenericParameterConstraints(sb, genericParameterConstraints);
+                    }
+                    else
+                    {
+                        sb.Append(GetDataType(type: genericArgument, genericStartBracket: "Of", genericEndBracket: string.Empty));
+                    }
+                    delimiter = ",";
+                }
+                sb.Append(genericEndBracket);
+                typeName = sb.ToString();
+                return typeName;
+
+                static Type[] GetGenericParameterConstraints(Type genericArgument)
+                {
+                    return genericArgument.IsGenericParameter ? genericArgument.GetGenericParameterConstraints().ToArray() : Array.Empty<Type>();
+                }
+
+                static void AppendGenericParameterConstraints(StringBuilder sb, Type[] genericParameterConstraints)
+                {
+                    var constraintDelimiter = string.Empty;
+                    foreach (var genericParameterConstraint in genericParameterConstraints)
+                    {
+                        sb.Append(constraintDelimiter).Append(GetDataType(type: genericParameterConstraint, genericStartBracket: "Of", genericEndBracket: string.Empty));
+                        constraintDelimiter = "'";
+                    }
+                }
             }
         }
 
