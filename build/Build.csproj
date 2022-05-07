@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- This code is for the Nuke during build, so we don't care about its code coverage -->
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
 			<Value>**</Value>
 		</SonarQubeSetting>

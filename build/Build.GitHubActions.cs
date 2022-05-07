@@ -2,6 +2,8 @@ using DryGen.GithubActions.GhPages;
 using DryGen.GithubActions.SonarCloud;
 using Nuke.Common.CI.GitHubActions;
 
+namespace DryGen.Build;
+
 [SonarCloudGitHubActions(
     name: "pr",
     GitHubActionsImage.UbuntuLatest,

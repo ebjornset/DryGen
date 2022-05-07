@@ -28,7 +28,7 @@ namespace DryGen.Core
             {
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
                 MetadataReference.CreateFromFile(Path.Combine(dotNetCoreDir ?? throw new ArgumentException($"Could not get directory of 'System.Runtime.dll' from typeof(object)"), "System.Runtime.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(dotNetCoreDir ?? throw new ArgumentException($"Could not get directory of 'netstandard.dll' from typeof(object)"), "netstandard.dll")),
+                MetadataReference.CreateFromFile(Path.Combine(dotNetCoreDir, "netstandard.dll")),
             }.ToList();
             if (referencedAssemblies != null)
             {
