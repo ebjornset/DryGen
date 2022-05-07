@@ -1,5 +1,4 @@
 ﻿using DryGen.DevUtils.Helpers;
-using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
 using DryGen.UTests.Helpers;
 using TechTalk.SpecFlow;

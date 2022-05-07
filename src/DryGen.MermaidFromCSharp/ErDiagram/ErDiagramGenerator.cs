@@ -41,79 +41,79 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
                 AppendRelationshipsToDiagram(entities, sb);
             }
             return sb.ToString();
+        }
 
-            static void AppendRelationshipsToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
+        private static void AppendRelationshipsToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
+        {
+            foreach (var entity in entities)
             {
-                foreach (var entity in entities)
+                foreach (var relationship in entity.GetRelationships())
                 {
-                    foreach (var relationship in entity.GetRelationships())
-                    {
-                        sb.Append("\t").Append(entity.Name).Append(' ')
-                            .Append(relationship.FromCardinality.GetFromCardinalityValue()).Append(relationship.GetRelationshipLine()).Append(relationship.ToCardinality.GetToCardinalityValue())
-                            .Append(' ').Append(relationship.To.Name).AppendLine($" : \"{relationship.Label}\"");
-                    }
+                    sb.Append("\t").Append(entity.Name).Append(' ')
+                        .Append(relationship.FromCardinality.GetFromCardinalityValue()).Append(relationship.GetRelationshipLine()).Append(relationship.ToCardinality.GetToCardinalityValue())
+                        .Append(' ').Append(relationship.To.Name).AppendLine($" : \"{relationship.Label}\"");
                 }
             }
+        }
 
-            void AppendEntitiesToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
+        private void AppendEntitiesToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
+        {
+            foreach (var entity in entities)
             {
-                foreach (var entity in entities)
+                if (attributeTypeExclusion != ErDiagramAttributeTypeExclusion.All && entity.GetAttributes().Any())
                 {
-                    if (attributeTypeExclusion != ErDiagramAttributeTypeExclusion.All && entity.GetAttributes().Any())
-                    {
-                        AppendAttributeToEnitity(sb, entity);
-                    }
-                    else
-                    {
-                        sb.Append("\t").AppendLine(entity.Name);
-                    }
+                    AppendAttributeToEnitity(sb, entity);
                 }
-
-                void AppendAttributeToEnitity(StringBuilder sb, ErDiagramEntity entity)
+                else
                 {
-                    sb.Append("\t").Append(entity.Name).AppendLine(" {");
-                    foreach (var attribute in entity.GetAttributes())
-                    {
-                        if (attributeTypeExclusion == ErDiagramAttributeTypeExclusion.Foreignkeys && attribute.IsForeignKey)
-                        {
-                            continue;
-                        }
-                        sb.Append("\t").Append("\t").Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
-                        AppendKeyTypeToAttribute(sb, attribute);
-                        AppendCommentsToAttribute(sb, attribute);
-                        sb.AppendLine();
-                    }
-                    sb.Append("\t").AppendLine("}");
+                    sb.Append("\t").AppendLine(entity.Name);
+                }
+            }
+        }
 
-                    void AppendKeyTypeToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
-                    {
-                        if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.KeyTypes))
-                        {
-                            if (attribute.IsPrimaryKey)
-                            {
-                                sb.Append(" PK");
-                            }
-                            else if (attribute.IsForeignKey)
-                            {
-                                sb.Append(" FK");
-                            }
-                        }
-                    }
+        private void AppendAttributeToEnitity(StringBuilder sb, ErDiagramEntity entity)
+        {
+            sb.Append("\t").Append(entity.Name).AppendLine(" {");
+            foreach (var attribute in entity.GetAttributes())
+            {
+                if (attributeTypeExclusion == ErDiagramAttributeTypeExclusion.Foreignkeys && attribute.IsForeignKey)
+                {
+                    continue;
+                }
+                sb.Append("\t").Append("\t").Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
+                AppendKeyTypeToAttribute(sb, attribute);
+                AppendCommentsToAttribute(sb, attribute);
+                sb.AppendLine();
+            }
+            sb.Append("\t").AppendLine("}");
+        }
 
-                    void AppendCommentsToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
-                    {
-                        if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.Comments))
-                        {
-                            if (attribute.IsAlternateKey)
-                            {
-                                sb.Append(" \"AK\"");
-                            }
-                            else if (attribute.IsNullable)
-                            {
-                                sb.Append(" \"Null\"");
-                            }
-                        }
-                    }
+        private void AppendKeyTypeToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+        {
+            if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.KeyTypes))
+            {
+                if (attribute.IsPrimaryKey)
+                {
+                    sb.Append(" PK");
+                }
+                else if (attribute.IsForeignKey)
+                {
+                    sb.Append(" FK");
+                }
+            }
+        }
+
+        private void AppendCommentsToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+        {
+            if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.Comments))
+            {
+                if (attribute.IsAlternateKey)
+                {
+                    sb.Append(" \"AK\"");
+                }
+                else if (attribute.IsNullable)
+                {
+                    sb.Append(" \"Null\"");
                 }
             }
         }
