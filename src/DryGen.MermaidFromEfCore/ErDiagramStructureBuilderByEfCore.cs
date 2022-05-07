@@ -57,37 +57,51 @@ namespace DryGen.MermaidFromEfCore
                 {
                     var principalEntity = entityLookup[principalType];
                     var isIdentifying = foreignKey.Properties?.All(p => p.IsKey()) == true;
-                    if (propertyType.IsGenericType
-                        && propertyType.GetGenericTypeDefinition().IsErDiagramRelationshipCollection())
+                    if (IsGenericRelationshipCollection(propertyType))
                     {
                         if (propertyType.GetGenericArguments().Length > 1)
                         {
                             continue;
                         }
-                        var labelBaseName = foreignKey.DependentToPrincipal?.Name ?? foreignKey.PrincipalToDependent?.Name ?? string.Empty;
-                        var label = labelBaseName.GetRelationshipLabel((foreignKey.DependentToPrincipal == null ? entity : principalEntity).Name, replaceEntityNameAtEndOfPropertyName: foreignKey.DependentToPrincipal != null);
-                        var fromCardianlity = foreignKey.IsRequired ? ErDiagramRelationshipCardinality.ExactlyOne : ErDiagramRelationshipCardinality.ZeroOrOne;
-                        var toCardianlity = ErDiagramRelationshipCardinality.ZeroOrMore;
-                        principalEntity.AddRelationship(entity, fromCardianlity, toCardianlity, label, propertyName, isIdentifying);
+                        CreateManyRelationshipForCollection(entity, foreignKey, propertyName, principalEntity, isIdentifying);
                     }
                     else
                     {
-                        var fromCardianlity = foreignKey.IsRequired ? ErDiagramRelationshipCardinality.ExactlyOne : ErDiagramRelationshipCardinality.ZeroOrOne;
-                        ErDiagramRelationshipCardinality toCardianlity;
-                        if (isBidirectional)
-                        {
-                            var isPrincipalToDependentRequired = foreignKey.PrincipalToDependent?.PropertyInfo?.GetCustomAttribute(typeof(RequiredAttribute)) != null;
-                            toCardianlity = isPrincipalToDependentRequired ? ErDiagramRelationshipCardinality.ExactlyOne : ErDiagramRelationshipCardinality.ZeroOrOne;
-                        }
-                        else
-                        {
-                            toCardianlity = ErDiagramRelationshipCardinality.ZeroOrMore;
-                        }
-                        var labelBaseName = foreignKey.DependentToPrincipal?.Name ?? foreignKey.PrincipalToDependent?.Name ?? string.Empty;
-                        var label = labelBaseName.GetRelationshipLabel((foreignKey.DependentToPrincipal == null ? entity : principalEntity).Name, replaceEntityNameAtEndOfPropertyName: true);
-                        principalEntity.AddRelationship(entity, fromCardianlity, toCardianlity, label, propertyName, isIdentifying);
+                        CreateRelationshipForNonCollection(entity, foreignKey, isBidirectional, propertyName, principalEntity, isIdentifying);
                     }
                 }
+            }
+
+            static void CreateManyRelationshipForCollection(EfCoreErEntity entity, IForeignKey foreignKey, string propertyName, EfCoreErEntity principalEntity, bool isIdentifying)
+            {
+                var labelBaseName = foreignKey.DependentToPrincipal?.Name ?? foreignKey.PrincipalToDependent?.Name ?? string.Empty;
+                var label = labelBaseName.GetRelationshipLabel((foreignKey.DependentToPrincipal == null ? entity : principalEntity).Name, replaceEntityNameAtEndOfPropertyName: foreignKey.DependentToPrincipal != null);
+                var fromCardianlity = foreignKey.IsRequired ? ErDiagramRelationshipCardinality.ExactlyOne : ErDiagramRelationshipCardinality.ZeroOrOne;
+                var toCardianlity = ErDiagramRelationshipCardinality.ZeroOrMore;
+                principalEntity.AddRelationship(entity, fromCardianlity, toCardianlity, label, propertyName, isIdentifying);
+            }
+
+            static bool IsGenericRelationshipCollection(Type propertyType)
+            {
+                return propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().IsErDiagramRelationshipCollection();
+            }
+
+            static void CreateRelationshipForNonCollection(EfCoreErEntity entity, IForeignKey foreignKey, bool isBidirectional, string propertyName, EfCoreErEntity principalEntity, bool isIdentifying)
+            {
+                var fromCardianlity = foreignKey.IsRequired ? ErDiagramRelationshipCardinality.ExactlyOne : ErDiagramRelationshipCardinality.ZeroOrOne;
+                ErDiagramRelationshipCardinality toCardianlity;
+                if (isBidirectional)
+                {
+                    var isPrincipalToDependentRequired = foreignKey.PrincipalToDependent?.PropertyInfo?.GetCustomAttribute(typeof(RequiredAttribute)) != null;
+                    toCardianlity = isPrincipalToDependentRequired ? ErDiagramRelationshipCardinality.ExactlyOne : ErDiagramRelationshipCardinality.ZeroOrOne;
+                }
+                else
+                {
+                    toCardianlity = ErDiagramRelationshipCardinality.ZeroOrMore;
+                }
+                var labelBaseName = foreignKey.DependentToPrincipal?.Name ?? foreignKey.PrincipalToDependent?.Name ?? string.Empty;
+                var label = labelBaseName.GetRelationshipLabel((foreignKey.DependentToPrincipal == null ? entity : principalEntity).Name, replaceEntityNameAtEndOfPropertyName: true);
+                principalEntity.AddRelationship(entity, fromCardianlity, toCardianlity, label, propertyName, isIdentifying);
             }
         }
 

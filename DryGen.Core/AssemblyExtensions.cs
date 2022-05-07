@@ -23,12 +23,16 @@ namespace DryGen.Core
         public static void CompileCodeToStream(this string cSharpCode, string assemblyName, Stream stream, params Assembly[] referencedAssemblies)
         {
             var dotNetCoreDir = Path.GetDirectoryName(typeof(object).Assembly.Location);
+            if (string.IsNullOrEmpty(dotNetCoreDir))
+            {
+                throw new ArgumentException($"Could not get directory of 'System.Runtime.dll' from typeof(object)");
+            }
             var syntaxTree = CSharpSyntaxTree.ParseText(cSharpCode);
             var references = new MetadataReference[]
             {
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                MetadataReference.CreateFromFile(Path.Combine(dotNetCoreDir ?? throw new ArgumentException($"Could not get directory of 'System.Runtime.dll' from typeof(object)"), "System.Runtime.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(dotNetCoreDir ?? throw new ArgumentException($"Could not get directory of 'netstandard.dll' from typeof(object)"), "netstandard.dll")),
+                MetadataReference.CreateFromFile(Path.Combine(dotNetCoreDir, "System.Runtime.dll")),
+                MetadataReference.CreateFromFile(Path.Combine(dotNetCoreDir, "netstandard.dll")),
             }.ToList();
             if (referencedAssemblies != null)
             {

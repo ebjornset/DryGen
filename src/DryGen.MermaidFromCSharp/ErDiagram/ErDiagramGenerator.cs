@@ -1,5 +1,4 @@
 ﻿using DryGen.MermaidFromCSharp.TypeFilters;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -36,10 +35,41 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
         private string GenerateErDiagramMermaid(IEnumerable<ErDiagramEntity> entities)
         {
             var sb = new StringBuilder().AppendLine("erDiagram");
-            foreach (var entity in entities)
+            AppendEntitiesToDiagram(entities, sb);
+            if (relationshipTypeExclusion != ErDiagramRelationshipTypeExclusion.All)
             {
-                // Append entities with any attributes
-                if (attributeTypeExclusion != ErDiagramAttributeTypeExclusion.All && entity.GetAttributes().Any())
+                AppendRelationshipsToDiagram(entities, sb);
+            }
+            return sb.ToString();
+
+            static void AppendRelationshipsToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
+            {
+                foreach (var entity in entities)
+                {
+                    foreach (var relationship in entity.GetRelationships())
+                    {
+                        sb.Append("\t").Append(entity.Name).Append(' ')
+                            .Append(relationship.FromCardinality.GetFromCardinalityValue()).Append(relationship.GetRelationshipLine()).Append(relationship.ToCardinality.GetToCardinalityValue())
+                            .Append(' ').Append(relationship.To.Name).AppendLine($" : \"{relationship.Label}\"");
+                    }
+                }
+            }
+
+            void AppendEntitiesToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
+            {
+                foreach (var entity in entities)
+                {
+                    if (attributeTypeExclusion != ErDiagramAttributeTypeExclusion.All && entity.GetAttributes().Any())
+                    {
+                        AppendAttributeToEnitity(sb, entity);
+                    }
+                    else
+                    {
+                        sb.Append("\t").AppendLine(entity.Name);
+                    }
+                }
+
+                void AppendAttributeToEnitity(StringBuilder sb, ErDiagramEntity entity)
                 {
                     sb.Append("\t").Append(entity.Name).AppendLine(" {");
                     foreach (var attribute in entity.GetAttributes())
@@ -49,6 +79,14 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
                             continue;
                         }
                         sb.Append("\t").Append("\t").Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
+                        AppendKeyTypeToAttribute(sb, attribute);
+                        AppendCommentsToAttribute(sb, attribute);
+                        sb.AppendLine();
+                    }
+                    sb.Append("\t").AppendLine("}");
+
+                    void AppendKeyTypeToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+                    {
                         if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.KeyTypes))
                         {
                             if (attribute.IsPrimaryKey)
@@ -60,6 +98,10 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
                                 sb.Append(" FK");
                             }
                         }
+                    }
+
+                    void AppendCommentsToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+                    {
                         if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.Comments))
                         {
                             if (attribute.IsAlternateKey)
@@ -71,29 +113,9 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
                                 sb.Append(" \"Null\"");
                             }
                         }
-                        sb.AppendLine();
-                    }
-                    sb.Append("\t").AppendLine("}");
-                }
-                else
-                {
-                    sb.Append("\t").AppendLine(entity.Name);
-                }
-            }
-            if (relationshipTypeExclusion != ErDiagramRelationshipTypeExclusion.All)
-            {
-                foreach (var entity in entities)
-                {
-                    // Append relations 
-                    foreach (var relationship in entity.GetRelationships())
-                    {
-                        sb.Append("\t").Append(entity.Name).Append(' ')
-                            .Append(relationship.FromCardinality.GetFromCardinalityValue()).Append(relationship.GetRelationshipLine()).Append(relationship.ToCardinality.GetToCardinalityValue())
-                            .Append(' ').Append(relationship.To.Name).AppendLine($" : \"{relationship.Label}\"");
                     }
                 }
             }
-            return sb.ToString();
         }
 
         private IReadOnlyList<ITypeFilter> ErDiagramFilters(IReadOnlyList<ITypeFilter> filters)

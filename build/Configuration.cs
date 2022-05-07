@@ -2,6 +2,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Nuke.Common.Tooling;
 
+namespace DryGen.Build;
+
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<Configuration>))]
 public class Configuration : Enumeration
