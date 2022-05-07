@@ -282,95 +282,124 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
         private string GenerateClassDiagramMermaid(IEnumerable<ClassDiagramClass> classes, INameRewriter? nameRewriter)
         {
             var sb = new StringBuilder().AppendLine("classDiagram");
-            if (direction != null && direction != ClassDiagramDirection.Default)
-            {
-                sb.Append("\tdirection ").AppendLine(direction.ToString());
-            }
-            foreach (var classDiagramClass in classes)
-            {
-                // Append class with any attributes
-                var dataType = GetDataType(classDiagramClass.Type);
-                sb.Append("\tclass ").Append(nameRewriter?.Rewrite(dataType) ?? dataType).AppendLine(" {");
-                if (classDiagramClass.Type.IsInterface)
-                {
-                    sb.AppendLine("\t\t<<interface>>");
-                }
-                else if (classDiagramClass.Type.IsAbstract)
-                {
-                    sb.AppendLine("\t\t<<abstract>>");
-                }
-                if (classDiagramClass.Type.IsEnum)
-                {
-                    sb.AppendLine("\t\t<<enumeration>>");
-                    if (attributeLevel != ClassDiagramAttributeLevel.None)
-                    {
-                        foreach (var enumName in classDiagramClass.Type.GetEnumNames())
-                        {
-                            sb.Append("\t\t").AppendLine(enumName);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var attribute in classDiagramClass.Attributes)
-                    {
-                        sb.Append("\t").Append("\t").Append(attribute.Visibility).Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
-                        if (attribute.IsStatic)
-                        {
-                            sb.Append('$');
-                        }
-                        sb.AppendLine();
-                    }
-                    foreach (var method in classDiagramClass.Methods)
-                    {
-                        sb.Append("\t").Append("\t").Append(method.Visibility).Append(method.MethodName).Append('(');
-                        if (excludeMethodParams)
-                        {
-                            if (method.Parameters.Count == 1)
-                            {
-                                sb.Append("1 param");
-                            }
-                            else if (method.Parameters.Count > 1)
-                            {
-                                sb.Append($"{method.Parameters.Count} params");
-                            }
-                        }
-                        else
-                        {
-                            var delimiter = string.Empty;
-                            foreach (var parameter in method.Parameters)
-                            {
-                                sb.Append(delimiter).Append(parameter.ParameterType).Append(' ').Append(parameter.ParameterName);
-                                delimiter = ", ";
-                            }
-                        }
-                        sb.Append(')');
-                        if (method.IsStatic)
-                        {
-                            sb.Append('$');
-                        }
-                        if (method.IsAbstract)
-                        {
-                            sb.Append('*');
-                        }
-                        if (!string.IsNullOrEmpty(method.ReturnType))
-                        {
-                            sb.Append(' ').Append(method.ReturnType);
-                        }
-                        sb.AppendLine();
-                    }
-                }
-                sb.Append("\t").AppendLine("}");
-            }
-            foreach (var classDiagramClass in classes)
-            {
-                // Append relationships
-                foreach (var relationship in classDiagramClass.Relationships.OrderBy(x => x.PropertyName))
-                {
-                    sb.Append("\t").Append(classDiagramClass.Name).Append(relationship.GetRelationshipPattern()).Append(relationship.To.Name).AppendLine(relationship.GetRelationshipLabel());
-                }
-            }
+            AppendDirection(sb);
+            AppendClasses(classes, nameRewriter, sb);
+            AppendRelationships(classes, sb);
             return sb.ToString();
+
+            void AppendDirection(StringBuilder sb)
+            {
+                if (direction != null && direction != ClassDiagramDirection.Default)
+                {
+                    sb.Append("\tdirection ").AppendLine(direction.ToString());
+                }
+            }
+
+            void AppendClasses(IEnumerable<ClassDiagramClass> classes, INameRewriter? nameRewriter, StringBuilder sb)
+            {
+                foreach (var classDiagramClass in classes)
+                {
+                    // Append class with any attributes
+                    var dataType = GetDataType(classDiagramClass.Type);
+                    sb.Append("\tclass ").Append(nameRewriter?.Rewrite(dataType) ?? dataType).AppendLine(" {");
+                    if (classDiagramClass.Type.IsInterface)
+                    {
+                        sb.AppendLine("\t\t<<interface>>");
+                    }
+                    else if (classDiagramClass.Type.IsAbstract)
+                    {
+                        sb.AppendLine("\t\t<<abstract>>");
+                    }
+                    if (classDiagramClass.Type.IsEnum)
+                    {
+                        AppendEnumerationToClass(sb, classDiagramClass);
+                    }
+                    else
+                    {
+                        AppendAttributesToClass(sb, classDiagramClass);
+                        AppendMethodsToClass(sb, classDiagramClass);
+                    }
+                    sb.Append("\t").AppendLine("}");
+                }
+            }
+
+            void AppendEnumerationToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+            {
+                sb.AppendLine("\t\t<<enumeration>>");
+                if (attributeLevel != ClassDiagramAttributeLevel.None)
+                {
+                    foreach (var enumName in classDiagramClass.Type.GetEnumNames())
+                    {
+                        sb.Append("\t\t").AppendLine(enumName);
+                    }
+                }
+            }
+
+            static void AppendAttributesToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+            {
+                foreach (var attribute in classDiagramClass.Attributes)
+                {
+                    sb.Append("\t").Append("\t").Append(attribute.Visibility).Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
+                    if (attribute.IsStatic)
+                    {
+                        sb.Append('$');
+                    }
+                    sb.AppendLine();
+                }
+            }
+
+            void AppendMethodsToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+            {
+                foreach (var method in classDiagramClass.Methods)
+                {
+                    sb.Append("\t").Append("\t").Append(method.Visibility).Append(method.MethodName).Append('(');
+                    if (excludeMethodParams)
+                    {
+                        if (method.Parameters.Count == 1)
+                        {
+                            sb.Append("1 param");
+                        }
+                        else if (method.Parameters.Count > 1)
+                        {
+                            sb.Append($"{method.Parameters.Count} params");
+                        }
+                    }
+                    else
+                    {
+                        var delimiter = string.Empty;
+                        foreach (var parameter in method.Parameters)
+                        {
+                            sb.Append(delimiter).Append(parameter.ParameterType).Append(' ').Append(parameter.ParameterName);
+                            delimiter = ", ";
+                        }
+                    }
+                    sb.Append(')');
+                    if (method.IsStatic)
+                    {
+                        sb.Append('$');
+                    }
+                    if (method.IsAbstract)
+                    {
+                        sb.Append('*');
+                    }
+                    if (!string.IsNullOrEmpty(method.ReturnType))
+                    {
+                        sb.Append(' ').Append(method.ReturnType);
+                    }
+                    sb.AppendLine();
+                }
+            }
+
+            static void AppendRelationships(IEnumerable<ClassDiagramClass> classes, StringBuilder sb)
+            {
+                foreach (var classDiagramClass in classes)
+                {
+                    foreach (var relationship in classDiagramClass.Relationships.OrderBy(x => x.PropertyName))
+                    {
+                        sb.Append("\t").Append(classDiagramClass.Name).Append(relationship.GetRelationshipPattern()).Append(relationship.To.Name).AppendLine(relationship.GetRelationshipLabel());
+                    }
+                }
+            }
         }
 
         private static bool IsNotGetterOrSetterOrLocalFunction(MethodInfo method)
