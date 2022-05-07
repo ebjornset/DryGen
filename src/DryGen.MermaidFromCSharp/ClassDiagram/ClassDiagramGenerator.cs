@@ -356,23 +356,11 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                 sb.Append("\t").Append("\t").Append(method.Visibility).Append(method.MethodName).Append('(');
                 if (excludeMethodParams)
                 {
-                    if (method.Parameters.Count == 1)
-                    {
-                        sb.Append("1 param");
-                    }
-                    else if (method.Parameters.Count > 1)
-                    {
-                        sb.Append($"{method.Parameters.Count} params");
-                    }
+                    AppedParamsSummaryToClassMethod(sb, method);
                 }
                 else
                 {
-                    var delimiter = string.Empty;
-                    foreach (var parameter in method.Parameters)
-                    {
-                        sb.Append(delimiter).Append(parameter.ParameterType).Append(' ').Append(parameter.ParameterName);
-                        delimiter = ", ";
-                    }
+                    AppendParamsToClassMethod(sb, method);
                 }
                 sb.Append(')');
                 if (method.IsStatic)
@@ -388,6 +376,28 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                     sb.Append(' ').Append(method.ReturnType);
                 }
                 sb.AppendLine();
+            }
+        }
+
+        private static void AppendParamsToClassMethod(StringBuilder sb, ClassDiagramMethod method)
+        {
+            var delimiter = string.Empty;
+            foreach (var parameter in method.Parameters)
+            {
+                sb.Append(delimiter).Append(parameter.ParameterType).Append(' ').Append(parameter.ParameterName);
+                delimiter = ", ";
+            }
+        }
+
+        private static void AppedParamsSummaryToClassMethod(StringBuilder sb, ClassDiagramMethod method)
+        {
+            if (method.Parameters.Count == 1)
+            {
+                sb.Append("1 param");
+            }
+            else if (method.Parameters.Count > 1)
+            {
+                sb.Append($"{method.Parameters.Count} params");
             }
         }
 
@@ -467,64 +477,65 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             // return nullableUnderlyingType == null ? result : $"{result}?";
             return result;
 
-            static string GetTypeName(string typeName)
+        }
+
+        static string GetTypeName(string typeName)
+        {
+            return typeName switch
             {
-                return typeName switch
+                "Int32" => "int",
+                "Int64" => "long",
+                "Single" => "float",
+                "Boolean" => "bool",
+                "String" => "string",
+                "Decimal" => "decimal",
+                "Object" => "object",
+                "Double" => "double",
+                _ => typeName,
+            };
+        }
+
+        private static string GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket)
+        {
+            string typeName;
+            var sb = new StringBuilder();
+            sb.Append(type.Name[..type.Name.IndexOf('`')]).Append(genericStartBracket);
+            var delimiter = string.Empty;
+            foreach (var genericArgument in type.GetGenericArguments())
+            {
+                sb.Append(delimiter);
+                var genericParameterConstraints = GetGenericParameterConstraints(genericArgument);
+                if (genericParameterConstraints.Length > 0)
                 {
-                    "Int32" => "int",
-                    "Int64" => "long",
-                    "Single" => "float",
-                    "Boolean" => "bool",
-                    "String" => "string",
-                    "Decimal" => "decimal",
-                    "Object" => "object",
-                    "Double" => "double",
-                    _ => typeName,
-                };
+                    AppendGenericParameterConstraints(sb, genericParameterConstraints);
+                }
+                else
+                {
+                    sb.Append(GetDataType(type: genericArgument, genericStartBracket: "Of", genericEndBracket: string.Empty));
+                }
+                delimiter = ",";
+            }
+            sb.Append(genericEndBracket);
+            typeName = sb.ToString();
+            return typeName;
+
+            static Type[] GetGenericParameterConstraints(Type genericArgument)
+            {
+                return genericArgument.IsGenericParameter ? genericArgument.GetGenericParameterConstraints().ToArray() : Array.Empty<Type>();
             }
 
-            static string GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket)
+            static void AppendGenericParameterConstraints(StringBuilder sb, Type[] genericParameterConstraints)
             {
-                string typeName;
-                var sb = new StringBuilder();
-                sb.Append(type.Name[..type.Name.IndexOf('`')]).Append(genericStartBracket);
-                var delimiter = string.Empty;
-                foreach (var genericArgument in type.GetGenericArguments())
+                var constraintDelimiter = string.Empty;
+                foreach (var genericParameterConstraint in genericParameterConstraints)
                 {
-                    sb.Append(delimiter);
-                    var genericParameterConstraints = GetGenericParameterConstraints(genericArgument);
-                    if (genericParameterConstraints.Length > 0)
-                    {
-                        AppendGenericParameterConstraints(sb, genericParameterConstraints);
-                    }
-                    else
-                    {
-                        sb.Append(GetDataType(type: genericArgument, genericStartBracket: "Of", genericEndBracket: string.Empty));
-                    }
-                    delimiter = ",";
-                }
-                sb.Append(genericEndBracket);
-                typeName = sb.ToString();
-                return typeName;
-
-                static Type[] GetGenericParameterConstraints(Type genericArgument)
-                {
-                    return genericArgument.IsGenericParameter ? genericArgument.GetGenericParameterConstraints().ToArray() : Array.Empty<Type>();
-                }
-
-                static void AppendGenericParameterConstraints(StringBuilder sb, Type[] genericParameterConstraints)
-                {
-                    var constraintDelimiter = string.Empty;
-                    foreach (var genericParameterConstraint in genericParameterConstraints)
-                    {
-                        sb.Append(constraintDelimiter).Append(GetDataType(type: genericParameterConstraint, genericStartBracket: "Of", genericEndBracket: string.Empty));
-                        constraintDelimiter = "'";
-                    }
+                    sb.Append(constraintDelimiter).Append(GetDataType(type: genericParameterConstraint, genericStartBracket: "Of", genericEndBracket: string.Empty));
+                    constraintDelimiter = "'";
                 }
             }
         }
 
-        static string GetVisibility(MethodInfo methodInfo)
+        private static string GetVisibility(MethodInfo methodInfo)
         {
             string visibility = "";
             if (methodInfo.IsPublic)
