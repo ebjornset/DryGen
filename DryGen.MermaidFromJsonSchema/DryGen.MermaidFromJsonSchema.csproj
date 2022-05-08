@@ -5,6 +5,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
 	  <ProjectReference Include="..\src\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj" />
 	  <ProjectReference Include="..\src\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />

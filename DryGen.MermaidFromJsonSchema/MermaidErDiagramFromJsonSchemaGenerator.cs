@@ -2,9 +2,7 @@
 using DryGen.CSharpFromJsonSchema;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ErDiagram;
-using Newtonsoft.Json;
 using System;
-using System.CodeDom.Compiler;
 using System.Threading.Tasks;
 
 namespace DryGen.MermaidFromJsonSchema
@@ -21,7 +19,7 @@ namespace DryGen.MermaidFromJsonSchema
                 excludeAllRelationships == true ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None);
             var theNamespace = $"MermaidErDiagramFromJsonSchemaGenerator_{Guid.NewGuid().ToString().Replace('-', '_')}";
             string cSharpCode = await cSharpCodeGenerator.Generate(jsonSchemaFileName, jsonSchemaFileFormat, theNamespace, rootClassname, arrayType: null, arrayInstanceType: null);
-            var tempAssembly = cSharpCode.CompileCodeToMemory(typeof(JsonPropertyAttribute).Assembly, typeof(GeneratedCodeAttribute).Assembly);
+            var tempAssembly = cSharpCode.CompileCodeToMemory(ReferencedAssemblies.Get());
             var mermaid = mermaidErDiagramGenerator.Generate(tempAssembly, new ITypeFilter[0], new IPropertyFilter[0], nameRewriter: null);
             return mermaid;
         }
