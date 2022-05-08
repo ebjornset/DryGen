@@ -1,3 +1,6 @@
 title: "DryGen"
 description: "A .Net tool to generate other representations of a piece of knowledge from one representation."
 theme: bulma-clean-theme
+permalink: pretty
+paginate: 5
+paginate_path: "/blog/page:num"
