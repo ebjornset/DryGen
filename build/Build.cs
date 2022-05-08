@@ -49,6 +49,9 @@ public partial class Build : NukeBuild
     string Authors;
     string Description;
     bool IsVersionTag;
+#pragma warning disable S1075 // URIs should not be hardcoded
+    private readonly string ProjectUrlInNugetPackage = "https://docs.drygen.net/";
+#pragma warning restore S1075 // URIs should not be hardcoded
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
@@ -133,8 +136,7 @@ public partial class Build : NukeBuild
                     .SetCopyright(Copyright)
                     .SetDescription(Description)
                     .SetRepositoryUrl(GitRepository.ToString())
-                    // TODO. Where should this point to?
-                    //.SetPackageProjectUrl()
+                    .SetPackageProjectUrl(ProjectUrlInNugetPackage)
                     .SetVersion(GitVersion.NuGetVersionV2));
             });
 
