@@ -54,9 +54,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.DevUtils", "src\deve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.CSharpFromJsonSchema", "src\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj", "{64777132-BBB0-46D5-8736-0EE496E91A7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.MermaidFromJsonSchema", "DryGen.MermaidFromJsonSchema\DryGen.MermaidFromJsonSchema.csproj", "{A7557D3C-CCE3-4F26-8AAF-D06FC0E7877E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.MermaidFromJsonSchema", "src\DryGen.MermaidFromJsonSchema\DryGen.MermaidFromJsonSchema.csproj", "{A7557D3C-CCE3-4F26-8AAF-D06FC0E7877E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryGen.Core", "DryGen.Core\DryGen.Core.csproj", "{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryGen.Core", "src\DryGen.Core\DryGen.Core.csproj", "{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
