@@ -154,14 +154,34 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
 
         private static void GenerateClassInheritanceForBaseType(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
         {
-            if (!classDiagramClass.Type.IsInterface && classDiagramClass.Type.BaseType != null && classLookup.ContainsKey(classDiagramClass.Type.BaseType))
+            if (classDiagramClass.Type.IsInterface)
             {
-                classDiagramClass.AddRelationship(
-                        ClassDiagramRelationshipCardinality.Unspecified,
-                        ClassDiagramRelationshipType.Inheritance,
-                        ClassDiagramRelationshipCardinality.Unspecified,
-                        classLookup[classDiagramClass.Type.BaseType], string.Empty, string.Empty);
+                return;
             }
+            var baseType = classDiagramClass.Type.BaseType;
+            baseType = GetNonClosedGenericBaseType(baseType, classLookup);
+            if (baseType == null)
+            {
+                return;
+            }
+            classDiagramClass.AddRelationship(
+                    ClassDiagramRelationshipCardinality.Unspecified,
+                    ClassDiagramRelationshipType.Inheritance,
+                    ClassDiagramRelationshipCardinality.Unspecified,
+                    classLookup[baseType], string.Empty, string.Empty);
+        }
+
+        private static Type? GetNonClosedGenericBaseType(Type? baseType, IDictionary<Type, ClassDiagramClass> classLookup)
+        {
+            if (baseType == null)
+            {
+                return null;
+            }
+            if (excludeClosedGenericTypeTypeFilter.Accepts(baseType))
+            {
+                return classLookup.ContainsKey(baseType) ? baseType : null;
+            }
+            return classLookup.Values.FirstOrDefault( x => x.Type.Name == baseType.Name)?.Type;
         }
 
         private static void GenerateClassDependencies(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
@@ -284,7 +304,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             var sb = new StringBuilder().AppendLine("classDiagram");
             AppendDirection(sb);
             AppendClasses(classes, nameRewriter, sb);
-            AppendRelationships(classes, sb);
+            AppendRelationships(classes, nameRewriter, sb);
             return sb.ToString();
         }
 
@@ -301,8 +321,8 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             foreach (var classDiagramClass in classes)
             {
                 // Append class with any attributes
-                var dataType = GetDataType(classDiagramClass.Type);
-                sb.Append("\tclass ").Append(nameRewriter?.Rewrite(dataType) ?? dataType).AppendLine(" {");
+                var dataType = GetDataType(classDiagramClass.Type, nameRewriter);
+                sb.Append("\tclass ").Append(dataType).AppendLine(" {");
                 if (classDiagramClass.Type.IsInterface)
                 {
                     sb.AppendLine("\t\t<<interface>>");
@@ -401,13 +421,15 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             }
         }
 
-        private static void AppendRelationships(IEnumerable<ClassDiagramClass> classes, StringBuilder sb)
+        private static void AppendRelationships(IEnumerable<ClassDiagramClass> classes, INameRewriter? nameRewriter, StringBuilder sb)
         {
             foreach (var classDiagramClass in classes)
             {
                 foreach (var relationship in classDiagramClass.Relationships.OrderBy(x => x.PropertyName))
                 {
-                    sb.Append("\t").Append(classDiagramClass.Name).Append(relationship.GetRelationshipPattern()).Append(relationship.To.Name).AppendLine(relationship.GetRelationshipLabel());
+                    var dataTypeFrom = GetDataType(classDiagramClass.Type, nameRewriter);
+                    var dataTypeTo = GetDataType(relationship.To.Type, nameRewriter);
+                    sb.Append("\t").Append(dataTypeFrom).Append(relationship.GetRelationshipPattern()).Append(dataTypeTo).AppendLine(relationship.GetRelationshipLabel());
                 }
             }
         }
@@ -423,7 +445,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
 
         private IReadOnlyList<ITypeFilter> ClassDiagramFilters(IReadOnlyList<ITypeFilter> filters)
         {
-            var result = new List<ITypeFilter> { new ExcludeNonPublicClassTypeFilter(), new ExcludeSystemObjectAndSystemEnumTypeFilter() };
+            var result = new List<ITypeFilter> { new ExcludeNonPublicClassTypeFilter(), new ExcludeSystemObjectAndSystemEnumTypeFilter(), new ExcludeClosedGenericTypeTypeFilter() };
             result.AddRange(filters);
             return result;
         }
@@ -449,7 +471,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             return true;
         }
 
-        private static string GetDataType(Type type, string genericStartBracket = "~", string genericEndBracket = "~")
+        private static string GetDataType(Type type, INameRewriter? nameRewriter = null, string genericStartBracket = "~", string genericEndBracket = "~")
         {
             if (type == typeof(void))
             {
@@ -473,10 +495,11 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                 typeName = nullableUnderlyingType.Name;
             }
             var result = GetTypeName(typeName);
-            // TODO The syntax don't allow ? in type so we must use comment for nullable types.
-            // return nullableUnderlyingType == null ? result : $"{result}?";
+            if (nameRewriter != null)
+            {
+                result = nameRewriter.Rewrite(result);
+            }
             return result;
-
         }
 
         static string GetTypeName(string typeName)
@@ -551,5 +574,6 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
         }
 
         private static readonly Type[] collectionTypes = { typeof(IEnumerable<>), typeof(ICollection<>), typeof(IList<>), typeof(IReadOnlyList<>), typeof(IReadOnlyCollection<>) };
+        private static readonly ExcludeClosedGenericTypeTypeFilter excludeClosedGenericTypeTypeFilter= new();
     }
 }
