@@ -284,7 +284,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             var sb = new StringBuilder().AppendLine("classDiagram");
             AppendDirection(sb);
             AppendClasses(classes, nameRewriter, sb);
-            AppendRelationships(classes, sb);
+            AppendRelationships(classes, nameRewriter, sb);
             return sb.ToString();
         }
 
@@ -301,8 +301,8 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             foreach (var classDiagramClass in classes)
             {
                 // Append class with any attributes
-                var dataType = GetDataType(classDiagramClass.Type);
-                sb.Append("\tclass ").Append(nameRewriter?.Rewrite(dataType) ?? dataType).AppendLine(" {");
+                var dataType = GetDataType(classDiagramClass.Type, nameRewriter);
+                sb.Append("\tclass ").Append(dataType).AppendLine(" {");
                 if (classDiagramClass.Type.IsInterface)
                 {
                     sb.AppendLine("\t\t<<interface>>");
@@ -401,13 +401,15 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             }
         }
 
-        private static void AppendRelationships(IEnumerable<ClassDiagramClass> classes, StringBuilder sb)
+        private static void AppendRelationships(IEnumerable<ClassDiagramClass> classes, INameRewriter? nameRewriter, StringBuilder sb)
         {
             foreach (var classDiagramClass in classes)
             {
                 foreach (var relationship in classDiagramClass.Relationships.OrderBy(x => x.PropertyName))
                 {
-                    sb.Append("\t").Append(classDiagramClass.Name).Append(relationship.GetRelationshipPattern()).Append(relationship.To.Name).AppendLine(relationship.GetRelationshipLabel());
+                    var dataTypeFrom = GetDataType(classDiagramClass.Type, nameRewriter);
+                    var dataTypeTo = GetDataType(relationship.To.Type, nameRewriter);
+                    sb.Append("\t").Append(dataTypeFrom).Append(relationship.GetRelationshipPattern()).Append(dataTypeTo).AppendLine(relationship.GetRelationshipLabel());
                 }
             }
         }
@@ -449,7 +451,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             return true;
         }
 
-        private static string GetDataType(Type type, string genericStartBracket = "~", string genericEndBracket = "~")
+        private static string GetDataType(Type type, INameRewriter? nameRewriter = null, string genericStartBracket = "~", string genericEndBracket = "~")
         {
             if (type == typeof(void))
             {
@@ -473,6 +475,10 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                 typeName = nullableUnderlyingType.Name;
             }
             var result = GetTypeName(typeName);
+            if (nameRewriter != null)
+            {
+                result = nameRewriter.Rewrite(result);
+            }
             // TODO The syntax don't allow ? in type so we must use comment for nullable types.
             // return nullableUnderlyingType == null ? result : $"{result}?";
             return result;

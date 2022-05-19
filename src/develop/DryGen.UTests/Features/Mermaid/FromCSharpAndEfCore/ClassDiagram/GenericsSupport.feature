@@ -12,7 +12,8 @@ Scenario: Generates class for generic type
 		namespace Test
 		{
 			public class Shape {}
-			public class Square<Shape> {}
+			public class ShapeAndSquare<TShape,TSquare> {}
+			public class Square<TShape> {}
 			public class Squares<T> where T : IEnumerable<IEnumerable<Shape>> {}
 		}
 		"""
@@ -23,7 +24,9 @@ Scenario: Generates class for generic type
 		classDiagram
 			class Shape {
 			}
-			class Square~Shape~ {
+			class ShapeAndSquare~TShape,TSquare~ {
+			}
+			class Square~TShape~ {
 			}
 			class Squares~IEnumerableOfIEnumerableOfShape~ {
 			}
@@ -104,4 +107,31 @@ Scenario: Generates data types for all generic method params and return types
 				+GenericMethod(IDictionary~float,IDictionaryOfint,bool~ genericParam) IDictionary~int,IDictionaryOfbool,IDictionaryOfint,string~
 			}
 		
+		"""
+
+Scenario: Generates inheritance for generic types
+	Given this C# source code
+		"""
+		using System.Collections.Generic;
+		namespace Test
+		{
+			public abstract class ShapeAndSquare<TShape,TSquare> {}
+			public class ObjectShapeAndSquare : ShapeAndSquare<object, object> {}
+		}
+		"""
+	When I generate a Class diagram
+	Then I should get this generated representation
+	# Mermaid only support one level of generics, so the <> in any nested generic types are replaced with "Of" as a workaround
+		"""
+		classDiagram
+			class ObjectShapeAndSquare {
+			}
+			class ShapeAndSquare~TShape,TSquare~ {
+				<<abstract>>
+			}
+			class ShapeAndSquare~object,object~ {
+				<<abstract>>
+			}
+			ObjectShapeAndSquare --|> ShapeAndSquare~object,object~
+
 		"""
