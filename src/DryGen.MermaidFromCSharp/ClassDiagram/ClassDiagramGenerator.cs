@@ -154,14 +154,34 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
 
         private static void GenerateClassInheritanceForBaseType(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
         {
-            if (!classDiagramClass.Type.IsInterface && classDiagramClass.Type.BaseType != null && classLookup.ContainsKey(classDiagramClass.Type.BaseType))
+            if (classDiagramClass.Type.IsInterface)
             {
-                classDiagramClass.AddRelationship(
-                        ClassDiagramRelationshipCardinality.Unspecified,
-                        ClassDiagramRelationshipType.Inheritance,
-                        ClassDiagramRelationshipCardinality.Unspecified,
-                        classLookup[classDiagramClass.Type.BaseType], string.Empty, string.Empty);
+                return;
             }
+            var baseType = classDiagramClass.Type.BaseType;
+            baseType = GetNonClosedGenericBaseType(baseType, classLookup);
+            if (baseType == null)
+            {
+                return;
+            }
+            classDiagramClass.AddRelationship(
+                    ClassDiagramRelationshipCardinality.Unspecified,
+                    ClassDiagramRelationshipType.Inheritance,
+                    ClassDiagramRelationshipCardinality.Unspecified,
+                    classLookup[baseType], string.Empty, string.Empty);
+        }
+
+        private static Type? GetNonClosedGenericBaseType(Type? baseType, IDictionary<Type, ClassDiagramClass> classLookup)
+        {
+            if (baseType == null)
+            {
+                return null;
+            }
+            if (excludeClosedGenericTypeTypeFilter.Accepts(baseType))
+            {
+                return classLookup.ContainsKey(baseType) ? baseType : null;
+            }
+            return classLookup.Values.FirstOrDefault( x => x.Type.Name == baseType.Name)?.Type;
         }
 
         private static void GenerateClassDependencies(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
@@ -425,7 +445,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
 
         private IReadOnlyList<ITypeFilter> ClassDiagramFilters(IReadOnlyList<ITypeFilter> filters)
         {
-            var result = new List<ITypeFilter> { new ExcludeNonPublicClassTypeFilter(), new ExcludeSystemObjectAndSystemEnumTypeFilter() };
+            var result = new List<ITypeFilter> { new ExcludeNonPublicClassTypeFilter(), new ExcludeSystemObjectAndSystemEnumTypeFilter(), new ExcludeClosedGenericTypeTypeFilter() };
             result.AddRange(filters);
             return result;
         }
@@ -479,10 +499,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             {
                 result = nameRewriter.Rewrite(result);
             }
-            // TODO The syntax don't allow ? in type so we must use comment for nullable types.
-            // return nullableUnderlyingType == null ? result : $"{result}?";
             return result;
-
         }
 
         static string GetTypeName(string typeName)
@@ -557,5 +574,6 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
         }
 
         private static readonly Type[] collectionTypes = { typeof(IEnumerable<>), typeof(ICollection<>), typeof(IList<>), typeof(IReadOnlyList<>), typeof(IReadOnlyCollection<>) };
+        private static readonly ExcludeClosedGenericTypeTypeFilter excludeClosedGenericTypeTypeFilter= new();
     }
 }

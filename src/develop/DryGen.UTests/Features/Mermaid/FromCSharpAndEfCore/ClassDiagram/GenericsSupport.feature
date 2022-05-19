@@ -129,9 +129,6 @@ Scenario: Generates inheritance for generic types
 			class ShapeAndSquare~TShape,TSquare~ {
 				<<abstract>>
 			}
-			class ShapeAndSquare~object,object~ {
-				<<abstract>>
-			}
-			ObjectShapeAndSquare --|> ShapeAndSquare~object,object~
+			ObjectShapeAndSquare --|> ShapeAndSquare~TShape,TSquare~
 
 		"""
