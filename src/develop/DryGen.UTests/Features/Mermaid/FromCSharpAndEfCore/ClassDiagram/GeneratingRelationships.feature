@@ -126,8 +126,8 @@ Scenario: Generates associations for scalar instance properties with a getter re
 Scenario: Generates composition for instance collection properties with a getter referencing other know types
 	Given this C# source code
 		"""
-		using System;
 		using System.Collections.Generic;
+		using System.Collections.ObjectModel;
 		namespace Test
 		{
 			public class Customer {
@@ -135,7 +135,7 @@ Scenario: Generates composition for instance collection properties with a getter
 				public <collection type><Order> GetSetOrders { get; set; }
 				public <collection type><Order> SetOrders { set {} } // Only set -> Should be excluded
 				public static <collection type><Order> StaticOrders { get; set; } // Static -> Should be excluded
-				public <collection type><object> Objects { get; set; } // Object is filtered out by the namespace filter -> Should be an attribute
+				public <collection type><object> Objects { get; set; } // object is filtered out by the namespace filter -> Should be an attribute
 			}
 			public class Order {}
 		}
@@ -160,22 +160,25 @@ Examples:
 	| IList               |
 	| IReadOnlyList       |
 	| IReadOnlyCollection |
+	| List                |
+	| Collection          |
 
 Scenario: Generates aggregation for instance collection properties with bidirectional scalar property in the other type
 	Given this C# source code
 		"""
 		using System.Collections.Generic;
+		using System.Collections.ObjectModel;
 		namespace Test
 		{
 			public class Customer {
-				public IEnumerable<Order> Orders { get; set; }
+				public <collection type><Order> Orders { get; set; }
 			}
 			public class Order {
 				public Customer Customer { get; set; }
 				public Product Product { get; set; }
 			}
 			public class Product {
-				public IEnumerable<Order> Orders { get; set; }
+				public <collection type><Order> Orders { get; set; }
 			}
 		}
 		"""
@@ -194,10 +197,14 @@ Scenario: Generates aggregation for instance collection properties with bidirect
 		
 		"""
 Examples:
-	| collection type |
-	| IEnumerable     |
-	| ICollection     |
-	| IList           |
+	| collection type     |
+	| IEnumerable         |
+	| ICollection         |
+	| IList               |
+	| IReadOnlyList       |
+	| IReadOnlyCollection |
+	| List                |
+	| Collection          |
 
 Scenario: Generates dependency for scalar constructor parameters that are not any other relationship type
 	Given this C# source code
