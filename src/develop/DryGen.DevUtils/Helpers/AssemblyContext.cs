@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -23,8 +24,7 @@ namespace DryGen.DevUtils.Helpers
 
         public void CompileCodeToMemory(string cSharpCode)
         {
-            var assembly = cSharpCode.CompileCodeToMemory(GetReferencedAssemblies());
-            this.assembly = assembly;
+            assembly = cSharpCode.CompileCodeToMemory(GetReferencedAssemblies());
         }
 
         public void CompileCodeToFile(string cSharpCode)
@@ -37,7 +37,7 @@ namespace DryGen.DevUtils.Helpers
         }
 
         private static Assembly[] GetReferencedAssemblies() => new[] { 
-            typeof(KeyAttribute).Assembly, typeof(Expression<>).Assembly, typeof(DbContext).Assembly, typeof(JsonPropertyAttribute).Assembly
+            typeof(Enumerable).Assembly, typeof(KeyAttribute).Assembly, typeof(Expression<>).Assembly, typeof(DbContext).Assembly, typeof(JsonPropertyAttribute).Assembly
         };
     }
 }

@@ -183,6 +183,34 @@ Scenario: Does not generate methods for local functions
 		
 		"""
 
+Scenario: Does not generate methods for compiler generated syntetic methods
+	Given this C# source code
+		"""
+		using System.Collections.Generic;
+		using System.Linq;
+		namespace Test
+		{
+			public abstract class A
+			{
+				public void AMethod() { 
+					new[] { 3L, 4L }.Select(x => CreateStringValue(x)).ToArray();
+				}
+
+				protected abstract string CreateStringValue(long value);
+			}
+		}
+		"""
+	When I generate a Class diagram
+	Then I should get this generated representation
+		"""
+		classDiagram
+			class A {
+				<<abstract>>
+				+AMethod()
+				#CreateStringValue(long value)* string
+			}
+		
+		"""
 
 Scenario: Generates methods parameters
 	Given this C# source code

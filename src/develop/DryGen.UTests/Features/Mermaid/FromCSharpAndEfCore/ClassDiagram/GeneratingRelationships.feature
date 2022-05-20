@@ -5,7 +5,7 @@ A short summary of the feature
 Background:
 	Given this include namespace filter '^Test$'
 
-Scenario: Generates realization for classes implemeting interfaces
+Scenario: Generates realization for classes implementing interfaces
 	Given this C# source code
 		"""
 		namespace Test
