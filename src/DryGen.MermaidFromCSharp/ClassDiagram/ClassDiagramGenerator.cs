@@ -1,6 +1,7 @@
 ﻿using DryGen.MermaidFromCSharp.TypeFilters;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -582,7 +583,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             return visibility;
         }
 
-        private static readonly Type[] collectionTypes = { typeof(IEnumerable<>), typeof(ICollection<>), typeof(IList<>), typeof(IReadOnlyList<>), typeof(IReadOnlyCollection<>) };
+        private static readonly Type[] collectionTypes = { typeof(IEnumerable<>), typeof(ICollection<>), typeof(IList<>), typeof(IReadOnlyList<>), typeof(IReadOnlyCollection<>), typeof(List<>), typeof(Collection<>) };
         private static readonly ExcludeClosedGenericTypeTypeFilter excludeClosedGenericTypeTypeFilter = new();
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace DryGen.DevUtils.Helpers
         }
 
         private static Assembly[] GetReferencedAssemblies() => new[] { 
-            typeof(Enumerable).Assembly, typeof(KeyAttribute).Assembly, typeof(Expression<>).Assembly, typeof(DbContext).Assembly, typeof(JsonPropertyAttribute).Assembly
+            typeof(Enumerable).Assembly, typeof(Collection<>).Assembly, typeof(KeyAttribute).Assembly, typeof(Expression<>).Assembly, typeof(DbContext).Assembly, typeof(JsonPropertyAttribute).Assembly
         };
     }
 }
