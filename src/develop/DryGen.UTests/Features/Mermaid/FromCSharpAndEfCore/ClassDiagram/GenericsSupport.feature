@@ -112,7 +112,6 @@ Scenario: Generates data types for all generic method params and return types
 Scenario: Generates inheritance for generic types
 	Given this C# source code
 		"""
-		using System.Collections.Generic;
 		namespace Test
 		{
 			public abstract class ShapeAndSquare<TShape,TSquare> {}

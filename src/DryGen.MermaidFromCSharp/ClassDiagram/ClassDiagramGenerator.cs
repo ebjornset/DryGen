@@ -7,7 +7,8 @@ using System.Text;
 
 namespace DryGen.MermaidFromCSharp.ClassDiagram
 {
-
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3011:Reflection should not be used to increase accessibility of classes, methods, or fields",
+        Justification = "We need to access private members to generate detailed class diagrams diagrams")]
     public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         private readonly ITypeLoader typeloader;
@@ -287,6 +288,9 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                 }
                 if (method.IsAssembly && methodLevel == ClassDiagramMethodLevel.Public)
                 {
+                    continue;
+                }
+                if (method.IsPrivate && method.Name.StartsWith('<')) {
                     continue;
                 }
                 var returnTypeType = GetDataType(method.ReturnType);
