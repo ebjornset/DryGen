@@ -182,7 +182,7 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             {
                 return classLookup.ContainsKey(baseType) ? baseType : null;
             }
-            return classLookup.Values.FirstOrDefault( x => x.Type.Name == baseType.Name)?.Type;
+            return classLookup.Values.FirstOrDefault(x => x.Type.Name == baseType.Name)?.Type;
         }
 
         private static void GenerateClassDependencies(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
@@ -278,19 +278,12 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             }
             foreach (var method in classDiagramClass.Type.GetMethods(bindingFlags).Where(x => IsNotGetterOrSetterOrLocalFunction(x)))
             {
-                if (method.IsPrivate && methodLevel != ClassDiagramMethodLevel.All)
+                if (IsMethodWithToLowVisibility(method))
                 {
                     continue;
                 }
-                if (method.IsFamily && (methodLevel == ClassDiagramMethodLevel.Public || methodLevel == ClassDiagramMethodLevel.Internal))
+                if (IsSyntheticCompilerGeneratedMethod(method))
                 {
-                    continue;
-                }
-                if (method.IsAssembly && methodLevel == ClassDiagramMethodLevel.Public)
-                {
-                    continue;
-                }
-                if (method.IsPrivate && method.Name.StartsWith('<')) {
                     continue;
                 }
                 var returnTypeType = GetDataType(method.ReturnType);
@@ -301,6 +294,18 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                 var parameters = method.GetParameters().Select(x => new ClassDiagramMethodParameter(GetDataType(x.ParameterType), x.Name)).ToList();
                 classDiagramClass.AddMethod(new ClassDiagramMethod(returnTypeType, methodName, visibility, isStatic, isAbstract, parameters));
             }
+        }
+
+        private bool IsMethodWithToLowVisibility(MethodInfo method)
+        {
+            return (method.IsPrivate && methodLevel != ClassDiagramMethodLevel.All)
+                || (method.IsFamily && (methodLevel == ClassDiagramMethodLevel.Public || methodLevel == ClassDiagramMethodLevel.Internal))
+                || (method.IsAssembly && methodLevel == ClassDiagramMethodLevel.Public);
+        }
+
+        private static bool IsSyntheticCompilerGeneratedMethod(MethodInfo method)
+        {
+            return method.IsPrivate && method.Name.StartsWith('<');
         }
 
         private string GenerateClassDiagramMermaid(IEnumerable<ClassDiagramClass> classes, INameRewriter? nameRewriter)
@@ -578,6 +583,6 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
         }
 
         private static readonly Type[] collectionTypes = { typeof(IEnumerable<>), typeof(ICollection<>), typeof(IList<>), typeof(IReadOnlyList<>), typeof(IReadOnlyCollection<>) };
-        private static readonly ExcludeClosedGenericTypeTypeFilter excludeClosedGenericTypeTypeFilter= new();
+        private static readonly ExcludeClosedGenericTypeTypeFilter excludeClosedGenericTypeTypeFilter = new();
     }
 }
