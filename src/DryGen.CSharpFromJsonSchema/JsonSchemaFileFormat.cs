@@ -2,7 +2,7 @@
 {
     public enum JsonSchemaFileFormat
     {
-        ByExtencion = 0,
+        ByExtension = 0,
         Json = 1,
         Yaml = 2,
     }

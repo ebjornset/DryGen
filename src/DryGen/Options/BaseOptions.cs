@@ -14,7 +14,6 @@ namespace DryGen.Options
         [Option('o', "output-file", HelpText = "Write the resulting diagram to this file.")]
         public string? OutputFile { get; set; }
 
-        [YamlMember(Alias = "options-file", ApplyNamingConventions = false)]
         [Option('f', "options-file", HelpText = "Read options from this file.")]
         public string? OptionsFile { get; set; }
     }

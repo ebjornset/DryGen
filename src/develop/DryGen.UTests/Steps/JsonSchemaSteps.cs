@@ -42,7 +42,7 @@ namespace DryGen.UTests.Steps
         [When(@"I load the json schema from a file with the extension ""([^""]*)""")]
         public void WhenILoadTheJsonSchemaFromAFileWithTheExtension(string extension)
         {
-            CreateAndLoadTestJsonFile(extension, JsonSchemaFileFormat.ByExtencion);
+            CreateAndLoadTestJsonFile(extension, JsonSchemaFileFormat.ByExtension);
         }
 
         [When(@"I load the json schema from a file forcing the schema format ""([^""]*)""")]

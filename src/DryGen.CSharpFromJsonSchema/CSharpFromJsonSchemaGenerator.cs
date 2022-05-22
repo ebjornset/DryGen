@@ -66,7 +66,7 @@ namespace DryGen.CSharpFromJsonSchema
         {
             var extension = Path.GetExtension(jsonSchemaFileName);
             if (jsonSchemaFileFormat == JsonSchemaFileFormat.Yaml
-                || (jsonSchemaFileFormat == JsonSchemaFileFormat.ByExtencion
+                || (jsonSchemaFileFormat == JsonSchemaFileFormat.ByExtension
                     && (string.Equals(".yaml", extension, StringComparison.InvariantCultureIgnoreCase)
                         || string.Equals(".yml", extension, StringComparison.InvariantCultureIgnoreCase))))
             {
