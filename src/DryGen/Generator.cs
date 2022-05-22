@@ -45,8 +45,9 @@ namespace DryGen
                 MermaidClassDiagramFromJsonSchemaOptions,
                 MermaidErDiagramFromCSharpOptions,
                 MermaidErDiagramFromEfCoreOptions,
-                MermaidErDiagramFromJsonSchemaOptions
-                 > (args);
+                MermaidErDiagramFromJsonSchemaOptions,
+                OptionsFromCommandlineOptions
+                 >(args);
             return parserResult.MapResult(
               (CSharpFromJsonSchemaOptions options) => GenerateCSharpFromJsonSchema(options, args),
               (MermaidClassDiagramFromCSharpOptions options) => GenerateMermaidClassDiagramFropmCSharp(options, args),
@@ -54,6 +55,7 @@ namespace DryGen
               (MermaidErDiagramFromCSharpOptions options) => GenerateMermaidErDiagramFromCSharp(options, args),
               (MermaidErDiagramFromEfCoreOptions options) => GenerateMermaidErDiagramFromEfCore(options, args),
               (MermaidErDiagramFromJsonSchemaOptions options) => GenerateMermaidErDiagramFromJsonSchema(options, args),
+              (OptionsFromCommandlineOptions options) => GenerateOptionsFromCommandline(options, args),
               errors => DisplayHelp(parserResult));
         }
 
@@ -77,7 +79,22 @@ namespace DryGen
             return 1;
         }
 
-        private int ExecuteWithExceptionAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions, new()
+        private int ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, string[] args, string resultRepresentation, Func<TOptions, string> resultFunc) where TOptions : BaseOptions, new()
+        {
+            return ExecuteWithExceptionHandlingAndHelpDisplay(options, options =>
+            {
+                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
+                if (!string.IsNullOrEmpty(options.OutputFile))
+                {
+                    outWriter.WriteLine($"Generating {resultRepresentation} to file '{options.OutputFile}'");
+                }
+                var resultReprersentation = resultFunc(options);
+                WriteGeneratedRepresentationToConsoleOrFile(options, resultReprersentation);
+                return 0;
+            });
+        }
+
+        private int ExecuteWithExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions, new()
         {
             try
             {
@@ -99,11 +116,10 @@ namespace DryGen
 
         private int GenerateMermaidErDiagramFromCSharp(MermaidErDiagramFromCSharpOptions options, string[] args)
         {
-            return ExecuteWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
             {
-                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
                 var structureBuilder =
-                     options.StructureBuilder == MermaidErDiagramFromCSharpOptions.ErStructureBuilderType.EfCore ?
+                     options.StructureBuilder == MermaidErDiagramFromCSharpBaseOptions.ErStructureBuilderType.EfCore ?
                      (IErDiagramStructureBuilder)new ErDiagramStructureBuilderByEfCore() :
                      new ErDiagramStructureBuilderByReflection();
                 var attributeTypeExclusion = GetAttributeTypeExclusions(options);
@@ -116,7 +132,7 @@ namespace DryGen
 
         private int GenerateMermaidErDiagramFromEfCore(MermaidErDiagramFromEfCoreOptions options, string[] args)
         {
-            return ExecuteWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
             {
                 options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
                 var structureBuilder =
@@ -134,7 +150,7 @@ namespace DryGen
 
         private int GenerateMermaidClassDiagramFropmCSharp(MermaidClassDiagramFromCSharpOptions options, string[] args)
         {
-            return ExecuteWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
             {
                 options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
                 var diagramGenerator = new ClassDiagramGenerator(
@@ -149,12 +165,9 @@ namespace DryGen
             });
         }
 
-        private int GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions cSharpOptions, IDiagramGenerator diagramGenerator)
+        [SuppressMessage("Major Code Smell", "S3885:\"Assembly.Load\" should be used", Justification = "We must use LoadFrom to be able to implement this functionallity")]
+        private string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions cSharpOptions, IDiagramGenerator diagramGenerator)
         {
-            if (!string.IsNullOrEmpty(cSharpOptions.OutputFile))
-            {
-                outWriter.WriteLine($"Generating mermaid diagram to file '{cSharpOptions.OutputFile}'");
-            }
             var assembly = Assembly.LoadFrom(cSharpOptions.InputFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
             var namespaceFilters = cSharpOptions.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
             var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };
@@ -170,56 +183,41 @@ namespace DryGen
             }
             var excludePropertyNamesFilters = cSharpOptions.ExcludePropertyNames?.Select(x => new ExcludePropertyNamePropertyFilter(x)).ToArray() ?? Array.Empty<IPropertyFilter>();
             var nameRewriter = new ReplaceNameRewriter(cSharpOptions.NameReplaceFrom ?? string.Empty, cSharpOptions.NameReplaceTo ?? string.Empty);
-            var mermaid = diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter);
-            WriteGeneratedRepresentationToConsoleOrFile(cSharpOptions, mermaid);
-            return 0;
+            return diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter);
         }
 
         private int GenerateCSharpFromJsonSchema(CSharpFromJsonSchemaOptions options, string[] args)
         {
-            return ExecuteWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "C# code", options =>
             {
-                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
-                if (!string.IsNullOrEmpty(options.OutputFile))
-                {
-                    outWriter.WriteLine($"Generating C# code to file '{options.OutputFile}'");
-                }
                 var generator = new CSharpFromJsonSchemaGenerator();
-                var cSharpCode = generator.Generate(options.InputFile, options.SchemaFileFormat, options.Namespace, options.RootClassname, options.ArrayType, options.ArrayInstanceType).Result;
-                WriteGeneratedRepresentationToConsoleOrFile(options, cSharpCode);
-                return 0;
+                return generator.Generate(options.InputFile, options.SchemaFileFormat, options.Namespace, options.RootClassname, options.ArrayType, options.ArrayInstanceType).Result;
             });
         }
 
         private int GenerateMermaidClassDiagramFromJsonSchema(MermaidClassDiagramFromJsonSchemaOptions options, string[] args)
         {
-            return ExecuteWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
             {
-                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
-                if (!string.IsNullOrEmpty(options.OutputFile))
-                {
-                    outWriter.WriteLine($"Generating Mermaid class diagram to file '{options.OutputFile}'");
-                }
                 var generator = new MermaidClassDiagramFromJsonSchemaGenerator();
-                var mermaid = generator.Generate(options.InputFile, options.SchemaFileFormat, options.RootClassname, options.Direction).Result;
-                WriteGeneratedRepresentationToConsoleOrFile(options, mermaid);
-                return 0;
+                return generator.Generate(options.InputFile, options.SchemaFileFormat, options.RootClassname, options.Direction).Result;
             });
         }
 
         private int GenerateMermaidErDiagramFromJsonSchema(MermaidErDiagramFromJsonSchemaOptions options, string[] args)
         {
-            return ExecuteWithExceptionAndHelpDisplay(options, options =>
+            return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
             {
-                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
-                if (!string.IsNullOrEmpty(options.OutputFile))
-                {
-                    outWriter.WriteLine($"Generating Mermaid ER diagram to file '{options.OutputFile}'");
-                }
                 var generator = new MermaidErDiagramFromJsonSchemaGenerator();
-                var mermaid = generator.Generate(options.InputFile, options.SchemaFileFormat, options.RootClassname, options.ExcludeAllAttributes, options.ExcludeAllRelationships).Result;
-                WriteGeneratedRepresentationToConsoleOrFile(options, mermaid);
-                return 0;
+                return generator.Generate(options.InputFile, options.SchemaFileFormat, options.RootClassname, options.ExcludeAllAttributes, options.ExcludeAllRelationships).Result;
+            });
+        }
+
+        private int GenerateOptionsFromCommandline(OptionsFromCommandlineOptions options, string[] args)
+        {
+            return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "dry-gen options", options =>
+            {
+                return string.Empty;
             });
         }
 
@@ -276,14 +274,14 @@ namespace DryGen
             else
             {
                 var outputFile = Path.GetFullPath(options.OutputFile);
-                var mermaidDirectory = Path.GetDirectoryName(outputFile);
-                if (mermaidDirectory == null)
+                var outputDirectory = Path.GetDirectoryName(outputFile);
+                if (outputDirectory == null)
                 {
                     throw new InvalidOperationException($"Can't get directory from output file'{outputFile}'.");
                 }
-                if (!Directory.Exists(mermaidDirectory))
+                if (!Directory.Exists(outputDirectory))
                 {
-                    Directory.CreateDirectory(mermaidDirectory);
+                    Directory.CreateDirectory(outputDirectory);
                 }
                 File.WriteAllText(outputFile, generatedRepresentation);
             }

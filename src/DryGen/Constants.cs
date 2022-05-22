@@ -35,5 +35,10 @@
         {
             public const string Verb = "csharp-from-json-schema";
         }
+
+        public static class OptionsFromCommandline
+        {
+            public const string Verb = "options-from-commandline";
+        }
     }
 }
