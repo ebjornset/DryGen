@@ -2,7 +2,6 @@
 using DryGen.CSharpFromJsonSchema;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ErDiagram;
-using System;
 using System.Threading.Tasks;
 
 namespace DryGen.MermaidFromJsonSchema

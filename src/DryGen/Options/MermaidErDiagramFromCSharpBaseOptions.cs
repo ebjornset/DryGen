@@ -1,9 +1,10 @@
 ﻿using CommandLine;
+using DryGen.MermaidFromCSharp.ErDiagram;
 using YamlDotNet.Serialization;
 
 namespace DryGen.Options
 {
-    public abstract class MermaidErDiagramFromCSharpBaseOptions : MermaidFromCSharpBaseOptions
+    public abstract class MermaidErDiagramFromCSharpBaseOptions : MermaidFromCSharpBaseOptions, IMermaidErDiagramFromCSharpOptions
     {
         [YamlMember(Alias = "exclude-all-attributes", ApplyNamingConventions = false)]
         [Option("exclude-all-attributes", HelpText = "Should all attributes be excluded from the diagram?")]
@@ -25,17 +26,47 @@ namespace DryGen.Options
         [Option("exclude-all-relationships", HelpText = "Should all relationships be excluded from the diagram?")]
         public bool? ExcludeAllRelationships { get; set; }
 
-        public ErStructureBuilderType StructureBuilder { get; private set; }
-
-        protected MermaidErDiagramFromCSharpBaseOptions(ErStructureBuilderType structureBuilder)
+        public ErDiagramAttributeTypeExclusion AttributeTypeExclusion
         {
-            StructureBuilder = structureBuilder;
+            get
+            {
+                if (ExcludeAllAttributes ?? default)
+                {
+                    return ErDiagramAttributeTypeExclusion.All;
+                }
+                if (ExcludeForeignkeyAttributes ?? default)
+                {
+                    return ErDiagramAttributeTypeExclusion.Foreignkeys;
+                }
+                return ErDiagramAttributeTypeExclusion.None;
+            }
         }
 
-        public enum ErStructureBuilderType
+        public ErDiagramAttributeDetailExclusions AttributeDetailExclusions
         {
-            Reflection,
-            EfCore
+            get
+            {
+                var result = ErDiagramAttributeDetailExclusions.None;
+                if (ExcludeAttributeKeytypes ?? default)
+                {
+                    result |= ErDiagramAttributeDetailExclusions.KeyTypes;
+                }
+                if (ExcludeAttributeComments ?? default)
+                {
+                    result |= ErDiagramAttributeDetailExclusions.Comments;
+                }
+                return result;
+            }
+        }
+
+        public ErDiagramRelationshipTypeExclusion RelationshipTypeExclusion =>
+            ExcludeAllRelationships ?? default ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None;
+
+        public IErDiagramStructureBuilder StructureBuilder { get; private set; }
+
+        protected MermaidErDiagramFromCSharpBaseOptions(IErDiagramStructureBuilder structureBuilder)
+        {
+            StructureBuilder = structureBuilder;
         }
     }
 }

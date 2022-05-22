@@ -2,7 +2,6 @@
 using CommandLine.Text;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
-using DryGen.MermaidFromEfCore;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using DryGen.MermaidFromCSharp.NameRewriters;
 using DryGen.MermaidFromCSharp.PropertyFilters;
@@ -118,14 +117,7 @@ namespace DryGen
         {
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
             {
-                var structureBuilder =
-                     options.StructureBuilder == MermaidErDiagramFromCSharpBaseOptions.ErStructureBuilderType.EfCore ?
-                     (IErDiagramStructureBuilder)new ErDiagramStructureBuilderByEfCore() :
-                     new ErDiagramStructureBuilderByReflection();
-                var attributeTypeExclusion = GetAttributeTypeExclusions(options);
-                var attributeDetailExclusions = GetAttributeDetailExclusions(options);
-                var relationshipLevel = options.ExcludeAllRelationships ?? default ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None;
-                var diagramGenerator = new ErDiagramGenerator(structureBuilder, attributeTypeExclusion, attributeDetailExclusions, relationshipLevel);
+                var diagramGenerator = new ErDiagramGenerator(options);
                 return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
             });
         }
@@ -134,15 +126,7 @@ namespace DryGen
         {
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
             {
-                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
-                var structureBuilder =
-                     options.StructureBuilder == MermaidErDiagramFromCSharpBaseOptions.ErStructureBuilderType.EfCore ?
-                     (IErDiagramStructureBuilder)new ErDiagramStructureBuilderByEfCore() :
-                     new ErDiagramStructureBuilderByReflection();
-                var attributeTypeExclusion = GetAttributeTypeExclusions(options);
-                var attributeDetailExclusions = GetAttributeDetailExclusions(options);
-                var relationshipLevel = options.ExcludeAllRelationships ?? default ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None;
-                var diagramGenerator = new ErDiagramGenerator(structureBuilder, attributeTypeExclusion, attributeDetailExclusions, relationshipLevel);
+                var diagramGenerator = new ErDiagramGenerator(options);
                 return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
             });
 
@@ -277,33 +261,6 @@ namespace DryGen
             var excludePropertyNamesFilters = cSharpOptions.ExcludePropertyNames?.Select(x => new ExcludePropertyNamePropertyFilter(x)).ToArray() ?? Array.Empty<IPropertyFilter>();
             var nameRewriter = new ReplaceNameRewriter(cSharpOptions.NameReplaceFrom ?? string.Empty, cSharpOptions.NameReplaceTo ?? string.Empty);
             return diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter);
-        }
-
-        private static ErDiagramAttributeTypeExclusion GetAttributeTypeExclusions(MermaidErDiagramFromCSharpBaseOptions options)
-        {
-            if (options.ExcludeAllAttributes ?? default)
-            {
-                return ErDiagramAttributeTypeExclusion.All;
-            }
-            if (options.ExcludeForeignkeyAttributes ?? default)
-            {
-                return ErDiagramAttributeTypeExclusion.Foreignkeys;
-            }
-            return ErDiagramAttributeTypeExclusion.None;
-        }
-
-        private static ErDiagramAttributeDetailExclusions GetAttributeDetailExclusions(MermaidErDiagramFromCSharpBaseOptions options)
-        {
-            var result = ErDiagramAttributeDetailExclusions.None;
-            if (options.ExcludeAttributeKeytypes ?? default)
-            {
-                result |= ErDiagramAttributeDetailExclusions.KeyTypes;
-            }
-            if (options.ExcludeAttributeComments ?? default)
-            {
-                result |= ErDiagramAttributeDetailExclusions.Comments;
-            }
-            return result;
         }
     }
 }
