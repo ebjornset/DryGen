@@ -1,10 +1,11 @@
 ﻿using CommandLine;
+using DryGen.CSharpFromJsonSchema;
 using YamlDotNet.Serialization;
 
 namespace DryGen.Options
 {
     [Verb(Constants.CSharpFromJsonSchema.Verb, HelpText = "Generate C# classes from a json schema (using NJsonSchema https://github.com/RicoSuter/NJsonSchema).")]
-    public class CSharpFromJsonSchemaOptions : FromJsonSchemaBaseOptions
+    public class CSharpFromJsonSchemaOptions : FromJsonSchemaBaseOptions, ICSharpFromJsonSchemaOptions
     {
         [YamlMember(Alias = "namespace", ApplyNamingConventions = false)]
         [Option("namespace", HelpText = "The namespace for the generated c# classes (default: 'CSharpFromJsonSchema').")]

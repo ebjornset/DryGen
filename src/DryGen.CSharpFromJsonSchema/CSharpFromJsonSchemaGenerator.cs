@@ -8,11 +8,11 @@ namespace DryGen.CSharpFromJsonSchema
 {
     public class CSharpFromJsonSchemaGenerator
     {
-        public async Task<string> Generate(string? jsonSchemaFileName, JsonSchemaFileFormat jsonSchemaFileFormat, string? theNamespace, string? rootClassname, string? arrayType, string? arrayInstanceType )
+        public async Task<string> Generate(ICSharpFromJsonSchemaOptions options)
         {
-            var jsonSchema = await LoadJsonSchemaFromFile(jsonSchemaFileName, jsonSchemaFileFormat);
+            var jsonSchema = await LoadJsonSchemaFromFile(options.InputFile, options.SchemaFileFormat);
             RemoveSynteticSchemaProperty(jsonSchema);
-            string cSharpCode = GenerateCSharpCode(jsonSchema, theNamespace, rootClassname, arrayType, arrayInstanceType);
+            string cSharpCode = GenerateCSharpCode(jsonSchema, options.Namespace, options.RootClassname, options.ArrayType, options.ArrayInstanceType);
             return cSharpCode;
         }
 

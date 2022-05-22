@@ -1,9 +1,10 @@
 ﻿using CommandLine;
+using DryGen.Core;
 using YamlDotNet.Serialization;
 
 namespace DryGen.Options
 {
-    public abstract class BaseOptions
+    public abstract class BaseOptions: IInputFileOptions
     {
         [YamlMember(Alias = Constants.InputFileOption, ApplyNamingConventions = false)]
         [Option('i', Constants.InputFileOption, HelpText = "Full path to the input file to generate a diagram for.")]

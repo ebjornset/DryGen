@@ -165,33 +165,12 @@ namespace DryGen
             });
         }
 
-        [SuppressMessage("Major Code Smell", "S3885:\"Assembly.Load\" should be used", Justification = "We must use LoadFrom to be able to implement this functionallity")]
-        private string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions cSharpOptions, IDiagramGenerator diagramGenerator)
-        {
-            var assembly = Assembly.LoadFrom(cSharpOptions.InputFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
-            var namespaceFilters = cSharpOptions.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
-            var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };
-            if (cSharpOptions.IncludeTypeNames?.Any() == true)
-            {
-                var typeNameFilters = cSharpOptions.IncludeTypeNames.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray();
-                typeFilters.Add(new AnyChildFiltersTypeFilter(typeNameFilters));
-            }
-            if (cSharpOptions.ExcludeTypeNames?.Any() == true)
-            {
-                var typeNameFilters = cSharpOptions.ExcludeTypeNames.Select(x => new ExcludeTypeNameTypeFilter(x)).ToArray();
-                typeFilters.Add(new AllChildFiltersTypeFilter(typeNameFilters));
-            }
-            var excludePropertyNamesFilters = cSharpOptions.ExcludePropertyNames?.Select(x => new ExcludePropertyNamePropertyFilter(x)).ToArray() ?? Array.Empty<IPropertyFilter>();
-            var nameRewriter = new ReplaceNameRewriter(cSharpOptions.NameReplaceFrom ?? string.Empty, cSharpOptions.NameReplaceTo ?? string.Empty);
-            return diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter);
-        }
-
         private int GenerateCSharpFromJsonSchema(CSharpFromJsonSchemaOptions options, string[] args)
         {
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "C# code", options =>
             {
                 var generator = new CSharpFromJsonSchemaGenerator();
-                return generator.Generate(options.InputFile, options.SchemaFileFormat, options.Namespace, options.RootClassname, options.ArrayType, options.ArrayInstanceType).Result;
+                return generator.Generate(options).Result;
             });
         }
 
@@ -200,7 +179,7 @@ namespace DryGen
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
             {
                 var generator = new MermaidClassDiagramFromJsonSchemaGenerator();
-                return generator.Generate(options.InputFile, options.SchemaFileFormat, options.RootClassname, options.Direction).Result;
+                return generator.Generate(options).Result;
             });
         }
 
@@ -209,7 +188,7 @@ namespace DryGen
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
             {
                 var generator = new MermaidErDiagramFromJsonSchemaGenerator();
-                return generator.Generate(options.InputFile, options.SchemaFileFormat, options.RootClassname, options.ExcludeAllAttributes, options.ExcludeAllRelationships).Result;
+                return generator.Generate(options).Result;
             });
         }
 
@@ -285,6 +264,27 @@ namespace DryGen
                 }
                 File.WriteAllText(outputFile, generatedRepresentation);
             }
+        }
+
+        [SuppressMessage("Major Code Smell", "S3885:\"Assembly.Load\" should be used", Justification = "We must use LoadFrom to be able to implement this functionallity")]
+        private static string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions cSharpOptions, IDiagramGenerator diagramGenerator)
+        {
+            var assembly = Assembly.LoadFrom(cSharpOptions.InputFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
+            var namespaceFilters = cSharpOptions.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
+            var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };
+            if (cSharpOptions.IncludeTypeNames?.Any() == true)
+            {
+                var typeNameFilters = cSharpOptions.IncludeTypeNames.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray();
+                typeFilters.Add(new AnyChildFiltersTypeFilter(typeNameFilters));
+            }
+            if (cSharpOptions.ExcludeTypeNames?.Any() == true)
+            {
+                var typeNameFilters = cSharpOptions.ExcludeTypeNames.Select(x => new ExcludeTypeNameTypeFilter(x)).ToArray();
+                typeFilters.Add(new AllChildFiltersTypeFilter(typeNameFilters));
+            }
+            var excludePropertyNamesFilters = cSharpOptions.ExcludePropertyNames?.Select(x => new ExcludePropertyNamePropertyFilter(x)).ToArray() ?? Array.Empty<IPropertyFilter>();
+            var nameRewriter = new ReplaceNameRewriter(cSharpOptions.NameReplaceFrom ?? string.Empty, cSharpOptions.NameReplaceTo ?? string.Empty);
+            return diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter);
         }
 
         private static ErDiagramAttributeTypeExclusion GetAttributeTypeExclusions(MermaidErDiagramFromCSharpBaseOptions options)

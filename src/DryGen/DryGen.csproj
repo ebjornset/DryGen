@@ -21,6 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
 		<ProjectReference Include="..\DryGen.MermaidFromJsonSchema\DryGen.MermaidFromJsonSchema.csproj" />
 		<ProjectReference Include="..\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj" />
 		<ProjectReference Include="..\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />
