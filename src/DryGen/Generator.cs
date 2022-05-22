@@ -152,15 +152,7 @@ namespace DryGen
         {
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
             {
-                options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
-                var diagramGenerator = new ClassDiagramGenerator(
-                    new TypeLoaderByReflection(),
-                    options.Direction ?? default,
-                    options.AttributeLevel ?? default,
-                    options.MethodLevel ?? default,
-                    excludeStaticAttributes: options.ExcludeStaticAttributes ?? default,
-                    excludeStaticMethods: options.ExcludeStaticMethods ?? default,
-                    excludeMethodParams: options.ExcludeMethodParams ?? default);
+                var diagramGenerator = new ClassDiagramGenerator(new TypeLoaderByReflection(), options);
                 return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
             });
         }
