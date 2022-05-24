@@ -34,9 +34,7 @@ namespace DryGen
         private static string GetOptionsYaml(Type optionsTypeFromVerb, string verb)
         {
             List<string> optionList = GenerateOptionsList(optionsTypeFromVerb);
-            var sb = new StringBuilder();
-            sb.Append("# dry-gen options for verb '").Append(verb).AppendLine("'");
-            sb.AppendJoin('\n', optionList.OrderBy(x => x));
+            var sb = new StringBuilder().AppendLine("#").Append("# dry-gen options for verb '").Append(verb).AppendLine("'").AppendLine("#").AppendJoin('\n', optionList.OrderBy(x => x));
             return sb.ToString();
         }
 
@@ -54,7 +52,7 @@ namespace DryGen
                     continue;
                 }
                 var propertyTypeInfo = GeneratePropertyTypeInfo(propery.PropertyType);
-                optionList.Add($"# {alias}: {propertyTypeInfo}");
+                optionList.Add($"#{alias}: {propertyTypeInfo}");
             }
 
             return optionList;
@@ -71,7 +69,7 @@ namespace DryGen
             if (collectionType != null)
             {
                 var typeInfo = GeneratePropertyTypeInfo(collectionType);
-                return $"# List of {typeInfo}\n# -";
+                return $"# List of {typeInfo}\n#- ";
             }
             if (propertyType.IsEnum)
             {

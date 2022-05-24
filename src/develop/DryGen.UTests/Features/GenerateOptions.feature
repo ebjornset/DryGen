@@ -27,14 +27,16 @@ Scenario: Should generate options for verb csharp-from-json-schema
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
+		#
 		# dry-gen options for verb 'csharp-from-json-schema'
-		# array-instance-type: string
-		# array-type: string
-		# input-file: string
-		# namespace: string
-		# output-file: string
-		# root-classname: string
-		# schema-file-format: byextension | json | yaml
+		#
+		#array-instance-type: string
+		#array-type: string
+		#input-file: string
+		#namespace: string
+		#output-file: string
+		#root-classname: string
+		#schema-file-format: byextension | json | yaml
 		"""
 
 Scenario: Should generate options for verb mermaid-class-diagram-from-csharp
@@ -46,25 +48,27 @@ Scenario: Should generate options for verb mermaid-class-diagram-from-csharp
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
+		#
 		# dry-gen options for verb 'mermaid-class-diagram-from-csharp'
-		# attribute-level: all | public | internal | protected | none
-		# direction: default | bt | tb | lr | rl
-		# exclude-method-params: true|false
-		# exclude-propertynames: # List of string
-		# -
-		# exclude-static-attributes: true|false
-		# exclude-static-methods: true|false
-		# exclude-typenames: # List of string
-		# -
-		# include-namespaces: # List of string
-		# -
-		# include-typenames: # List of string
-		# -
-		# input-file: string
-		# method-level: all | public | internal | protected | none
-		# name-replace-from: string
-		# name-replace-to: string
-		# output-file: string
+		#
+		#attribute-level: all | public | internal | protected | none
+		#direction: default | bt | tb | lr | rl
+		#exclude-method-params: true|false
+		#exclude-propertynames: # List of string
+		#- 
+		#exclude-static-attributes: true|false
+		#exclude-static-methods: true|false
+		#exclude-typenames: # List of string
+		#- 
+		#include-namespaces: # List of string
+		#- 
+		#include-typenames: # List of string
+		#- 
+		#input-file: string
+		#method-level: all | public | internal | protected | none
+		#name-replace-from: string
+		#name-replace-to: string
+		#output-file: string
 		"""
 		
 Scenario: Should generate options for verb mermaid-class-diagram-from-json-schema
@@ -76,12 +80,14 @@ Scenario: Should generate options for verb mermaid-class-diagram-from-json-schem
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
+		#
 		# dry-gen options for verb 'mermaid-class-diagram-from-json-schema'
-		# direction: default | bt | tb | lr | rl
-		# input-file: string
-		# output-file: string
-		# root-classname: string
-		# schema-file-format: byextension | json | yaml
+		#
+		#direction: default | bt | tb | lr | rl
+		#input-file: string
+		#output-file: string
+		#root-classname: string
+		#schema-file-format: byextension | json | yaml
 		"""
 
 Scenario: Should generate options for verb mermaid-er-diagram-from-csharp
@@ -93,24 +99,26 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-csharp
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
+		#
 		# dry-gen options for verb 'mermaid-er-diagram-from-csharp'
-		# exclude-all-attributes: true|false
-		# exclude-all-relationships: true|false
-		# exclude-attribute-comments: true|false
-		# exclude-attribute-keytypes: true|false
-		# exclude-foreignkey-attributes: true|false
-		# exclude-propertynames: # List of string
-		# -
-		# exclude-typenames: # List of string
-		# -
-		# include-namespaces: # List of string
-		# -
-		# include-typenames: # List of string
-		# -
-		# input-file: string
-		# name-replace-from: string
-		# name-replace-to: string
-		# output-file: string
+		#
+		#exclude-all-attributes: true|false
+		#exclude-all-relationships: true|false
+		#exclude-attribute-comments: true|false
+		#exclude-attribute-keytypes: true|false
+		#exclude-foreignkey-attributes: true|false
+		#exclude-propertynames: # List of string
+		#- 
+		#exclude-typenames: # List of string
+		#- 
+		#include-namespaces: # List of string
+		#- 
+		#include-typenames: # List of string
+		#- 
+		#input-file: string
+		#name-replace-from: string
+		#name-replace-to: string
+		#output-file: string
 		"""
 
 Scenario: Should generate options for verb mermaid-er-diagram-from-efcore
@@ -122,24 +130,26 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-efcore
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
+		#
 		# dry-gen options for verb 'mermaid-er-diagram-from-efcore'
-		# exclude-all-attributes: true|false
-		# exclude-all-relationships: true|false
-		# exclude-attribute-comments: true|false
-		# exclude-attribute-keytypes: true|false
-		# exclude-foreignkey-attributes: true|false
-		# exclude-propertynames: # List of string
-		# -
-		# exclude-typenames: # List of string
-		# -
-		# include-namespaces: # List of string
-		# -
-		# include-typenames: # List of string
-		# -
-		# input-file: string
-		# name-replace-from: string
-		# name-replace-to: string
-		# output-file: string
+		#
+		#exclude-all-attributes: true|false
+		#exclude-all-relationships: true|false
+		#exclude-attribute-comments: true|false
+		#exclude-attribute-keytypes: true|false
+		#exclude-foreignkey-attributes: true|false
+		#exclude-propertynames: # List of string
+		#- 
+		#exclude-typenames: # List of string
+		#- 
+		#include-namespaces: # List of string
+		#- 
+		#include-typenames: # List of string
+		#- 
+		#input-file: string
+		#name-replace-from: string
+		#name-replace-to: string
+		#output-file: string
 		"""
 
 Scenario: Should generate options for verb mermaid-er-diagram-from-json-schema
@@ -151,13 +161,15 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-json-schema
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
+		#
 		# dry-gen options for verb 'mermaid-er-diagram-from-json-schema'
-		# exclude-all-attributes: true|false
-		# exclude-all-relationships: true|false
-		# input-file: string
-		# output-file: string
-		# root-classname: string
-		# schema-file-format: byextension | json | yaml
+		#
+		#exclude-all-attributes: true|false
+		#exclude-all-relationships: true|false
+		#input-file: string
+		#output-file: string
+		#root-classname: string
+		#schema-file-format: byextension | json | yaml
 		"""
 		
 Scenario: Should generate options for verb options-from-commandline
@@ -169,8 +181,10 @@ Scenario: Should generate options for verb options-from-commandline
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
+		#
 		# dry-gen options for verb 'options-from-commandline'
-		# input-file: string
-		# output-file: string
-		# verb: string
+		#
+		#input-file: string
+		#output-file: string
+		#verb: string
 		"""
