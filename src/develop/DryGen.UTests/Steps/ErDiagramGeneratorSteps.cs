@@ -1,12 +1,10 @@
 ﻿using BoDi;
 using DryGen.DevUtils.Helpers;
-using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using DryGen.UTests.Helpers;
 using DryGen.UTests.Hooks;
 using System;
 using TechTalk.SpecFlow;
-using static DryGen.Options.MermaidErDiagramFromCSharpBaseOptions;
 
 namespace DryGen.UTests.Steps
 {
@@ -66,7 +64,7 @@ namespace DryGen.UTests.Steps
         [When(@"I generate an ER diagram using EF Core")]
         public void WhenIGenerateAnERDiagramUsingEfCore()
         {
-            var erDiagramGeneratorByEfCore = objectContainer.Resolve<ErDiagramGenerator>("ErDiagramGeneratorByEfCore"); ;
+            var erDiagramGeneratorByEfCore = objectContainer.Resolve<ErDiagramGenerator>("ErDiagramGeneratorByEfCore");
             generatedRepresentationContext.GeneratedRepresentation = exceptionContext.HarvestExceptionFrom(() =>
                 erDiagramGeneratorByEfCore.Generate(
                     assemblyContext.Assembly,
@@ -91,6 +89,12 @@ namespace DryGen.UTests.Steps
             {
                 throw new ArgumentException($"Unsupported structure builder type '{structureBuilderType}'");
             }
+        }
+
+        private enum ErStructureBuilderType
+        {
+            Reflection,
+            EfCore
         }
     }
 }

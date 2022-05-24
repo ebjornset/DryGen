@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace DryGen.Options
 {
-    public abstract class FromJsonSchemaBaseOptions : BaseOptions
+    public abstract class FromJsonSchemaBaseOptions : BaseOptions, IFromJsonSchemaOptions
     {
         [YamlMember(Alias = "schema-file-format", ApplyNamingConventions = false)]
         [Option("schema-file-format", HelpText = "What format should be used when reading the schema file? 'ByExtension' (default) treats files with extension 'yaml' or 'yml' as yaml, others as json. Use 'Yaml' or 'Json' to force the format explicitly.")]

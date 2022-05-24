@@ -13,11 +13,20 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
         private readonly ErDiagramAttributeDetailExclusions attributeDetailExclusions;
         private readonly ErDiagramRelationshipTypeExclusion relationshipTypeExclusion;
 
+        public ErDiagramGenerator(IMermaidErDiagramFromCSharpOptions options) : this(
+            options.StructureBuilder,
+            options.AttributeTypeExclusion,
+            options.AttributeDetailExclusions,
+            options.RelationshipTypeExclusion
+            )
+        { }
+
         public ErDiagramGenerator(
             IErDiagramStructureBuilder structureBuilder,
             ErDiagramAttributeTypeExclusion attributeTypeExclusion,
             ErDiagramAttributeDetailExclusions attributeDetailExclusions,
-            ErDiagramRelationshipTypeExclusion relationshipTypeExclusion)
+            ErDiagramRelationshipTypeExclusion relationshipTypeExclusion
+            )
         {
             this.structureBuilder = structureBuilder;
             this.attributeTypeExclusion = attributeTypeExclusion;

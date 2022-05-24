@@ -1,10 +1,11 @@
 ﻿using CommandLine;
+using DryGen.MermaidFromJsonSchema;
 using YamlDotNet.Serialization;
 
 namespace DryGen.Options
 {
     [Verb(Constants.MermaidErDiagramFromJsonSchema.Verb, HelpText = "Generate a Mermaid Entity Relationship diagram from a Json shcema.")]
-    public class MermaidErDiagramFromJsonSchemaOptions : FromJsonSchemaBaseOptions
+    public class MermaidErDiagramFromJsonSchemaOptions : FromJsonSchemaBaseOptions, IMermaidErDiagramFromJsonSchemaOptions
     {
         [YamlMember(Alias = "exclude-all-attributes", ApplyNamingConventions = false)]
         [Option("exclude-all-attributes", HelpText = "Should all attributes be excluded from the diagram?")]

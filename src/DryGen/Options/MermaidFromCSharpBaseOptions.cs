@@ -1,10 +1,11 @@
 ﻿using CommandLine;
+using DryGen.MermaidFromCSharp;
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
 namespace DryGen.Options
 {
-    public abstract class MermaidFromCSharpBaseOptions : BaseOptions
+    public abstract class MermaidFromCSharpBaseOptions : BaseOptions, IMermaidDiagramOptions
     {
         [YamlMember(Alias = "include-namespaces", ApplyNamingConventions = false)]
         [Option("include-namespaces", Separator = ';', HelpText = "A list of regular expressions for namespaces to include.")]

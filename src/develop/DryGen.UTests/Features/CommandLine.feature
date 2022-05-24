@@ -56,7 +56,7 @@ Scenario: Print header to console output when output file is specified
 		| Arg                               |
 		| mermaid-class-diagram-from-csharp |
 	Then I should get exit code '0'
-	And I should find the text "Generating mermaid diagram to file '" in console out
+	And I should find the text "Generating Mermaid class diagram to file '" in console out
 
 Scenario: Print usage to console error when an underlying exception is thrown
 	When I call the program with this command line arguments

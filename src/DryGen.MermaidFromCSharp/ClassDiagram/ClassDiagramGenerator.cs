@@ -22,20 +22,15 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
 
         public ClassDiagramGenerator(
             ITypeLoader typeloader,
-            ClassDiagramDirection? direction,
-            ClassDiagramAttributeLevel attributeLevel,
-            ClassDiagramMethodLevel methodLevel,
-            bool excludeStaticAttributes,
-            bool excludeStaticMethods,
-            bool excludeMethodParams)
+            IMermaidClassDiagramFromCSharpOptions options)
         {
             this.typeloader = typeloader;
-            this.direction = direction;
-            this.attributeLevel = attributeLevel;
-            this.methodLevel = methodLevel;
-            this.excludeStaticAttributes = excludeStaticAttributes;
-            this.excludeStaticMethods = excludeStaticMethods;
-            this.excludeMethodParams = excludeMethodParams;
+            direction = options.Direction;
+            attributeLevel = options.AttributeLevel ?? default;
+            methodLevel = options.MethodLevel ?? default;
+            excludeStaticAttributes = options.ExcludeStaticAttributes ?? default;
+            excludeStaticMethods = options.ExcludeStaticMethods ?? default;
+            excludeMethodParams = options.ExcludeMethodParams ?? default;
         }
 
         public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter)

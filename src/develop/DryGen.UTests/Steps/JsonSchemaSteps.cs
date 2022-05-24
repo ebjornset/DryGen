@@ -1,5 +1,6 @@
 using DryGen.CSharpFromJsonSchema;
 using DryGen.DevUtils.Helpers;
+using DryGen.Options;
 using DryGen.UTests.Helpers;
 using System;
 using System.IO;
@@ -16,7 +17,7 @@ namespace DryGen.UTests.Steps
         private readonly GeneratedRepresentationContext generatedRepresentationContext;
 
         public JsonSchemaSteps(
-            ExceptionContext exceptionContext, 
+            ExceptionContext exceptionContext,
             InputFileContext inputFileContext,
             GeneratedRepresentationContext generatedRepresentationContext)
         {
@@ -41,7 +42,7 @@ namespace DryGen.UTests.Steps
         [When(@"I load the json schema from a file with the extension ""([^""]*)""")]
         public void WhenILoadTheJsonSchemaFromAFileWithTheExtension(string extension)
         {
-            CreateAndLoadTestJsonFile(extension, JsonSchemaFileFormat.ByExtencion);
+            CreateAndLoadTestJsonFile(extension, JsonSchemaFileFormat.ByExtension);
         }
 
         [When(@"I load the json schema from a file forcing the schema format ""([^""]*)""")]
@@ -75,8 +76,12 @@ namespace DryGen.UTests.Steps
         private void LoadJsonSchemaFromFile(JsonSchemaFileFormat jsonSchemaFileFormat)
         {
             var generator = new CSharpFromJsonSchemaGenerator();
-            generatedRepresentationContext.GeneratedRepresentation = exceptionContext.HarvestExceptionFrom(() =>
-               generator.Generate(inputFileContext.InputFileName, jsonSchemaFileFormat, theNamespace: null, rootClassname: null, arrayType: null, arrayInstanceType: null).Result);
+            var options = new CSharpFromJsonSchemaOptions
+            {
+                InputFile = inputFileContext.InputFileName,
+                SchemaFileFormat = jsonSchemaFileFormat
+            };
+            generatedRepresentationContext.GeneratedRepresentation = exceptionContext.HarvestExceptionFrom(() => generator.Generate(options).Result);
         }
     }
 }
