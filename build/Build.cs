@@ -32,33 +32,33 @@ public partial class Build : NukeBuild
     public static int Main() => Execute<Build>(x => x.UTests, x => x.ITests, x => x.Docs, x => x.Specs);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    internal readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
     [Parameter("The Nuget source url")]
-    readonly string NuGetSource = "https://api.nuget.org/v3/index.json";
+    internal readonly string NuGetSource = "https://api.nuget.org/v3/index.json";
 
     [Parameter("The api key to use when pushing to Nuget")]
     [Secret]
-    readonly string NuGetApiKey;
+    internal readonly string NuGetApiKey;
 
-    [Solution] readonly Solution Solution;
-    [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion] readonly GitVersion GitVersion;
+    [Solution] internal readonly Solution Solution;
+    [GitRepository] internal readonly GitRepository GitRepository;
+    [GitVersion] internal readonly GitVersion GitVersion;
 
-    string Copyright;
-    string Authors;
+    internal string Copyright;
+    internal string Authors;
     string Description;
-    bool IsVersionTag;
+    internal bool IsVersionTag;
 #pragma warning disable S1075 // URIs should not be hardcoded
     private readonly string ProjectUrlInNugetPackage = "https://docs.drygen.net/";
 #pragma warning restore S1075 // URIs should not be hardcoded
 
-    AbsolutePath SourceDirectory => RootDirectory / "src";
-    AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-    AbsolutePath DocsDirectory => RootDirectory / "docs";
-    AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
+    internal AbsolutePath SourceDirectory => RootDirectory / "src";
+    internal AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
+    internal AbsolutePath DocsDirectory => RootDirectory / "docs";
+    internal AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
 
-    Target Clean => _ => _
+    internal Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
@@ -67,7 +67,7 @@ public partial class Build : NukeBuild
             EnsureCleanDirectory(SonarQubeCoverageDirectory);
         });
 
-    Target Init => _ => _
+    internal Target Init => _ => _
         .Executes(() =>
         {
             var endyear = DateTime.Today.Year;
@@ -85,7 +85,7 @@ public partial class Build : NukeBuild
             Serilog.Log.Information("GitVersion.NuGetVersionV2 = {GitVersionNuGetVersionV2}", GitVersion.NuGetVersionV2);
         });
 
-    Target Restore => _ => _
+    internal Target Restore => _ => _
        .After(Clean)
        .Executes(() =>
        {
@@ -93,7 +93,7 @@ public partial class Build : NukeBuild
                .SetProjectFile(Solution));
        });
 
-    Target Compile => _ => _
+    internal Target Compile => _ => _
         .DependsOn(Restore)
         .DependsOn(Init)
         .Executes(() =>
@@ -109,7 +109,7 @@ public partial class Build : NukeBuild
                 .EnableNoRestore());
         });
 
-    Target UTests => _ => _
+    internal Target UTests => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
@@ -121,7 +121,7 @@ public partial class Build : NukeBuild
                     settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
         });
 
-    Target Pack => _ => _
+    internal Target Pack => _ => _
             .DependsOn(Compile)
             .DependsOn(Init)
             .Executes(() =>
@@ -140,7 +140,7 @@ public partial class Build : NukeBuild
                     .SetVersion(GitVersion.NuGetVersionV2));
             });
 
-    Target ITests => _ => _
+    internal Target ITests => _ => _
             .DependsOn(Pack)
             .DependsOn(Init)
             .Executes(() =>
@@ -168,21 +168,20 @@ public partial class Build : NukeBuild
                     , degreeOfParallelism: 4, completeOnFailure: true);
             });
 
-    Target Docs => _ => _
+    internal Target Docs => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
-            // TODO. The doc generation must be rethought after picking Jekyll as doc generator
-            //DotNetRun(c => c
-            //    .SetProjectFile(Solution.GetProject("DryGen.Docs"))
-            //    .SetConfiguration(Configuration)
-            //    .SetApplicationArguments($"-o {DocsDirectory}")
-            //    .EnableNoBuild()
-            //    .SetNoLaunchProfile(true)
-            //    );
+            DotNetRun(c => c
+                .SetProjectFile(Solution.GetProject("DryGen.Docs"))
+                .SetConfiguration(Configuration)
+                .SetApplicationArguments($"-o {DocsDirectory}")
+                .EnableNoBuild()
+                .SetNoLaunchProfile(true)
+                );
         });
 
-    Target Specs => _ => _
+    internal Target Specs => _ => _
             .DependsOn(UTests)
             .DependsOn(ITests)
             .Executes(() =>
@@ -209,7 +208,7 @@ public partial class Build : NukeBuild
                 //}
             });
 
-    Target Push => _ => _
+    internal Target Push => _ => _
        .DependsOn(UTests)
        .DependsOn(ITests)
        .DependsOn(Docs)
@@ -232,14 +231,25 @@ public partial class Build : NukeBuild
                 (v, path) => v.SetTargetPath(path)));
        });
 
-    Target UpdateGlobalTool => _ => _
+    internal Target GlobalTool => _ => _
         .DependsOn(Pack)
         .DependsOn(Init)
         .Executes(() =>
         {
-            // TODO: It would be faster to just install the tool, but how do we prevent the install from failing when it's already installed?
+            try
+            {
+                DotNetToolUninstall(c => c
+                    .SetGlobal(true)
+                    .SetPackageName("dry-gen")
+                    .SetProcessLogOutput(false)
+                    );
+            }
+            catch
+            {
+                // Noop, to prevent the build from stopping when dry-gen is not installed as a global tool (yet)
+            }
             var workingDirectory = Solution.GetProject("DryGen.ITests").Directory;
-            DotNetToolUpdate(c => c
+            DotNetToolInstall(c => c
                 .SetGlobal(true)
                 .SetPackageName("dry-gen")
                 .AddSources(ArtifactsDirectory)
