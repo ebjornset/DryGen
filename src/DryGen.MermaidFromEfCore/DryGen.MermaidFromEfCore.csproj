@@ -7,8 +7,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.22" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.22" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" Condition="'$(TargetFramework)' == 'net6.0'" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.4" Condition="'$(TargetFramework)' == 'net6.0'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" Condition="'$(TargetFramework)' == 'net6.0'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" Condition="'$(TargetFramework)' == 'net6.0'" />
 	</ItemGroup>
 
 	<ItemGroup>
