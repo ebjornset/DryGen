@@ -54,7 +54,7 @@ static IEnumerable<GeneratorData> BuildGeneratorData()
         },
         new GeneratorData {
             Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
-            InputFile = "DryGen.MermaidFromCSharp.EfCore.dll",
+            InputFile = "DryGen.MermaidFromEfCore.dll",
             OptionsFile = "DryGen.Mermaid.ClassDiagram.From.CSharp.For.EfCore.yaml",
         },
     };
