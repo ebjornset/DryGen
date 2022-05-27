@@ -53,10 +53,10 @@ public partial class Build : NukeBuild
     private readonly string ProjectUrlInNugetPackage = "https://docs.drygen.net/";
 #pragma warning restore S1075 // URIs should not be hardcoded
 
-    internal AbsolutePath SourceDirectory => RootDirectory / "src";
-    internal AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-    internal AbsolutePath DocsDirectory => RootDirectory / "docs";
-    internal AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
+    internal static AbsolutePath SourceDirectory => RootDirectory / "src";
+    internal static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
+    internal static AbsolutePath DocsDirectory => RootDirectory / "docs";
+    internal static AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
 
     internal Target Clean => _ => _
         .Before(Restore)
