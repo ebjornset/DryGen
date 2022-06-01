@@ -24,5 +24,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\DryGen\DryGen.csproj" />
 		<ProjectReference Include="..\DryGen.DevUtils\DryGen.DevUtils.csproj" />
+		<ProjectReference Include="..\DryGen.Docs\DryGen.Docs.csproj" />
 	</ItemGroup>
 </Project>

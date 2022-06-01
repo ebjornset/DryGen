@@ -1,5 +1,4 @@
-﻿using CommandLine;
-using DryGen.Options;
+﻿using DryGen.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,19 +15,9 @@ namespace DryGen
             {
                 throw new RequiredOptionMissingException(nameof(options.Verb));
             }
-            var optionsTypeFromVerb = GetOptionsTypeFromVerb(options.Verb);
+            var optionsTypeFromVerb = options.Verb.GetVerbOptionsType();
             var optionsYaml = GetOptionsYaml(optionsTypeFromVerb, options.Verb);
             return optionsYaml;
-        }
-
-        private Type GetOptionsTypeFromVerb(string verb)
-        {
-            var optionsTypes = GetType().Assembly.GetTypes().Where(type => VerbAttributeMatches(type, verb)).ToList();
-            if (optionsTypes.Count == 0)
-            {
-                throw new ArgumentException($"Unknown verb '{verb}'", nameof(verb));
-            }
-            return optionsTypes.Single();
         }
 
         private static string GetOptionsYaml(Type optionsTypeFromVerb, string verb)
@@ -91,20 +80,6 @@ namespace DryGen
                 return type.GetGenericArguments()[0];
             }
             return null;
-        }
-
-        private static bool VerbAttributeMatches(Type type, string verb)
-        {
-            if (type.GetCustomAttributes(typeof(VerbAttribute), inherit: true)?.Any() == true)
-            {
-                var verbAttribute = type.CustomAttributes.Single(x => x.AttributeType == typeof(VerbAttribute));
-                var optionsVerb = verbAttribute.ConstructorArguments[0].ToString()?.Replace("\"", string.Empty);
-                if (string.Equals(optionsVerb, verb, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private static readonly Type[] collectionTypes = { typeof(IEnumerable<>) };

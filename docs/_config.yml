@@ -4,3 +4,4 @@ theme: bulma-clean-theme
 permalink: pretty
 paginate: 5
 paginate_path: "/blog/page:num"
+fixed_navbar: top

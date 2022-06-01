@@ -175,6 +175,7 @@ public partial class Build : NukeBuild
             DotNetRun(c => c
                 .SetProjectFile(Solution.GetProject("DryGen.Docs"))
                 .SetConfiguration(Configuration)
+                .SetFramework("net6.0")
                 .SetApplicationArguments($"-o {DocsDirectory}")
                 .EnableNoBuild()
                 .SetNoLaunchProfile(true)
