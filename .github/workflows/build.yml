@@ -72,7 +72,7 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            core.setFailed('Git modification found after [nuke]. Maybe [nuke docs] wasn't performed before commit?')
+            core.setFailed('Git modification found after [nuke]. Maybe [nuke docs] was omitted before commit?')
       - name: Run Coverlet Report Generator (for SonarCloud)
         run:
           reportgenerator "-reports:**/TestResults/**/coverage.cobertura.xml" "-targetdir:.sonarqubecoverage" "-reporttypes:SonarQube"
