@@ -6,4 +6,16 @@ description: Details about the dry-gen verb mermaid-er-diagram-from-json-schema
 show_sidebar: false
 menubar: verbs_menu
 ---
-Generate a Mermaid Entity Relationship diagram from a Json shcema.
+Generate a Mermaid Entity Relationship diagram from a Json shcema. 
+
+## Options
+
+|Option|Alias|Type|Description|
+|---|---|---|---|
+|--exclude-all-attributes||true/false|Should all attributes be excluded from the diagram?|
+|--exclude-all-relationships||true/false|Should all relationships be excluded from the diagram?|
+|--input-file|-i|string|Full path to the input file to generate a new representation for.|
+|--options-file|-f|string|Read options from this file.|
+|--output-file|-o|string|Write the generated representation to this file.|
+|--root-classname||string|The classname for the class representing the schema it self. Default is the schema title, or 'ClassFromJsonSchema' if the schema has no title.|
+|--schema-file-format||byextension / json / yaml|What format should be used when reading the schema file? 'ByExtension' (default) treats files with extension 'yaml' or 'yml' as yaml, others as json. Use 'Yaml' or 'Json' to force the format explicitly.|

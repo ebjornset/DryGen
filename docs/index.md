@@ -12,11 +12,11 @@ Beeing a .Net tool (with tool name `dry-gen`), you'll need a [.NET SDK](https://
 **A little warning befor you start**: As with all .Net tools, you run `dry-gen` as an application with full trust, so make sure you know exactly where you write your output files.
 
 ## Installation
-#### Install as a global tool
+#### As a global tool
 ```
 dotnet tool install --global dry-gen
 ```
-#### Install as a local tool
+#### As a local tool
 ```
 dotnet new tool-manifest # if you haven't set up the .Net tools for this project already.
 dotnet tool install --local dry-gen

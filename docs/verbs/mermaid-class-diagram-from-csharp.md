@@ -6,4 +6,24 @@ description: Details about the dry-gen verb mermaid-class-diagram-from-csharp
 show_sidebar: false
 menubar: verbs_menu
 ---
-Generate a Mermaid Class diagram from a C# assembly using reflection.
+Generate a Mermaid Class diagram from a C# assembly using reflection. 
+
+## Options
+
+|Option|Alias|Type|Description|
+|---|---|---|---|
+|--attribute-level||all / public / internal / protected / none|What visibility must an attribute have to be included in the diagram?|
+|--direction||default / bt / tb / lr / rl|In which direction should the diagram be generated|
+|--exclude-method-params||true/false|Should method params be excluded from the diagram? (Replaced by count)|
+|--exclude-propertynames||List of string|A list of regular expressions for property names to exclude from each type.|
+|--exclude-static-attributes||true/false|Should static attributes be excluded from the diagram?|
+|--exclude-static-methods||true/false|Should static methods be excluded from the diagram?|
+|--exclude-typenames||List of string|A list of regular expressions for type names to exclude.|
+|--include-namespaces||List of string|A list of regular expressions for namespaces to include.|
+|--include-typenames||List of string|A list of regular expressions for type names to include.|
+|--input-file|-i|string|Full path to the input file to generate a new representation for.|
+|--method-level||all / public / internal / protected / none|What visibility must a method have to be included in the diagram?|
+|--name-replace-from||string|A string to replace in all class/entity names.|
+|--name-replace-to||string|The string to replace with in all class/entity names.|
+|--options-file|-f|string|Read options from this file.|
+|--output-file|-o|string|Write the generated representation to this file.|

@@ -6,4 +6,15 @@ description: Details about the dry-gen verb mermaid-class-diagram-from-json-sche
 show_sidebar: false
 menubar: verbs_menu
 ---
-Generate a Mermaid Class diagram from a json schema.
+Generate a Mermaid Class diagram from a json schema. 
+
+## Options
+
+|Option|Alias|Type|Description|
+|---|---|---|---|
+|--direction||default / bt / tb / lr / rl|In which direction should the diagram be generated|
+|--input-file|-i|string|Full path to the input file to generate a new representation for.|
+|--options-file|-f|string|Read options from this file.|
+|--output-file|-o|string|Write the generated representation to this file.|
+|--root-classname||string|The classname for the class representing the schema it self. Default is the schema title, or 'ClassFromJsonSchema' if the schema has no title.|
+|--schema-file-format||byextension / json / yaml|What format should be used when reading the schema file? 'ByExtension' (default) treats files with extension 'yaml' or 'yml' as yaml, others as json. Use 'Yaml' or 'Json' to force the format explicitly.|

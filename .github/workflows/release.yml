@@ -61,6 +61,11 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
       - name: Run './build.cmd Clean UTests ITests Docs Specs'
         run: ./build.cmd Clean UTests ITests Docs Specs
+      - name: Generate docs with Jekyll
+        uses: limjh16/jekyll-action-ts@v2
+        with:
+          enable_cache: true
+          jekyll_src: ./docs
       - name: Check if there is any git changes
         id: get_changes
         run: echo "::set-output name=changed::$(git status --porcelain | wc - l)"
@@ -78,11 +83,6 @@ jobs:
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Generate docs with Jekyll
-        uses: limjh16/jekyll-action-ts@v2
-        with:
-          enable_cache: true
-          jekyll_src: ./docs
       - name: Run './build.cmd Push'
         run: ./build.cmd Push
         env:

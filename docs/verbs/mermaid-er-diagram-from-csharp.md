@@ -6,4 +6,23 @@ description: Details about the dry-gen verb mermaid-er-diagram-from-csharp
 show_sidebar: false
 menubar: verbs_menu
 ---
-Generate a Mermaid Entity Relationship diagram from a C# assembly using reflection.
+Generate a Mermaid Entity Relationship diagram from a C# assembly using reflection. 
+
+## Options
+
+|Option|Alias|Type|Description|
+|---|---|---|---|
+|--exclude-all-attributes||true/false|Should all attributes be excluded from the diagram?|
+|--exclude-all-relationships||true/false|Should all relationships be excluded from the diagram?|
+|--exclude-attribute-comments||true/false|Should attributes comments be excluded from the diagram?|
+|--exclude-attribute-keytypes||true/false|Should attributes key types be excluded from the diagram?|
+|--exclude-foreignkey-attributes||true/false|Should foreign key attributes be excluded from the diagram?|
+|--exclude-propertynames||List of string|A list of regular expressions for property names to exclude from each type.|
+|--exclude-typenames||List of string|A list of regular expressions for type names to exclude.|
+|--include-namespaces||List of string|A list of regular expressions for namespaces to include.|
+|--include-typenames||List of string|A list of regular expressions for type names to include.|
+|--input-file|-i|string|Full path to the input file to generate a new representation for.|
+|--name-replace-from||string|A string to replace in all class/entity names.|
+|--name-replace-to||string|The string to replace with in all class/entity names.|
+|--options-file|-f|string|Read options from this file.|
+|--output-file|-o|string|Write the generated representation to this file.|
