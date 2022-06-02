@@ -68,7 +68,7 @@ jobs:
           jekyll_src: ./docs
       - name: Check if there is any git changes
         id: get_changes
-        run: echo "::set-output name=changed::$(git status --porcelain | wc - l)"
+        run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
       - name: Fail if there is any git changes
         if: steps.get_changes.outputs.changed != 0
         uses: actions/github-script@v3

@@ -11,7 +11,7 @@ namespace DryGen.GithubActions.FailOnGitChanges
             using (writer.Indent())
             {
                 writer.WriteLine("id: get_changes");
-                writer.WriteLine("run: echo \"::set-output name=changed::$(git status --porcelain | wc - l)\"");
+                writer.WriteLine("run: echo \"::set-output name=changed::$(git status --porcelain | wc -l)\"");
             }
         }
     }
