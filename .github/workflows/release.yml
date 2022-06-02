@@ -5,7 +5,7 @@
 #
 #     - To turn off auto-generation set:
 #
-#         [GhPagesGitHubActions (AutoGenerate = false)]
+#         [NugetPushGitHubActions (AutoGenerate = false)]
 #
 #     - To trigger manual generation invoke:
 #
@@ -59,10 +59,17 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
-      - name: Run './build.cmd Clean Push'
-        run: ./build.cmd Clean Push
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      - name: Run './build.cmd Clean UTests ITests Docs Specs'
+        run: ./build.cmd Clean UTests ITests Docs Specs
+      - name: Check if there is any git changes
+        id: get_changes
+        run: echo "::set-output name=changed::$(git status --porcelain | wc - l)"
+      - name: Fail if there is any git changes
+        if: steps.get_changes.outputs.changed != 0
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Git modification found after [nuke]. Maybe [nuke docs] wasn't performed before commit?')
       - name: Run Coverlet Report Generator (for SonarCloud)
         run:
           reportgenerator "-reports:**/TestResults/**/coverage.cobertura.xml" "-targetdir:.sonarqubecoverage" "-reporttypes:SonarQube"
@@ -76,6 +83,10 @@ jobs:
         with:
           enable_cache: true
           jekyll_src: ./docs
+      - name: Run './build.cmd Push'
+        run: ./build.cmd Push
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       - name: Prepare generated docs for deployment on branch gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:

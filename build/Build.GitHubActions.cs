@@ -1,4 +1,4 @@
-using DryGen.GithubActions.GhPages;
+using DryGen.GithubActions.NugetPush;
 using DryGen.GithubActions.SonarCloud;
 using Nuke.Common.CI.GitHubActions;
 
@@ -21,16 +21,12 @@ namespace DryGen.Build;
     InvokedTargets = new[] { nameof(Clean), nameof(UTests), nameof(ITests), nameof(Docs), nameof(Specs) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
 ]
-
-[GhPagesGitHubActions(
+[NugetPushGitHubActions(
     name: "release",
     GitHubActionsImage.UbuntuLatest,
     OnPushTags = new[] { "v*.*.*" },
     PublishArtifacts = true,
-    InvokedTargets = new[] { nameof(Clean), nameof(Push) },
-    ImportSecrets = new[] { "NUGET_API_KEY" },
+    InvokedTargets = new[] { nameof(Clean), nameof(UTests), nameof(ITests), nameof(Docs), nameof(Specs) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
 ]
-public partial class Build
-{
-}
+public partial class Build { }
