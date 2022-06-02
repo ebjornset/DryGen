@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DryGen
 {
-    public class VerbMetaData
+    public class VerbMetadata
     {
         private readonly Type optionsType;
 
-        public VerbMetaData(Type optionsType)
+        public VerbMetadata(Type optionsType)
         {
             this.optionsType = optionsType;
         }
 
         public string Verb => optionsType.GetVerb();
         public string HelpText => optionsType.GetVerbHelpText();
+
+        public IReadOnlyList<OptionMetadata> Options => optionsType.GetOptionMetadataList();
     }
 }

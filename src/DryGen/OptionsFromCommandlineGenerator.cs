@@ -40,48 +40,10 @@ namespace DryGen
                 {
                     continue;
                 }
-                var propertyTypeInfo = GeneratePropertyTypeInfo(propery.PropertyType);
+                var propertyTypeInfo = propery.PropertyType.GeneratePropertyTypeInfo(asYamlComment: true);
                 optionList.Add($"#{alias}: {propertyTypeInfo}");
             }
-
             return optionList;
         }
-
-        private static string GeneratePropertyTypeInfo(Type propertyType)
-        {
-            var nullableUnderlyingType = Nullable.GetUnderlyingType(propertyType);
-            if (nullableUnderlyingType != null)
-            {
-                return GeneratePropertyTypeInfo(nullableUnderlyingType);
-            }
-            var collectionType = GetCollectionType(propertyType);
-            if (collectionType != null)
-            {
-                var typeInfo = GeneratePropertyTypeInfo(collectionType);
-                return $"# List of {typeInfo}\n#- ";
-            }
-            if (propertyType.IsEnum)
-            {
-                return string.Join(" | ", Enum.GetNames(propertyType).Select(x => x.ToLowerInvariant()));
-            }
-            if (propertyType == typeof(bool))
-            {
-                return "true|false";
-            }
-            return propertyType.Name.ToLowerInvariant();
-        }
-
-        private static Type? GetCollectionType(Type type)
-        {
-            if (type.IsGenericType
-                && collectionTypes.Contains(type.GetGenericTypeDefinition())
-                && type.GetGenericArguments().Length == 1)
-            {
-                return type.GetGenericArguments()[0];
-            }
-            return null;
-        }
-
-        private static readonly Type[] collectionTypes = { typeof(IEnumerable<>) };
     }
 }

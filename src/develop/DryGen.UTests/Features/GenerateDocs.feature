@@ -40,6 +40,15 @@ Scenario: Should generate verb markdown for options-from-commandline
 		show_sidebar: false
 		menubar: verbs_menu
 		---
-		Generate dry-gen options for a verb from the command line.
+		Generate dry-gen options for a verb from the command line. 
+		
+		## Options
+		
+		|Option|Alias|Type|Description|
+		|---|---|---|---|
+		|--input-file|-i|string|Full path to the input file to generate a new representation for.|
+		|--options-file|-f|string|Read options from this file.|
+		|--output-file|-o|string|Write the generated representation to this file.|
+		|--verb||string|The dryg-gen verb to generate options for.|
 
 		"""
