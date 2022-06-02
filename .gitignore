@@ -392,3 +392,6 @@ FodyWeavers.xsd
 
 # Coverlet SonarQube coverarge report
 .sonarqubecoverage/
+
+# SonarQube stuff
+.sonarqube/
