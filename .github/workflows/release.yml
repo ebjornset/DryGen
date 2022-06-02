@@ -48,10 +48,6 @@ jobs:
       - name: Begin SonarCloud scan
         run:
           dotnet-sonarscanner begin /k:"ebjornset_DryGen" /o:"ebjornset" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="./.sonarqubecoverage/SonarQube.xml"
-      - name: Setup Ruby v 3.1 (for docs generation with Jekyll)
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1
       - name: Cache .nuke/temp, ~/.nuget/packages
         uses: actions/cache@v2
         with:
@@ -59,16 +55,23 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
+      - name: Setup Ruby v 3.1 (for docs generation with Jekyll)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
       - name: Run './build.cmd Clean UTests ITests Docs Specs'
         run: ./build.cmd Clean UTests ITests Docs Specs
+      - name: Check if there is any git changes
+        id: get_changes
+        run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
       - name: Generate docs with Jekyll
         uses: limjh16/jekyll-action-ts@v2
         with:
           enable_cache: true
           jekyll_src: ./docs
-      - name: Check if there is any git changes
-        id: get_changes
-        run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
+      - name: List any git changes
+        if: steps.get_changes.outputs.changed != 0
+        run: git status --porcelain
       - name: Fail if there is any git changes
         if: steps.get_changes.outputs.changed != 0
         uses: actions/github-script@v3

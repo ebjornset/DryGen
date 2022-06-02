@@ -15,10 +15,10 @@ namespace DryGen.GithubActions.SonarCloud
         {
             var job = base.GetJobs(image, relevantTargets);
             var newSteps = new List<GitHubActionsStep>(job.Steps);
-            newSteps.Insert(newSteps.Count - 4, new GitHubActionsSetupJavaStep());
-            newSteps.Insert(newSteps.Count - 4, new GitHubActionsInstallSonarCloudScannerStep());
-            newSteps.Insert(newSteps.Count - 4, new GitHubActionsInstallCoverletReportGeneratorStep());
-            newSteps.Insert(newSteps.Count - 4, new GitHubActionsBeginSonarCloudScanStep());
+            newSteps.Insert(newSteps.Count - 5, new GitHubActionsSetupJavaStep());
+            newSteps.Insert(newSteps.Count - 5, new GitHubActionsInstallSonarCloudScannerStep());
+            newSteps.Insert(newSteps.Count - 5, new GitHubActionsInstallCoverletReportGeneratorStep());
+            newSteps.Insert(newSteps.Count - 5, new GitHubActionsBeginSonarCloudScanStep());
             newSteps.Add(new GitHubActionsRunCoverletReportGeneratorStep());
             newSteps.Add(new GitHubActionsEndSonarCloudScanStep());
             job.Steps = newSteps.ToArray();

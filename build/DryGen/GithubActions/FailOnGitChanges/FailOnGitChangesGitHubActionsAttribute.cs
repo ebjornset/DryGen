@@ -15,6 +15,7 @@ namespace DryGen.GithubActions.FailOnGitChanges
             var job = base.GetJobs(image, relevantTargets);
             var newSteps = new List<GitHubActionsStep>(job.Steps);
             newSteps.Add(new GitHubActionsCheckForGitChangesStep());
+            newSteps.Add(new GitHubActionsListGitChangesStep());
             newSteps.Add(new GitHubActionsFailOnGitChangesStep());
             job.Steps = newSteps.ToArray();
             return job;
