@@ -12,7 +12,6 @@ namespace DryGen
             this.optionsType = optionsType;
         }
 
-        public string Verb => optionsType.GetVerb();
         public string HelpText => optionsType.GetVerbHelpText();
 
         public IReadOnlyList<OptionMetadata> Options => optionsType.GetOptionMetadataList();
