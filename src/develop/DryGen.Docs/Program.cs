@@ -4,7 +4,7 @@ using DryGen.Docs;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 
 return Parser.Default.ParseArguments<Options>(args)
   .MapResult(
@@ -14,23 +14,38 @@ return Parser.Default.ParseArguments<Options>(args)
 static int RunAndReturnExitCode(Options options)
 {
     var outputFolder = Path.GetFullPath(options.Output);
-    string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
     if (!Directory.Exists(outputFolder))
     {
         throw new ArgumentException($"output folder '{outputFolder}' does not exist!");
     }
-    var generator = new Generator(Console.Out, Console.Error);
     var result = 0;
-    foreach (var generatorData in BuildGeneratorData())
+    var verbMenuPath = Path.Combine(outputFolder, "_data", "verbs_menu.yml");
+    Console.WriteLine($"Generating verbs menu to \"{verbMenuPath}\"");
+    using var verbMenuWriter = new StreamWriter(verbMenuPath);
+    new VerbMenuGenerator().GenerateVerbMenu(verbMenuWriter);
+    var verbMarkdownGenerator = new VerbMarkdowGenerator();
+    var verbs = typeof(Generator).Assembly.GetTypes().Where(x => x.HasVerbAttribute()).Select(x => x.GetVerb());
+    foreach (var verb in verbs.OrderBy(x => x))
     {
-        var commandLine = BuildCommandline(generatorData, outputFolder, assemblyFolder);
-        Console.WriteLine($"Generating: {string.Join(' ', commandLine)}");
-        result = generator.Run(commandLine);
-        if (result > 0)
-        {
-            break;
-        }
+        var verbMarkdownPath = Path.Combine(outputFolder, "verbs", $"{verb}.md");
+        Console.WriteLine($"Generating verb markdown for '{verb}' to \"{verbMarkdownPath}\"");
+        using var verbMarkdownWriter = new StreamWriter(verbMarkdownPath);
+        verbMarkdownGenerator.GenerateVerbMarkdown(verb, verbMarkdownWriter);
     }
+
+
+    //string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    //var generator = new Generator(Console.Out, Console.Error);
+    //foreach (var generatorData in BuildGeneratorData())
+    //{
+    //    var commandLine = BuildCommandline(generatorData, outputFolder, assemblyFolder);
+    //    Console.WriteLine($"Generating: {string.Join(' ', commandLine)}");
+    //    result = generator.Run(commandLine);
+    //    if (result > 0)
+    //    {
+    //        break;
+    //    }
+    //}
     return result;
 }
 
@@ -54,7 +69,7 @@ static IEnumerable<GeneratorData> BuildGeneratorData()
         },
         new GeneratorData {
             Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
-            InputFile = "DryGen.MermaidFromCSharp.EfCore.dll",
+            InputFile = "DryGen.MermaidFromEfCore.dll",
             OptionsFile = "DryGen.Mermaid.ClassDiagram.From.CSharp.For.EfCore.yaml",
         },
     };

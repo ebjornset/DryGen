@@ -83,13 +83,13 @@
               "Clean",
               "Compile",
               "Docs",
+              "GlobalTool",
               "Init",
               "ITests",
               "Pack",
               "Push",
               "Restore",
               "Specs",
-              "UpdateGlobalTool",
               "UTests"
             ]
           }
@@ -107,13 +107,13 @@
               "Clean",
               "Compile",
               "Docs",
+              "GlobalTool",
               "Init",
               "ITests",
               "Pack",
               "Push",
               "Restore",
               "Specs",
-              "UpdateGlobalTool",
               "UTests"
             ]
           }

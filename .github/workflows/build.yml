@@ -60,10 +60,22 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
-      - name: Run './build.cmd Clean UTests ITests Docs Specs'
-        run: ./build.cmd Clean UTests ITests Docs Specs
+      - name: Run './build.cmd '
+        run: ./build.cmd 
         env:
           dummy: ${{ github.event.inputs.dummy }}
+      - name: Check if there is any git changes
+        id: get_changes
+        run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
+      - name: List any git changes
+        if: steps.get_changes.outputs.changed != 0
+        run: git status --porcelain
+      - name: Fail if there is any git changes
+        if: steps.get_changes.outputs.changed != 0
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Git modifications found after [nuke]. Maybe [nuke docs] was omitted before commit? Check the output from the step "List any git changes" for details about the git changes.')
       - name: Run Coverlet Report Generator (for SonarCloud)
         run:
           reportgenerator "-reports:**/TestResults/**/coverage.cobertura.xml" "-targetdir:.sonarqubecoverage" "-reporttypes:SonarQube"

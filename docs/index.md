@@ -1,8 +1,8 @@
 ---
 layout: page
+title: Getting started
+description: How to get started with dry-gen
 ---
-# Getting started
-
 DryGen is a .Net tool to generate other representations of a piece of knowledge from one representation. 
 
 It's inspired by the ["Don't repeat yourself" (DRY) prinsiple](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system"
@@ -12,11 +12,11 @@ Beeing a .Net tool (with tool name `dry-gen`), you'll need a [.NET SDK](https://
 **A little warning befor you start**: As with all .Net tools, you run `dry-gen` as an application with full trust, so make sure you know exactly where you write your output files.
 
 ## Installation
-#### Install as a global tool
+#### As a global tool
 ```
 dotnet tool install --global dry-gen
 ```
-#### Install as a local tool
+#### As a local tool
 ```
 dotnet new tool-manifest # if you haven't set up the .Net tools for this project already.
 dotnet tool install --local dry-gen
@@ -33,4 +33,6 @@ The verb defines your target and source representation. The supported verbs are 
 The options are spesific to each verb, and are used to fine tune the result representation. Most options uses the standard long notation of `--<option-name>`, e.g. `--input-file`. Some options also supports the shorthand notation of `-<letter>`, e.g. `-i` for input file, but we suggest you use the long format.  Execute `dry-gen <verb> --help` to get the list of options for a specific verb, e.g. `dry-gen mermaid-class-diagram-from-csharp --help`
 
 ##### Going further
-Until we've got generation of documentation of each verb and its options from the command line help up and running, you'll need to use the command line help to get going. (After all, we should live as we preach...)
+Head over to the [verbs page](/verbs) to see the list iof verbs dry-gen supports. 
+
+Have fun!

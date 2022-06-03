@@ -31,6 +31,7 @@ namespace DryGen
             parser = new Parser(with =>
             {
                 with.CaseInsensitiveEnumValues = true;
+                with.HelpWriter = null;
             });
             this.outWriter = outWriter;
             this.errorWriter = errorWriter;
@@ -71,6 +72,10 @@ namespace DryGen
                 });
                 h.AutoHelp = false;     // hides --help
                 h.AutoVersion = false;  // hides --version
+                h.OptionComparison = HelpText.RequiredThenAlphaComparison;
+                h.AddEnumValuesToHelpText = true;
+                h.MaximumDisplayWidth = 100;
+                h.AddDashesToOption = true;
                 var helpText = HelpText.DefaultParsingErrorsHandler(result, h);
                 return helpText;
             }, e => e, verbsIndex: true);

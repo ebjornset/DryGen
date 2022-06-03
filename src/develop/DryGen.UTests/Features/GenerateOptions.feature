@@ -1,6 +1,6 @@
 ﻿Feature: Generate options from command line
 
-To be able to use options files without having to hand crafdt them from scratch
+To be able to use options files without having to hand craft them from scratch
 As a dry-gen user
 I would like to be able to generate option files for all verbs
 

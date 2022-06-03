@@ -44,8 +44,6 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
             var nullableUnderlyingType = Nullable.GetUnderlyingType(type);
             var propertyTypename = (nullableUnderlyingType ?? type).Name;
             var result = GetPropertyTypeName(propertyTypename);
-            // TODO The syntaxt don't allow ? in type so we must use comment for nullable types.
-            // return nullableUnderlyingType == null ? result : $"{result}?";
             return result;
 
             static string GetPropertyTypeName(string propertyTypename)
