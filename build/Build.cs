@@ -29,7 +29,7 @@ public partial class Build : NukeBuild
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
-    public static int Main() => Execute<Build>(x => x.UTests, x => x.ITests, x => x.Docs, x => x.Specs);
+    public static int Main() => Execute<Build>(x => x.Clean, x => x.UTests, x => x.ITests, x => x.Docs, x => x.Specs);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     internal readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;

@@ -18,7 +18,7 @@ namespace DryGen.GithubActions.FailOnGitChanges
                     writer.WriteLine("script: |");
                     using (writer.Indent())
                     {
-                        writer.WriteLine("core.setFailed('Git modification found after [nuke]. Maybe [nuke docs] was omitted before commit?')");
+                        writer.WriteLine($"core.setFailed('Git modifications found after [nuke]. Maybe [nuke docs] was omitted before commit? Check the output from the step \"{GitHubActionsListGitChangesStep.StepName}\" for details about the git changes.')");
                     }
                 }
             }

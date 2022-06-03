@@ -9,7 +9,7 @@ namespace DryGen.Build;
     GitHubActionsImage.UbuntuLatest,
     OnPullRequestBranches = new[] { "main" },
     PublishArtifacts = false,
-    InvokedTargets = new[] { nameof(Clean), nameof(UTests), nameof(ITests), nameof(Docs), nameof(Specs) },
+//    InvokedTargets = new[] { nameof(Clean), nameof(UTests), nameof(ITests), nameof(Docs), nameof(Specs) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" }),
 ]
 [SonarCloudGitHubActions(
@@ -18,7 +18,7 @@ namespace DryGen.Build;
     OnPushBranches = new[] { "main" },
     OnWorkflowDispatchOptionalInputs = new[] { "dummy" },
     PublishArtifacts = true,
-    InvokedTargets = new[] { nameof(Clean), nameof(UTests), nameof(ITests), nameof(Docs), nameof(Specs) },
+//    InvokedTargets = new[] { nameof(Clean), nameof(UTests), nameof(ITests), nameof(Docs), nameof(Specs) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
 ]
 [NugetPushGitHubActions(
@@ -26,7 +26,7 @@ namespace DryGen.Build;
     GitHubActionsImage.UbuntuLatest,
     OnPushTags = new[] { "v*.*.*" },
     PublishArtifacts = true,
-    InvokedTargets = new[] { nameof(Clean), nameof(UTests), nameof(ITests), nameof(Docs), nameof(Specs) },
+//    InvokedTargets = new[] { nameof(Clean), nameof(UTests), nameof(ITests), nameof(Docs), nameof(Specs) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
 ]
 public partial class Build { }
