@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DryGen.Docs
 {
-    public class VerbMenuGenerator
+    public static class VerbMenuGenerator
     {
         public static void GenerateVerbMenu(TextWriter writer)
         {
