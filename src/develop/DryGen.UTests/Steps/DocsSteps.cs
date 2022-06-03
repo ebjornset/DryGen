@@ -17,13 +17,13 @@ namespace DryGen.UTests.Steps
         [When(@"I generate the docs verb menu")]
         public void WhenIGenerateTheDocsVerbMenu()
         {
-            new VerbMenuGenerator().GenerateVerbMenu(consoleContext.OutWriter);
+            VerbMenuGenerator.GenerateVerbMenu(consoleContext.OutWriter);
         }
 
         [When(@"I generate the docs markdown for the verb ""([^""]*)""")]
         public void WhenIGenerateTheDocsMarkdownForTheVerb(string verb)
         {
-            new VerbMarkdowGenerator().GenerateVerbMarkdown(verb, consoleContext.OutWriter);
+            VerbMarkdowGenerator.GenerateVerbMarkdown(verb, consoleContext.OutWriter);
         }
     }
 }

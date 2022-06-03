@@ -177,8 +177,7 @@ namespace DryGen
         {
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "dry-gen options", options =>
             {
-                var generator = new OptionsFromCommandlineGenerator();
-                return generator.Generate(options);
+                return OptionsFromCommandlineGenerator.Generate(options);
             });
         }
 

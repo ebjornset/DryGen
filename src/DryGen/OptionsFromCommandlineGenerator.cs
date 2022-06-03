@@ -7,9 +7,9 @@ using YamlDotNet.Serialization;
 
 namespace DryGen
 {
-    public class OptionsFromCommandlineGenerator
+    public static class OptionsFromCommandlineGenerator
     {
-        public string Generate(OptionsFromCommandlineOptions options)
+        public static string Generate(OptionsFromCommandlineOptions options)
         {
             if (string.IsNullOrWhiteSpace(options.Verb))
             {
