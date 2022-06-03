@@ -28,10 +28,11 @@ The verb 'mermaid-er-diagram-from-efcore' uses the following options.
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
 
+{% include notification.html
+message="You can always get information about this verb's options by running the command `dry-gen mermaid-er-diagram-from-efcore --help`."
+%}
 ## Options file template
 Here is a template for an options file for 'mermaid-er-diagram-from-efcore'. 
-
-PS! You can generate this your self with the command `dry-gen options-from-commandline --verb mermaid-er-diagram-from-efcore`.
 ```
 #
 # dry-gen options for verb 'mermaid-er-diagram-from-efcore'
@@ -54,3 +55,6 @@ PS! You can generate this your self with the command `dry-gen options-from-comma
 #name-replace-to: string
 #output-file: string
 ```
+{% include notification.html
+message="You can generate the same template your self with the command `dry-gen options-from-commandline --verb mermaid-er-diagram-from-efcore`."
+%}

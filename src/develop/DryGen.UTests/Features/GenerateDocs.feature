@@ -52,10 +52,11 @@ Scenario: Should generate verb markdown for options-from-commandline
 		|--output-file|-o|string|Write the generated representation to this file.|
 		|--verb||string|The dryg-gen verb to generate options for.|
 		
+		{% include notification.html
+		message="You can always get information about this verb's options by running the command `dry-gen options-from-commandline --help`."
+		%}
 		## Options file template
 		Here is a template for an options file for 'options-from-commandline'. 
-		
-		PS! You can generate this your self with the command `dry-gen options-from-commandline --verb options-from-commandline`.
 		```
 		#
 		# dry-gen options for verb 'options-from-commandline'
@@ -64,7 +65,10 @@ Scenario: Should generate verb markdown for options-from-commandline
 		#output-file: string
 		#verb: string
 		```
-
+		{% include notification.html
+		message="You can generate the same template your self with the command `dry-gen options-from-commandline --verb options-from-commandline`."
+		%}
+		
 		"""
 
 # We could test for the docs generation for more verbs, but that would only make more fragile test, since the docs changes each time the help text for a verb is improved...

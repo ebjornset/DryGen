@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace DryGen.Docs
@@ -33,15 +32,18 @@ namespace DryGen.Docs
                   .Append(optionMetadata.Description.AsMarkdownTableCellValue()).AppendLine("|");
             }
             sb.AppendLine()
-              .AppendLine("## Options file template")
+              .AppendLine("{% include notification.html")
+              .Append("message=\"You can always get information about this verb's options by running the command `dry-gen ").Append(verb).AppendLine(" --help`.\"")
+              .AppendLine("%}").AppendLine("## Options file template")
               .Append("Here is a template for an options file for '").Append(verb).AppendLine("'. ")
-              .AppendLine()
-              .Append("PS! You can generate this your self with the command `dry-gen options-from-commandline").Append(" --verb ").Append(verb).AppendLine("`.")
               .AppendLine("```");
             using var optionTemplateWriter = new StringWriter();
             new Generator(optionTemplateWriter, optionTemplateWriter).Run(new[] { "options-from-commandline", "--verb", verb });
-            sb.AppendLine(optionTemplateWriter.ToString());
-            sb.AppendLine("```");
+            sb.AppendLine(optionTemplateWriter.ToString())
+              .AppendLine("```")
+              .AppendLine("{% include notification.html")
+              .Append("message=\"You can generate the same template your self with the command `dry-gen options-from-commandline --verb ").Append(verb).AppendLine("`.\"")
+              .AppendLine("%}");
             writer.Write(sb.ToString());
         }
     }
