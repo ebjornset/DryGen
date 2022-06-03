@@ -9,6 +9,7 @@ menubar: verbs_menu
 Generate C# classes from a json schema (using NJsonSchema https://github.com/RicoSuter/NJsonSchema). 
 
 ## Options
+The verb 'csharp-from-json-schema' uses the following options.
 
 |Option|Alias|Type|Description|
 |---|---|---|---|
@@ -20,3 +21,20 @@ Generate C# classes from a json schema (using NJsonSchema https://github.com/Ric
 |--output-file|-o|string|Write the generated representation to this file.|
 |--root-classname||string|The classname for the class representing the schema it self. Default is the schema title, or 'ClassFromJsonSchema' if the schema has no title.|
 |--schema-file-format||byextension / json / yaml|What format should be used when reading the schema file? 'ByExtension' (default) treats files with extension 'yaml' or 'yml' as yaml, others as json. Use 'Yaml' or 'Json' to force the format explicitly.|
+
+## Options file template
+Here is a template for an options file for 'csharp-from-json-schema'. 
+
+PS! You can generate this your self with the command `dry-gen options-from-commandline --verb csharp-from-json-schema`.
+```
+#
+# dry-gen options for verb 'csharp-from-json-schema'
+#
+#array-instance-type: string
+#array-type: string
+#input-file: string
+#namespace: string
+#output-file: string
+#root-classname: string
+#schema-file-format: byextension | json | yaml
+```

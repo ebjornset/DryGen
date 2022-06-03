@@ -9,6 +9,7 @@ menubar: verbs_menu
 Generate a Mermaid Class diagram from a C# assembly using reflection. 
 
 ## Options
+The verb 'mermaid-class-diagram-from-csharp' uses the following options.
 
 |Option|Alias|Type|Description|
 |---|---|---|---|
@@ -27,3 +28,31 @@ Generate a Mermaid Class diagram from a C# assembly using reflection.
 |--name-replace-to||string|The string to replace with in all class/entity names.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+
+## Options file template
+Here is a template for an options file for 'mermaid-class-diagram-from-csharp'. 
+
+PS! You can generate this your self with the command `dry-gen options-from-commandline --verb mermaid-class-diagram-from-csharp`.
+```
+#
+# dry-gen options for verb 'mermaid-class-diagram-from-csharp'
+#
+#attribute-level: all | public | internal | protected | none
+#direction: default | bt | tb | lr | rl
+#exclude-method-params: true|false
+#exclude-propertynames: # List of string
+#- 
+#exclude-static-attributes: true|false
+#exclude-static-methods: true|false
+#exclude-typenames: # List of string
+#- 
+#include-namespaces: # List of string
+#- 
+#include-typenames: # List of string
+#- 
+#input-file: string
+#method-level: all | public | internal | protected | none
+#name-replace-from: string
+#name-replace-to: string
+#output-file: string
+```

@@ -20,6 +20,7 @@ namespace DryGen.Docs
                 .AppendLine("---")
                 .Append(verbMetaData.HelpText).AppendLine(" ").AppendLine()
                 .AppendLine("## Options")
+                .Append("The verb '").Append(verb).AppendLine("' uses the following options.")
                 .AppendLine()
                 .AppendLine("|Option|Alias|Type|Description|")
                 .AppendLine("|---|---|---|---|");
@@ -31,6 +32,16 @@ namespace DryGen.Docs
                   .Append(optionMetadata.Type.AsMarkdownTableCellValue()).Append('|')
                   .Append(optionMetadata.Description.AsMarkdownTableCellValue()).AppendLine("|");
             }
+            sb.AppendLine()
+              .AppendLine("## Options file template")
+              .Append("Here is a template for an options file for '").Append(verb).AppendLine("'. ")
+              .AppendLine()
+              .Append("PS! You can generate this your self with the command `dry-gen options-from-commandline").Append(" --verb ").Append(verb).AppendLine("`.")
+              .AppendLine("```");
+            using var optionTemplateWriter = new StringWriter();
+            new Generator(optionTemplateWriter, optionTemplateWriter).Run(new[] { "options-from-commandline", "--verb", verb });
+            sb.AppendLine(optionTemplateWriter.ToString());
+            sb.AppendLine("```");
             writer.Write(sb.ToString());
         }
     }

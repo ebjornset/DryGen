@@ -43,6 +43,7 @@ Scenario: Should generate verb markdown for options-from-commandline
 		Generate dry-gen options for a verb from the command line. 
 		
 		## Options
+		The verb 'options-from-commandline' uses the following options.
 		
 		|Option|Alias|Type|Description|
 		|---|---|---|---|
@@ -50,5 +51,20 @@ Scenario: Should generate verb markdown for options-from-commandline
 		|--options-file|-f|string|Read options from this file.|
 		|--output-file|-o|string|Write the generated representation to this file.|
 		|--verb||string|The dryg-gen verb to generate options for.|
+		
+		## Options file template
+		Here is a template for an options file for 'options-from-commandline'. 
+		
+		PS! You can generate this your self with the command `dry-gen options-from-commandline --verb options-from-commandline`.
+		```
+		#
+		# dry-gen options for verb 'options-from-commandline'
+		#
+		#input-file: string
+		#output-file: string
+		#verb: string
+		```
 
 		"""
+
+# We could test for the docs generation for more verbs, but that would only make more fragile test, since the docs changes each time the help text for a verb is improved...

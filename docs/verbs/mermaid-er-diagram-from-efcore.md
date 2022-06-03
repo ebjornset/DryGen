@@ -9,6 +9,7 @@ menubar: verbs_menu
 Generate a Mermaid Entity Relationship diagram from a C# assembly using Entity Framework Core. 
 
 ## Options
+The verb 'mermaid-er-diagram-from-efcore' uses the following options.
 
 |Option|Alias|Type|Description|
 |---|---|---|---|
@@ -26,3 +27,30 @@ Generate a Mermaid Entity Relationship diagram from a C# assembly using Entity F
 |--name-replace-to||string|The string to replace with in all class/entity names.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+
+## Options file template
+Here is a template for an options file for 'mermaid-er-diagram-from-efcore'. 
+
+PS! You can generate this your self with the command `dry-gen options-from-commandline --verb mermaid-er-diagram-from-efcore`.
+```
+#
+# dry-gen options for verb 'mermaid-er-diagram-from-efcore'
+#
+#exclude-all-attributes: true|false
+#exclude-all-relationships: true|false
+#exclude-attribute-comments: true|false
+#exclude-attribute-keytypes: true|false
+#exclude-foreignkey-attributes: true|false
+#exclude-propertynames: # List of string
+#- 
+#exclude-typenames: # List of string
+#- 
+#include-namespaces: # List of string
+#- 
+#include-typenames: # List of string
+#- 
+#input-file: string
+#name-replace-from: string
+#name-replace-to: string
+#output-file: string
+```
