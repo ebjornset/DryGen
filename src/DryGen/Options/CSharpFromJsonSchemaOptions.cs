@@ -12,7 +12,7 @@ namespace DryGen.Options
         public string? Namespace { get; set; }
 
         [YamlMember(Alias = "array-type", ApplyNamingConventions = false)]
-        [Option("array-type", HelpText = "The generic array .NET type (default: 'ICollection'). Synthetic change to verify that the build fails on git changes")]
+        [Option("array-type", HelpText = "The generic array .NET type (default: 'ICollection').")]
         public string? ArrayType { get; set; }
 
         [YamlMember(Alias = "array-instance-type", ApplyNamingConventions = false)]
