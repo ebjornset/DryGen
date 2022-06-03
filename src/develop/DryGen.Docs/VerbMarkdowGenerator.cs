@@ -3,9 +3,9 @@ using System.Text;
 
 namespace DryGen.Docs
 {
-    public class VerbMarkdowGenerator
+    public static class VerbMarkdowGenerator
     {
-        public void GenerateVerbMarkdown(string verb, TextWriter writer)
+        public static void GenerateVerbMarkdown(string verb, TextWriter writer)
         {
             var verbMetaData = verb.GetVerbMetadata();
             var sb = new StringBuilder();
