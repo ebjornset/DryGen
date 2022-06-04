@@ -5,6 +5,6 @@ namespace DryGen.MermaidFromCSharp
 {
     public interface IDiagramGenerator
     {
-        string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter nameRewriter);
+        string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter);
     }
 }

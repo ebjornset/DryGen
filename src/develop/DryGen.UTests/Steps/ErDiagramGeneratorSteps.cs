@@ -18,6 +18,7 @@ namespace DryGen.UTests.Steps
         private readonly GeneratedRepresentationContext generatedRepresentationContext;
         private readonly GeneratorHooks generatorHooks;
         private readonly ExceptionContext exceptionContext;
+        private readonly TreeShakingContext treeShakingContext;
 
         public ErDiagramGeneratorSteps(
             IObjectContainer objectContainer,
@@ -26,7 +27,8 @@ namespace DryGen.UTests.Steps
             PropertyFiltersContext propertyFiltersContext,
             GeneratedRepresentationContext generatedRepresentationContext,
             GeneratorHooks generatorHooks,
-            ExceptionContext exceptionContext)
+            ExceptionContext exceptionContext,
+            TreeShakingContext treeShakingContext)
         {
             this.objectContainer = objectContainer;
             this.assemblyContext = assemblyContext;
@@ -35,6 +37,7 @@ namespace DryGen.UTests.Steps
             this.generatedRepresentationContext = generatedRepresentationContext;
             this.generatorHooks = generatorHooks;
             this.exceptionContext = exceptionContext;
+            this.treeShakingContext = treeShakingContext;
         }
 
         [Given(@"the Er diagram attribute type exclusion '([^']*)'")]
@@ -58,7 +61,8 @@ namespace DryGen.UTests.Steps
                     assemblyContext.Assembly,
                     typeFiltersContext.Filters,
                     propertyFiltersContext.Filters,
-                    nameRewriter: null));
+                    nameRewriter: null,
+                    treeShakingContext.DiagramFilter));
         }
 
         [When(@"I generate an ER diagram using EF Core")]
@@ -70,7 +74,8 @@ namespace DryGen.UTests.Steps
                     assemblyContext.Assembly,
                     typeFiltersContext.Filters,
                     propertyFiltersContext.Filters,
-                    nameRewriter: null));
+                    nameRewriter: null,
+                    treeShakingContext.DiagramFilter));
         }
 
         [When(@"I generate an ER diagram using '([^']*)'")]

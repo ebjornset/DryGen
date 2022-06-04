@@ -6,6 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromCSharpAndEfCore\ErDiagram\TreeShaking.feature.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
 		<PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
 		<PackageReference Include="SpecFlow.xUnit" Version="3.9.74" />
@@ -25,5 +29,18 @@
 		<ProjectReference Include="..\..\DryGen\DryGen.csproj" />
 		<ProjectReference Include="..\DryGen.DevUtils\DryGen.DevUtils.csproj" />
 		<ProjectReference Include="..\DryGen.Docs\DryGen.Docs.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Features\Mermaid\FromCSharpAndEfCore\ErDiagram\TreeShaking.feature.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <SpecFlowFeatureFiles Update="Features\Mermaid\FromCSharpAndEfCore\ErDiagram\TreeShaking.feature">
+	    <Visible>$(UsingMicrosoftNETSdk)</Visible>
+	    <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+	  </SpecFlowFeatureFiles>
 	</ItemGroup>
 </Project>

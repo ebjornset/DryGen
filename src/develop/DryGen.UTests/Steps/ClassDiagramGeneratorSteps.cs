@@ -12,6 +12,7 @@ namespace DryGen.UTests.Steps
         private readonly TypeFiltersContext typeFiltersContext;
         private readonly PropertyFiltersContext propertyFiltersContext;
         private readonly GeneratedRepresentationContext generatedRepresentationContext;
+        private readonly TreeShakingContext treeShakingContext;
         private readonly ClassDiagramGenerator generator;
 
         public ClassDiagramGeneratorSteps(
@@ -19,12 +20,14 @@ namespace DryGen.UTests.Steps
             AssemblyContext assemblyContext,
             TypeFiltersContext typeFiltersContext,
             PropertyFiltersContext propertyFiltersContext,
-            GeneratedRepresentationContext generatedRepresentationContext)
+            GeneratedRepresentationContext generatedRepresentationContext,
+            TreeShakingContext treeShakingContext)
         {
             this.assemblyContext = assemblyContext;
             this.typeFiltersContext = typeFiltersContext;
             this.propertyFiltersContext = propertyFiltersContext;
             this.generatedRepresentationContext = generatedRepresentationContext;
+            this.treeShakingContext = treeShakingContext;
             this.generator = generator;
         }
 
@@ -35,7 +38,8 @@ namespace DryGen.UTests.Steps
                 assemblyContext.Assembly,
                 typeFiltersContext.Filters,
                 propertyFiltersContext.Filters,
-                nameRewriter: null);
+                nameRewriter: null,
+                treeShakingContext.DiagramFilter);
         }
     }
 }

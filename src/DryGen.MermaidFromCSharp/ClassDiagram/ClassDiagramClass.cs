@@ -80,6 +80,16 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                     r.To.Relationships.Any(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Aggregation));
         }
 
+        protected override bool IsRelatedTo(IDiagramType type)
+        {
+            var result = Relationships.Any(x => x.To.Type == type.Type);
+            if (!result && type is ClassDiagramClass to)
+            {
+                result = to.Relationships.Any(x => x.To.Type == Type);
+            }
+            return result;
+        }
+
         private void SwitchFromComposisionToAggregationForAllBidirectionalCollectionReferences(ClassDiagramRelationshipCardinality toCardinality, ClassDiagramClass to, string label)
         {
             foreach (var relationship in to.Relationships.Where(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Composition))

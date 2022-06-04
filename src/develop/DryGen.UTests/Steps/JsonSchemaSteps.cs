@@ -1,7 +1,6 @@
 using DryGen.CSharpFromJsonSchema;
 using DryGen.DevUtils.Helpers;
 using DryGen.Options;
-using DryGen.UTests.Helpers;
 using System;
 using System.IO;
 using TechTalk.SpecFlow;

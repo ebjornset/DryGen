@@ -1,6 +1,7 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 
-namespace DryGen.UTests.Helpers
+namespace DryGen.DevUtils.Helpers
 {
     public class ExceptionContext
     {
@@ -29,6 +30,17 @@ namespace DryGen.UTests.Helpers
                 Exception = ex;
             }
             return default;
+        }
+
+        public void ExpectExceptionContainingTheText(string text)
+        {
+            Exception.Should().NotBeNull();
+            Exception?.Message.Should().Contain(text);
+        }
+
+        public void ExpectNoException()
+        {
+            Exception.Should().BeNull();
         }
     }
 }

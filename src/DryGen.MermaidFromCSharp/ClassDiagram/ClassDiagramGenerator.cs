@@ -9,7 +9,7 @@ using System.Text;
 namespace DryGen.MermaidFromCSharp.ClassDiagram
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3011:Reflection should not be used to increase accessibility of classes, methods, or fields",
-        Justification = "We need to access private members to generate detailed class diagrams diagrams")]
+        Justification = "We need to access private members to generate detailed class diagrams.")]
     public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         private readonly ITypeLoader typeloader;
@@ -33,15 +33,16 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             excludeMethodParams = options.ExcludeMethodParams ?? default;
         }
 
-        public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter)
+        public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter, IDiagramFilter diagramFilter)
         {
-            var classes = typeloader.Load(assembly, ClassDiagramFilters(typeFilters), nameRewriter).Select(x => new ClassDiagramClass(x)).ToList();
+            IEnumerable<ClassDiagramClass> classes = typeloader.Load(assembly, ClassDiagramFilters(typeFilters), nameRewriter).Select(x => new ClassDiagramClass(x)).ToList();
             GenerateClassDiagramStructure(classes, attributeFilters);
+            classes = diagramFilter.Filter(classes);
             var result = GenerateClassDiagramMermaid(classes, nameRewriter);
             return result;
         }
 
-        private void GenerateClassDiagramStructure(IReadOnlyList<ClassDiagramClass> classes, IReadOnlyList<IPropertyFilter> attributeFilters)
+        private void GenerateClassDiagramStructure(IEnumerable<ClassDiagramClass> classes, IReadOnlyList<IPropertyFilter> attributeFilters)
         {
             var classLookup = classes.ToDictionary(x => x.Type, x => x);
             foreach (var classDiagramClass in classes)
