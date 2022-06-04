@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace DryGen.MermaidFromCSharp
@@ -20,6 +21,7 @@ namespace DryGen.MermaidFromCSharp
             return types.Any(x => IsRelatedTo(x));
         }
 
+        [ExcludeFromCodeCoverage()] // This should in theory never happend.
         protected virtual bool IsRelatedTo(IDiagramType type)
         {
             throw new NotImplementedException($"'{nameof(IsRelatedTo)}' should be implemented in all subclasses and should never be accessed directly on a '{typeof(NamedType).FullName}'");
