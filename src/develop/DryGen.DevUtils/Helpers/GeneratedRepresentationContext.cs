@@ -55,14 +55,8 @@ namespace DryGen.DevUtils.Helpers
         {
             if (!string.IsNullOrEmpty(generatedRepresentationFileName) && File.Exists(generatedRepresentationFileName))
             {
-                try
-                {
-                    File.Delete(generatedRepresentationFileName);
-                }
-                catch
-                {
-                    // Best effort to clean up...
-                }
+                File.Delete(generatedRepresentationFileName);
+                generatedRepresentationFileName = null;
             }
             GC.SuppressFinalize(this);
         }

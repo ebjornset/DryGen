@@ -252,7 +252,9 @@ namespace DryGen
         [SuppressMessage("Major Code Smell", "S3885:\"Assembly.Load\" should be used", Justification = "We must use LoadFrom to be able to implement this functionallity.")]
         private static string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
         {
-            var assembly = Assembly.LoadFrom(options.InputFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
+            /// It seems like Assembly.Load from a file name will hold the file open, and thus our tests cannot clean up by deleting the tmp files they uses, so we read the file to memory our self...
+            var assemblyBytes = File.ReadAllBytes(options.InputFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
+            var assembly = Assembly.Load(assemblyBytes);
             var namespaceFilters = options.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
             var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };
             if (options.IncludeTypeNames?.Any() == true)
