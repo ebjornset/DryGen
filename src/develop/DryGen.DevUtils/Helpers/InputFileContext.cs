@@ -32,14 +32,8 @@ namespace DryGen.DevUtils.Helpers
         {
             if (!string.IsNullOrEmpty(inputFileName) && File.Exists(inputFileName))
             {
-                try
-                {
-                    File.Delete(inputFileName);
-                }
-                catch
-                {
-                    // Best effort to clean up...
-                }
+                File.Delete(inputFileName);
+                inputFileName = null;
             }
         }
     }

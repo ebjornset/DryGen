@@ -12,7 +12,7 @@ namespace DryGen.DevUtils.Helpers
 
         public void WriteOptionsFile(string yaml)
         {
-            TryDeleteOptionsFile();
+            DeleteOptionsFile();
             var optionsFileName = Path.GetTempFileName();
             File.WriteAllText(optionsFileName, yaml);
             this.optionsFileName = optionsFileName;
@@ -20,22 +20,15 @@ namespace DryGen.DevUtils.Helpers
 
         public void Dispose()
         {
-            TryDeleteOptionsFile();
+            DeleteOptionsFile();
             GC.SuppressFinalize(this);
         }
 
-        private void TryDeleteOptionsFile()
+        private void DeleteOptionsFile()
         {
             if (!string.IsNullOrEmpty(optionsFileName) && File.Exists(optionsFileName))
             {
-                try
-                {
-                    File.Delete(optionsFileName);
-                }
-                catch
-                {
-                    // Best effort to clean up...
-                }
+                File.Delete(optionsFileName);
                 optionsFileName = null;
             }
         }
