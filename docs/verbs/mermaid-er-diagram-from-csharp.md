@@ -27,6 +27,7 @@ The verb 'mermaid-er-diagram-from-csharp' uses the following options.
 |--name-replace-to||string|The string to replace with in all class/entity names.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+|--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 |--tree-shaking-roots||List of string|A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
 {% include notification.html
@@ -55,6 +56,7 @@ Here is a template for an options file for 'mermaid-er-diagram-from-csharp'.
 #name-replace-from: string
 #name-replace-to: string
 #output-file: string
+#replace-token-in-output-file: string
 #tree-shaking-roots: # List of string
 #- 
 ```

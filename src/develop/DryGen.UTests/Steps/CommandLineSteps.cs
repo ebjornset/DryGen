@@ -46,7 +46,7 @@ namespace DryGen.UTests.Steps
                 argList.Add("-i");
                 argList.Add(inputFileContext.InputFileName);
             }
-            if (outputIsSpesified)
+            if (outputIsSpesified || generatedRepresentationContext.HasGeneratedRepresentationFileName)
             {
                 argList.Add("-o");
                 argList.Add(generatedRepresentationContext.GeneratedRepresentationFileName);

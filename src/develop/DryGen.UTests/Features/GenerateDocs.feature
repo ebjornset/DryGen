@@ -50,6 +50,7 @@ Scenario: Should generate verb markdown for options-from-commandline
 		|--input-file|-i|string|Full path to the input file to generate a new representation for.|
 		|--options-file|-f|string|Read options from this file.|
 		|--output-file|-o|string|Write the generated representation to this file.|
+		|--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 		|--verb||string|The dryg-gen verb to generate options for.|
 		
 		{% include notification.html
@@ -63,6 +64,7 @@ Scenario: Should generate verb markdown for options-from-commandline
 		#
 		#input-file: string
 		#output-file: string
+		#replace-token-in-output-file: string
 		#verb: string
 		```
 		{% include notification.html

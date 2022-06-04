@@ -13,9 +13,9 @@ namespace DryGen.DevUtils.Helpers
         public void WriteOptionsFile(string yaml)
         {
             DeleteOptionsFile();
-            var optionsFileName = Path.GetTempFileName();
-            File.WriteAllText(optionsFileName, yaml);
-            this.optionsFileName = optionsFileName;
+            var newOptionsFileName = Path.GetTempFileName();
+            File.WriteAllText(newOptionsFileName, yaml);
+            optionsFileName = newOptionsFileName;
         }
 
         public void Dispose()

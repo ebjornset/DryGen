@@ -35,6 +35,7 @@ Scenario: Should generate options for verb csharp-from-json-schema
 		#input-file: string
 		#namespace: string
 		#output-file: string
+		#replace-token-in-output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
 		"""
@@ -69,6 +70,7 @@ Scenario: Should generate options for verb mermaid-class-diagram-from-csharp
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#replace-token-in-output-file: string
 		#tree-shaking-roots: # List of string
 		#- 
 		"""
@@ -88,6 +90,7 @@ Scenario: Should generate options for verb mermaid-class-diagram-from-json-schem
 		#direction: default | bt | tb | lr | rl
 		#input-file: string
 		#output-file: string
+		#replace-token-in-output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
 		#tree-shaking-roots: # List of string
@@ -123,6 +126,7 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-csharp
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#replace-token-in-output-file: string
 		#tree-shaking-roots: # List of string
 		#- 
 		"""
@@ -156,6 +160,7 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-efcore
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#replace-token-in-output-file: string
 		#tree-shaking-roots: # List of string
 		#- 
 		"""
@@ -176,6 +181,7 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-json-schema
 		#exclude-all-relationships: true|false
 		#input-file: string
 		#output-file: string
+		#replace-token-in-output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
 		#tree-shaking-roots: # List of string
@@ -196,5 +202,6 @@ Scenario: Should generate options for verb options-from-commandline
 		#
 		#input-file: string
 		#output-file: string
+		#replace-token-in-output-file: string
 		#verb: string
 		"""
