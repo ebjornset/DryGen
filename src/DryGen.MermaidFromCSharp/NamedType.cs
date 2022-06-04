@@ -8,12 +8,8 @@ namespace DryGen.MermaidFromCSharp
     {
         public NamedType(string name, Type type)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException($"'{nameof(name)}' cannot be null or empty.", nameof(name));
-            }
             Name = name;
-            Type = type ?? throw new ArgumentNullException(nameof(type));
+            Type = type;
         }
 
         public string Name { get; private set; }
@@ -26,7 +22,7 @@ namespace DryGen.MermaidFromCSharp
 
         protected virtual bool IsRelatedTo(IDiagramType type)
         {
-            return false;
+            throw new NotImplementedException($"'{nameof(IsRelatedTo)}' should be implemented in all subclasses and should never be accessed directly on a '{typeof(NamedType).FullName}'");
         }
     }
 }
