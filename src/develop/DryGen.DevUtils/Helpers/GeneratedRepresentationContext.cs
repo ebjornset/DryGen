@@ -26,6 +26,8 @@ namespace DryGen.DevUtils.Helpers
             }
         }
 
+        public bool HasGeneratedRepresentationFileName => ! string.IsNullOrEmpty(generatedRepresentationFileName);
+
         public string? GeneratedRepresentation
         {
             get
@@ -49,6 +51,11 @@ namespace DryGen.DevUtils.Helpers
                 }
                 return File.ReadAllText(generatedRepresentationFileName);
             }
+        }
+
+        public void WriteGeneratedRepresentationFile(string fileContent)
+        {
+            File.WriteAllText(GeneratedRepresentationFileName, fileContent);
         }
 
         public void Dispose()

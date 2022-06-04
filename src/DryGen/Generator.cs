@@ -87,13 +87,30 @@ namespace DryGen
         {
             return ExecuteWithExceptionHandlingAndHelpDisplay(options, options =>
             {
+                string? existingRepresentation = null;
                 options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
+                if (string.IsNullOrWhiteSpace(options.OutputFile) && !string.IsNullOrWhiteSpace(options.RplaceTokenInOutputFile))
+                {
+                    throw new OptionsException("'replace-token-in-output-file' specified when 'output-file' is missing.");
+                }
                 if (!string.IsNullOrEmpty(options.OutputFile))
                 {
-                    outWriter.WriteLine($"Generating {resultRepresentation} to file '{options.OutputFile}'");
+                    if (string.IsNullOrWhiteSpace(options.RplaceTokenInOutputFile))
+                    {
+                        outWriter.WriteLine($"Generating {resultRepresentation} to file '{options.OutputFile}'");
+                    }
+                    else
+                    {
+                        existingRepresentation = File.ReadAllText(options.OutputFile);
+                        if (!existingRepresentation?.Contains(options.RplaceTokenInOutputFile) == true)
+                        {
+                            throw new OptionsException($"'replace-token-in-output-file' '{options.RplaceTokenInOutputFile}' was not found in output file '{options.OutputFile}'");
+                        }
+                        outWriter.WriteLine($"Replacing the 'magic token' '{options.RplaceTokenInOutputFile}' with  {resultRepresentation} in file '{options.OutputFile}'");
+                    }
                 }
                 var resultReprersentation = resultFunc(options);
-                WriteGeneratedRepresentationToConsoleOrFile(options, resultReprersentation);
+                WriteGeneratedRepresentationToConsoleOrFile(options, resultReprersentation, existingRepresentation);
                 return 0;
             });
         }
@@ -227,7 +244,7 @@ namespace DryGen
             }
         }
 
-        private void WriteGeneratedRepresentationToConsoleOrFile(BaseOptions options, string generatedRepresentation)
+        private void WriteGeneratedRepresentationToConsoleOrFile(BaseOptions options, string generatedRepresentation, string? existingRepresentation)
         {
             if (string.IsNullOrEmpty(options.OutputFile))
             {
@@ -236,16 +253,26 @@ namespace DryGen
             else
             {
                 var outputFile = Path.GetFullPath(options.OutputFile);
-                var outputDirectory = Path.GetDirectoryName(outputFile);
-                if (outputDirectory == null)
+                CreateMissingOutputDirectory(outputFile);
+                if (!string.IsNullOrWhiteSpace(existingRepresentation) && !string.IsNullOrWhiteSpace(options.RplaceTokenInOutputFile))
                 {
-                    throw new InvalidOperationException($"Can't get directory from output file'{outputFile}'.");
-                }
-                if (!Directory.Exists(outputDirectory))
-                {
-                    Directory.CreateDirectory(outputDirectory);
+                    generatedRepresentation = existingRepresentation.Replace(options.RplaceTokenInOutputFile, generatedRepresentation);
                 }
                 File.WriteAllText(outputFile, generatedRepresentation);
+            }
+        }
+
+        [ExcludeFromCodeCoverage] // We uses the tmp files feature from the .Net runtime so the tests don't have any issues with directory names
+        private static void CreateMissingOutputDirectory(string outputFile)
+        {
+            var outputDirectory = Path.GetDirectoryName(outputFile);
+            if (outputDirectory == null)
+            {
+                throw new InvalidOperationException($"Can't get directory from output file'{outputFile}'.");
+            }
+            if (!Directory.Exists(outputDirectory))
+            {
+                Directory.CreateDirectory(outputDirectory);
             }
         }
 

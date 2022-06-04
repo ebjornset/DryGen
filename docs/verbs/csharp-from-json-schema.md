@@ -19,6 +19,7 @@ The verb 'csharp-from-json-schema' uses the following options.
 |--namespace||string|The namespace for the generated c# classes (default: 'CSharpFromJsonSchema').|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+|--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 |--root-classname||string|The classname for the class representing the schema it self. Default is the schema title, or 'ClassFromJsonSchema' if the schema has no title.|
 |--schema-file-format||byextension / json / yaml|What format should be used when reading the schema file? 'ByExtension' (default) treats files with extension 'yaml' or 'yml' as yaml, others as json. Use 'Yaml' or 'Json' to force the format explicitly.|
 
@@ -36,6 +37,7 @@ Here is a template for an options file for 'csharp-from-json-schema'.
 #input-file: string
 #namespace: string
 #output-file: string
+#replace-token-in-output-file: string
 #root-classname: string
 #schema-file-format: byextension | json | yaml
 ```
