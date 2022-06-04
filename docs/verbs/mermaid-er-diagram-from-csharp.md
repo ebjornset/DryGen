@@ -27,6 +27,7 @@ The verb 'mermaid-er-diagram-from-csharp' uses the following options.
 |--name-replace-to||string|The string to replace with in all class/entity names.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+|--tree-shaking-roots||List of string|A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
 {% include notification.html
 message="You can always get information about this verb's options by running the command `dry-gen mermaid-er-diagram-from-csharp --help`."
@@ -54,6 +55,8 @@ Here is a template for an options file for 'mermaid-er-diagram-from-csharp'.
 #name-replace-from: string
 #name-replace-to: string
 #output-file: string
+#tree-shaking-roots: # List of string
+#- 
 ```
 {% include notification.html
 message="You can generate the same template your self with the command `dry-gen options-from-commandline --verb mermaid-er-diagram-from-csharp`."

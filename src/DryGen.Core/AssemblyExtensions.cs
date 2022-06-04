@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -48,9 +49,15 @@ namespace DryGen.Core
                 references: references,
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
             EmitResult compilationResult = compilation.Emit(stream);
+            ThrowExceptionIfCompilationFailed(compilationResult);
+        }
+
+        [ExcludeFromCodeCoverage] //This should in theory never happen in a normal test run, only when we develop new tests that compiles C# code
+        private static void ThrowExceptionIfCompilationFailed(EmitResult compilationResult)
+        {
             if (!compilationResult.Success)
             {
-                var errors = string.Join(Environment.NewLine, compilationResult.Diagnostics.Select(codeIssue => $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()}, Location: { codeIssue.Location.GetLineSpan()}, Severity: { codeIssue.Severity} "));
+                var errors = string.Join(Environment.NewLine, compilationResult.Diagnostics.Select(codeIssue => $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()}, Location: {codeIssue.Location.GetLineSpan()}, Severity: {codeIssue.Severity} "));
                 throw new ArgumentException(errors);
             }
         }

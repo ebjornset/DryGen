@@ -212,3 +212,43 @@ Scenario: Should generate Er diagram with relationships excluded from argument
 			Order
 		
 		"""
+
+Scenario: Should tree shake Er diagram from argument
+	Given this C# source code compiled to a file
+	# The commandline argument -i <this assembly filename> will be appended to the command line
+		"""
+		using Microsoft.EntityFrameworkCore;
+		namespace Test
+		{
+			public class Order {
+			}
+			public class NoMatchOrder {
+			}
+			public class TestDbContext: DbContext {
+				public DbSet<Order> Orders { get; set; }
+				public DbSet<NoMatchOrder> NoMatchOrders { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+				protected override void OnModelCreating(ModelBuilder modelBuilder)
+		        {
+		            modelBuilder.Entity<Order>().HasNoKey();
+		            modelBuilder.Entity<NoMatchOrder>().HasNoKey();
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                  |
+		| <Verb>               |
+		| --tree-shaking-roots |
+		| ^Order$              |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		erDiagram
+			Order
+		
+		"""
+Examples:
+	| Verb                           |
+	| mermaid-er-diagram-from-csharp |
+	| mermaid-er-diagram-from-efcore |

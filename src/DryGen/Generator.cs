@@ -160,7 +160,8 @@ namespace DryGen
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
             {
                 var generator = new MermaidClassDiagramFromJsonSchemaGenerator();
-                return generator.Generate(options).Result;
+                var treeShakingDiagramFilter = GetTreeShakingDiagramFilter(options.TreeShakingRoots);
+                return generator.Generate(options, treeShakingDiagramFilter).Result;
             });
         }
 
@@ -169,7 +170,8 @@ namespace DryGen
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
             {
                 var generator = new MermaidErDiagramFromJsonSchemaGenerator();
-                return generator.Generate(options).Result;
+                var treeShakingDiagramFilter = GetTreeShakingDiagramFilter(options.TreeShakingRoots);
+                return generator.Generate(options, treeShakingDiagramFilter).Result;
             });
         }
 
@@ -247,25 +249,33 @@ namespace DryGen
             }
         }
 
-        [SuppressMessage("Major Code Smell", "S3885:\"Assembly.Load\" should be used", Justification = "We must use LoadFrom to be able to implement this functionallity")]
-        private static string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions cSharpOptions, IDiagramGenerator diagramGenerator)
+        [SuppressMessage("Major Code Smell", "S3885:\"Assembly.Load\" should be used", Justification = "We must use LoadFrom to be able to implement this functionallity.")]
+        private static string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
         {
-            var assembly = Assembly.LoadFrom(cSharpOptions.InputFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
-            var namespaceFilters = cSharpOptions.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
+            var assembly = Assembly.LoadFrom(options.InputFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
+            var namespaceFilters = options.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
             var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };
-            if (cSharpOptions.IncludeTypeNames?.Any() == true)
+            if (options.IncludeTypeNames?.Any() == true)
             {
-                var typeNameFilters = cSharpOptions.IncludeTypeNames.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray();
+                var typeNameFilters = options.IncludeTypeNames.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray();
                 typeFilters.Add(new AnyChildFiltersTypeFilter(typeNameFilters));
             }
-            if (cSharpOptions.ExcludeTypeNames?.Any() == true)
+            if (options.ExcludeTypeNames?.Any() == true)
             {
-                var typeNameFilters = cSharpOptions.ExcludeTypeNames.Select(x => new ExcludeTypeNameTypeFilter(x)).ToArray();
+                var typeNameFilters = options.ExcludeTypeNames.Select(x => new ExcludeTypeNameTypeFilter(x)).ToArray();
                 typeFilters.Add(new AllChildFiltersTypeFilter(typeNameFilters));
             }
-            var excludePropertyNamesFilters = cSharpOptions.ExcludePropertyNames?.Select(x => new ExcludePropertyNamePropertyFilter(x)).ToArray() ?? Array.Empty<IPropertyFilter>();
-            var nameRewriter = new ReplaceNameRewriter(cSharpOptions.NameReplaceFrom ?? string.Empty, cSharpOptions.NameReplaceTo ?? string.Empty);
-            return diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter);
+            var excludePropertyNamesFilters = options.ExcludePropertyNames?.Select(x => new ExcludePropertyNamePropertyFilter(x)).ToArray() ?? Array.Empty<IPropertyFilter>();
+            var nameRewriter = new ReplaceNameRewriter(options.NameReplaceFrom ?? string.Empty, options.NameReplaceTo ?? string.Empty);
+            var treeShakingDiagramFilter = GetTreeShakingDiagramFilter(options.TreeShakingRoots);
+            return diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter, treeShakingDiagramFilter);
+        }
+
+        private static TreeShakingDiagramFilter GetTreeShakingDiagramFilter(IEnumerable<string>? treeShakingRoots)
+        {
+            var treeShakingRootsFilters = treeShakingRoots?.Any() == true ? treeShakingRoots.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray() : null;
+            var treeShakingDiagramFilter = new TreeShakingDiagramFilter(treeShakingRootsFilters);
+            return treeShakingDiagramFilter;
         }
     }
 }

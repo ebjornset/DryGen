@@ -9,6 +9,8 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
         private readonly List<ErDiagramAttribute> attributes;
         private readonly List<ErDiagramRelationship> relationships;
 
+        public IReadOnlyList<ErDiagramRelationship> Relationships => relationships;
+
         public ErDiagramEntity(NamedType other) : this(other.Name, other.Type)
         {
         }
@@ -42,6 +44,16 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
                 && string.IsNullOrEmpty(r.Label)
                 && (GetRelationships().Any(x => x != r && x.To == r.To)
                     || r.To.GetRelationships().Any(x => x.To == this)));
+        }
+
+        protected override bool IsRelatedTo(IDiagramType type)
+        {
+            var result = relationships.Any(x => x.To.Type == type.Type);
+            if (!result && type is ErDiagramEntity to)
+            {
+                result = to.Relationships.Any(x => x.To.Type == Type);
+            }
+            return result;
         }
     }
 }

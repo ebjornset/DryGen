@@ -455,3 +455,31 @@ Scenario: Should exclude methods parameters from Class diagram from argument
 			}
 		
 		"""
+
+Scenario: Should tree shake Class diagram from argument
+	Given this C# source code compiled to a file
+	# The commandline argument -i <this assembly filename> will be appended to the command line
+		"""
+		namespace Test
+		{
+			public class Order {
+			}
+			public class NoMatchOrder {
+			}
+			public class OrderNoMatch {
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                               |
+		| mermaid-class-diagram-from-csharp |
+		| --tree-shaking-roots              |
+		| ^Order$                           |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		classDiagram
+			class Order {
+			}
+		
+		"""

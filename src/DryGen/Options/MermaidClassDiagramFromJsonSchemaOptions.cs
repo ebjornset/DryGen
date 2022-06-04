@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using DryGen.MermaidFromCSharp.ClassDiagram;
 using DryGen.MermaidFromJsonSchema;
+using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
 namespace DryGen.Options
@@ -11,5 +12,9 @@ namespace DryGen.Options
         [YamlMember(Alias = "direction", ApplyNamingConventions = false)]
         [Option("direction", HelpText = "In which direction should the diagram be generated")]
         public ClassDiagramDirection? Direction { get; set; }
+
+        [YamlMember(Alias = "tree-shaking-roots", ApplyNamingConventions = false)]
+        [Option("tree-shaking-roots", Separator = ';', HelpText = "A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.")]
+        public IEnumerable<string>? TreeShakingRoots { get; set; }
     }
 }

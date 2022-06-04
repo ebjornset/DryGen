@@ -5,8 +5,14 @@ namespace DryGen.DevUtils.Helpers
 {
     public class GeneratedRepresentationContext : IDisposable
     {
+        private readonly ExceptionContext exceptionContext;
         private string? generatedRepresentation;
         private string? generatedRepresentationFileName;
+
+        public GeneratedRepresentationContext(ExceptionContext exceptionContext)
+        {
+            this.exceptionContext = exceptionContext;
+        }
 
         public string GeneratedRepresentationFileName
         {
@@ -24,6 +30,7 @@ namespace DryGen.DevUtils.Helpers
         {
             get
             {
+                exceptionContext.ExpectNoException();
                 return generatedRepresentation ?? throw new ArgumentNullException(nameof(generatedRepresentation));
             }
             set

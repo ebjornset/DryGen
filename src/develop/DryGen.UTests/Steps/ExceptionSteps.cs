@@ -1,5 +1,4 @@
-﻿using DryGen.UTests.Helpers;
-using FluentAssertions;
+﻿using DryGen.DevUtils.Helpers;
 using TechTalk.SpecFlow;
 
 namespace DryGen.UTests.Steps
@@ -17,14 +16,14 @@ namespace DryGen.UTests.Steps
         [Then(@"I should get an exception containing the text ""([^""]*)""")]
         public void ThenIShouldGetAnExceptionContainingTheText(string text)
         {
-            exceptionContext.Exception.Should().NotBeNull();
-            exceptionContext.Exception?.Message.Should().Contain(text);
+            exceptionContext.ExpectExceptionContainingTheText(text);
         }
 
         [Then(@"I should not get an exception")]
+        [Then(@"I should get no exceptions")]
         public void ThenIShouldNotGetAnException()
         {
-            exceptionContext.Exception.Should().BeNull();
+            exceptionContext.ExpectNoException();
         }
     }
 }

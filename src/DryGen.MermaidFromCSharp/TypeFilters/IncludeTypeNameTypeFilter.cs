@@ -1,5 +1,4 @@
-﻿using DryGen.MermaidFromCSharp;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 
 namespace DryGen.MermaidFromCSharp.TypeFilters

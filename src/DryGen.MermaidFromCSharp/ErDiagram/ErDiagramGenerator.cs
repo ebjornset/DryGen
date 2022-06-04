@@ -34,9 +34,10 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
             this.relationshipTypeExclusion = relationshipTypeExclusion;
         }
 
-        public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter)
+        public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter, IDiagramFilter diagramFilter)
         {
-            var entities = structureBuilder.GenerateErStructure(assembly, ErDiagramFilters(typeFilters), attributeFilters, nameRewriter);
+            IEnumerable<ErDiagramEntity> entities = structureBuilder.GenerateErStructure(assembly, ErDiagramFilters(typeFilters), attributeFilters, nameRewriter);
+            entities = diagramFilter.Filter(entities);
             var result = GenerateErDiagramMermaid(entities);
             return result;
         }
