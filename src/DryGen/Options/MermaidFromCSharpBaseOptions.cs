@@ -30,5 +30,9 @@ namespace DryGen.Options
         [YamlMember(Alias = "name-replace-to", ApplyNamingConventions = false)]
         [Option("name-replace-to", HelpText = "The string to replace with in all class/entity names.")]
         public string? NameReplaceTo { get; set; }
+
+        [YamlMember(Alias = "tree-shaking-roots", ApplyNamingConventions = false)]
+        [Option("tree-shaking-roots", Separator = ';', HelpText = "A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.")]
+        public IEnumerable<string>? TreeShakingRoots { get; set; }
     }
 }

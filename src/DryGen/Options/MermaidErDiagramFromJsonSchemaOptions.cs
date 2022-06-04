@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using DryGen.MermaidFromJsonSchema;
+using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
 namespace DryGen.Options
@@ -14,5 +15,9 @@ namespace DryGen.Options
         [YamlMember(Alias = "exclude-all-relationships", ApplyNamingConventions = false)]
         [Option("exclude-all-relationships", HelpText = "Should all relationships be excluded from the diagram?")]
         public bool? ExcludeAllRelationships { get; set; }
+
+        [YamlMember(Alias = "tree-shaking-roots", ApplyNamingConventions = false)]
+        [Option("tree-shaking-roots", Separator = ';', HelpText = "A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.")]
+        public IEnumerable<string>? TreeShakingRoots { get; set; }
     }
 }

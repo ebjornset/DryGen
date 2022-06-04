@@ -69,6 +69,8 @@ Scenario: Should generate options for verb mermaid-class-diagram-from-csharp
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#tree-shaking-roots: # List of string
+		#- 
 		"""
 		
 Scenario: Should generate options for verb mermaid-class-diagram-from-json-schema
@@ -88,6 +90,8 @@ Scenario: Should generate options for verb mermaid-class-diagram-from-json-schem
 		#output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
+		#tree-shaking-roots: # List of string
+		#- 
 		"""
 
 Scenario: Should generate options for verb mermaid-er-diagram-from-csharp
@@ -119,6 +123,8 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-csharp
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#tree-shaking-roots: # List of string
+		#- 
 		"""
 
 Scenario: Should generate options for verb mermaid-er-diagram-from-efcore
@@ -150,6 +156,8 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-efcore
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#tree-shaking-roots: # List of string
+		#- 
 		"""
 
 Scenario: Should generate options for verb mermaid-er-diagram-from-json-schema
@@ -170,6 +178,8 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-json-schema
 		#output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
+		#tree-shaking-roots: # List of string
+		#- 
 		"""
 		
 Scenario: Should generate options for verb options-from-commandline

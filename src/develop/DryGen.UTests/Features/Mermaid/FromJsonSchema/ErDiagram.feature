@@ -80,3 +80,36 @@ Scenario: Should generate Er diagram from json schema with relationships exclude
 			}
 		
 		"""
+
+Scenario: Should generate Mermaid Er diagram with tree shaking from 'tree-shaking-roots' option
+	Given this json schema input file with the extension "yaml"
+		"""
+		$schema: https://json-schema.org/draft/2020-12/schema
+		id: https://drygen.net/test-json-schemas/some.json
+		title: Test Schema
+		type: object
+		properties:
+		  Order:
+		    $ref: "#/definitions/Order"
+		additionalProperties: false
+		definitions:
+		  Order:
+		    additionalProperties: false
+		  NoMatchOrder:
+		    additionalProperties: false
+		"""
+	And output is spesified as a command line argument
+	When I call the program with this command line arguments
+		| Arg                                    |
+		| mermaid-er-diagram-from-json-schema |
+		| --tree-shaking-roots                   |
+		| ^Order$                                |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		erDiagram
+			Order
+			TestSchema
+			Order ||..|| TestSchema : ""
+		
+		"""
