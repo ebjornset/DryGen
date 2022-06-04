@@ -57,12 +57,18 @@ Scenario: Tree shaking should keep related entities
 				public int Id { get; set; }
 				public Customer Customer { get; set; }
 			}
+			public class Product {
+				[Key]
+				public int Id { get; set; }
+				public IEnumerable<Order> Orders { get; set; }
+			}
 			public class NonRelated {}
 		
 			public class TestDbContext: DbContext {
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				public DbSet<Customer> Customers { get; set; }
 				public DbSet<Order> Orders { get; set; }
+				public DbSet<Product> Products { get; set; }
 				public DbSet<NonRelated> NonRelated { get; set; }
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
 				{
@@ -77,7 +83,9 @@ Scenario: Tree shaking should keep related entities
 		erDiagram
 			Customer
 			Order
+			Product
 			Customer <From cadinality>..o{ Order : ""
+			Product <From cadinality>..o{ Order : ""
 		
 		"""
 Examples:
