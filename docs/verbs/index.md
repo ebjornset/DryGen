@@ -5,9 +5,7 @@ description: The verbs dry-gen supports
 show_sidebar: false
 menubar: verbs_menu
 ---
-In the left menu you see links to all the verbs dry-gen supports. 
-
-Each of these pages gives you an overview of the options and an options file template for the verb. 
+The  menu on the left lists all the dry-gen verbs. Each of these pages will give you an overview of the verb's options and an options file template for the verb. 
 
 {% include notification.html 
 message="You can always get the information about the options for a verb by running the command 
