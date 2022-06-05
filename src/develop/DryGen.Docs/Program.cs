@@ -120,17 +120,17 @@ namespace DryGen.Docs
             };
         }
 
-        private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string docsDirectory, string assemblyDirectory, string? relativeRoot)
+        private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string docsDirectory, string assemblyDirectory, string relativeRoot)
         {
             var inputFile = Path.Combine(assemblyDirectory, generatorData.InputFile); 
             if (!string.IsNullOrEmpty(relativeRoot))
             {
-                inputFile = Path.GetRelativePath(relativeRoot, inputFile);
+                inputFile = Path.GetRelativePath(relativeRoot, inputFile).Replace("\\", "/");
             }
             var outputFile = GetOutputFile(docsDirectory, generatorData);
             if (!string.IsNullOrEmpty(relativeRoot))
             {
-                outputFile = Path.GetRelativePath(relativeRoot, outputFile);
+                outputFile = Path.GetRelativePath(relativeRoot, outputFile).Replace("\\", "/");
             }
             var result = new List<string> {
                 generatorData.Verb,

@@ -118,7 +118,10 @@ namespace DryGen
                 throw new OptionsException($"'replace-token-in-output-file' '{replaceTokenInOutputFile}' was not found in output file '{outputFile}'");
             }
             outWriter.WriteLine($"Replacing the 'magic token' '{replaceTokenInOutputFile}' with  {resultRepresentation} in file '{outputFile}'");
+#pragma warning disable CS8603 // Possible null reference return.
+            // No, we can't get null reference return here, since we use ?? string.Empty.
             return existingRepresentation;
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         private int ExecuteWithExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions, new()
