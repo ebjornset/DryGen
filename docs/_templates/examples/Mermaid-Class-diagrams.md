@@ -12,7 +12,6 @@ General description of the examples
 Description of example one
 
 Commandline: `.!.!.replace-token-for-class-diagram-one-commandline.!.!.`
-
 #### The generated Mermaid code
 ```
 .!.!.replace-token-for-class-diagram-one.!.!.
