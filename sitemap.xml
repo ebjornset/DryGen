@@ -17,11 +17,8 @@
 <lastmod>2022-06-03T00:00:00+00:00</lastmod>
 </url>
 <url>
-<loc>/2022/06/05/release-0.6.0-prerelease1/</loc>
+<loc>/2022/06/05/release-0.6.0-prerelease2/</loc>
 <lastmod>2022-06-05T00:00:00+00:00</lastmod>
-</url>
-<url>
-<loc>/examples/Mermaid-Class-diagrams/</loc>
 </url>
 <url>
 <loc>/verbs/csharp-from-json-schema/</loc>
@@ -43,6 +40,9 @@
 </url>
 <url>
 <loc>/verbs/mermaid-class-diagram-from-json-schema/</loc>
+</url>
+<url>
+<loc>/examples/mermaid-class-diagrams/</loc>
 </url>
 <url>
 <loc>/verbs/mermaid-er-diagram-from-csharp/</loc>
