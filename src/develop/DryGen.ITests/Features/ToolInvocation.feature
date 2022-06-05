@@ -1,6 +1,8 @@
 ﻿Feature: ToolInvocation
 
-A short summary of the feature
+To be sure that the .Net tool is setup correctly
+As a dry-gen developer
+I want to be sure that I can install and run the .Net tool
 
 Scenario: Should be able to run the dotnet tool
 	Given this C# source code compiled to a file

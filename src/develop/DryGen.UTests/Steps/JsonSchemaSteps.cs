@@ -63,16 +63,17 @@ namespace DryGen.UTests.Steps
             {
                 throw new ArgumentException("Json schema is not specified");
             }
-            var tmpFileName = Path.GetTempFileName();
-            var jsonSchemaFileName = Path.ChangeExtension(tmpFileName, extension);
-            if (File.Exists(tmpFileName))
+            string jsonSchemaFileName;
+            do
             {
-                File.Delete(tmpFileName);
+                var tmpFileName = Path.GetTempFileName();
+                jsonSchemaFileName = Path.ChangeExtension(tmpFileName, extension);
+                if (File.Exists(tmpFileName))
+                {
+                    File.Delete(tmpFileName);
+                }
             }
-            if (File.Exists(jsonSchemaFileName))
-            {
-                throw new ArgumentException($"Json schema file '{jsonSchemaFileName}' already exists");
-            }
+            while (File.Exists(jsonSchemaFileName));
             File.WriteAllText(jsonSchemaFileName, jsonSchemaText);
             inputFileContext.InputFileName = jsonSchemaFileName;
         }

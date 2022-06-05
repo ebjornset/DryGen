@@ -5,7 +5,7 @@ namespace DryGen.Docs
 {
     public static class VerbMarkdowGenerator
     {
-        public static void GenerateVerbMarkdown(string verb, TextWriter writer)
+        public static void Generate(string verb, TextWriter writer)
         {
             var verbMetaData = verb.GetVerbMetadata();
             var sb = new StringBuilder();

@@ -1,6 +1,8 @@
 ﻿Feature: Command line for generating C# code from Json schema
 
-A short summary of the feature
+To be able to generate other representation of Json schemas
+As a dry-gen user
+I should be able to generate C# code from a Json schema file with the verb 'csharp-from-json-schema'
 
 Scenario: Should generate c# code to console from 'csharp-from-json-schema' verb
 	Given this json schema input file with the extension "yaml"

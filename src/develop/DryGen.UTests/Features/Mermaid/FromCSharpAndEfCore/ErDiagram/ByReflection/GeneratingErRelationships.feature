@@ -1,6 +1,8 @@
 ﻿Feature: Generating Relationships in Er diagrams using reflection
 
-A short summary of the feature
+To be able to generate Mermaid Er digrams from C# code
+As a dry-gen user
+I should be able to generate Mermaid relationships from C# type's references by reflection
 
 Background:
 	Given this include namespace filter '^Test$'
