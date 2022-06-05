@@ -11,8 +11,8 @@ General description of the examples
 ### Title of example one
 Description of example one
 
-Commandline: `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Debug/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/Mermaid-Class-diagrams.md --replace-token-in-output-file .!.!.replace-token-for-class-diagram-one.!.!.`
-
+#### The commandline
+`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/Mermaid-Class-diagrams.md --replace-token-in-output-file .!.!.replace-token-for-class-diagram-one.!.!.`
 #### The generated Mermaid code
 ```
 classDiagram
@@ -379,7 +379,7 @@ classDiagram
 	TypeLoaderByReflection ..|> ITypeLoader
 
 ```
-#### The Mermaid diagram
+#### The resulting Mermaid diagram
 If  you are using a markdown reader/editor that can render inline Mermaid diagrams, you should see the resulting Mermaid Class diagram below, otherwise you will only see the same Mermaid code as above
 ```mermaid
 classDiagram
