@@ -61,14 +61,14 @@ jobs:
           ruby-version: 3.1
       - name: Run './build.cmd '
         run: ./build.cmd 
-      - name: Check if there is any git changes
-        id: get_changes
-        run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
       - name: Generate docs with Jekyll
         uses: limjh16/jekyll-action-ts@v2
         with:
           enable_cache: true
           jekyll_src: ./docs
+      - name: Check if there is any git changes
+        id: get_changes
+        run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
       - name: Display any git diffs
         if: steps.get_changes.outputs.changed != 0
         run: git diff HEAD
