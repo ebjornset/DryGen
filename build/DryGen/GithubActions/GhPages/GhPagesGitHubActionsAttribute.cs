@@ -14,8 +14,8 @@ namespace DryGen.GithubActions.GhPages
         {
             var job = base.GetJobs(image, relevantTargets);
             var newSteps = new List<GitHubActionsStep>(job.Steps);
-            newSteps.Insert(newSteps.Count - 6, new GitHubActionsSetupRubyStep());
-            newSteps.Insert(newSteps.Count - 5, new GitHubActionsGenerateDocsWithJekyllStep());
+            newSteps.Insert(newSteps.Count - 7, new GitHubActionsSetupRubyStep());
+            newSteps.Insert(newSteps.Count - 6, new GitHubActionsGenerateDocsWithJekyllStep());
             newSteps.Add(new GitHubActionsPrepareGeneratedDocsForDeploymentOnBranchGhPagesStep());
             job.Steps = newSteps.ToArray();
             return job;

@@ -67,6 +67,9 @@ jobs:
       - name: Check if there is any git changes
         id: get_changes
         run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
+      - name: List any git changes
+        if: steps.get_changes.outputs.changed != 0
+        run: git status --porcelain
       - name: Display any git diffs
         if: steps.get_changes.outputs.changed != 0
         run: git diff HEAD
