@@ -12,7 +12,7 @@ General description of the examples
 Description of example one
 
 #### The commandline
-`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/Mermaid-Class-diagrams.md --replace-token-in-output-file .!.!.replace-token-for-class-diagram-one.!.!.`
+`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagrams.md --replace-token-in-output-file .!.!.replace-token-for-class-diagram-one.!.!.`
 #### The generated Mermaid code
 ```
 classDiagram

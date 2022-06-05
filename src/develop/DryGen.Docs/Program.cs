@@ -65,7 +65,7 @@ namespace DryGen.Docs
 
         private static string GetOutputFile(string docsDirectory, ExamplesGeneratorData generatorData)
         {
-            return Path.Combine(docsDirectory, "examples", generatorData.OutputFile);
+            return Path.Combine(docsDirectory, "examples", generatorData.OutputFile.ToLowerInvariant());
         }
 
         private static void GenerateVerbsMarkdown(string docsDirectory)
@@ -104,7 +104,7 @@ namespace DryGen.Docs
             Console.WriteLine($"Copying examples template files from \"{examplesTemplatesDirectory}\" to \"{examplesDirectory}\"");
             foreach (var exampleTemplateFile in Directory.GetFiles(examplesTemplatesDirectory))
             {
-                File.Copy(exampleTemplateFile, Path.Combine(examplesDirectory, Path.GetFileName(exampleTemplateFile)), true);
+                File.Copy(exampleTemplateFile, Path.Combine(examplesDirectory, Path.GetFileName(exampleTemplateFile.ToLowerInvariant())), true);
             }
         }
 
