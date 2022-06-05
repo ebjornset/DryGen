@@ -65,7 +65,7 @@ namespace DryGen.Docs
 
         private static string GetOutputFile(string docsDirectory, ExamplesGeneratorData generatorData)
         {
-            return Path.Combine(docsDirectory, "examples", generatorData.OutputFile);
+            return Path.Combine(docsDirectory, "examples", generatorData.OutputFile.ToLowerInvariant());
         }
 
         private static void GenerateVerbsMarkdown(string docsDirectory)
