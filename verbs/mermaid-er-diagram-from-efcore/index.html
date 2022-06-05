@@ -60,6 +60,10 @@
                     
                 
                     
+                    <a href="/examples/" class="navbar-item ">Examples</a>
+                    
+                
+                    
                     <a href="/blog/" class="navbar-item ">Releases</a>
                     
                 
@@ -246,6 +250,18 @@
       <td>string</td>
       <td>Write the generated representation to this file.</td>
     </tr>
+    <tr>
+      <td>–replace-token-in-output-file</td>
+      <td> </td>
+      <td>string</td>
+      <td>Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.</td>
+    </tr>
+    <tr>
+      <td>–tree-shaking-roots</td>
+      <td> </td>
+      <td>List of string</td>
+      <td>A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -287,6 +303,9 @@
 #name-replace-from: string
 #name-replace-to: string
 #output-file: string
+#replace-token-in-output-file: string
+#tree-shaking-roots: # List of string
+#- 
 </code></pre></div></div>
 <div x-data="{visible: true}">
     <div class="notification is-warning" x-show.transition.duration.300ms="visible">

@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-social@1/bin/bulma-social.min.css">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Mermaid class diagram examples | DryGen</title>
+<meta name="generator" content="Jekyll v4.2.2" />
+<meta property="og:title" content="Mermaid class diagram examples" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Examples on how to generate Mermaid class diagrams from C# code" />
+<meta property="og:description" content="Examples on how to generate Mermaid class diagrams from C# code" />
+<meta property="og:site_name" content="DryGen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Mermaid class diagram examples" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Examples on how to generate Mermaid class diagrams from C# code","headline":"Mermaid class diagram examples","url":"/examples/Mermaid-Class-diagrams/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                DryGen
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/verbs/" class="navbar-item ">Verbs</a>
+                    
+                
+                    
+                    <a href="/examples/" class="navbar-item ">Examples</a>
+                    
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Releases</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-medium  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Mermaid class diagram examples</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    
+
+<aside class="menu">
+
+    <p class="menu-label">dry-gen examples</p>
+    <ul class="menu-list">
+        
+        <li>
+            <a href="/examples/mermaid-class-diagrams" class="">Mermaid Class diagrams</a>
+            
+        </li>
+            
+    </ul>
+
+</aside>
+                </div>
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    
+<div class="content">
+    <h1 id="work-in-progress">Work in progress</h1>
+<p>General description of the examples</p>
+
+<h3 id="title-of-example-one">Title of example one</h3>
+<p>Description of example one</p>
+
+<h4 id="the-commandline">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/Mermaid-Class-diagrams.md --replace-token-in-output-file .!.!.replace-token-for-class-diagram-one.!.!.</code></p>
+<h4 id="the-generated-mermaid-code">The generated Mermaid code</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>classDiagram
+	class AllChildFiltersTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class AnyChildFiltersTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ClassDiagramAttribute {
+		+string AttributeType
+		+string AttributeName
+		+string Visibility
+		+bool IsStatic
+	}
+	class ClassDiagramAttributeLevel {
+		&lt;&lt;enumeration&gt;&gt;
+		All
+		Public
+		Internal
+		Protected
+		None
+	}
+	class ClassDiagramClass {
+		+AddAttribute(ClassDiagramAttribute attribute)
+		+AddMethod(ClassDiagramMethod method)
+		+AddRelationship(ClassDiagramRelationshipCardinality fromCardinality, ClassDiagramRelationshipType relationshipType, ClassDiagramRelationshipCardinality toCardinality, ClassDiagramClass to, string label, string propertyName)
+		+RemoveBidirectionalRelationshipDuplicates()
+		#IsRelatedTo(IDiagramType type) bool
+		-SwitchFromComposisionToAggregationForAllBidirectionalCollectionReferences(ClassDiagramRelationshipCardinality toCardinality, ClassDiagramClass to, string label)
+		-HasBidirectionalRelationship(ClassDiagramClass to) bool
+		-SwitchFroComposisionToAggregationIfThisIsABidirectionalCollectionReferences(ClassDiagramRelationshipCardinality&amp; fromCardinality, ClassDiagramRelationshipType&amp; relationshipType, ClassDiagramClass to, String&amp; label, Boolean&amp; isBidirectional)
+		-RemoveAnyDependenciesCreatedFromContrutorParameters(ClassDiagramClass to)
+		-IsDuplicateDependency(ClassDiagramClass to) bool
+		-FindNonBidirectionalAssociationToThisThatMatchesThisAssociation(ClassDiagramClass to) ClassDiagramRelationship
+	}
+	class ClassDiagramDirection {
+		&lt;&lt;enumeration&gt;&gt;
+		Default
+		BT
+		TB
+		LR
+		RL
+	}
+	class ClassDiagramExtensions {
+		&lt;&lt;abstract&gt;&gt;
+		+GetRelationshipPattern(ClassDiagramRelationship relationship)$ string
+		+GetCardinalityValue(ClassDiagramRelationshipCardinality cardinality)$ string
+		+GetRelationshipLine(ClassDiagramRelationshipType relationship)$ string
+		+GetRelationshipStartArrow(ClassDiagramRelationshipType relationship, bool isBidirectional)$ string
+		+GetRelationshipEndArrow(ClassDiagramRelationshipType relationship)$ string
+		+GetAssociationToCardinality(PropertyInfo property, bool isNullable)$ ClassDiagramRelationshipCardinality
+		+GetRelationshipLabel(ClassDiagramRelationship relationship)$ string
+	}
+	class ClassDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classes, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassAssociationsCompositionsAndAggregations(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GetPropertyTypeRelationshipInfo(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ ValueTuple~bool,bool,bool,Type~
+		-IsCollectionOfKnownType(IDictionary~Type,ClassDiagramClass~ classLookup, Type type)$ bool
+		-GenerateClassInheritanceOrRealizationForInterfaces(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GenerateClassInheritanceForBaseType(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GetNonClosedGenericBaseType(Type baseType, IDictionary~Type,ClassDiagramClass~ classLookup)$ Type
+		-GenerateClassDependencies(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-AddDependency(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, Type parameterType)$
+		-GenerateClassAttributes(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassMethods(ClassDiagramClass classDiagramClass)
+		-IsMethodWithToLowVisibility(MethodInfo method) bool
+		-IsSyntheticCompilerGeneratedMethod(MethodInfo method)$ bool
+		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter) string
+		-AppendDirection(StringBuilder sb)
+		-AppendClasses(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)
+		-AppendEnumerationToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendAttributesToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)$
+		-AppendMethodsToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendParamsToClassMethod(StringBuilder sb, ClassDiagramMethod method)$
+		-AppedParamsSummaryToClassMethod(StringBuilder sb, ClassDiagramMethod method)$
+		-AppendRelationships(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)$
+		-IsNotGetterOrSetterOrLocalFunction(MethodInfo method)$ bool
+		-ClassDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
+		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, PropertyInfo property)$ bool
+		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ bool
+		-GetDataType(Type type, INameRewriter nameRewriter, string genericStartBracket, string genericEndBracket)$ string
+		-GetTypeName(string typeName)$ string
+		-GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket)$ string
+		-GetVisibility(MethodInfo methodInfo)$ string
+	}
+	class ClassDiagramMethod {
+		+string ReturnType
+		+string MethodName
+		+string Visibility
+		+bool IsStatic
+		+bool IsAbstract
+	}
+	class ClassDiagramMethodLevel {
+		&lt;&lt;enumeration&gt;&gt;
+		All
+		Public
+		Internal
+		Protected
+		None
+	}
+	class ClassDiagramMethodParameter {
+		+string ParameterType
+		+string ParameterName
+	}
+	class ClassDiagramRelationship {
+		+string Label
+		+string PropertyName
+		+bool IsBidirectional
+	}
+	class ClassDiagramRelationshipCardinality {
+		&lt;&lt;enumeration&gt;&gt;
+		Unspecified
+		ZeroOrOne
+		ExactlyOne
+		ZeroOrMore
+		OneOrMore
+	}
+	class ClassDiagramRelationshipType {
+		&lt;&lt;enumeration&gt;&gt;
+		Realization
+		Inheritance
+		Association
+		Composition
+		Aggregation
+		Dependency
+	}
+	class ErDiagramAttribute {
+		+string AttributeType
+		+string AttributeName
+		+bool IsNullable
+		+bool IsPrimaryKey
+		+bool IsAlternateKey
+		+bool IsForeignKey
+	}
+	class ErDiagramAttributeDetailExclusions {
+		&lt;&lt;enumeration&gt;&gt;
+		None
+		KeyTypes
+		Comments
+		KeyTypesAndComments
+	}
+	class ErDiagramAttributeTypeExclusion {
+		&lt;&lt;enumeration&gt;&gt;
+		None
+		Foreignkeys
+		All
+	}
+	class ErDiagramEntity {
+		+GetAttributes() IReadOnlyList~ErDiagramAttribute~
+		+GetRelationships() IReadOnlyList~ErDiagramRelationship~
+		+AddAttribute(ErDiagramAttribute attribute)
+		+AddRelationship(ErDiagramEntity to, ErDiagramRelationshipCardinality fromCardinality, ErDiagramRelationshipCardinality toCardinality, string label, string propertyName, bool isIdentifying)
+		+RemoveBidirectionalRelationshipDuplicates()
+		#IsRelatedTo(IDiagramType type) bool
+	}
+	class ErDiagramExtensions {
+		&lt;&lt;abstract&gt;&gt;
+		+IsErDiagramRelationshipCollection(Type type)$ bool
+		+IsErDiagramAttributePropertyType(PropertyInfo property)$ bool
+		+IsErDiagramAttributePropertyType(Type propertyType)$ bool
+		+GetErDiagramAttributeTypeName(PropertyInfo property)$ string
+		+GetErDiagramAttributeTypeName(Type type)$ string
+		+GetFromCardinalityValue(ErDiagramRelationshipCardinality cardinality)$ string
+		+GetToCardinalityValue(ErDiagramRelationshipCardinality cardinality)$ string
+		+GetRelationshipLine(ErDiagramRelationship relationship)$ string
+		+IsMany(ErDiagramRelationshipCardinality cardinality)$ bool
+		+IsNotMany(ErDiagramRelationshipCardinality cardinality)$ bool
+	}
+	class ErDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+		-GenerateErDiagramMermaid(IEnumerable~ErDiagramEntity~ entities) string
+		-AppendRelationshipsToDiagram(IEnumerable~ErDiagramEntity~ entities, StringBuilder sb)$
+		-AppendEntitiesToDiagram(IEnumerable~ErDiagramEntity~ entities, StringBuilder sb)
+		-AppendAttributeToEnitity(StringBuilder sb, ErDiagramEntity entity)
+		-AppendKeyTypeToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+		-AppendCommentsToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+		-ErDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
+	}
+	class ErDiagramRelationship {
+		+string Label
+		~string PropertyName
+		+bool IsIdenifying
+	}
+	class ErDiagramRelationshipCardinality {
+		&lt;&lt;enumeration&gt;&gt;
+		ZeroOrOne
+		ExactlyOne
+		ZeroOrMore
+		OneOrMore
+	}
+	class ErDiagramRelationshipTypeExclusion {
+		&lt;&lt;enumeration&gt;&gt;
+		None
+		All
+	}
+	class ErDiagramStructureBuilderByReflection {
+		+GenerateErStructure(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter) IReadOnlyList~ErDiagramEntity~
+		-GeneratieErStructure(IReadOnlyList~ErDiagramEntity~ entities, IReadOnlyList~IPropertyFilter~ attributeFilters)
+	}
+	class ExcludeAbstractClassTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeClosedGenericTypeTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeEnumTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeNonPublicClassTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludePropertyNamePropertyFilter {
+		+Accepts(PropertyInfo property) bool
+	}
+	class ExcludeSystemEnumTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeSystemObjectAndSystemEnumTypeFilter {
+	}
+	class ExcludeSystemObjectTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeTypeNameTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class Extensions {
+		&lt;&lt;abstract&gt;&gt;
+		+GetDirectInterfaces(Type type)$ IEnumerable~Type~
+		+GetRelationshipLabel(string propertyName, string entityName, bool replaceEntityNameAtEndOfPropertyName)$ string
+	}
+	class IClassDiagramGenerator {
+		&lt;&lt;interface&gt;&gt;
+	}
+	class IDiagramFilter {
+		&lt;&lt;interface&gt;&gt;
+		+Filter(IEnumerable~IDiagramType~ types)* IEnumerable~IDiagramType~
+	}
+	class IDiagramGenerator {
+		&lt;&lt;interface&gt;&gt;
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter)* string
+	}
+	class IDiagramType {
+		&lt;&lt;interface&gt;&gt;
+		+string Name
+		+Type Type
+		+IsRelatedToAny(IEnumerable~IDiagramType~ types)* bool
+	}
+	class IErDiagramGenerator {
+		&lt;&lt;interface&gt;&gt;
+	}
+	class IErDiagramStructureBuilder {
+		&lt;&lt;interface&gt;&gt;
+		+GenerateErStructure(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter)* IReadOnlyList~ErDiagramEntity~
+	}
+	class IMermaidClassDiagramFromCSharpOptions {
+		&lt;&lt;interface&gt;&gt;
+		+bool ExcludeStaticAttributes
+		+bool ExcludeStaticMethods
+		+bool ExcludeMethodParams
+	}
+	class IMermaidDiagramOptions {
+		&lt;&lt;interface&gt;&gt;
+		+IEnumerable~string~ IncludeNamespaces
+		+IEnumerable~string~ IncludeTypeNames
+		+IEnumerable~string~ ExcludeTypeNames
+		+IEnumerable~string~ ExcludePropertyNames
+		+string NameReplaceFrom
+		+string NameReplaceTo
+	}
+	class IMermaidErDiagramFromCSharpOptions {
+		&lt;&lt;interface&gt;&gt;
+	}
+	class INameRewriter {
+		&lt;&lt;interface&gt;&gt;
+		+Rewrite(string name)* string
+	}
+	class IncludeNamespaceTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class IncludeTypeNameTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class IPropertyFilter {
+		&lt;&lt;interface&gt;&gt;
+		+Accepts(PropertyInfo property)* bool
+	}
+	class ITypeFilter {
+		&lt;&lt;interface&gt;&gt;
+		+Accepts(Type type)* bool
+	}
+	class ITypeLoader {
+		&lt;&lt;interface&gt;&gt;
+		+Load(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, INameRewriter nameRewriter)* IReadOnlyList~NamedType~
+	}
+	class NamedType {
+		+string Name
+		+Type Type
+		+IsRelatedToAny(IEnumerable~IDiagramType~ types) bool
+		#IsRelatedTo(IDiagramType type) bool
+	}
+	class ReplaceNameRewriter {
+		+Rewrite(string name) string
+	}
+	class TreeShakingDiagramFilter {
+		+Filter(IEnumerable~IDiagramType~ types) IEnumerable~IDiagramType~
+		-GetNonRootedTypes(IEnumerable~IDiagramType~ allTypes, IEnumerable~IDiagramType~ rootedTypes) IEnumerable~IDiagramType~
+	}
+	class TypeLoaderByReflection {
+		+Load(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, INameRewriter nameRewriter) IReadOnlyList~NamedType~
+	}
+	AllChildFiltersTypeFilter ..|&gt; ITypeFilter
+	AnyChildFiltersTypeFilter ..|&gt; ITypeFilter
+	ClassDiagramClass --|&gt; NamedType
+	ClassDiagramClass *-- "*" ClassDiagramAttribute : attributes
+	ClassDiagramClass *-- "*" ClassDiagramMethod : methods
+	ClassDiagramClass "0..1" o-- "*" ClassDiagramRelationship : relationships
+	ClassDiagramGenerator ..&gt; ITypeLoader
+	ClassDiagramGenerator ..&gt; IMermaidClassDiagramFromCSharpOptions
+	ClassDiagramGenerator ..|&gt; IClassDiagramGenerator
+	ClassDiagramMethod *-- "*" ClassDiagramMethodParameter : parameters
+	ClassDiagramRelationship --&gt; "0..1" ClassDiagramRelationshipCardinality : from cardinality
+	ClassDiagramRelationship --&gt; "0..1" ClassDiagramRelationshipType : relationsship type
+	ClassDiagramRelationship --&gt; "0..1" ClassDiagramRelationshipCardinality : to cardinality
+	ErDiagramEntity --|&gt; NamedType
+	ErDiagramEntity "0..1" o-- "*" ErDiagramRelationship : relationships
+	ErDiagramGenerator ..&gt; IMermaidErDiagramFromCSharpOptions
+	ErDiagramGenerator ..&gt; IErDiagramStructureBuilder
+	ErDiagramGenerator ..&gt; ErDiagramAttributeTypeExclusion
+	ErDiagramGenerator ..&gt; ErDiagramAttributeDetailExclusions
+	ErDiagramGenerator ..&gt; ErDiagramRelationshipTypeExclusion
+	ErDiagramGenerator ..|&gt; IErDiagramGenerator
+	ErDiagramRelationship --&gt; "0..1" ErDiagramRelationshipCardinality : from cardinality
+	ErDiagramRelationship --&gt; "0..1" ErDiagramRelationshipCardinality : to cardinality
+	ErDiagramStructureBuilderByReflection ..|&gt; IErDiagramStructureBuilder
+	ErDiagramStructureBuilderByReflection --|&gt; TypeLoaderByReflection
+	ExcludeAbstractClassTypeFilter ..|&gt; ITypeFilter
+	ExcludeClosedGenericTypeTypeFilter ..|&gt; ITypeFilter
+	ExcludeEnumTypeFilter ..|&gt; ITypeFilter
+	ExcludeNonPublicClassTypeFilter ..|&gt; ITypeFilter
+	ExcludePropertyNamePropertyFilter ..|&gt; IPropertyFilter
+	ExcludeSystemEnumTypeFilter ..|&gt; ITypeFilter
+	ExcludeSystemObjectAndSystemEnumTypeFilter --|&gt; AllChildFiltersTypeFilter
+	ExcludeSystemObjectTypeFilter ..|&gt; ITypeFilter
+	ExcludeTypeNameTypeFilter ..|&gt; ITypeFilter
+	IClassDiagramGenerator --|&gt; IDiagramGenerator
+	IErDiagramGenerator --|&gt; IDiagramGenerator
+	IMermaidClassDiagramFromCSharpOptions --&gt; "0..1" ClassDiagramAttributeLevel : attribute level
+	IMermaidClassDiagramFromCSharpOptions --&gt; "0..1" ClassDiagramMethodLevel : method level
+	IMermaidClassDiagramFromCSharpOptions --&gt; "0..1" ClassDiagramDirection : direction
+	IMermaidClassDiagramFromCSharpOptions --|&gt; IMermaidDiagramOptions
+	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" ErDiagramAttributeTypeExclusion : attribute type exclusion
+	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" ErDiagramAttributeDetailExclusions : attribute detail exclusions
+	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" ErDiagramRelationshipTypeExclusion : relationship type exclusion
+	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" IErDiagramStructureBuilder : structure builder
+	IMermaidErDiagramFromCSharpOptions --|&gt; IMermaidDiagramOptions
+	IncludeNamespaceTypeFilter ..|&gt; ITypeFilter
+	IncludeTypeNameTypeFilter ..|&gt; ITypeFilter
+	NamedType ..|&gt; IDiagramType
+	ReplaceNameRewriter ..|&gt; INameRewriter
+	TreeShakingDiagramFilter ..&gt; ITypeFilter
+	TreeShakingDiagramFilter ..|&gt; IDiagramFilter
+	TypeLoaderByReflection ..|&gt; ITypeLoader
+
+</code></pre></div></div>
+<h4 id="the-resulting-mermaid-diagram">The resulting Mermaid diagram</h4>
+<p>If  you are using a markdown reader/editor that can render inline Mermaid diagrams, you should see the resulting Mermaid Class diagram below, otherwise you will only see the same Mermaid code as above</p>
+<pre><code class="language-mermaid">classDiagram
+	class AllChildFiltersTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class AnyChildFiltersTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ClassDiagramAttribute {
+		+string AttributeType
+		+string AttributeName
+		+string Visibility
+		+bool IsStatic
+	}
+	class ClassDiagramAttributeLevel {
+		&lt;&lt;enumeration&gt;&gt;
+		All
+		Public
+		Internal
+		Protected
+		None
+	}
+	class ClassDiagramClass {
+		+AddAttribute(ClassDiagramAttribute attribute)
+		+AddMethod(ClassDiagramMethod method)
+		+AddRelationship(ClassDiagramRelationshipCardinality fromCardinality, ClassDiagramRelationshipType relationshipType, ClassDiagramRelationshipCardinality toCardinality, ClassDiagramClass to, string label, string propertyName)
+		+RemoveBidirectionalRelationshipDuplicates()
+		#IsRelatedTo(IDiagramType type) bool
+		-SwitchFromComposisionToAggregationForAllBidirectionalCollectionReferences(ClassDiagramRelationshipCardinality toCardinality, ClassDiagramClass to, string label)
+		-HasBidirectionalRelationship(ClassDiagramClass to) bool
+		-SwitchFroComposisionToAggregationIfThisIsABidirectionalCollectionReferences(ClassDiagramRelationshipCardinality&amp; fromCardinality, ClassDiagramRelationshipType&amp; relationshipType, ClassDiagramClass to, String&amp; label, Boolean&amp; isBidirectional)
+		-RemoveAnyDependenciesCreatedFromContrutorParameters(ClassDiagramClass to)
+		-IsDuplicateDependency(ClassDiagramClass to) bool
+		-FindNonBidirectionalAssociationToThisThatMatchesThisAssociation(ClassDiagramClass to) ClassDiagramRelationship
+	}
+	class ClassDiagramDirection {
+		&lt;&lt;enumeration&gt;&gt;
+		Default
+		BT
+		TB
+		LR
+		RL
+	}
+	class ClassDiagramExtensions {
+		&lt;&lt;abstract&gt;&gt;
+		+GetRelationshipPattern(ClassDiagramRelationship relationship)$ string
+		+GetCardinalityValue(ClassDiagramRelationshipCardinality cardinality)$ string
+		+GetRelationshipLine(ClassDiagramRelationshipType relationship)$ string
+		+GetRelationshipStartArrow(ClassDiagramRelationshipType relationship, bool isBidirectional)$ string
+		+GetRelationshipEndArrow(ClassDiagramRelationshipType relationship)$ string
+		+GetAssociationToCardinality(PropertyInfo property, bool isNullable)$ ClassDiagramRelationshipCardinality
+		+GetRelationshipLabel(ClassDiagramRelationship relationship)$ string
+	}
+	class ClassDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classes, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassAssociationsCompositionsAndAggregations(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GetPropertyTypeRelationshipInfo(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ ValueTuple~bool,bool,bool,Type~
+		-IsCollectionOfKnownType(IDictionary~Type,ClassDiagramClass~ classLookup, Type type)$ bool
+		-GenerateClassInheritanceOrRealizationForInterfaces(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GenerateClassInheritanceForBaseType(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GetNonClosedGenericBaseType(Type baseType, IDictionary~Type,ClassDiagramClass~ classLookup)$ Type
+		-GenerateClassDependencies(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-AddDependency(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, Type parameterType)$
+		-GenerateClassAttributes(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassMethods(ClassDiagramClass classDiagramClass)
+		-IsMethodWithToLowVisibility(MethodInfo method) bool
+		-IsSyntheticCompilerGeneratedMethod(MethodInfo method)$ bool
+		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter) string
+		-AppendDirection(StringBuilder sb)
+		-AppendClasses(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)
+		-AppendEnumerationToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendAttributesToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)$
+		-AppendMethodsToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendParamsToClassMethod(StringBuilder sb, ClassDiagramMethod method)$
+		-AppedParamsSummaryToClassMethod(StringBuilder sb, ClassDiagramMethod method)$
+		-AppendRelationships(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)$
+		-IsNotGetterOrSetterOrLocalFunction(MethodInfo method)$ bool
+		-ClassDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
+		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, PropertyInfo property)$ bool
+		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ bool
+		-GetDataType(Type type, INameRewriter nameRewriter, string genericStartBracket, string genericEndBracket)$ string
+		-GetTypeName(string typeName)$ string
+		-GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket)$ string
+		-GetVisibility(MethodInfo methodInfo)$ string
+	}
+	class ClassDiagramMethod {
+		+string ReturnType
+		+string MethodName
+		+string Visibility
+		+bool IsStatic
+		+bool IsAbstract
+	}
+	class ClassDiagramMethodLevel {
+		&lt;&lt;enumeration&gt;&gt;
+		All
+		Public
+		Internal
+		Protected
+		None
+	}
+	class ClassDiagramMethodParameter {
+		+string ParameterType
+		+string ParameterName
+	}
+	class ClassDiagramRelationship {
+		+string Label
+		+string PropertyName
+		+bool IsBidirectional
+	}
+	class ClassDiagramRelationshipCardinality {
+		&lt;&lt;enumeration&gt;&gt;
+		Unspecified
+		ZeroOrOne
+		ExactlyOne
+		ZeroOrMore
+		OneOrMore
+	}
+	class ClassDiagramRelationshipType {
+		&lt;&lt;enumeration&gt;&gt;
+		Realization
+		Inheritance
+		Association
+		Composition
+		Aggregation
+		Dependency
+	}
+	class ErDiagramAttribute {
+		+string AttributeType
+		+string AttributeName
+		+bool IsNullable
+		+bool IsPrimaryKey
+		+bool IsAlternateKey
+		+bool IsForeignKey
+	}
+	class ErDiagramAttributeDetailExclusions {
+		&lt;&lt;enumeration&gt;&gt;
+		None
+		KeyTypes
+		Comments
+		KeyTypesAndComments
+	}
+	class ErDiagramAttributeTypeExclusion {
+		&lt;&lt;enumeration&gt;&gt;
+		None
+		Foreignkeys
+		All
+	}
+	class ErDiagramEntity {
+		+GetAttributes() IReadOnlyList~ErDiagramAttribute~
+		+GetRelationships() IReadOnlyList~ErDiagramRelationship~
+		+AddAttribute(ErDiagramAttribute attribute)
+		+AddRelationship(ErDiagramEntity to, ErDiagramRelationshipCardinality fromCardinality, ErDiagramRelationshipCardinality toCardinality, string label, string propertyName, bool isIdentifying)
+		+RemoveBidirectionalRelationshipDuplicates()
+		#IsRelatedTo(IDiagramType type) bool
+	}
+	class ErDiagramExtensions {
+		&lt;&lt;abstract&gt;&gt;
+		+IsErDiagramRelationshipCollection(Type type)$ bool
+		+IsErDiagramAttributePropertyType(PropertyInfo property)$ bool
+		+IsErDiagramAttributePropertyType(Type propertyType)$ bool
+		+GetErDiagramAttributeTypeName(PropertyInfo property)$ string
+		+GetErDiagramAttributeTypeName(Type type)$ string
+		+GetFromCardinalityValue(ErDiagramRelationshipCardinality cardinality)$ string
+		+GetToCardinalityValue(ErDiagramRelationshipCardinality cardinality)$ string
+		+GetRelationshipLine(ErDiagramRelationship relationship)$ string
+		+IsMany(ErDiagramRelationshipCardinality cardinality)$ bool
+		+IsNotMany(ErDiagramRelationshipCardinality cardinality)$ bool
+	}
+	class ErDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+		-GenerateErDiagramMermaid(IEnumerable~ErDiagramEntity~ entities) string
+		-AppendRelationshipsToDiagram(IEnumerable~ErDiagramEntity~ entities, StringBuilder sb)$
+		-AppendEntitiesToDiagram(IEnumerable~ErDiagramEntity~ entities, StringBuilder sb)
+		-AppendAttributeToEnitity(StringBuilder sb, ErDiagramEntity entity)
+		-AppendKeyTypeToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+		-AppendCommentsToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+		-ErDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
+	}
+	class ErDiagramRelationship {
+		+string Label
+		~string PropertyName
+		+bool IsIdenifying
+	}
+	class ErDiagramRelationshipCardinality {
+		&lt;&lt;enumeration&gt;&gt;
+		ZeroOrOne
+		ExactlyOne
+		ZeroOrMore
+		OneOrMore
+	}
+	class ErDiagramRelationshipTypeExclusion {
+		&lt;&lt;enumeration&gt;&gt;
+		None
+		All
+	}
+	class ErDiagramStructureBuilderByReflection {
+		+GenerateErStructure(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter) IReadOnlyList~ErDiagramEntity~
+		-GeneratieErStructure(IReadOnlyList~ErDiagramEntity~ entities, IReadOnlyList~IPropertyFilter~ attributeFilters)
+	}
+	class ExcludeAbstractClassTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeClosedGenericTypeTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeEnumTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeNonPublicClassTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludePropertyNamePropertyFilter {
+		+Accepts(PropertyInfo property) bool
+	}
+	class ExcludeSystemEnumTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeSystemObjectAndSystemEnumTypeFilter {
+	}
+	class ExcludeSystemObjectTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class ExcludeTypeNameTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class Extensions {
+		&lt;&lt;abstract&gt;&gt;
+		+GetDirectInterfaces(Type type)$ IEnumerable~Type~
+		+GetRelationshipLabel(string propertyName, string entityName, bool replaceEntityNameAtEndOfPropertyName)$ string
+	}
+	class IClassDiagramGenerator {
+		&lt;&lt;interface&gt;&gt;
+	}
+	class IDiagramFilter {
+		&lt;&lt;interface&gt;&gt;
+		+Filter(IEnumerable~IDiagramType~ types)* IEnumerable~IDiagramType~
+	}
+	class IDiagramGenerator {
+		&lt;&lt;interface&gt;&gt;
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter)* string
+	}
+	class IDiagramType {
+		&lt;&lt;interface&gt;&gt;
+		+string Name
+		+Type Type
+		+IsRelatedToAny(IEnumerable~IDiagramType~ types)* bool
+	}
+	class IErDiagramGenerator {
+		&lt;&lt;interface&gt;&gt;
+	}
+	class IErDiagramStructureBuilder {
+		&lt;&lt;interface&gt;&gt;
+		+GenerateErStructure(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter)* IReadOnlyList~ErDiagramEntity~
+	}
+	class IMermaidClassDiagramFromCSharpOptions {
+		&lt;&lt;interface&gt;&gt;
+		+bool ExcludeStaticAttributes
+		+bool ExcludeStaticMethods
+		+bool ExcludeMethodParams
+	}
+	class IMermaidDiagramOptions {
+		&lt;&lt;interface&gt;&gt;
+		+IEnumerable~string~ IncludeNamespaces
+		+IEnumerable~string~ IncludeTypeNames
+		+IEnumerable~string~ ExcludeTypeNames
+		+IEnumerable~string~ ExcludePropertyNames
+		+string NameReplaceFrom
+		+string NameReplaceTo
+	}
+	class IMermaidErDiagramFromCSharpOptions {
+		&lt;&lt;interface&gt;&gt;
+	}
+	class INameRewriter {
+		&lt;&lt;interface&gt;&gt;
+		+Rewrite(string name)* string
+	}
+	class IncludeNamespaceTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class IncludeTypeNameTypeFilter {
+		+Accepts(Type type) bool
+	}
+	class IPropertyFilter {
+		&lt;&lt;interface&gt;&gt;
+		+Accepts(PropertyInfo property)* bool
+	}
+	class ITypeFilter {
+		&lt;&lt;interface&gt;&gt;
+		+Accepts(Type type)* bool
+	}
+	class ITypeLoader {
+		&lt;&lt;interface&gt;&gt;
+		+Load(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, INameRewriter nameRewriter)* IReadOnlyList~NamedType~
+	}
+	class NamedType {
+		+string Name
+		+Type Type
+		+IsRelatedToAny(IEnumerable~IDiagramType~ types) bool
+		#IsRelatedTo(IDiagramType type) bool
+	}
+	class ReplaceNameRewriter {
+		+Rewrite(string name) string
+	}
+	class TreeShakingDiagramFilter {
+		+Filter(IEnumerable~IDiagramType~ types) IEnumerable~IDiagramType~
+		-GetNonRootedTypes(IEnumerable~IDiagramType~ allTypes, IEnumerable~IDiagramType~ rootedTypes) IEnumerable~IDiagramType~
+	}
+	class TypeLoaderByReflection {
+		+Load(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, INameRewriter nameRewriter) IReadOnlyList~NamedType~
+	}
+	AllChildFiltersTypeFilter ..|&gt; ITypeFilter
+	AnyChildFiltersTypeFilter ..|&gt; ITypeFilter
+	ClassDiagramClass --|&gt; NamedType
+	ClassDiagramClass *-- "*" ClassDiagramAttribute : attributes
+	ClassDiagramClass *-- "*" ClassDiagramMethod : methods
+	ClassDiagramClass "0..1" o-- "*" ClassDiagramRelationship : relationships
+	ClassDiagramGenerator ..&gt; ITypeLoader
+	ClassDiagramGenerator ..&gt; IMermaidClassDiagramFromCSharpOptions
+	ClassDiagramGenerator ..|&gt; IClassDiagramGenerator
+	ClassDiagramMethod *-- "*" ClassDiagramMethodParameter : parameters
+	ClassDiagramRelationship --&gt; "0..1" ClassDiagramRelationshipCardinality : from cardinality
+	ClassDiagramRelationship --&gt; "0..1" ClassDiagramRelationshipType : relationsship type
+	ClassDiagramRelationship --&gt; "0..1" ClassDiagramRelationshipCardinality : to cardinality
+	ErDiagramEntity --|&gt; NamedType
+	ErDiagramEntity "0..1" o-- "*" ErDiagramRelationship : relationships
+	ErDiagramGenerator ..&gt; IMermaidErDiagramFromCSharpOptions
+	ErDiagramGenerator ..&gt; IErDiagramStructureBuilder
+	ErDiagramGenerator ..&gt; ErDiagramAttributeTypeExclusion
+	ErDiagramGenerator ..&gt; ErDiagramAttributeDetailExclusions
+	ErDiagramGenerator ..&gt; ErDiagramRelationshipTypeExclusion
+	ErDiagramGenerator ..|&gt; IErDiagramGenerator
+	ErDiagramRelationship --&gt; "0..1" ErDiagramRelationshipCardinality : from cardinality
+	ErDiagramRelationship --&gt; "0..1" ErDiagramRelationshipCardinality : to cardinality
+	ErDiagramStructureBuilderByReflection ..|&gt; IErDiagramStructureBuilder
+	ErDiagramStructureBuilderByReflection --|&gt; TypeLoaderByReflection
+	ExcludeAbstractClassTypeFilter ..|&gt; ITypeFilter
+	ExcludeClosedGenericTypeTypeFilter ..|&gt; ITypeFilter
+	ExcludeEnumTypeFilter ..|&gt; ITypeFilter
+	ExcludeNonPublicClassTypeFilter ..|&gt; ITypeFilter
+	ExcludePropertyNamePropertyFilter ..|&gt; IPropertyFilter
+	ExcludeSystemEnumTypeFilter ..|&gt; ITypeFilter
+	ExcludeSystemObjectAndSystemEnumTypeFilter --|&gt; AllChildFiltersTypeFilter
+	ExcludeSystemObjectTypeFilter ..|&gt; ITypeFilter
+	ExcludeTypeNameTypeFilter ..|&gt; ITypeFilter
+	IClassDiagramGenerator --|&gt; IDiagramGenerator
+	IErDiagramGenerator --|&gt; IDiagramGenerator
+	IMermaidClassDiagramFromCSharpOptions --&gt; "0..1" ClassDiagramAttributeLevel : attribute level
+	IMermaidClassDiagramFromCSharpOptions --&gt; "0..1" ClassDiagramMethodLevel : method level
+	IMermaidClassDiagramFromCSharpOptions --&gt; "0..1" ClassDiagramDirection : direction
+	IMermaidClassDiagramFromCSharpOptions --|&gt; IMermaidDiagramOptions
+	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" ErDiagramAttributeTypeExclusion : attribute type exclusion
+	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" ErDiagramAttributeDetailExclusions : attribute detail exclusions
+	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" ErDiagramRelationshipTypeExclusion : relationship type exclusion
+	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" IErDiagramStructureBuilder : structure builder
+	IMermaidErDiagramFromCSharpOptions --|&gt; IMermaidDiagramOptions
+	IncludeNamespaceTypeFilter ..|&gt; ITypeFilter
+	IncludeTypeNameTypeFilter ..|&gt; ITypeFilter
+	NamedType ..|&gt; IDiagramType
+	ReplaceNameRewriter ..|&gt; INameRewriter
+	TreeShakingDiagramFilter ..&gt; ITypeFilter
+	TreeShakingDiagramFilter ..|&gt; IDiagramFilter
+	TypeLoaderByReflection ..|&gt; ITypeLoader
+
+</code></pre>
+
+</div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+        
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+        </div>
+    </div>
+</footer>
+
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts --></body>
+</html>
