@@ -176,7 +176,7 @@ public partial class Build : NukeBuild
                 .SetProjectFile(Solution.GetProject("DryGen.Docs"))
                 .SetConfiguration(Configuration)
                 .SetFramework("net6.0")
-                .SetApplicationArguments($"-o {DocsDirectory}")
+                .SetApplicationArguments($"--docs-directory {DocsDirectory}")
                 .EnableNoBuild()
                 .SetNoLaunchProfile(true)
                 );

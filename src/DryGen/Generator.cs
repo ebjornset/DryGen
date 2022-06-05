@@ -89,30 +89,36 @@ namespace DryGen
             {
                 string? existingRepresentation = null;
                 options = GetOptionsFromFileWithCommandlineOptionsAsOverrides(options, args);
-                if (string.IsNullOrWhiteSpace(options.OutputFile) && !string.IsNullOrWhiteSpace(options.RplaceTokenInOutputFile))
+                if (string.IsNullOrWhiteSpace(options.OutputFile) && !string.IsNullOrWhiteSpace(options.ReplaceTokenInOutputFile))
                 {
                     throw new OptionsException("'replace-token-in-output-file' specified when 'output-file' is missing.");
                 }
                 if (!string.IsNullOrEmpty(options.OutputFile))
                 {
-                    if (string.IsNullOrWhiteSpace(options.RplaceTokenInOutputFile))
+                    if (string.IsNullOrWhiteSpace(options.ReplaceTokenInOutputFile))
                     {
                         outWriter.WriteLine($"Generating {resultRepresentation} to file '{options.OutputFile}'");
                     }
                     else
                     {
-                        existingRepresentation = File.ReadAllText(options.OutputFile);
-                        if (!existingRepresentation?.Contains(options.RplaceTokenInOutputFile) == true)
-                        {
-                            throw new OptionsException($"'replace-token-in-output-file' '{options.RplaceTokenInOutputFile}' was not found in output file '{options.OutputFile}'");
-                        }
-                        outWriter.WriteLine($"Replacing the 'magic token' '{options.RplaceTokenInOutputFile}' with  {resultRepresentation} in file '{options.OutputFile}'");
+                        existingRepresentation = ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(resultRepresentation, options.OutputFile, options.ReplaceTokenInOutputFile);
                     }
                 }
                 var resultReprersentation = resultFunc(options);
                 WriteGeneratedRepresentationToConsoleOrFile(options, resultReprersentation, existingRepresentation);
                 return 0;
             });
+        }
+
+        public string ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(string resultRepresentation, string outputFile, string replaceTokenInOutputFile)
+        {
+            var existingRepresentation = File.ReadAllText(outputFile) ?? string.Empty;
+            if (!existingRepresentation?.Contains(replaceTokenInOutputFile) == true)
+            {
+                throw new OptionsException($"'replace-token-in-output-file' '{replaceTokenInOutputFile}' was not found in output file '{outputFile}'");
+            }
+            outWriter.WriteLine($"Replacing the 'magic token' '{replaceTokenInOutputFile}' with  {resultRepresentation} in file '{outputFile}'");
+            return existingRepresentation;
         }
 
         private int ExecuteWithExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions, new()
@@ -254,9 +260,9 @@ namespace DryGen
             {
                 var outputFile = Path.GetFullPath(options.OutputFile);
                 CreateMissingOutputDirectory(outputFile);
-                if (!string.IsNullOrWhiteSpace(existingRepresentation) && !string.IsNullOrWhiteSpace(options.RplaceTokenInOutputFile))
+                if (!string.IsNullOrWhiteSpace(existingRepresentation) && !string.IsNullOrWhiteSpace(options.ReplaceTokenInOutputFile))
                 {
-                    generatedRepresentation = existingRepresentation.Replace(options.RplaceTokenInOutputFile, generatedRepresentation);
+                    generatedRepresentation = existingRepresentation.Replace(options.ReplaceTokenInOutputFile, generatedRepresentation);
                 }
                 File.WriteAllText(outputFile, generatedRepresentation);
             }
