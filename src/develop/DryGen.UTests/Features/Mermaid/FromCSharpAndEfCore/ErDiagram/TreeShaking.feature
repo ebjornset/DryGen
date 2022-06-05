@@ -2,7 +2,7 @@
 
 To be able to generate Entity Relationship diagrams for parts of a solution in an effective manner
 As a dry-gen user
-I want to be able to shake of uninteresting types from my Er diagrams
+I should be able to shake of uninteresting types from my Er diagrams
 
 Background:
 	Given these tree shaking roots

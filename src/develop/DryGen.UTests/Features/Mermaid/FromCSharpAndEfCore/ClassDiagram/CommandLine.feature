@@ -1,6 +1,8 @@
 ﻿Feature: Command line for generating Mermaid Class diagrams from C#
 
-A short summary of the feature
+To be able to generate other representation of C# code
+As a dry-gen user
+I should be able to generate Mermaid Class diagrams from a .Net assembly with the verb 'mermaid-class-diagram-from-csharp'
 
 Background:
 	Given this C# source code compiled to a file

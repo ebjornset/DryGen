@@ -1,4 +1,6 @@
-- name: Verbs  
+- name: Verbs
   link: /verbs/
+- name: Examples
+  link: /examples/
 - name: Releases
   link: /blog/

@@ -1,8 +1,8 @@
-﻿Feature: Replace magic token in output file
+﻿Feature: Replace token in output file
 
-To be able to build documents with both non dry-gen generated information and dry-gen output
+To be able to build documents with both non dry-gen generated information and dry-gen generated representations
 As a dry-gen user
-I would like the functionality to replace a "magic token" in the output file with the generated representation instead of just overwrite the file
+I should be able to replace a "magic token" in the output file with the generated representation instead of just overwrite the file with the representation
 
 # This functionality is for every verb, but we only test it for 'options-from-commandline', since it executes quickest
 

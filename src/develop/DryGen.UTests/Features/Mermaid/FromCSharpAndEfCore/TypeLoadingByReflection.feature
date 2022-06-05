@@ -1,6 +1,8 @@
-﻿Feature: Type loading by refelction
+﻿Feature: Type loading by reflection
 
-A short summary of the feature
+To be able to generate other representation of C# code
+As a dry-gen user
+I should be able to use reflection to load C# types from an assembly
 
 Background:
 	Given this C# source code

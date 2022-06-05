@@ -67,15 +67,15 @@ jobs:
       - name: Check if there is any git changes
         id: get_changes
         run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
-      - name: List any git changes
+      - name: Display any git diffs
         if: steps.get_changes.outputs.changed != 0
-        run: git status --porcelain
+        run: git diff HEAD
       - name: Fail if there is any git changes
         if: steps.get_changes.outputs.changed != 0
         uses: actions/github-script@v3
         with:
           script: |
-            core.setFailed('Git modifications found after [nuke]. Maybe [nuke docs] was omitted before commit? Check the output from the step "List any git changes" for details about the git changes.')
+            core.setFailed('Git modifications found after <nuke>. Maybe <nuke [docs] --configuration release> was omitted before commit? Check the output from the step "Display any git diffs" for details about the changes.')
       - name: Run Coverlet Report Generator (for SonarCloud)
         run:
           reportgenerator "-reports:**/TestResults/**/coverage.cobertura.xml" "-targetdir:.sonarqubecoverage" "-reporttypes:SonarQube"

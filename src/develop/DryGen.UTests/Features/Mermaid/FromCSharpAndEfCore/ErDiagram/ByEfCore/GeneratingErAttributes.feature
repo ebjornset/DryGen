@@ -1,6 +1,8 @@
 ﻿Feature: Generating Attributes in Er diagrams using Entity Framework Core
 
-A short summary of the feature
+To be able to generate Mermaid Er digrams from C# code
+As a dry-gen user
+I should be able to generate Mermaid attributes from C# type's properties using metadata from Ef Core DbContexts
 
 Background:
 	Given this include namespace filter '^Test$'
