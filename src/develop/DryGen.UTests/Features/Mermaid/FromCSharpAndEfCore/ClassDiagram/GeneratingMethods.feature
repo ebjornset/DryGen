@@ -1,6 +1,8 @@
 ﻿Feature: Generating Methods in Class diagrams
 
-A short summary of the feature
+To be able to generate Mermaid Class diagrams that represente my C# code
+As a dry-gen user
+I should be able to generate Mermaid method information from the C# methods
 
 Background:
 	Given this include namespace filter '^Test$'

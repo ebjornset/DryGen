@@ -2,7 +2,7 @@
 
 To be able to generate Class diagrams for parts of a solution in an effective manner
 As a dry-gen user
-I want to be able to shake of uninteresting types from my Class diagrams
+I should be able to shake of uninteresting types from my Class diagrams
 
 Background:
 	Given these tree shaking roots

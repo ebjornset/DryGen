@@ -1,6 +1,8 @@
 ﻿Feature: Command line for generation Mermaid Er diagrams from C#, both by reflection and from EF Core
 
-A short summary of the feature
+To be able to generate other representation of C# code
+As a dry-gen user
+I should be able to generate Mermaid ER diagrams from a .Net assembly with the verbs 'mermaid-er-diagram-from-csharp' and 'mermaid-er-diagram-from-efcore'
 
 Background:
 	Given this C# source code compiled to a file

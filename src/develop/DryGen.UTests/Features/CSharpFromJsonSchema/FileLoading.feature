@@ -1,6 +1,8 @@
 ﻿Feature: Loading Json schema files
 
-A short summary of the feature
+To be able to generate other representation of Json schemas from both Json and Yaml format
+As a dry-gen user
+I should be able to load the schema from both Json and Yaml files 
 
 Scenario: Loading json schema file from yaml file by extension
 	Given this json schema

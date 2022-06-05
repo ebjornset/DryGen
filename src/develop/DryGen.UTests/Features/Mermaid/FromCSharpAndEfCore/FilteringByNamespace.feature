@@ -1,6 +1,8 @@
 ﻿Feature: Filtering by namspace
 
-A short summary of the feature
+To be able to generate Mermaid digrams from the interesting parts of the C# code
+As a dry-gen user
+I should be able to include and types by their name space using regex
 
 Background:
 	Given this C# source code

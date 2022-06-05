@@ -1,6 +1,8 @@
 ﻿Feature: Filtering by type name
 
-A short summary of the feature
+To be able to generate Mermaid digrams from the interesting parts of the C# code
+As a dry-gen user
+I should be able to include and/or exclude types by their type name using regex
 
 Background:
 	Given this C# source code

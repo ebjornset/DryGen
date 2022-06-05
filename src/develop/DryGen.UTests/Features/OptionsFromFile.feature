@@ -1,6 +1,8 @@
 ﻿Feature: Options from file
 
-A short summary of the feature
+To avoid long command lines, and to be able to reuse option sets
+As a dry-gen user
+I should be able to specify the options in a Yaml file
 
 Background:
 	Given this C# source code compiled to a file

@@ -2,7 +2,7 @@
 
 To be able to use options files without having to hand craft them from scratch
 As a dry-gen user
-I would like to be able to generate option files for all verbs
+I should be able to generate option files for all verbs with the verb 'options-from-commandline'
 
 Scenario: Verb should be required
 	When I call the program with this command line arguments

@@ -1,6 +1,8 @@
 ﻿Feature: Loading the Entity Framework Core DbContext
 
-A short summary of the feature
+To be able to generate Mermaid Er digrams from C# code using the metadata in Ef Core DbContexts
+As a dry-gen user
+I should be able to load metadata from Ef Core DbContexts
 
 Scenario: Should get exception if no DbContext ctor takes option as an argument
 	Given this C# source code

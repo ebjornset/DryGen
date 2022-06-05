@@ -2,7 +2,7 @@
 
 To be able to "live as we preach"
 As a dry-gen developer
-I would like to be able to generate documentation for each verb from the help system
+I should be able to generate documentation for each verb from the help system
 
 Scenario: Should generate menu with all verbs
 	When I generate the docs verb menu

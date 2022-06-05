@@ -1,6 +1,8 @@
 ﻿Feature: Command line
 
-A short summary of the feature
+To be able to use dry-gen with redirection of output and to get help when there is any problems
+As a dry-gen user
+I should get the generated representation and other error and information message in the console
 
 Scenario: Print usage to console error when command line parsing fails
 	Given this C# source code compiled to a file

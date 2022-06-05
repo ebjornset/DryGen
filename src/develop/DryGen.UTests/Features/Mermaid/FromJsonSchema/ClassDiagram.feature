@@ -1,6 +1,8 @@
-﻿Feature: Generating Mermaid class diagram from Json schema
+﻿Feature: Generating Mermaid Class diagram from Json schema
 
-A short summary of the feature
+To be able to generate other representation of Json schemas
+As a dry-gen user
+I should be able to generate Mermaid Class diagram from a Json schema file with the verb 'mermaid-class-diagram-from-json-schema'
 
 # We use csharp-from-json-schema to generate c# under the hoods.
 # The options for 'schema-file-format' and 'root-classname' are handled by that generator, 
