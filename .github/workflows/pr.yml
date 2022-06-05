@@ -63,6 +63,10 @@ jobs:
       - name: List any git changes
         if: steps.get_changes.outputs.changed != 0
         run: git status --porcelain
+      - name: Read file contents (for debuging of why a file has changed)
+        uses: andstor/file-reader-action@v1
+        with:
+          path: "docs/examples/Mermaid-Class-diagrams.md"
       - name: Fail if there is any git changes
         if: steps.get_changes.outputs.changed != 0
         uses: actions/github-script@v3
