@@ -285,7 +285,6 @@ namespace DryGen
             }
         }
 
-        [SuppressMessage("Major Code Smell", "S3885:\"Assembly.Load\" should be used", Justification = "We must use LoadFrom to be able to implement this functionallity.")]
         private static string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
         {
             /// It seems like Assembly.Load from a file name will hold the file open, and thus our tests cannot clean up by deleting the tmp files they uses, so we read the file to memory our self...
