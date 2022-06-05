@@ -104,7 +104,7 @@ namespace DryGen.Docs
             Console.WriteLine($"Copying examples template files from \"{examplesTemplatesDirectory}\" to \"{examplesDirectory}\"");
             foreach (var exampleTemplateFile in Directory.GetFiles(examplesTemplatesDirectory))
             {
-                File.Copy(exampleTemplateFile, Path.Combine(examplesDirectory, Path.GetFileName(exampleTemplateFile)), true);
+                File.Copy(exampleTemplateFile, Path.Combine(examplesDirectory, Path.GetFileName(exampleTemplateFile.ToLowerInvariant())), true);
             }
         }
 
