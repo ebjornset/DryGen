@@ -1,2 +1,5 @@
 _site/
 .jekyll-cache
+
+# For the Github action that generates the Jekyll site (peaceiris/actions-gh-pages)
+.bundle/
