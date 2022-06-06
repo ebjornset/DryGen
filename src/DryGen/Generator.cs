@@ -110,14 +110,17 @@ namespace DryGen
             });
         }
 
-        public string ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(string resultRepresentation, string outputFile, string replaceTokenInOutputFile)
+        public string ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(string resultRepresentation, string outputFile, string replaceTokenInOutputFile, bool verbose = true)
         {
             var existingRepresentation = File.ReadAllText(outputFile) ?? string.Empty;
             if (!existingRepresentation?.Contains(replaceTokenInOutputFile) == true)
             {
                 throw new OptionsException($"'replace-token-in-output-file' '{replaceTokenInOutputFile}' was not found in output file '{outputFile}'");
             }
-            outWriter.WriteLine($"Replacing the 'magic token' '{replaceTokenInOutputFile}' with  {resultRepresentation} in file '{outputFile}'");
+            if (verbose)
+            {
+                outWriter.WriteLine($"Replacing the 'magic token' '{replaceTokenInOutputFile}' with  {resultRepresentation} in file '{outputFile}'");
+            }
 #pragma warning disable CS8603 // Possible null reference return.
             // No, we can't get null reference return here, since we use ?? string.Empty.
             return existingRepresentation;

@@ -3,7 +3,6 @@ layout: page
 title: Mermaid class diagram examples
 description: Examples on how to generate Mermaid class diagrams from C# code
 show_sidebar: false
-menubar: examples_menu
 ---
 # Work in progress
 General description of the examples
@@ -18,7 +17,8 @@ Description of example one
 .!.!.replace-token-for-class-diagram-one.!.!.
 ```
 #### The resulting Mermaid diagram
-If  you are using a markdown reader/editor that can render inline Mermaid diagrams, you should see the resulting Mermaid Class diagram below, otherwise you will only see the same Mermaid code as above
-```mermaid
-.!.!.replace-token-for-class-diagram-one.!.!.
-```
+<div class="mermaid">
+.!.!.replace-token-for-class-diagram-one-html-escaped.!.!.
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true, logLevel: "warn"});</script>
