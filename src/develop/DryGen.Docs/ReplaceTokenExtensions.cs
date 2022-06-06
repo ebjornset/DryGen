@@ -11,5 +11,10 @@
         {
             return $".!.!.replace-token-for-{replaceToken.ToLowerInvariant()}.!.!.";
         }
+
+        public static string AsHtmlEscapedGeneratedRepresentationReplaceToken(this string replaceToken)
+        {
+            return $".!.!.replace-token-for-{replaceToken.ToLowerInvariant()}-html-escaped.!.!.";
+        }
     }
 }
