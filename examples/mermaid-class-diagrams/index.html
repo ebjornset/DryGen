@@ -96,25 +96,7 @@
         <div class="container">
             <div class="columns is-multiline">
                 
-                <div class="column is-4-desktop is-4-tablet">
-                    
-
-<aside class="menu">
-
-    <p class="menu-label">dry-gen examples</p>
-    <ul class="menu-list">
-        
-        <li>
-            <a href="/examples/mermaid-class-diagrams" class="">Mermaid Class diagrams</a>
-            
-        </li>
-            
-    </ul>
-
-</aside>
-                </div>
-                
-                <div class="column is-8">
+                <div class="column is-12">
                     
                     
                     
@@ -495,8 +477,8 @@
 
 </code></pre></div></div>
 <h4 id="the-resulting-mermaid-diagram">The resulting Mermaid diagram</h4>
-<p>If  you are using a markdown reader/editor that can render inline Mermaid diagrams, you should see the resulting Mermaid Class diagram below, otherwise you will only see the same Mermaid code as above</p>
-<pre><code class="language-mermaid">classDiagram
+<div class="mermaid">
+classDiagram
 	class AllChildFiltersTypeFilter {
 		+Accepts(Type type) bool
 	}
@@ -859,7 +841,11 @@
 	TreeShakingDiagramFilter ..|&gt; IDiagramFilter
 	TypeLoaderByReflection ..|&gt; ITypeLoader
 
-</code></pre>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+<script>mermaid.initialize({startOnLoad:true, logLevel: "warn"});</script>
+
 
 </div>
                 </div>
