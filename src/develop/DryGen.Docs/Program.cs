@@ -27,6 +27,8 @@ namespace DryGen.Docs
             }
             GenerateVerbsMenu(docsDirectory);
             GenerateVerbsMarkdown(docsDirectory);
+            return 0;
+            //// TODO. The examples are not quite ready to be released yet
             GenerateExamplesMenu(docsDirectory);
             CopyExamplesTemplates(docsDirectory);
             var result = 0;
