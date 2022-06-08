@@ -2,6 +2,8 @@
 layout: page
 title: Getting started
 description: How to get started with dry-gen
+toc: true
+hero_height: is-fullwidth
 ---
 DryGen is a .Net tool to generate other representations of a piece of knowledge from one representation. 
 

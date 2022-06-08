@@ -5,6 +5,7 @@ title: options-from-commandline
 description: Details about the dry-gen verb options-from-commandline
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate dry-gen options for a verb from the command line. 
 

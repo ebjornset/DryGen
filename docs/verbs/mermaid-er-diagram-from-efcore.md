@@ -5,6 +5,7 @@ title: mermaid-er-diagram-from-efcore
 description: Details about the dry-gen verb mermaid-er-diagram-from-efcore
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate a Mermaid Entity Relationship diagram from a C# assembly using Entity Framework Core. 
 

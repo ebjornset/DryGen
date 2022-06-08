@@ -5,6 +5,7 @@ title: mermaid-class-diagram-from-json-schema
 description: Details about the dry-gen verb mermaid-class-diagram-from-json-schema
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate a Mermaid Class diagram from a json schema. 
 
