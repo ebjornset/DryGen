@@ -12,7 +12,7 @@
     <ul class="pagination-list">
         {% for page in (1..paginator.total_pages) %}
         {% if page == paginator.page %}
-        <li><a class="pagination-link is-current">{{ page }}</a></li>
+        <li><a class="button is-primary" disabled>{{ page }}</a></li>
         {% elsif page == 1 %}
         <li><a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | split: '/' | pop | join: '/' }}" class="pagination-link">{{ page }}</a></li>
         {% else %}
