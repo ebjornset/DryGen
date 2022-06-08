@@ -5,6 +5,7 @@ title: csharp-from-json-schema
 description: Details about the dry-gen verb csharp-from-json-schema
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate C# classes from a json schema (using NJsonSchema https://github.com/RicoSuter/NJsonSchema). 
 

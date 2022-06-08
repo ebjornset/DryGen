@@ -16,6 +16,7 @@ namespace DryGen.Docs
                 .Append("description: Details about the dry-gen verb ").AppendLine(verb)
                 .AppendLine("show_sidebar: false")
                 .AppendLine("menubar: verbs_menu")
+                .AppendLine("hero_height: is-fullwidth")
                 .AppendLine("---")
                 .Append(verbMetaData.HelpText).AppendLine(" ").AppendLine()
                 .AppendLine("## Options")

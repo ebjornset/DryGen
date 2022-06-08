@@ -5,6 +5,7 @@ title: mermaid-class-diagram-from-csharp
 description: Details about the dry-gen verb mermaid-class-diagram-from-csharp
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate a Mermaid Class diagram from a C# assembly using reflection. 
 

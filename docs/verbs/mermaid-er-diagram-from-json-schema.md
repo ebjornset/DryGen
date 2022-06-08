@@ -5,6 +5,7 @@ title: mermaid-er-diagram-from-json-schema
 description: Details about the dry-gen verb mermaid-er-diagram-from-json-schema
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate a Mermaid Entity Relationship diagram from a Json shcema. 
 
