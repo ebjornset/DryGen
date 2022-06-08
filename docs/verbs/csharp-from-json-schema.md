@@ -7,7 +7,7 @@ show_sidebar: false
 menubar: verbs_menu
 hero_height: is-fullwidth
 ---
-Generate C# classes from a json schema (using NJsonSchema https://github.com/RicoSuter/NJsonSchema). 
+Generate C# classes from a json schema, using [NJsonSchema](https://github.com/RicoSuter/NJsonSchema). 
 
 ## Options
 The verb 'csharp-from-json-schema' uses the following options.
