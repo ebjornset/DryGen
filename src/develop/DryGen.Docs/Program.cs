@@ -27,8 +27,6 @@ namespace DryGen.Docs
             }
             GenerateVerbsMenu(docsDirectory);
             GenerateVerbsMarkdown(docsDirectory);
-            return 0;
-            //// TODO. The examples are not quite ready to be released yet
             GenerateExamplesMenu(docsDirectory);
             CopyExamplesTemplates(docsDirectory);
             var result = 0;
@@ -37,11 +35,6 @@ namespace DryGen.Docs
             foreach (var generatorData in BuildExamplesGeneratorData())
             {
                 result = ReplaceRepresentationInExample(docsDirectory, assemblyDirectory, generator, generatorData);
-                if (result > 0)
-                {
-                    break;
-                }
-                result = ReplaceHtmlEscapedRepresentationInExample(docsDirectory, assemblyDirectory, generatorData);
                 if (result > 0)
                 {
                     break;
@@ -57,25 +50,6 @@ namespace DryGen.Docs
             var commandline = BuildExamplesGeneratorCommandline(generatorData, docsDirectory, assemblyDirectory, relativeRoot: null);
             Console.WriteLine($"Generating: {string.Join(' ', commandline)}");
             result = generator.Run(commandline);
-            return result;
-        }
-
-        private static int ReplaceHtmlEscapedRepresentationInExample(string docsDirectory, string assemblyDirectory, ExamplesGeneratorData generatorData)
-        {
-            /// Workaround for some strange issue where Jekyll won't replace << or >> correctly in the resulting html.
-            int result;
-            var commandline = BuildExamplesGeneratorCommandline(generatorData, docsDirectory, assemblyDirectory, relativeRoot: null, excludeOutputFile: true);
-            Console.WriteLine($"Generating: {string.Join(' ', commandline)}");
-            using var outWriter = new StringWriter();
-            var generator = new Generator(outWriter, Console.Error);
-            result = generator.Run(commandline);
-            if (result == 0)
-            {
-                var generatedRepresentation = outWriter.ToString().Replace("<", "&lt;").Replace(">", "&gt;");
-                var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(docsDirectory, generatorData), generatorData.ReplaceToken.AsHtmlEscapedGeneratedRepresentationReplaceToken());
-                generatedRepresentation = existingRepresentation.Replace(generatorData.ReplaceToken.AsHtmlEscapedGeneratedRepresentationReplaceToken(), generatedRepresentation);
-                File.WriteAllText(GetOutputFile(docsDirectory, generatorData), generatedRepresentation);
-            }
             return result;
         }
 
@@ -146,30 +120,27 @@ namespace DryGen.Docs
             };
         }
 
-        private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string docsDirectory, string assemblyDirectory, string relativeRoot, bool excludeOutputFile = false)
+        private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string docsDirectory, string assemblyDirectory, string relativeRoot)
         {
             var inputFile = Path.Combine(assemblyDirectory, generatorData.InputFile);
             if (!string.IsNullOrEmpty(relativeRoot))
             {
                 inputFile = Path.GetRelativePath(relativeRoot, inputFile).Replace("\\", "/");
             }
+            var outputFile = GetOutputFile(docsDirectory, generatorData);
+            if (!string.IsNullOrEmpty(relativeRoot))
+            {
+                outputFile = Path.GetRelativePath(relativeRoot, outputFile).Replace("\\", "/");
+            }
             var result = new List<string> {
                 generatorData.Verb,
                 $"--{Constants.InputFileOption}",
                 inputFile,
+                $"--{Constants.OutputFileOption}",
+                outputFile,
+                $"--{Constants.ReplaceTokenInOutputFile}",
+                generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken(),
             };
-            if (!excludeOutputFile)
-            {
-                var outputFile = GetOutputFile(docsDirectory, generatorData);
-                if (!string.IsNullOrEmpty(relativeRoot))
-                {
-                    outputFile = Path.GetRelativePath(relativeRoot, outputFile).Replace("\\", "/");
-                }
-                result.Add($"--{Constants.OutputFileOption}");
-                result.Add(outputFile);
-                result.Add($"--{Constants.ReplaceTokenInOutputFile}");
-                result.Add(generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken());
-            }
             return result.ToArray();
         }
     }
