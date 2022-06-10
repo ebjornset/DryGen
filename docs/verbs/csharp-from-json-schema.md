@@ -24,8 +24,10 @@ The verb 'csharp-from-json-schema' uses the following options.
 |--root-classname||string|The classname for the class representing the schema it self. Default is the schema title, or 'ClassFromJsonSchema' if the schema has no title.|
 |--schema-file-format||byextension / json / yaml|What format should be used when reading the schema file? 'ByExtension' (default) treats files with extension 'yaml' or 'yml' as yaml, others as json. Use 'Yaml' or 'Json' to force the format explicitly.|
 
-{% include notification.html
-message="You can always get information about this verb's options by running the command `dry-gen csharp-from-json-schema --help`."
+{% include notification.html status="is-dark" 
+message="You can always get information about this verb's options by running the command 
+
+`dry-gen csharp-from-json-schema --help`."
 %}
 ## Options file template
 Here is a template for an options file for 'csharp-from-json-schema'. 
@@ -42,6 +44,8 @@ Here is a template for an options file for 'csharp-from-json-schema'.
 #root-classname: string
 #schema-file-format: byextension | json | yaml
 ```
-{% include notification.html
-message="You can generate the same template your self with the command `dry-gen options-from-commandline --verb csharp-from-json-schema`."
+{% include notification.html status="is-dark" 
+message="You can generate the same template your self with the command 
+
+`dry-gen options-from-commandline --verb csharp-from-json-schema`"
 %}

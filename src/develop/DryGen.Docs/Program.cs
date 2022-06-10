@@ -114,8 +114,23 @@ namespace DryGen.Docs
                 new ExamplesGeneratorData {
                     Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
                     InputFile = "DryGen.MermaidFromCSharp.dll",
-                    OutputFile = "Mermaid-Class-diagrams.md",
-                    ReplaceToken = "class-diagram-one",
+                    OutputFile = "Filtering-Mermaid-diagram-content.md",
+                    ReplaceToken = "mermaid-diagram-filter-example-no-filtering",
+                    AdditionalOptions = new[] {"--attribute-level", "none", "--method-level", "none", "--direction", "TB" },
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
+                    InputFile = "DryGen.MermaidFromCSharp.dll",
+                    OutputFile = "Filtering-Mermaid-diagram-content.md",
+                    ReplaceToken = "mermaid-diagram-filter-example-tree-shaking-roots",
+                    AdditionalOptions = new[] {"--tree-shaking-roots", "^ITypeFilter$", "--attribute-level", "none", "--method-level", "none", "--direction", "BT" },
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
+                    InputFile = "DryGen.MermaidFromCSharp.dll",
+                    OutputFile = "Filtering-Mermaid-diagram-content.md",
+                    ReplaceToken = "mermaid-diagram-filter-example-include-namespaces",
+                    AdditionalOptions = new[] { "--include-namespaces", "^DryGen.MermaidFromCSharp.ClassDiagram$", "--attribute-level", "none", "--method-level", "none", "--direction", "TB" },
                 },
             };
         }
@@ -133,6 +148,10 @@ namespace DryGen.Docs
                 $"--{Constants.ReplaceTokenInOutputFile}",
                 generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken(),
             };
+            if (generatorData.AdditionalOptions?.Any() == true)
+            {
+                result.AddRange(generatorData.AdditionalOptions);
+            }
             return result.ToArray();
         }
 
