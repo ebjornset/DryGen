@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace DryGen.Docs
 {
+    [ExcludeFromCodeCoverage] // We run this from nuke docs, so we are not to worried about the code coverage at the moment
     public static class Program
     {
         public static int Main(string[] args)
@@ -20,87 +21,86 @@ namespace DryGen.Docs
 
         static int RunAndReturnExitCode(Options options)
         {
-            var docsDirectory = Path.GetFullPath(options.DocsDirectory);
-            if (!Directory.Exists(docsDirectory))
+            var rootDirectory = Path.GetFullPath(options.RootDirectory);
+            if (!Directory.Exists(rootDirectory))
             {
-                throw new ArgumentException($"Docs directory '{docsDirectory}' does not exist!");
+                throw new ArgumentException($"Root directory '{rootDirectory}' does not exist!");
             }
-            GenerateVerbsMenu(docsDirectory);
-            GenerateVerbsMarkdown(docsDirectory);
-            GenerateExamplesMenu(docsDirectory);
-            CopyExamplesTemplates(docsDirectory);
+            GenerateVerbsMenu(rootDirectory);
+            GenerateVerbsMarkdown(rootDirectory);
+            GenerateExamplesMenu(rootDirectory);
+            CopyExamplesTemplates(rootDirectory);
             var result = 0;
             string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var generator = new Generator(Console.Out, Console.Error);
             foreach (var generatorData in BuildExamplesGeneratorData())
             {
-                result = ReplaceRepresentationInExample(docsDirectory, assemblyDirectory, generator, generatorData);
+                result = ReplaceRepresentationInExample(rootDirectory, assemblyDirectory, generator, generatorData);
                 if (result > 0)
                 {
                     break;
                 }
-                ReplaceCommandlineInExample(docsDirectory, assemblyDirectory, generator, generatorData);
+                ReplaceCommandlineInExample(rootDirectory, assemblyDirectory, generator, generatorData);
             }
             return result;
         }
 
-        private static int ReplaceRepresentationInExample(string docsDirectory, string assemblyDirectory, Generator generator, ExamplesGeneratorData generatorData)
+        private static int ReplaceRepresentationInExample(string rootDirectory, string assemblyDirectory, Generator generator, ExamplesGeneratorData generatorData)
         {
             int result;
-            var commandline = BuildExamplesGeneratorCommandline(generatorData, docsDirectory, assemblyDirectory, relativeRoot: null);
+            var commandline = BuildExamplesGeneratorCommandline(generatorData, rootDirectory, assemblyDirectory);
             Console.WriteLine($"Generating: {string.Join(' ', commandline)}");
             result = generator.Run(commandline);
             return result;
         }
 
-        private static void ReplaceCommandlineInExample(string docsDirectory, string assemblyDirectory, Generator generator, ExamplesGeneratorData generatorData)
+        private static void ReplaceCommandlineInExample(string rootDirectory, string assemblyDirectory, Generator generator, ExamplesGeneratorData generatorData)
         {
-            var relativeRoot = Path.GetFullPath(Path.Combine(docsDirectory, ".."));
-            var commandline = BuildExamplesGeneratorCommandline(generatorData, docsDirectory, assemblyDirectory, relativeRoot);
+            var commandline = BuildExamplesGeneratorCommandline(generatorData, rootDirectory, assemblyDirectory);
             var examplesCommandLine = $"dry-gen {string.Join(' ', commandline)}";
-            var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(docsDirectory, generatorData), generatorData.ReplaceToken.AsCommandLineReplaceToken(), verbose: false);
+            var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(rootDirectory, generatorData), generatorData.ReplaceToken.AsCommandLineReplaceToken(), verbose: false);
             var generatedRepresentation = existingRepresentation.Replace(generatorData.ReplaceToken.AsCommandLineReplaceToken(), examplesCommandLine);
-            File.WriteAllText(GetOutputFile(docsDirectory, generatorData), generatedRepresentation);
+            File.WriteAllText(GetOutputFile(rootDirectory, generatorData), generatedRepresentation);
         }
 
-        private static string GetOutputFile(string docsDirectory, ExamplesGeneratorData generatorData)
+        private static string GetOutputFile(string rootDirectory, ExamplesGeneratorData generatorData)
         {
-            return Path.Combine(docsDirectory, "examples", generatorData.OutputFile.ToLowerInvariant());
+            return Path.Combine(rootDirectory, "docs", "examples", generatorData.OutputFile.ToLowerInvariant());
         }
 
-        private static void GenerateVerbsMarkdown(string docsDirectory)
+        private static void GenerateVerbsMarkdown(string rootDirectory)
         {
             var verbs = typeof(Generator).Assembly.GetTypes().Where(x => x.HasVerbAttribute()).Select(x => x.GetVerb());
             foreach (var verb in verbs.OrderBy(x => x))
             {
-                var verbMarkdownPath = Path.Combine(docsDirectory, "verbs", $"{verb}.md");
+                var verbMarkdownPath = Path.Combine(rootDirectory, "docs", "verbs", $"{verb}.md");
                 Console.WriteLine($"Generating verb markdown for '{verb}' to \"{verbMarkdownPath}\"");
                 using var verbMarkdownWriter = new StreamWriter(verbMarkdownPath);
                 VerbMarkdowGenerator.Generate(verb, verbMarkdownWriter);
             }
         }
 
-        private static void GenerateVerbsMenu(string docsDirectory)
+        private static void GenerateVerbsMenu(string rootDirectory)
         {
-            var verbMenuPath = Path.Combine(docsDirectory, "_data", "verbs_menu.yml");
+            var verbMenuPath = Path.Combine(rootDirectory, "docs", "_data", "verbs_menu.yml");
             Console.WriteLine($"Generating verbs menu to \"{verbMenuPath}\"");
             using var verbMenuWriter = new StreamWriter(verbMenuPath);
             VerbMenuGenerator.Generate(verbMenuWriter);
         }
 
-        private static void GenerateExamplesMenu(string docsDirectory)
+        private static void GenerateExamplesMenu(string rootDirectory)
         {
-            var examplesTemplateDirectory = Path.Combine(docsDirectory, "_templates", "examples");
-            var examplesMenuPath = Path.Combine(docsDirectory, "_data", "examples_menu.yml");
+            var examplesTemplateDirectory = Path.Combine(rootDirectory, "docs", "_templates", "examples");
+            var examplesMenuPath = Path.Combine(rootDirectory, "docs", "_data", "examples_menu.yml");
             Console.WriteLine($"Generating examples menu to \"{examplesMenuPath}\"");
             using var examplesMenuWriter = new StreamWriter(examplesMenuPath);
             ExamplesMenuGenerator.Generate(examplesMenuWriter, examplesTemplateDirectory);
         }
 
-        private static void CopyExamplesTemplates(string docsDirectory)
+        private static void CopyExamplesTemplates(string rootDirectory)
         {
-            var examplesTemplatesDirectory = Path.Combine(docsDirectory, "_templates", "examples");
-            var examplesDirectory = Path.Combine(docsDirectory, "examples");
+            var examplesTemplatesDirectory = Path.Combine(rootDirectory, "docs", "_templates", "examples");
+            var examplesDirectory = Path.Combine(rootDirectory, "docs", "examples");
             Console.WriteLine($"Copying examples template files from \"{examplesTemplatesDirectory}\" to \"{examplesDirectory}\"");
             foreach (var exampleTemplateFile in Directory.GetFiles(examplesTemplatesDirectory))
             {
@@ -120,18 +120,10 @@ namespace DryGen.Docs
             };
         }
 
-        private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string docsDirectory, string assemblyDirectory, string relativeRoot)
+        private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string rootDirectory, string assemblyDirectory)
         {
-            var inputFile = Path.Combine(assemblyDirectory, generatorData.InputFile);
-            if (!string.IsNullOrEmpty(relativeRoot))
-            {
-                inputFile = Path.GetRelativePath(relativeRoot, inputFile).Replace("\\", "/");
-            }
-            var outputFile = GetOutputFile(docsDirectory, generatorData);
-            if (!string.IsNullOrEmpty(relativeRoot))
-            {
-                outputFile = Path.GetRelativePath(relativeRoot, outputFile).Replace("\\", "/");
-            }
+            var inputFile = Path.GetRelativePath(rootDirectory, Path.Combine(assemblyDirectory, generatorData.InputFile)).Replace("\\", "/");
+            var outputFile = Path.GetRelativePath(rootDirectory, GetOutputFile(rootDirectory, generatorData)).Replace("\\", "/");
             var result = new List<string> {
                 generatorData.Verb,
                 $"--{Constants.InputFileOption}",
