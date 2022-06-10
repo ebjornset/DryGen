@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Version 0.7.0 is released
+title: Version X.Y.Z is released
 subtitle: XXX
 summary: |-
     XXX.
