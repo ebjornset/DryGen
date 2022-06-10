@@ -10,6 +10,7 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
         private readonly List<ErDiagramRelationship> relationships;
 
         public IReadOnlyList<ErDiagramRelationship> Relationships => relationships;
+        public IReadOnlyList<ErDiagramAttribute> Attributes => attributes;
 
         public ErDiagramEntity(NamedType other) : this(other.Name, other.Type)
         {
@@ -21,10 +22,10 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
             relationships = new List<ErDiagramRelationship>();
         }
 
-        public IReadOnlyList<ErDiagramAttribute> GetAttributes() => attributes.OrderBy(x => x.IsPrimaryKey ? 0 : 1).ThenBy(x => x.IsAlternateKey ? 0 : 1)
+        public IReadOnlyList<ErDiagramAttribute> GetAttributes() => Attributes.OrderBy(x => x.IsPrimaryKey ? 0 : 1).ThenBy(x => x.IsAlternateKey ? 0 : 1)
             .ThenBy(x => x.IsForeignKey ? 0 : 1).ThenBy(x => x.IsNullable ? 1 : 0).ThenBy(x => x.AttributeName).ToArray();
 
-        public IReadOnlyList<ErDiagramRelationship> GetRelationships() => relationships.OrderBy(x => x.PropertyName).ToArray();
+        public IReadOnlyList<ErDiagramRelationship> GetRelationships() => Relationships.OrderBy(x => x.PropertyName).ToArray();
 
         public void AddAttribute(ErDiagramAttribute attribute)
         {

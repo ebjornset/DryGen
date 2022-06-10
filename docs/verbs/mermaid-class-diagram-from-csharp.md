@@ -15,7 +15,7 @@ The verb 'mermaid-class-diagram-from-csharp' uses the following options.
 |Option|Alias|Type|Description|
 |---|---|---|---|
 |--attribute-level||all / public / internal / protected / none|What visibility must an attribute have to be included in the diagram?|
-|--direction||default / bt / tb / lr / rl|In which direction should the diagram be generated|
+|--direction||default / bt / tb / lr / rl|In what direction should the diagram be generated?|
 |--exclude-method-params||true/false|Should method params be excluded from the diagram? (Replaced by count)|
 |--exclude-propertynames||List of string|A list of regular expressions for property names to exclude from each type.|
 |--exclude-static-attributes||true/false|Should static attributes be excluded from the diagram?|

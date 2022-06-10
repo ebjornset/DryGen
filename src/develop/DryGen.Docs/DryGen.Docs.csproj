@@ -10,19 +10,4 @@
 		<ProjectReference Include="..\..\DryGen\DryGen.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="DryGen.Mermaid.ClassDiagram.From.CSharp.For.ClassDiagram.yaml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="DryGen.Mermaid.ClassDiagram.From.CSharp.For.CommonClasses.yaml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="DryGen.Mermaid.ClassDiagram.From.CSharp.For.EfCore.yaml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="DryGen.Mermaid.ClassDiagram.From.CSharp.For.ErDiagram.yaml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 </Project>
