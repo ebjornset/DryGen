@@ -65,7 +65,7 @@ namespace DryGen.Docs
 
         private static string GetOutputFile(string rootDirectory, ExamplesGeneratorData generatorData)
         {
-            return Path.Combine(rootDirectory.AsExamplesDirectory(), generatorData.OutputFile.ToLowerInvariant());
+            return Path.Combine(rootDirectory.AsExamplesDirectory(), generatorData.OutputFile.ToLowerInvariant()).AsLinuxPath();
         }
 
         private static void GenerateVerbsMarkdown(string rootDirectory)
@@ -73,7 +73,7 @@ namespace DryGen.Docs
             var verbs = typeof(Generator).Assembly.GetTypes().Where(x => x.HasVerbAttribute()).Select(x => x.GetVerb());
             foreach (var verb in verbs.OrderBy(x => x))
             {
-                var verbMarkdownPath = Path.Combine(rootDirectory.AsVerbsDirectory(), $"{verb}.md");
+                var verbMarkdownPath = Path.Combine(rootDirectory.AsVerbsDirectory(), $"{verb}.md").AsLinuxPath();
                 Console.WriteLine($"Generating verb markdown for '{verb}' to \"{verbMarkdownPath}\"");
                 using var verbMarkdownWriter = new StreamWriter(verbMarkdownPath);
                 VerbMarkdowGenerator.Generate(verb, verbMarkdownWriter);
@@ -82,7 +82,7 @@ namespace DryGen.Docs
 
         private static void GenerateVerbsMenu(string rootDirectory)
         {
-            var verbMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "verbs_menu.yml");
+            var verbMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "verbs_menu.yml").AsLinuxPath();
             Console.WriteLine($"Generating verbs menu to \"{verbMenuPath}\"");
             using var verbMenuWriter = new StreamWriter(verbMenuPath);
             VerbMenuGenerator.Generate(verbMenuWriter);
@@ -91,7 +91,7 @@ namespace DryGen.Docs
         private static void GenerateExamplesMenu(string rootDirectory)
         {
             var examplesTemplateDirectory = rootDirectory.AsExamplesTemplatesDirectory();
-            var examplesMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "examples_menu.yml");
+            var examplesMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "examples_menu.yml").AsLinuxPath();
             Console.WriteLine($"Generating examples menu to \"{examplesMenuPath}\"");
             using var examplesMenuWriter = new StreamWriter(examplesMenuPath);
             ExamplesMenuGenerator.Generate(examplesMenuWriter, examplesTemplateDirectory);
