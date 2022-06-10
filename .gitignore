@@ -399,3 +399,6 @@ FodyWeavers.xsd
 # For the Github action that generate the Jekyll site (peaceiris/actions-gh-pages)
 _site/
 vendor/
+
+# Nuke temporary files
+.nuke/temp
