@@ -16,7 +16,7 @@ namespace DryGen.Options
         public ClassDiagramMethodLevel? MethodLevel { get; set; }
 
         [YamlMember(Alias = "direction", ApplyNamingConventions = false)]
-        [Option("direction", HelpText = "In which direction should the diagram be generated")]
+        [Option("direction", HelpText = "In what direction should the diagram be generated?")]
         public ClassDiagramDirection? Direction { get; set; }
 
         [YamlMember(Alias = "exclude-static-attributes", ApplyNamingConventions = false)]

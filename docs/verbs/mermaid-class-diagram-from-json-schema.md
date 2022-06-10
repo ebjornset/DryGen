@@ -14,7 +14,7 @@ The verb 'mermaid-class-diagram-from-json-schema' uses the following options.
 
 |Option|Alias|Type|Description|
 |---|---|---|---|
-|--direction||default / bt / tb / lr / rl|In which direction should the diagram be generated|
+|--direction||default / bt / tb / lr / rl|In what direction should the diagram be generated?|
 |--input-file|-i|string|Full path to the input file to generate a new representation for.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|

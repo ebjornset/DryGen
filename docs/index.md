@@ -35,6 +35,6 @@ The verb defines your target and source representation. The supported verbs are 
 The options are spesific to each verb, and are used to fine tune the result representation. Most options uses the standard long notation of `--<option-name>`, e.g. `--input-file`. Some options also supports the shorthand notation of `-<letter>`, e.g. `-i` for input file, but we suggest you use the long format.  Execute `dry-gen <verb> --help` to get the list of options for a specific verb, e.g. `dry-gen mermaid-class-diagram-from-csharp --help`
 
 ##### Going further
-Head over to the [verbs page](/verbs) to see the list of verbs dry-gen supports. 
+Head over to the [verbs page](/verbs) to see the list of verbs dry-gen supports, or take a look on [our examples](/examples). 
 
 Have fun!
