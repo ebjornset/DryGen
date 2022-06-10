@@ -11,13 +11,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<!-- This code is only run from Nuke during build, so we don't care about its code coverage -->
-		<SonarQubeSetting Include="sonar.coverage.exclusions">
-			<Value>**</Value>
-		</SonarQubeSetting>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Update="DryGen.Mermaid.ClassDiagram.From.CSharp.For.ClassDiagram.yaml">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
