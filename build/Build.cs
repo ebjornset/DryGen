@@ -55,7 +55,6 @@ public partial class Build : NukeBuild
 
     internal static AbsolutePath SourceDirectory => RootDirectory / "src";
     internal static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-    internal static AbsolutePath DocsDirectory => RootDirectory / "docs";
     internal static AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
 
     internal Target Clean => _ => _
@@ -176,7 +175,7 @@ public partial class Build : NukeBuild
                 .SetProjectFile(Solution.GetProject("DryGen.Docs"))
                 .SetConfiguration(Configuration)
                 .SetFramework("net6.0")
-                .SetApplicationArguments($"--docs-directory {DocsDirectory}")
+                .SetApplicationArguments($"--root-directory {RootDirectory}")
                 .EnableNoBuild()
                 .SetNoLaunchProfile(true)
                 );
