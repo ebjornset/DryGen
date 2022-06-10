@@ -8,7 +8,6 @@ show_sidebar: false
 toc: true
 hero_height: is-fullwidth
 ---
-# Work in progress
 General description of the examples
 
 ### Title of example one
