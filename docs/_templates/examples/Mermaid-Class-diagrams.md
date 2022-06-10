@@ -19,5 +19,5 @@ Description of example one
 .!.!.replace-token-for-class-diagram-one.!.!.
 ```
 
-{% include fenced-mermaid-code-blocks-to-mermaid-div-script.html %}
+{% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}
 
