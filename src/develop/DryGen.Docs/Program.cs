@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace DryGen.Docs
 {
-    [ExcludeFromCodeCoverage] // We run this from nuke docs, so we are not to worried about the code coverage at the moment
+    [ExcludeFromCodeCoverage] // We run this from nuke docs, so we are not to worried about the code coverage at the moment...
     public static class Program
     {
         public static int Main(string[] args)
@@ -29,7 +29,7 @@ namespace DryGen.Docs
             GenerateVerbsMenu(rootDirectory);
             GenerateVerbsMarkdown(rootDirectory);
             GenerateExamplesMenu(rootDirectory);
-            CopyExamplesTemplates(rootDirectory);
+            GenerateExamplesFilesFromTemplates(rootDirectory);
             var result = 0;
             string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var generator = new Generator(Console.Out, Console.Error);
@@ -65,7 +65,7 @@ namespace DryGen.Docs
 
         private static string GetOutputFile(string rootDirectory, ExamplesGeneratorData generatorData)
         {
-            return Path.Combine(rootDirectory, "docs", "examples", generatorData.OutputFile.ToLowerInvariant());
+            return Path.Combine(rootDirectory.AsExamplesDirectory(), generatorData.OutputFile.ToLowerInvariant());
         }
 
         private static void GenerateVerbsMarkdown(string rootDirectory)
@@ -73,7 +73,7 @@ namespace DryGen.Docs
             var verbs = typeof(Generator).Assembly.GetTypes().Where(x => x.HasVerbAttribute()).Select(x => x.GetVerb());
             foreach (var verb in verbs.OrderBy(x => x))
             {
-                var verbMarkdownPath = Path.Combine(rootDirectory, "docs", "verbs", $"{verb}.md");
+                var verbMarkdownPath = Path.Combine(rootDirectory.AsVerbsDirectory(), $"{verb}.md");
                 Console.WriteLine($"Generating verb markdown for '{verb}' to \"{verbMarkdownPath}\"");
                 using var verbMarkdownWriter = new StreamWriter(verbMarkdownPath);
                 VerbMarkdowGenerator.Generate(verb, verbMarkdownWriter);
@@ -82,7 +82,7 @@ namespace DryGen.Docs
 
         private static void GenerateVerbsMenu(string rootDirectory)
         {
-            var verbMenuPath = Path.Combine(rootDirectory, "docs", "_data", "verbs_menu.yml");
+            var verbMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "verbs_menu.yml");
             Console.WriteLine($"Generating verbs menu to \"{verbMenuPath}\"");
             using var verbMenuWriter = new StreamWriter(verbMenuPath);
             VerbMenuGenerator.Generate(verbMenuWriter);
@@ -90,21 +90,21 @@ namespace DryGen.Docs
 
         private static void GenerateExamplesMenu(string rootDirectory)
         {
-            var examplesTemplateDirectory = Path.Combine(rootDirectory, "docs", "_templates", "examples");
-            var examplesMenuPath = Path.Combine(rootDirectory, "docs", "_data", "examples_menu.yml");
+            var examplesTemplateDirectory = rootDirectory.AsExamplesTemplatesDirectory();
+            var examplesMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "examples_menu.yml");
             Console.WriteLine($"Generating examples menu to \"{examplesMenuPath}\"");
             using var examplesMenuWriter = new StreamWriter(examplesMenuPath);
             ExamplesMenuGenerator.Generate(examplesMenuWriter, examplesTemplateDirectory);
         }
 
-        private static void CopyExamplesTemplates(string rootDirectory)
+        private static void GenerateExamplesFilesFromTemplates(string rootDirectory)
         {
-            var examplesTemplatesDirectory = Path.Combine(rootDirectory, "docs", "_templates", "examples");
-            var examplesDirectory = Path.Combine(rootDirectory, "docs", "examples");
-            Console.WriteLine($"Copying examples template files from \"{examplesTemplatesDirectory}\" to \"{examplesDirectory}\"");
-            foreach (var exampleTemplateFile in Directory.GetFiles(examplesTemplatesDirectory))
+            var examplesTemplatesDirectory = rootDirectory.AsExamplesTemplatesDirectory();
+            var examplesDirectory = rootDirectory.AsExamplesDirectory();
+            foreach (var exampleTemplateFile in Directory.GetFiles(examplesTemplatesDirectory).Select(x => Path.GetFileName(x)))
             {
-                File.Copy(exampleTemplateFile, Path.Combine(examplesDirectory, Path.GetFileName(exampleTemplateFile.ToLowerInvariant())), true);
+                Console.WriteLine($"Generating examples from template file \"{exampleTemplateFile}\" in directory \"{examplesTemplatesDirectory}\" to \"{examplesDirectory}\"");
+                ExamplesFileGenerator.Generate(rootDirectory, exampleTemplateFile);
             }
         }
 
@@ -134,6 +134,12 @@ namespace DryGen.Docs
                 generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken(),
             };
             return result.ToArray();
+        }
+
+        internal class Options
+        {
+            [Option("root-directory", Required = true, HelpText = "Sets the root directory, assuming this is the parent directory of the docs directory where stuff will be generated.")]
+            public string RootDirectory { get; set; }
         }
     }
 }

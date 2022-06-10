@@ -119,7 +119,7 @@ namespace DryGen
             }
             if (verbose)
             {
-                outWriter.WriteLine($"Replacing the 'magic token' '{replaceTokenInOutputFile}' with  {resultRepresentation} in file '{outputFile}'");
+                outWriter.WriteLine($"Replacing the 'magic token' '{replaceTokenInOutputFile}' with {resultRepresentation} in file '{outputFile}'");
             }
 #pragma warning disable CS8603 // Possible null reference return.
             // No, we can't get null reference return here, since we use ?? string.Empty.
