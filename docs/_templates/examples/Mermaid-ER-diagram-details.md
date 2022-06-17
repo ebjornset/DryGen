@@ -10,3 +10,14 @@ hero_height: is-fullwidth
 ---
 ### About these examples
 TODO...
+
+### Example one: No filtering
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`.!.!.replace-token-for-mermaid-er-diagram-details-example-no-filtering-commandline.!.!.`
+#### The resulting Mermaid diagram
+```mermaid
+.!.!.replace-token-for-mermaid-er-diagram-details-example-no-filtering.!.!.
+```
+
+{% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}

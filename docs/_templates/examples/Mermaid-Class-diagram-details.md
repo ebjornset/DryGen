@@ -10,3 +10,46 @@ hero_height: is-fullwidth
 ---
 ### About these examples
 TODO...
+
+### Example one: No filtering
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`.!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering-commandline.!.!.`
+#### The resulting Mermaid diagram
+```mermaid
+.!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering.!.!.
+```
+### Example : Exclude static methods
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods-commandline.!.!.`
+#### The resulting Mermaid diagram
+```mermaid
+.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods.!.!.
+```
+### Example : Exclude method params
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params-commandline.!.!.`
+#### The resulting Mermaid diagram
+```mermaid
+.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params.!.!.
+```
+### Example : Method level
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`.!.!.replace-token-for-mermaid-class-diagram-details-example-method-level-commandline.!.!.`
+#### The resulting Mermaid diagram
+```mermaid
+.!.!.replace-token-for-mermaid-class-diagram-details-example-method-level.!.!.
+```
+### Example : Name replacement
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`.!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace-commandline.!.!.`
+#### The resulting Mermaid diagram
+```mermaid
+.!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace.!.!.
+```
+
+{% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}
