@@ -9,7 +9,7 @@ toc: true
 hero_height: is-fullwidth
 ---
 ### About these examples
-These examples show how you can control what C# types that will be included in your Mermaid diagrams. Here we will only focus on the Class diagrams, but the filtering capabilities are the same for ER diagrams, so you can use the same filters for your ER diagrams.
+These examples show how you can control what C# types that will be included in your Mermaid diagrams. Here we will only focus on the Class diagrams, but the filtering capabilities are the same for ER diagrams, so you can use the same filters for those diagrams.
 
 In the following examples we exclude most of the diagram content details, to make it easier to follow the examples. [The Mermaid Class diagram details examples](../mermaid-class-diagram-details/) digs into more details on how to control the content details in your Mermaid Class diagrams and [the Mermaid ER diagram details examples](../mermaid-er-diagram-details/) does the same for Mermaid Er diagrams.
 
@@ -333,7 +333,7 @@ In this example we show all the dry-gen types where the type name matches the re
 #### The commandline
 `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-include-typenames.!.!. --include-typenames .*ClassDiagram.* --attribute-level none --method-level none --direction TB`
 #### The resulting Mermaid diagram
-{% include notification.html status="is-dark" message="This diagram contains more or less the same C# types as in the previous example. That is just a coincidence, and happens since all the types for generating Mermaid class diagrmas have the same naming convention **and** are grouped in the same name space."%}
+{% include notification.html status="is-dark" message="This diagram contains more or less the same C# types as in the previous example. That is just a coincidence, and happens since all the types for generating Mermaid class diagrams have the same naming convention **and** are grouped in the same name space."%}
 ```mermaid
 classDiagram
 	direction TB

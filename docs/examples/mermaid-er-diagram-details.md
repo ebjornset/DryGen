@@ -10,3 +10,36 @@ hero_height: is-fullwidth
 ---
 ### About these examples
 TODO...
+
+### Example one: No filtering
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-no-filtering.!.!.`
+#### The resulting Mermaid diagram
+```mermaid
+erDiagram
+	Customer {
+		int Id PK
+		string Name
+	}
+	Order {
+		int Id PK
+		int CustomerId FK
+	}
+	OrderLine {
+		int OrderId PK
+		int LineNumber PK
+		int ProductId FK
+		int Quantity
+	}
+	Product {
+		int Id PK
+		string Name
+	}
+	Customer ||..o{ Order : ""
+	Order ||--o{ OrderLine : ""
+	Product ||..o{ OrderLine : ""
+
+```
+
+{% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}

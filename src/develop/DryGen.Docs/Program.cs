@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -114,38 +115,80 @@ namespace DryGen.Docs
                 new ExamplesGeneratorData {
                     Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
                     InputFile = "DryGen.MermaidFromCSharp.dll",
-                    OutputFile = "Filtering-Mermaid-diagram-content.md",
+                    OutputFile = "filtering-mermaid-diagram-content.md",
                     ReplaceToken = "mermaid-diagram-filter-example-no-filtering",
                     AdditionalOptions = new[] {"--attribute-level", "none", "--method-level", "none", "--direction", "RL" },
                 },
                 new ExamplesGeneratorData {
                     Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
                     InputFile = "DryGen.MermaidFromCSharp.dll",
-                    OutputFile = "Filtering-Mermaid-diagram-content.md",
+                    OutputFile = "filtering-mermaid-diagram-content.md",
                     ReplaceToken = "mermaid-diagram-filter-example-tree-shaking-roots",
                     AdditionalOptions = new[] {"--tree-shaking-roots", "^ITypeFilter$", "--attribute-level", "none", "--method-level", "none", "--direction", "RL" },
                 },
                 new ExamplesGeneratorData {
                     Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
                     InputFile = "DryGen.MermaidFromCSharp.dll",
-                    OutputFile = "Filtering-Mermaid-diagram-content.md",
+                    OutputFile = "filtering-mermaid-diagram-content.md",
                     ReplaceToken = "mermaid-diagram-filter-example-include-namespaces",
                     AdditionalOptions = new[] { "--include-namespaces", "^DryGen.MermaidFromCSharp.ClassDiagram$", "--attribute-level", "none", "--method-level", "none", "--direction", "TB" },
                 },
                 new ExamplesGeneratorData {
                     Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
                     InputFile = "DryGen.MermaidFromCSharp.dll",
-                    OutputFile = "Filtering-Mermaid-diagram-content.md",
+                    OutputFile = "filtering-mermaid-diagram-content.md",
                     ReplaceToken = "mermaid-diagram-filter-example-include-typenames",
                     AdditionalOptions = new[] { "--include-typenames", ".*ClassDiagram.*", "--attribute-level", "none", "--method-level", "none", "--direction", "TB" },
                 },
                 new ExamplesGeneratorData {
                     Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
                     InputFile = "DryGen.MermaidFromCSharp.dll",
-                    OutputFile = "Filtering-Mermaid-diagram-content.md",
+                    OutputFile = "filtering-mermaid-diagram-content.md",
                     ReplaceToken = "mermaid-diagram-filter-example-exclude-typenames",
                     AdditionalOptions = new[] { "--exclude-typenames", ".*TypeFilter.*;.*ClassDiagram.*", "--attribute-level", "none", "--method-level", "none", "--direction", "RL" },
-                }
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
+                    InputFile = "DryGen.MermaidFromCSharp.dll",
+                    OutputFile = "mermaid-class-diagram-details.md",
+                    ReplaceToken = "mermaid-class-diagram-details-example-no-filtering",
+                    AdditionalOptions = new[] { "--include-typenames", "^ClassDiagramGenerator$"},
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
+                    InputFile = "DryGen.MermaidFromCSharp.dll",
+                    OutputFile = "mermaid-class-diagram-details.md",
+                    ReplaceToken = "mermaid-class-diagram-details-example-exclude-static-methods",
+                    AdditionalOptions = new[] { "--include-typenames", "^ClassDiagramGenerator$", "--exclude-static-methods", "true"},
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
+                    InputFile = "DryGen.MermaidFromCSharp.dll",
+                    OutputFile = "mermaid-class-diagram-details.md",
+                    ReplaceToken = "mermaid-class-diagram-details-example-exclude-method-params",
+                    AdditionalOptions = new[] { "--include-typenames", "^ClassDiagramGenerator$", "--exclude-method-params", "true"},
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
+                    InputFile = "DryGen.MermaidFromCSharp.dll",
+                    OutputFile = "mermaid-class-diagram-details.md",
+                    ReplaceToken = "mermaid-class-diagram-details-example-method-level",
+                    AdditionalOptions = new[] { "--include-typenames", "^ClassDiagramGenerator$", "--method-level", "public"},
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
+                    InputFile = "DryGen.MermaidFromCSharp.dll",
+                    OutputFile = "mermaid-class-diagram-details.md",
+                    ReplaceToken = "mermaid-class-diagram-details-example-name-replace",
+                    AdditionalOptions = new[] { "--name-replace-from", "ClassDiagram", "--name-replace-to", "", "--include-typenames", "^ClassDiagram.*", "--attribute-level", "none", "--method-level", "none", "--direction", "TB"},
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidErDiagramFromEfCore.Verb,
+                    InputFile = "DryGen.Docs.dll",
+                    OutputFile = "mermaid-er-diagram-details.md",
+                    ReplaceToken = "mermaid-er-diagram-details-example-no-filtering",
+                    //AdditionalOptions = new[] { "--include-typenames", "^ErDiagram.*", },
+                },
             };
         }
 

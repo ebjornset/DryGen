@@ -10,3 +10,171 @@ hero_height: is-fullwidth
 ---
 ### About these examples
 TODO...
+
+### Example one: No filtering
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering.!.!. --include-typenames ^ClassDiagramGenerator$`
+#### The resulting Mermaid diagram
+```mermaid
+classDiagram
+	class ClassDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classes, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassAssociationsCompositionsAndAggregations(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GetPropertyTypeRelationshipInfo(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ ValueTuple~bool,bool,bool,Type~
+		-IsCollectionOfKnownType(IDictionary~Type,ClassDiagramClass~ classLookup, Type type)$ bool
+		-GenerateClassInheritanceOrRealizationForInterfaces(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GenerateClassInheritanceForBaseType(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GetNonClosedGenericBaseType(Type baseType, IDictionary~Type,ClassDiagramClass~ classLookup)$ Type
+		-GenerateClassDependencies(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-AddDependency(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, Type parameterType)$
+		-GenerateClassAttributes(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassMethods(ClassDiagramClass classDiagramClass)
+		-IsMethodWithToLowVisibility(MethodInfo method) bool
+		-IsSyntheticCompilerGeneratedMethod(MethodInfo method)$ bool
+		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter) string
+		-AppendDirection(StringBuilder sb)
+		-AppendClasses(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)
+		-AppendEnumerationToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendAttributesToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)$
+		-AppendMethodsToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendParamsToClassMethod(StringBuilder sb, ClassDiagramMethod method)$
+		-AppedParamsSummaryToClassMethod(StringBuilder sb, ClassDiagramMethod method)$
+		-AppendRelationships(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)$
+		-IsNotGetterOrSetterOrLocalFunction(MethodInfo method)$ bool
+		-ClassDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
+		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, PropertyInfo property)$ bool
+		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ bool
+		-GetDataType(Type type, INameRewriter nameRewriter, string genericStartBracket, string genericEndBracket)$ string
+		-GetTypeName(string typeName)$ string
+		-GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket)$ string
+		-GetVisibility(MethodInfo methodInfo)$ string
+	}
+
+```
+### Example : Exclude static methods
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods.!.!. --include-typenames ^ClassDiagramGenerator$ --exclude-static-methods true`
+#### The resulting Mermaid diagram
+```mermaid
+classDiagram
+	class ClassDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classes, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassAttributes(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassMethods(ClassDiagramClass classDiagramClass)
+		-IsMethodWithToLowVisibility(MethodInfo method) bool
+		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter) string
+		-AppendDirection(StringBuilder sb)
+		-AppendClasses(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)
+		-AppendEnumerationToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendMethodsToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-ClassDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
+	}
+
+```
+### Example : Exclude method params
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params.!.!. --include-typenames ^ClassDiagramGenerator$ --exclude-method-params true`
+#### The resulting Mermaid diagram
+```mermaid
+classDiagram
+	class ClassDiagramGenerator {
+		+Generate(5 params) string
+		-GenerateClassDiagramStructure(2 params)
+		-GenerateClassAssociationsCompositionsAndAggregations(2 params)$
+		-GetPropertyTypeRelationshipInfo(2 params)$ ValueTuple~bool,bool,bool,Type~
+		-IsCollectionOfKnownType(2 params)$ bool
+		-GenerateClassInheritanceOrRealizationForInterfaces(2 params)$
+		-GenerateClassInheritanceForBaseType(2 params)$
+		-GetNonClosedGenericBaseType(2 params)$ Type
+		-GenerateClassDependencies(2 params)$
+		-AddDependency(3 params)$
+		-GenerateClassAttributes(3 params)
+		-GenerateClassMethods(1 param)
+		-IsMethodWithToLowVisibility(1 param) bool
+		-IsSyntheticCompilerGeneratedMethod(1 param)$ bool
+		-GenerateClassDiagramMermaid(2 params) string
+		-AppendDirection(1 param)
+		-AppendClasses(3 params)
+		-AppendEnumerationToClass(2 params)
+		-AppendAttributesToClass(2 params)$
+		-AppendMethodsToClass(2 params)
+		-AppendParamsToClassMethod(2 params)$
+		-AppedParamsSummaryToClassMethod(2 params)$
+		-AppendRelationships(3 params)$
+		-IsNotGetterOrSetterOrLocalFunction(1 param)$ bool
+		-ClassDiagramFilters(1 param) IReadOnlyList~ITypeFilter~
+		-IsAttributePropertyType(2 params)$ bool
+		-IsAttributePropertyType(2 params)$ bool
+		-GetDataType(4 params)$ string
+		-GetTypeName(1 param)$ string
+		-GetDataTypeForGenericType(3 params)$ string
+		-GetVisibility(1 param)$ string
+	}
+
+```
+### Example : Method level
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-method-level.!.!. --include-typenames ^ClassDiagramGenerator$ --method-level public`
+#### The resulting Mermaid diagram
+```mermaid
+classDiagram
+	class ClassDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+	}
+
+```
+### Example : Name replacement
+Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+#### The commandline
+`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace.!.!. --name-replace-from ClassDiagram --name-replace-to  --include-typenames ^ClassDiagram.* --attribute-level none --method-level none --direction TB`
+#### The resulting Mermaid diagram
+```mermaid
+classDiagram
+	direction TB
+	class Attribute {
+	}
+	class AttributeLevel {
+		<<enumeration>>
+	}
+	class Class {
+	}
+	class Direction {
+		<<enumeration>>
+	}
+	class Extensions {
+		<<abstract>>
+	}
+	class Generator {
+	}
+	class Method {
+	}
+	class MethodLevel {
+		<<enumeration>>
+	}
+	class MethodParameter {
+	}
+	class Relationship {
+	}
+	class RelationshipCardinality {
+		<<enumeration>>
+	}
+	class RelationshipType {
+		<<enumeration>>
+	}
+	Class *-- "*" Attribute
+	Class *-- "*" Method
+	Class "0..1" o-- "*" Relationship : to
+	Method *-- "*" MethodParameter : parameters
+	Relationship --> "0..1" RelationshipCardinality : from cardinality
+	Relationship --> "0..1" RelationshipType : relationsship type
+	Relationship --> "0..1" RelationshipCardinality : to cardinality
+
+```
+
+{% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}
