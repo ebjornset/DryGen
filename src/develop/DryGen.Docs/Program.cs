@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -43,6 +42,7 @@ namespace DryGen.Docs
                 }
                 ReplaceCommandlineInExample(rootDirectory, assemblyDirectory, generator, generatorData);
             }
+            ReplaceErDigramExampleCodeInExample(rootDirectory, generator);
             return result;
         }
 
@@ -212,6 +212,22 @@ namespace DryGen.Docs
             return result.ToArray();
         }
 
+        private static void ReplaceErDigramExampleCodeInExample(string rootDirectory, Generator generator)
+        {
+            var generatorData = new ExamplesGeneratorData
+            {
+                OutputFile = "mermaid-er-diagram-details.md",
+                ReplaceToken = "mermaid-er-diagram-details-example-code",
+            };
+            var exampleCodeFile = Path.Combine(rootDirectory, "src", "develop", "DryGen.Docs", "ErDiagramExample", "Example.cs");
+            var exampleCode = File.ReadAllText(exampleCodeFile);
+            var replaceToken = generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken();
+            var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(rootDirectory, generatorData), replaceToken, verbose: false);
+            var generatedRepresentation = existingRepresentation.Replace(replaceToken, exampleCode);
+            File.WriteAllText(GetOutputFile(rootDirectory, generatorData), generatedRepresentation);
+        }
+
+        [ExcludeFromCodeCoverage] // We run this from nuke docs, so we are not to worried about the code coverage at the moment...
         internal class Options
         {
             [Option("root-directory", Required = true, HelpText = "Sets the root directory, assuming this is the parent directory of the docs directory where stuff will be generated.")]
