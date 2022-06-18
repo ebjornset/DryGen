@@ -152,8 +152,22 @@ namespace DryGen
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
             {
                 var diagramGenerator = new ErDiagramGenerator(options);
+                if (!string.IsNullOrEmpty(options.OutputFile))
+                {
+                    WarnIfDeprecatedIsUsed(options.ExcludeAllAttributes.HasValue, Constants.MermaidErDiagramFromCsharp.ExcludeAllAttributesOption, Constants.MermaidErDiagramFromCsharp.AttributeTypeExclusionOption);
+                    WarnIfDeprecatedIsUsed(options.ExcludeForeignkeyAttributes.HasValue, Constants.MermaidErDiagramFromCsharp.ExcludeForeignkeyAttributesOption, Constants.MermaidErDiagramFromCsharp.AttributeTypeExclusionOption);
+                    WarnIfDeprecatedIsUsed(options.ExcludeAllRelationships.HasValue, Constants.MermaidErDiagramFromCsharp.ExcludeAllRelationshipsOption, Constants.MermaidErDiagramFromCsharp.RelationshipTypeExclusionOption);
+                }
                 return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
             });
+        }
+
+        private void WarnIfDeprecatedIsUsed(bool isDeprecatedOptionUsed, string deprecatedOption, string replacedByOption)
+        {
+            if (isDeprecatedOptionUsed)
+            {
+                outWriter.WriteLine($"Warning! The option '{deprecatedOption}' is deprecated. Use '{replacedByOption}' instead.");
+            }
         }
 
         private int GenerateMermaidErDiagramFromEfCore(MermaidErDiagramFromEfCoreOptions options, string[] args)

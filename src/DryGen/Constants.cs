@@ -2,6 +2,7 @@
 {
     public static class Constants
     {
+        public const string DeprecatedNotice = "Deprecated";
         public const string InputFileOption = "input-file";
         public const string OutputFileOption = "output-file";
         public const string OptionsFileOption = "options-file";
@@ -20,6 +21,13 @@
         public static class MermaidErDiagramFromCsharp
         {
             public const string Verb = "mermaid-er-diagram-from-csharp";
+            public const string ExcludeAllAttributesOption = "exclude-all-attributes";
+            public const string ExcludeForeignkeyAttributesOption = "exclude-foreignkey-attributes";
+            public const string AttributeTypeExclusionOption = "attribute-type-exclusion";
+            public const string ExcludeAllRelationshipsOption = "exclude-all-relationships";
+            public const string RelationshipTypeExclusionOption = "relationship-type-exclusion";
+            public const string ReplacedByAttributeTypeExclusionHelpText = DeprecatedNotice + ", use '" + AttributeTypeExclusionOption + " instead.";
+            public const string ReplacedByRelationshipTypeExclusionHelpText = DeprecatedNotice + ", use '" + RelationshipTypeExclusionOption + " instead.";
         }
 
         public static class MermaidErDiagramFromEfCore

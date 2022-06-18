@@ -80,6 +80,44 @@ Scenario: Should generate Er diagram with attributes excluded from argument
 		
 		"""
 
+Scenario: Should generate Er diagram with attributes excluded from type exclusion argument
+	When I call the program with this command line arguments
+		| Arg                            |
+		| mermaid-er-diagram-from-csharp |
+		| --attribute-type-exclusion     |
+		| all                            |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		erDiagram
+			Customer
+			Order
+			Customer ||..|| Order : ""
+		
+		"""
+
+Scenario: Should generate Er diagram with attributes excluded from type exclusion argument over deprecated
+	When I call the program with this command line arguments
+		| Arg                            |
+		| mermaid-er-diagram-from-csharp |
+		| --attribute-type-exclusion     |
+		| all                            |
+		| --<Deprecated option>          |
+		| <Deprecated option value>      |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		erDiagram
+			Customer
+			Order
+			Customer ||..|| Order : ""
+		
+		"""
+Examples:
+	| Deprecated option             | Deprecated option value |
+	| exclude-all-attributes        | false                   |
+	| exclude-foreignkey-attributes | false                   |
+
 Scenario: Should generate Er diagram with attribute key type excluded from argument
 	When I call the program with this command line arguments
 		| Arg                            |
@@ -215,6 +253,46 @@ Scenario: Should generate Er diagram with relationships excluded from argument
 		
 		"""
 
+Scenario: Should generate Er diagram with relationships excluded from type exclusion argument
+	Given the Er diagram relationship exclusion 'All'
+	When I call the program with this command line arguments
+		| Arg                            |
+		| mermaid-er-diagram-from-csharp |
+		| --relationship-type-exclusion  |
+		| all                            |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		erDiagram
+			Customer {
+				int PublicProp PK
+				int NullableProp "Null"
+			}
+			Order
+		
+		"""
+
+Scenario: Should generate Er diagram with relationships excluded from type exclusion argument over deprected
+	Given the Er diagram relationship exclusion 'All'
+	When I call the program with this command line arguments
+		| Arg                            |
+		| mermaid-er-diagram-from-csharp |
+		| --relationship-type-exclusion  |
+		| all                            |
+		| --exclude-all-relationships    |
+		| false                          |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		erDiagram
+			Customer {
+				int PublicProp PK
+				int NullableProp "Null"
+			}
+			Order
+		
+		"""
+
 Scenario: Should tree shake Er diagram from argument
 	Given this C# source code compiled to a file
 	# The commandline argument -i <this assembly filename> will be appended to the command line
@@ -254,3 +332,17 @@ Examples:
 	| Verb                           |
 	| mermaid-er-diagram-from-csharp |
 	| mermaid-er-diagram-from-efcore |
+
+Scenario: Show deprecation warning for deprecated options when output file is specified
+	When I call the program with this command line arguments
+		| Arg                            |
+		| mermaid-er-diagram-from-csharp |
+		| --<Deprecated option>          |
+		| <Deprecated option value>      |
+	Then I should get exit code '0'
+	And I should find the text "Warning! The option '<Deprecated option>' is deprecated. Use '<Replaced by option>' instead." in console out
+Examples:
+	| Deprecated option             | Replaced by option          | Deprecated option value |
+	| exclude-all-attributes        | attribute-type-exclusion    | true                    |
+	| exclude-foreignkey-attributes | attribute-type-exclusion    | false                   |
+	| exclude-all-relationships     | relationship-type-exclusion | true                    |

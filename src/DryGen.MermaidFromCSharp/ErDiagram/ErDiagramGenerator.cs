@@ -15,9 +15,9 @@ namespace DryGen.MermaidFromCSharp.ErDiagram
 
         public ErDiagramGenerator(IMermaidErDiagramFromCSharpOptions options) : this(
             options.StructureBuilder,
-            options.AttributeTypeExclusion,
+            options.AttributeTypeExclusion ?? ErDiagramAttributeTypeExclusion.None,
             options.AttributeDetailExclusions,
-            options.RelationshipTypeExclusion
+            options.RelationshipTypeExclusion ?? ErDiagramRelationshipTypeExclusion.None
             )
         { }
 
