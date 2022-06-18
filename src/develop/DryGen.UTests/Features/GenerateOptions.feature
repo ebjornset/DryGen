@@ -109,11 +109,10 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-csharp
 		#
 		# dry-gen options for verb 'mermaid-er-diagram-from-csharp'
 		#
-		#exclude-all-attributes: true|false
+		#attribute-type-exclusion: none | foreignkeys | all
 		#exclude-all-relationships: true|false
 		#exclude-attribute-comments: true|false
 		#exclude-attribute-keytypes: true|false
-		#exclude-foreignkey-attributes: true|false
 		#exclude-propertynames: # List of string
 		#- 
 		#exclude-typenames: # List of string
@@ -143,11 +142,10 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-efcore
 		#
 		# dry-gen options for verb 'mermaid-er-diagram-from-efcore'
 		#
-		#exclude-all-attributes: true|false
+		#attribute-type-exclusion: none | foreignkeys | all
 		#exclude-all-relationships: true|false
 		#exclude-attribute-comments: true|false
 		#exclude-attribute-keytypes: true|false
-		#exclude-foreignkey-attributes: true|false
 		#exclude-propertynames: # List of string
 		#- 
 		#exclude-typenames: # List of string

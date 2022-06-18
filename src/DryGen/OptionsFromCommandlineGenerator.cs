@@ -1,4 +1,5 @@
-﻿using DryGen.Options;
+﻿using CommandLine;
+using DryGen.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,16 @@ namespace DryGen
                     ? yamlMemberAttribute?.NamedArguments.Single(x => x.MemberName == nameof(YamlMemberAttribute.Alias)).TypedValue.ToString().Replace("\"", string.Empty)
                     : null;
                 if (string.IsNullOrEmpty(alias))
+                {
+                    continue;
+                }
+                var optionAttribute = propery.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(OptionAttribute));
+                if (optionAttribute == null)
+                {
+                    continue;
+                }
+                var optionMetadata = new OptionMetadata(optionAttribute);
+                if (optionMetadata.Description?.StartsWith(Constants.DeprecatedNotice) == true)
                 {
                     continue;
                 }

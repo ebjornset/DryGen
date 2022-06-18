@@ -35,16 +35,8 @@ namespace DryGen
                 {
                     continue;
                 }
-                var optionMetadata = new OptionMetadata();
-                optionMetadata.LongName = optionAttribute.ConstructorArguments.Single(x => x.ArgumentType == typeof(string)).Value?.ToString()?.Replace("\"", string.Empty) ?? string.Empty;
-                optionMetadata.LongName = $"--{optionMetadata.LongName}";
-                optionMetadata.ShortName = optionAttribute.ConstructorArguments.SingleOrDefault(x => x.ArgumentType == typeof(char)).Value?.ToString()?.Replace("\"", string.Empty) ?? string.Empty;
-                if (!string.IsNullOrWhiteSpace(optionMetadata.ShortName))
-                {
-                    optionMetadata.ShortName = $"-{optionMetadata.ShortName}";
-                }
-                optionMetadata.Description = optionAttribute.NamedArguments.Single(x => x.MemberName == nameof(OptionAttribute.HelpText)).TypedValue.ToString()?.Replace("\"", string.Empty) ?? string.Empty;
-                optionMetadata.Type = propery.PropertyType.GeneratePropertyTypeInfo(asYamlComment : false);
+                var optionMetadata = new OptionMetadata(optionAttribute);
+                optionMetadata.Type = propery.PropertyType.GeneratePropertyTypeInfo(asYamlComment: false);
                 optionList.Add(optionMetadata);
             }
             return optionList.OrderBy(x => x.LongName).ToArray();

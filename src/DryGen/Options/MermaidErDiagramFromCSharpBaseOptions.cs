@@ -6,8 +6,8 @@ namespace DryGen.Options
 {
     public abstract class MermaidErDiagramFromCSharpBaseOptions : MermaidFromCSharpBaseOptions, IMermaidErDiagramFromCSharpOptions
     {
-        [YamlMember(Alias = "exclude-all-attributes", ApplyNamingConventions = false)]
-        [Option("exclude-all-attributes", HelpText = "Should all attributes be excluded from the diagram?")]
+        [YamlMember(Alias = Constants.MermaidErDiagramFromCsharp.ExcludeAllAttributesOption, ApplyNamingConventions = false)]
+        [Option(Constants.MermaidErDiagramFromCsharp.ExcludeAllAttributesOption, HelpText = Constants.MermaidErDiagramFromCsharp.ReplacedByAttributeTypeExclusionHelpText)]
         public bool? ExcludeAllAttributes { get; set; }
 
         [YamlMember(Alias = "exclude-attribute-keytypes", ApplyNamingConventions = false)]
@@ -18,18 +18,24 @@ namespace DryGen.Options
         [Option("exclude-attribute-comments", HelpText = "Should attributes comments be excluded from the diagram?")]
         public bool? ExcludeAttributeComments { get; set; }
 
-        [YamlMember(Alias = "exclude-foreignkey-attributes", ApplyNamingConventions = false)]
-        [Option("exclude-foreignkey-attributes", HelpText = "Should foreign key attributes be excluded from the diagram?")]
+        [YamlMember(Alias = Constants.MermaidErDiagramFromCsharp.ExcludeForeignkeyAttributesOption, ApplyNamingConventions = false)]
+        [Option(Constants.MermaidErDiagramFromCsharp.ExcludeForeignkeyAttributesOption, HelpText = Constants.MermaidErDiagramFromCsharp.ReplacedByAttributeTypeExclusionHelpText)]
         public bool? ExcludeForeignkeyAttributes { get; set; }
 
         [YamlMember(Alias = "exclude-all-relationships", ApplyNamingConventions = false)]
         [Option("exclude-all-relationships", HelpText = "Should all relationships be excluded from the diagram?")]
         public bool? ExcludeAllRelationships { get; set; }
 
-        public ErDiagramAttributeTypeExclusion AttributeTypeExclusion
+        [YamlMember(Alias = Constants.MermaidErDiagramFromCsharp.AttributeTypeExclusionOption, ApplyNamingConventions = false)]
+        [Option(Constants.MermaidErDiagramFromCsharp.AttributeTypeExclusionOption, HelpText = "What kind of attributes should be excluded from the diagram?")]
+        public ErDiagramAttributeTypeExclusion? AttributeTypeExclusion
         {
             get
             {
+                if (attributeTypeExclusion.HasValue)
+                {
+                    return attributeTypeExclusion;
+                }
                 if (ExcludeAllAttributes ?? default)
                 {
                     return ErDiagramAttributeTypeExclusion.All;
@@ -40,6 +46,7 @@ namespace DryGen.Options
                 }
                 return ErDiagramAttributeTypeExclusion.None;
             }
+            set { attributeTypeExclusion = value; }
         }
 
         public ErDiagramAttributeDetailExclusions AttributeDetailExclusions
@@ -59,7 +66,7 @@ namespace DryGen.Options
             }
         }
 
-        public ErDiagramRelationshipTypeExclusion RelationshipTypeExclusion =>
+        public ErDiagramRelationshipTypeExclusion? RelationshipTypeExclusion =>
             ExcludeAllRelationships ?? default ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None;
 
         public IErDiagramStructureBuilder StructureBuilder { get; private set; }
@@ -68,5 +75,7 @@ namespace DryGen.Options
         {
             StructureBuilder = structureBuilder;
         }
+
+        private ErDiagramAttributeTypeExclusion? attributeTypeExclusion;
     }
 }
