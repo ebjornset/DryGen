@@ -13,11 +13,12 @@ The verb 'mermaid-er-diagram-from-efcore' uses the following options.
 
 |Option|Alias|Type|Description|
 |---|---|---|---|
-|--exclude-all-attributes||true/false|Should all attributes be excluded from the diagram?|
-|--exclude-all-relationships||true/false|Should all relationships be excluded from the diagram?|
+|--attribute-type-exclusion||none / foreignkeys / all|What kind of attributes should be excluded from the diagram?|
+|--exclude-all-attributes||true/false|Deprecated, use 'attribute-type-exclusion instead.|
+|--exclude-all-relationships||true/false|Deprecated, use 'relationship-type-exclusion instead.|
 |--exclude-attribute-comments||true/false|Should attributes comments be excluded from the diagram?|
 |--exclude-attribute-keytypes||true/false|Should attributes key types be excluded from the diagram?|
-|--exclude-foreignkey-attributes||true/false|Should foreign key attributes be excluded from the diagram?|
+|--exclude-foreignkey-attributes||true/false|Deprecated, use 'attribute-type-exclusion instead.|
 |--exclude-propertynames||List of string|A list of regular expressions for property names to exclude from each type.|
 |--exclude-typenames||List of string|A list of regular expressions for type names to exclude.|
 |--include-namespaces||List of string|A list of regular expressions for namespaces to include.|
@@ -27,6 +28,7 @@ The verb 'mermaid-er-diagram-from-efcore' uses the following options.
 |--name-replace-to||string|The string to replace with in all class/entity names.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+|--relationship-type-exclusion||none / all|What kind of relationships should be excluded from the diagram?|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 |--tree-shaking-roots||List of string|A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
@@ -39,11 +41,9 @@ Here is a template for an options file for 'mermaid-er-diagram-from-efcore'.
 #
 # dry-gen options for verb 'mermaid-er-diagram-from-efcore'
 #
-#exclude-all-attributes: true|false
-#exclude-all-relationships: true|false
+#attribute-type-exclusion: none | foreignkeys | all
 #exclude-attribute-comments: true|false
 #exclude-attribute-keytypes: true|false
-#exclude-foreignkey-attributes: true|false
 #exclude-propertynames: # List of string
 #- 
 #exclude-typenames: # List of string
@@ -56,6 +56,7 @@ Here is a template for an options file for 'mermaid-er-diagram-from-efcore'.
 #name-replace-from: string
 #name-replace-to: string
 #output-file: string
+#relationship-type-exclusion: none | all
 #replace-token-in-output-file: string
 #tree-shaking-roots: # List of string
 #- 
