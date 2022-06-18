@@ -24,7 +24,10 @@
             public const string ExcludeAllAttributesOption = "exclude-all-attributes";
             public const string ExcludeForeignkeyAttributesOption = "exclude-foreignkey-attributes";
             public const string AttributeTypeExclusionOption = "attribute-type-exclusion";
+            public const string ExcludeAllRelationshipsOption = "exclude-all-relationships";
+            public const string RelationshipTypeExclusionOption = "relationship-type-exclusion";
             public const string ReplacedByAttributeTypeExclusionHelpText = DeprecatedNotice + ", use '" + AttributeTypeExclusionOption + " instead.";
+            public const string ReplacedByRelationshipTypeExclusionHelpText = DeprecatedNotice + ", use '" + RelationshipTypeExclusionOption + " instead.";
         }
 
         public static class MermaidErDiagramFromEfCore

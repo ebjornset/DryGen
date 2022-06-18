@@ -156,6 +156,7 @@ namespace DryGen
                 {
                     WarnIfDeprecatedIsUsed(options.ExcludeAllAttributes.HasValue, Constants.MermaidErDiagramFromCsharp.ExcludeAllAttributesOption, Constants.MermaidErDiagramFromCsharp.AttributeTypeExclusionOption);
                     WarnIfDeprecatedIsUsed(options.ExcludeForeignkeyAttributes.HasValue, Constants.MermaidErDiagramFromCsharp.ExcludeForeignkeyAttributesOption, Constants.MermaidErDiagramFromCsharp.AttributeTypeExclusionOption);
+                    WarnIfDeprecatedIsUsed(options.ExcludeAllRelationships.HasValue, Constants.MermaidErDiagramFromCsharp.ExcludeAllRelationshipsOption, Constants.MermaidErDiagramFromCsharp.RelationshipTypeExclusionOption);
                 }
                 return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
             });

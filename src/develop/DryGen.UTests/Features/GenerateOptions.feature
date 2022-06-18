@@ -110,7 +110,6 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-csharp
 		# dry-gen options for verb 'mermaid-er-diagram-from-csharp'
 		#
 		#attribute-type-exclusion: none | foreignkeys | all
-		#exclude-all-relationships: true|false
 		#exclude-attribute-comments: true|false
 		#exclude-attribute-keytypes: true|false
 		#exclude-propertynames: # List of string
@@ -125,6 +124,7 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-csharp
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#relationship-type-exclusion: none | all
 		#replace-token-in-output-file: string
 		#tree-shaking-roots: # List of string
 		#- 
@@ -143,7 +143,6 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-efcore
 		# dry-gen options for verb 'mermaid-er-diagram-from-efcore'
 		#
 		#attribute-type-exclusion: none | foreignkeys | all
-		#exclude-all-relationships: true|false
 		#exclude-attribute-comments: true|false
 		#exclude-attribute-keytypes: true|false
 		#exclude-propertynames: # List of string
@@ -158,6 +157,7 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-efcore
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#relationship-type-exclusion: none | all
 		#replace-token-in-output-file: string
 		#tree-shaking-roots: # List of string
 		#- 

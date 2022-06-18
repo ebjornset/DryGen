@@ -22,8 +22,8 @@ namespace DryGen.Options
         [Option(Constants.MermaidErDiagramFromCsharp.ExcludeForeignkeyAttributesOption, HelpText = Constants.MermaidErDiagramFromCsharp.ReplacedByAttributeTypeExclusionHelpText)]
         public bool? ExcludeForeignkeyAttributes { get; set; }
 
-        [YamlMember(Alias = "exclude-all-relationships", ApplyNamingConventions = false)]
-        [Option("exclude-all-relationships", HelpText = "Should all relationships be excluded from the diagram?")]
+        [YamlMember(Alias = Constants.MermaidErDiagramFromCsharp.ExcludeAllRelationshipsOption, ApplyNamingConventions = false)]
+        [Option(Constants.MermaidErDiagramFromCsharp.ExcludeAllRelationshipsOption, HelpText = Constants.MermaidErDiagramFromCsharp.ReplacedByRelationshipTypeExclusionHelpText)]
         public bool? ExcludeAllRelationships { get; set; }
 
         [YamlMember(Alias = Constants.MermaidErDiagramFromCsharp.AttributeTypeExclusionOption, ApplyNamingConventions = false)]
@@ -49,6 +49,21 @@ namespace DryGen.Options
             set { attributeTypeExclusion = value; }
         }
 
+        [YamlMember(Alias = Constants.MermaidErDiagramFromCsharp.RelationshipTypeExclusionOption, ApplyNamingConventions = false)]
+        [Option(Constants.MermaidErDiagramFromCsharp.RelationshipTypeExclusionOption, HelpText = "What kind of relationships should be excluded from the diagram?")]
+        public ErDiagramRelationshipTypeExclusion? RelationshipTypeExclusion
+        {
+            get
+            {
+                if (relationshipTypeExclusion.HasValue)
+                {
+                    return relationshipTypeExclusion;
+                }
+                return ExcludeAllRelationships ?? default ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None;
+            }
+            set { relationshipTypeExclusion = value; }
+        }
+
         public ErDiagramAttributeDetailExclusions AttributeDetailExclusions
         {
             get
@@ -66,9 +81,6 @@ namespace DryGen.Options
             }
         }
 
-        public ErDiagramRelationshipTypeExclusion? RelationshipTypeExclusion =>
-            ExcludeAllRelationships ?? default ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None;
-
         public IErDiagramStructureBuilder StructureBuilder { get; private set; }
 
         protected MermaidErDiagramFromCSharpBaseOptions(IErDiagramStructureBuilder structureBuilder)
@@ -77,5 +89,6 @@ namespace DryGen.Options
         }
 
         private ErDiagramAttributeTypeExclusion? attributeTypeExclusion;
+        private ErDiagramRelationshipTypeExclusion? relationshipTypeExclusion;
     }
 }
