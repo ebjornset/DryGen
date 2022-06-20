@@ -60,6 +60,10 @@
                     
                 
                     
+                    <a href="/examples/" class="navbar-item ">Examples</a>
+                    
+                
+                    
                     <a href="/blog/" class="navbar-item ">Releases</a>
                     
                 
@@ -75,7 +79,7 @@
 </nav>
 
     
-        <section class="hero  is-medium  is-bold is-primary" >
+        <section class="hero  is-fullwidth  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
             <h1 class="title is-2">mermaid-er-diagram-from-csharp</h1>
@@ -163,16 +167,22 @@
   </thead>
   <tbody>
     <tr>
+      <td>–attribute-type-exclusion</td>
+      <td> </td>
+      <td>none / foreignkeys / all</td>
+      <td>What kind of attributes should be excluded from the diagram?</td>
+    </tr>
+    <tr>
       <td>–exclude-all-attributes</td>
       <td> </td>
       <td>true/false</td>
-      <td>Should all attributes be excluded from the diagram?</td>
+      <td>Deprecated, use ‘attribute-type-exclusion instead.</td>
     </tr>
     <tr>
       <td>–exclude-all-relationships</td>
       <td> </td>
       <td>true/false</td>
-      <td>Should all relationships be excluded from the diagram?</td>
+      <td>Deprecated, use ‘relationship-type-exclusion instead.</td>
     </tr>
     <tr>
       <td>–exclude-attribute-comments</td>
@@ -190,7 +200,7 @@
       <td>–exclude-foreignkey-attributes</td>
       <td> </td>
       <td>true/false</td>
-      <td>Should foreign key attributes be excluded from the diagram?</td>
+      <td>Deprecated, use ‘attribute-type-exclusion instead.</td>
     </tr>
     <tr>
       <td>–exclude-propertynames</td>
@@ -247,6 +257,12 @@
       <td>Write the generated representation to this file.</td>
     </tr>
     <tr>
+      <td>–relationship-type-exclusion</td>
+      <td> </td>
+      <td>none / all</td>
+      <td>What kind of relationships should be excluded from the diagram?</td>
+    </tr>
+    <tr>
       <td>–replace-token-in-output-file</td>
       <td> </td>
       <td>string</td>
@@ -262,7 +278,7 @@
 </table>
 
 <div x-data="{visible: true}">
-    <div class="notification is-warning" x-show.transition.duration.300ms="visible">
+    <div class="notification is-dark" x-show.transition.duration.300ms="visible">
         
         <article class="media">
             
@@ -271,7 +287,9 @@
                 </div>
             
             <div class="media-content">
-                <div class="content"><p>You can always get information about this verb’s options by running the command <code class="language-plaintext highlighter-rouge">dry-gen mermaid-er-diagram-from-csharp --help</code>.</p>
+                <div class="content"><p>You can always get information about this verb’s options by running the command</p>
+
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-er-diagram-from-csharp --help</code>.</p>
 </div>
             </div>
         </article>
@@ -282,11 +300,9 @@
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#
 # dry-gen options for verb 'mermaid-er-diagram-from-csharp'
 #
-#exclude-all-attributes: true|false
-#exclude-all-relationships: true|false
+#attribute-type-exclusion: none | foreignkeys | all
 #exclude-attribute-comments: true|false
 #exclude-attribute-keytypes: true|false
-#exclude-foreignkey-attributes: true|false
 #exclude-propertynames: # List of string
 #- 
 #exclude-typenames: # List of string
@@ -299,12 +315,13 @@
 #name-replace-from: string
 #name-replace-to: string
 #output-file: string
+#relationship-type-exclusion: none | all
 #replace-token-in-output-file: string
 #tree-shaking-roots: # List of string
 #- 
 </code></pre></div></div>
 <div x-data="{visible: true}">
-    <div class="notification is-warning" x-show.transition.duration.300ms="visible">
+    <div class="notification is-dark" x-show.transition.duration.300ms="visible">
         
         <article class="media">
             
@@ -313,7 +330,9 @@
                 </div>
             
             <div class="media-content">
-                <div class="content"><p>You can generate the same template your self with the command <code class="language-plaintext highlighter-rouge">dry-gen options-from-commandline --verb mermaid-er-diagram-from-csharp</code>.</p>
+                <div class="content"><p>You can generate the same template your self with the command</p>
+
+<p><code class="language-plaintext highlighter-rouge">dry-gen options-from-commandline --verb mermaid-er-diagram-from-csharp</code></p>
 </div>
             </div>
         </article>

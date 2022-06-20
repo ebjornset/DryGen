@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-social@1/bin/bulma-social.min.css">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Examples of how to control the Mermaid Class diagram detail level | DryGen</title>
+<meta name="generator" content="Jekyll v4.2.2" />
+<meta property="og:title" content="Examples of how to control the Mermaid Class diagram detail level" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Examples of how to control the Mermaid Class diagram detail level" />
+<meta property="og:description" content="Examples of how to control the Mermaid Class diagram detail level" />
+<meta property="og:site_name" content="DryGen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Examples of how to control the Mermaid Class diagram detail level" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Examples of how to control the Mermaid Class diagram detail level","headline":"Examples of how to control the Mermaid Class diagram detail level","url":"/examples/mermaid-class-diagram-details/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                DryGen
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/verbs/" class="navbar-item ">Verbs</a>
+                    
+                
+                    
+                    <a href="/examples/" class="navbar-item ">Examples</a>
+                    
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Releases</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-fullwidth  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Examples of how to control the Mermaid Class diagram detail level</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    
+
+<aside class="menu">
+
+    <p class="menu-label">dry-gen examples</p>
+    <ul class="menu-list">
+        
+        <li>
+            <a href="/examples/filtering-mermaid-diagram-content" class="">Filtering Mermaid diagram content</a>
+            
+        </li>
+        
+        <li>
+            <a href="/examples/mermaid-class-diagram-details" class="">Mermaid Class diagram details</a>
+            
+        </li>
+        
+        <li>
+            <a href="/examples/mermaid-er-diagram-details" class="">Mermaid ER diagram details</a>
+            
+        </li>
+            
+    </ul>
+
+</aside>
+                </div>
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    
+    
+    
+
+<div class="contents">
+    <div class="menu">
+        <p class="menu-label">Contents</p>
+        <ul class="menu-list">
+  <li><a href="#example-one-no-filtering">Example one: No filtering</a></li>
+  <li><a href="#example-two-make-more-high-level-diagrams-with---method-level-and---attribute-level">Example two: Make more high level diagrams with <code class="language-plaintext highlighter-rouge">--method-level</code> and <code class="language-plaintext highlighter-rouge">--attribute-level</code></a></li>
+  <li><a href="#example-three-focus-on-the-domains-structure-with---exclude-static-methods-and---exclude-static-attributes">Example three: Focus on the domain’s structure with <code class="language-plaintext highlighter-rouge">--exclude-static-methods</code> and <code class="language-plaintext highlighter-rouge">--exclude-static-attributes</code></a></li>
+  <li><a href="#example-four-simplify-method-signatures-with---exclude-method-params">Example four: Simplify method signatures with <code class="language-plaintext highlighter-rouge">--exclude-method-params</code></a></li>
+  <li><a href="#example-five-hiding-naming-conventions-with---name-replace-from-and---name-replace-to">Example five: Hiding naming conventions with <code class="language-plaintext highlighter-rouge">--name-replace-from</code> and <code class="language-plaintext highlighter-rouge">--name-replace-to</code></a></li>
+</ul>
+    </div>
+</div>
+
+
+
+
+<div class="content">
+    <p>These examples shows how you can control the property and method information from your C# types that’s included in your Mermaid Class diagrams. Most of the examples uses one singe dry-gen C# type, the ClassDiagramGenerator, to make it easier to see the effect of the example’s option.</p>
+
+<div x-data="{visible: true}">
+    <div class="notification is-dark" x-show.transition.duration.300ms="visible">
+        
+        <article class="media">
+            
+                <div class="media-left">
+                    <span class="icon"><i class="fas fa-exclamation-circle fa-lg"></i></span>
+                </div>
+            
+            <div class="media-content">
+                <div class="content"><p>The option <code class="language-plaintext highlighter-rouge">--exclude-propertynames</code> works the same way for Mermaid class diagram as for Er diagrams. Look at the example in the <a href="../mermaid-er-diagram-details/">Mermaid ER diagram details examples</a> for details.</p>
+</div>
+            </div>
+        </article>
+    </div>
+</div>
+<h3 id="example-one-no-filtering">Example one: No filtering</h3>
+<p>Sometimes a C# type can contain quite a few methods and or properties, and thus can look quite complex in a Mermaid class diagram.</p>
+<h4 id="the-commandline">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering.!.!. --include-typenames ^ClassDiagramGenerator$</code></p>
+<h4 id="the-resulting-mermaid-diagram">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">classDiagram
+	class ClassDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classes, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassAssociationsCompositionsAndAggregations(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GetPropertyTypeRelationshipInfo(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ ValueTuple~bool,bool,bool,Type~
+		-IsCollectionOfKnownType(IDictionary~Type,ClassDiagramClass~ classLookup, Type type)$ bool
+		-GenerateClassInheritanceOrRealizationForInterfaces(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GenerateClassInheritanceForBaseType(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-GetNonClosedGenericBaseType(Type baseType, IDictionary~Type,ClassDiagramClass~ classLookup)$ Type
+		-GenerateClassDependencies(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
+		-AddDependency(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, Type parameterType)$
+		-GenerateClassAttributes(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassMethods(ClassDiagramClass classDiagramClass)
+		-IsMethodWithToLowVisibility(MethodInfo method) bool
+		-IsSyntheticCompilerGeneratedMethod(MethodInfo method)$ bool
+		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter) string
+		-AppendDirection(StringBuilder sb)
+		-AppendClasses(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)
+		-AppendEnumerationToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendAttributesToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)$
+		-AppendMethodsToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendParamsToClassMethod(StringBuilder sb, ClassDiagramMethod method)$
+		-AppedParamsSummaryToClassMethod(StringBuilder sb, ClassDiagramMethod method)$
+		-AppendRelationships(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)$
+		-IsNotGetterOrSetterOrLocalFunction(MethodInfo method)$ bool
+		-ClassDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
+		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, PropertyInfo property)$ bool
+		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ bool
+		-GetDataType(Type type, INameRewriter nameRewriter, string genericStartBracket, string genericEndBracket)$ string
+		-GetTypeName(string typeName)$ string
+		-GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket)$ string
+		-GetVisibility(MethodInfo methodInfo)$ string
+	}
+
+</code></pre>
+<h3 id="example-two-make-more-high-level-diagrams-with---method-level-and---attribute-level">Example two: Make more high level diagrams with <code class="language-plaintext highlighter-rouge">--method-level</code> and <code class="language-plaintext highlighter-rouge">--attribute-level</code></h3>
+<p>If you want a more high level diagram, you can suppress methods by their visibility with <code class="language-plaintext highlighter-rouge">--method-level</code>.</p>
+
+<div x-data="{visible: true}">
+    <div class="notification is-dark" x-show.transition.duration.300ms="visible">
+        
+        <article class="media">
+            
+                <div class="media-left">
+                    <span class="icon"><i class="fas fa-exclamation-circle fa-lg"></i></span>
+                </div>
+            
+            <div class="media-content">
+                <div class="content"><p>Use <code class="language-plaintext highlighter-rouge">--attribute-level</code> to control what C# properties to include in your diagram.</p>
+</div>
+            </div>
+        </article>
+    </div>
+</div>
+<p> </p>
+
+<p>In this example we only show the public methods.</p>
+
+<h4 id="the-commandline-1">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-method-level.!.!. --include-typenames ^ClassDiagramGenerator$ --method-level public</code></p>
+<h4 id="the-resulting-mermaid-diagram-1">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">classDiagram
+	class ClassDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+	}
+
+</code></pre>
+<h3 id="example-three-focus-on-the-domains-structure-with---exclude-static-methods-and---exclude-static-attributes">Example three: Focus on the domain’s structure with <code class="language-plaintext highlighter-rouge">--exclude-static-methods</code> and <code class="language-plaintext highlighter-rouge">--exclude-static-attributes</code></h3>
+<p>Sometimes your class diagram are all about the structure of a domain. Since static methods often tends to be “helper methods”, they might not give any extra information about the structure. In these situations it might be useful to supress them with <code class="language-plaintext highlighter-rouge">--exclude-static-methods</code>.</p>
+
+<div x-data="{visible: true}">
+    <div class="notification is-dark" x-show.transition.duration.300ms="visible">
+        
+        <article class="media">
+            
+                <div class="media-left">
+                    <span class="icon"><i class="fas fa-exclamation-circle fa-lg"></i></span>
+                </div>
+            
+            <div class="media-content">
+                <div class="content"><p>You can also exclude any static attibutes with <code class="language-plaintext highlighter-rouge">--exclude-static-attributes</code>, but these tends to be seldomly used.</p>
+</div>
+            </div>
+        </article>
+    </div>
+</div>
+<p> </p>
+<h4 id="the-commandline-2">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods.!.!. --include-typenames ^ClassDiagramGenerator$ --exclude-static-methods true</code></p>
+<h4 id="the-resulting-mermaid-diagram-2">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">classDiagram
+	class ClassDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classes, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassAttributes(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassMethods(ClassDiagramClass classDiagramClass)
+		-IsMethodWithToLowVisibility(MethodInfo method) bool
+		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter) string
+		-AppendDirection(StringBuilder sb)
+		-AppendClasses(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)
+		-AppendEnumerationToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-AppendMethodsToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
+		-ClassDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
+	}
+
+</code></pre>
+<h3 id="example-four-simplify-method-signatures-with---exclude-method-params">Example four: Simplify method signatures with <code class="language-plaintext highlighter-rouge">--exclude-method-params</code></h3>
+<p>Use <code class="language-plaintext highlighter-rouge">--exclude-method-params</code> if you want a simpler diagram without details about all the methods parameters.</p>
+
+<h4 id="the-commandline-3">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params.!.!. --include-typenames ^ClassDiagramGenerator$ --exclude-method-params true</code></p>
+<h4 id="the-resulting-mermaid-diagram-3">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">classDiagram
+	class ClassDiagramGenerator {
+		+Generate(5 params) string
+		-GenerateClassDiagramStructure(2 params)
+		-GenerateClassAssociationsCompositionsAndAggregations(2 params)$
+		-GetPropertyTypeRelationshipInfo(2 params)$ ValueTuple~bool,bool,bool,Type~
+		-IsCollectionOfKnownType(2 params)$ bool
+		-GenerateClassInheritanceOrRealizationForInterfaces(2 params)$
+		-GenerateClassInheritanceForBaseType(2 params)$
+		-GetNonClosedGenericBaseType(2 params)$ Type
+		-GenerateClassDependencies(2 params)$
+		-AddDependency(3 params)$
+		-GenerateClassAttributes(3 params)
+		-GenerateClassMethods(1 param)
+		-IsMethodWithToLowVisibility(1 param) bool
+		-IsSyntheticCompilerGeneratedMethod(1 param)$ bool
+		-GenerateClassDiagramMermaid(2 params) string
+		-AppendDirection(1 param)
+		-AppendClasses(3 params)
+		-AppendEnumerationToClass(2 params)
+		-AppendAttributesToClass(2 params)$
+		-AppendMethodsToClass(2 params)
+		-AppendParamsToClassMethod(2 params)$
+		-AppedParamsSummaryToClassMethod(2 params)$
+		-AppendRelationships(3 params)$
+		-IsNotGetterOrSetterOrLocalFunction(1 param)$ bool
+		-ClassDiagramFilters(1 param) IReadOnlyList~ITypeFilter~
+		-IsAttributePropertyType(2 params)$ bool
+		-IsAttributePropertyType(2 params)$ bool
+		-GetDataType(4 params)$ string
+		-GetTypeName(1 param)$ string
+		-GetDataTypeForGenericType(3 params)$ string
+		-GetVisibility(1 param)$ string
+	}
+
+</code></pre>
+<h3 id="example-five-hiding-naming-conventions-with---name-replace-from-and---name-replace-to">Example five: Hiding naming conventions with <code class="language-plaintext highlighter-rouge">--name-replace-from</code> and <code class="language-plaintext highlighter-rouge">--name-replace-to</code></h3>
+<p>Sometimes your C# code follow some naming convention where a lot of your types ends up with the same prefix or post fix, e.g. <code class="language-plaintext highlighter-rouge">.*Entity$</code> for all your types stored in the database by Entity Framework, or like in dry.gen where all types related to generation of Mermaid class diagrams has the convention <code class="language-plaintext highlighter-rouge">^ClassDiagram.*</code>. You might want to hide this convention from your resulting diagram, to focus on the pure domain concepts.</p>
+
+<p>In this example we hides the  <code class="language-plaintext highlighter-rouge">^ClassDiagram.*</code> convention for all the  <code class="language-plaintext highlighter-rouge">^ClassDiagram.*</code> C# types in dry.gen.</p>
+
+<div x-data="{visible: true}">
+    <div class="notification is-dark" x-show.transition.duration.300ms="visible">
+        
+        <article class="media">
+            
+                <div class="media-left">
+                    <span class="icon"><i class="fas fa-exclamation-circle fa-lg"></i></span>
+                </div>
+            
+            <div class="media-content">
+                <div class="content"><p>Here we only also exclude all attibutes and methods with <code class="language-plaintext highlighter-rouge">attribute-level none --method-level none</code>, to make the resulting diagram more focused on the class names</p>
+</div>
+            </div>
+        </article>
+    </div>
+</div>
+<p> </p>
+<h4 id="the-commandline-4">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace.!.!. --name-replace-from ClassDiagram --name-replace-to  --include-typenames ^ClassDiagram.* --attribute-level none --method-level none --direction TB</code></p>
+<h4 id="the-resulting-mermaid-diagram-4">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">classDiagram
+	direction TB
+	class Attribute {
+	}
+	class AttributeLevel {
+		&lt;&lt;enumeration&gt;&gt;
+	}
+	class Class {
+	}
+	class Direction {
+		&lt;&lt;enumeration&gt;&gt;
+	}
+	class Extensions {
+		&lt;&lt;abstract&gt;&gt;
+	}
+	class Generator {
+	}
+	class Method {
+	}
+	class MethodLevel {
+		&lt;&lt;enumeration&gt;&gt;
+	}
+	class MethodParameter {
+	}
+	class Relationship {
+	}
+	class RelationshipCardinality {
+		&lt;&lt;enumeration&gt;&gt;
+	}
+	class RelationshipType {
+		&lt;&lt;enumeration&gt;&gt;
+	}
+	Class *-- "*" Attribute
+	Class *-- "*" Method
+	Class "0..1" o-- "*" Relationship : to
+	Method *-- "*" MethodParameter : parameters
+	Relationship --&gt; "0..1" RelationshipCardinality : from cardinality
+	Relationship --&gt; "0..1" RelationshipType : relationsship type
+	Relationship --&gt; "0..1" RelationshipCardinality : to cardinality
+
+</code></pre>
+<script src="https://unpkg.com/mermaid@8.14.0/dist/mermaid.min.js"></script>
+
+<script>
+// select <pre class="mermaid"> _and_ <pre><code class="language-mermaid">
+document.querySelectorAll("pre.mermaid, pre>code.language-mermaid").forEach($el => {
+  const $mermaidCode = $el.innerHTML;
+  // if the second selector got a hit, reference the parent <pre>
+  if ($el.tagName === "CODE")
+    $el = $el.parentElement
+  // put the Mermaid contents in the expected <div class="mermaid">
+  // plus keep the original contents in a nice <details>
+  $el.outerHTML = `<div class="mermaid">${$mermaidCode}</div>
+    <details>
+      <summary>The Mermaid code behind the diagram</summary>
+      <pre>${$mermaidCode}</pre>
+    </details>`
+})
+</script>
+
+
+</div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+        
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+        </div>
+    </div>
+</footer>
+
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts --></body>
+</html>
