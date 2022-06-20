@@ -170,44 +170,51 @@ namespace DryGen.Docs
 
         private static ExamplesGeneratorData GetExamplesGeneratorDataForFilteringMermaidDiagramContent(string replaceTopic, string[] additionalOptions)
         {
-            var result = new ExamplesGeneratorData
-            {
-                Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
-                InputFile = "DryGen.MermaidFromCSharp.dll",
-                OutputFile = "filtering-mermaid-diagram-content.md",
-                ReplaceToken = $"mermaid-diagram-filter-example-{replaceTopic}",
-            };
-            if (additionalOptions != null)
-            {
-                result.AdditionalOptions = additionalOptions;
-            }
-            return result;
+            return GetExamplesGeneratorData(
+                replaceTopic,
+                additionalOptions,
+                verb: Constants.MermaidClassDiagramFromCsharp.Verb,
+                inputFile: "DryGen.MermaidFromCSharp.dll",
+                outputFile: "filtering-mermaid-diagram-content.md",
+                replaceTokenPrefix: "mermaid-diagram-filter-example-");
         }
 
         private static ExamplesGeneratorData GetExamplesGeneratorDataForMermaidClassDiagramDetails(string replaceTopic, string[] additionalOptions)
         {
-            var result = new ExamplesGeneratorData
-            {
-                Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
-                InputFile = "DryGen.MermaidFromCSharp.dll",
-                OutputFile = "mermaid-class-diagram-details.md",
-                ReplaceToken = $"mermaid-class-diagram-details-example-{replaceTopic}"
-            };
-            if (additionalOptions != null)
-            {
-                result.AdditionalOptions = additionalOptions;
-            }
-            return result;
+            return GetExamplesGeneratorData(
+                replaceTopic,
+                additionalOptions,
+                verb: Constants.MermaidClassDiagramFromCsharp.Verb,
+                inputFile: "DryGen.MermaidFromCSharp.dll",
+                outputFile: "mermaid-class-diagram-details.md",
+                replaceTokenPrefix: "mermaid-class-diagram-details-example-");
         }
 
         private static ExamplesGeneratorData GetExamplesGeneratorDataForMermaidErDiagramDetails(string replaceTopic, string[] additionalOptions)
         {
+            return GetExamplesGeneratorData(
+                replaceTopic,
+                additionalOptions,
+                verb: Constants.MermaidErDiagramFromEfCore.Verb,
+                inputFile: "DryGen.Docs.dll",
+                outputFile: "mermaid-er-diagram-details.md",
+                replaceTokenPrefix: "mermaid-er-diagram-details-example-");
+        }
+
+        private static ExamplesGeneratorData GetExamplesGeneratorData(
+            string replaceTopic,
+            string[] additionalOptions,
+            string verb,
+            string inputFile,
+            string outputFile,
+            string replaceTokenPrefix)
+        {
             var result = new ExamplesGeneratorData
             {
-                Verb = Constants.MermaidErDiagramFromEfCore.Verb,
-                InputFile = "DryGen.Docs.dll",
-                OutputFile = "mermaid-er-diagram-details.md",
-                ReplaceToken = $"mermaid-er-diagram-details-example-{replaceTopic}",
+                Verb = verb,
+                InputFile = inputFile,
+                OutputFile = outputFile,
+                ReplaceToken = $"{replaceTokenPrefix}{replaceTopic}",
             };
             if (additionalOptions != null)
             {
