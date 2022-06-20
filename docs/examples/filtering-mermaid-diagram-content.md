@@ -9,14 +9,17 @@ toc: true
 menubar: examples_menu
 hero_height: is-fullwidth
 ---
-### About these examples
-These examples show how you can control what C# types that will be included in your Mermaid diagrams. Here we will only focus on the Class diagrams, but the filtering capabilities are the same for ER diagrams, so you can use the same filters for those diagrams.
+These examples shows how you can control what C# types that will be included in your Mermaid diagrams. 
+Here we will only focus on the Class diagrams, but the filtering capabilities are the same for ER diagrams, so you can use the same filters for those diagrams.
 
-In the following examples we exclude most of the diagram content details, to make it easier to follow the examples. [The Mermaid Class diagram details examples](../mermaid-class-diagram-details/) digs into more details on how to control the content details in your Mermaid Class diagrams and [the Mermaid ER diagram details examples](../mermaid-er-diagram-details/) does the same for Mermaid Er diagrams.
+In the following examples we exclude most of the diagram content details, to make it easier to follow the examples. 
+[The Mermaid Class diagram details examples](../mermaid-class-diagram-details/) digs into more details on how to control the content details in your Mermaid Class diagrams and 
+[the Mermaid ER diagram details examples](../mermaid-er-diagram-details/) does the same for Mermaid Er diagrams.
 
-All these examples uses the assembly for generating Mermaid diagram from C# code using reflection `DryGen.MermaidFromCSharp.dll` as `--input-file`. They also uses the same `--output-file` options, to give you an idea of how to control the generated representation by using the highlighted options. 
+All these examples uses `DryGen.MermaidFromCSharp.dll` (the assembly for generating Mermaid diagram from C# code using reflection ) as `--input-file`. 
+They also uses the same `--output-file` options, to give you an idea of how to control the generated representation by using the highlighted options. 
 
-The `--direction` option in the examples are choosen by trial and error.
+The `--direction` option used in the examples are choosen by trial and error.
 ### Example one: No filtering
 Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
 #### The commandline
@@ -212,13 +215,14 @@ classDiagram
 
 ```
 ### Example two: Filtering with `--tree-shaking-roots`
-Use `--tree-shakong-roots` if you want a diagram with all C# types that has a relationship with one or more type(s). 
+Use `--tree-shakong-roots` if you want a diagram with just the C# types with a relationship with one or more type(s). 
 
 In this example we show all the dry-gen types related to the interface `ITypeFilter`. 
 #### The commandline
 `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-tree-shaking-roots.!.!. --tree-shaking-roots ^ITypeFilter$ --attribute-level none --method-level none --direction RL`
 #### The resulting Mermaid diagram
-{% include notification.html status="is-dark" message="This diagram contains more or less all the C# types implementing the filtering capabilities we look at in these examples."%}
+{% include notification.html status="is-dark" 
+message="This diagram contains more or less all the C# types implementing the filtering capabilities we look at in these examples." %}
 ```mermaid
 classDiagram
 	direction RL
@@ -277,7 +281,8 @@ In this example we show all the dry-gen types in the namespace `DryGen.MermaidFr
 #### The commandline
 `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-include-namespaces.!.!. --include-namespaces ^DryGen.MermaidFromCSharp.ClassDiagram$ --attribute-level none --method-level none --direction TB`
 #### The resulting Mermaid diagram
-{% include notification.html status="is-dark" message="This diagram contains more or less all the C# types implementing the capabilities to generate Mermaid Class diagrams."%}
+{% include notification.html status="is-dark" 
+message="This diagram contains more or less all the C# types implementing the capabilities to generate Mermaid Class diagrams." %}
 ```mermaid
 classDiagram
 	direction TB
@@ -334,7 +339,8 @@ In this example we show all the dry-gen types where the type name matches the re
 #### The commandline
 `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-include-typenames.!.!. --include-typenames .*ClassDiagram.* --attribute-level none --method-level none --direction TB`
 #### The resulting Mermaid diagram
-{% include notification.html status="is-dark" message="This diagram contains more or less the same C# types as in the previous example. That is just a coincidence, and happens since all the types for generating Mermaid class diagrams have the same naming convention **and** are grouped in the same name space."%}
+{% include notification.html status="is-dark" 
+message="This diagram contains more or less the same C# types as in the previous example. That is just a coincidence, and happens since all the types for generating Mermaid class diagrams have the same naming convention **and** are grouped in the same name space." %}
 ```mermaid
 classDiagram
 	direction TB
@@ -395,7 +401,8 @@ In this example we show all the dry-gen types where the type name does not match
 #### The commandline
 `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-exclude-typenames.!.!. --exclude-typenames .*TypeFilter.*;.*ClassDiagram.* --attribute-level none --method-level none --direction RL`
 #### The resulting Mermaid diagram
-{% include notification.html status="is-dark" message="This diagram contains most of the dry-gen C# types except those in the previous examples two and four."%}
+{% include notification.html status="is-dark" 
+message="This diagram contains most of the dry-gen C# types except those in the previous examples two and four." %}
 ```mermaid
 classDiagram
 	direction RL
@@ -494,4 +501,3 @@ classDiagram
 
 ```
 {% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}
-

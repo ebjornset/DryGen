@@ -17,3 +17,6 @@ message="You can always get the information about the options for a verb by runn
 message="You can also generate an options file template for a verb by running the command 
 
 `dry-gen options-from-commandline --verb <the verb>`" %}
+&nbsp;
+{% include notification.html status="is-dark" 
+message="Due to a limitation in the library we use for cammndline parsing, all boolean options must be specified as `--<boolean option> true|false`" %}

@@ -9,10 +9,7 @@ toc: true
 menubar: examples_menu
 hero_height: is-fullwidth
 ---
-### About these examples
-TODO...
-
-All these examples uses an oversimplified example of an ordering system, and are generated from this C# code: 
+These examples shows how you can control the property and method information from your C# types that's included in your Mermaid Class diagrams. Here we use an oversimplified model of an ordering system, and are generated from this C# code: 
 <details>
 ```csharp
 using Microsoft.EntityFrameworkCore;
@@ -100,11 +97,12 @@ public class ExampleDbContext : DbContext
 
 ```
 </details> 
-
+&nbsp;
 {% include notification.html status="is-dark" 
-message="The options `--name-replace-from` and `--name-replace-to` works the same way for Mermaid ER diagram as for class diagrams. Look at the example in the [Mermaid Class diagram details examples](../mermaid-class-diagram-details/) for details." %}
+message="The options `--name-replace-from` and `--name-replace-to` works the same way for Mermaid ER diagram as for class diagrams. Look at the example in the [Mermaid Class diagram details examples](../mermaid-class-diagram-details/) for details." %} 
+
 ### Example one: No filtering
-TODO...
+With no filtering there's a one-to-one mapping from the structure of your C# types to the entities in the Mermaid ER diagram.
 #### The commandline
 `dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-no-filtering.!.!.`
 #### The resulting Mermaid diagram
@@ -152,7 +150,7 @@ erDiagram
 
 ```
 ### Example two: Control what attributes are displayed with `--attribute-type-exclusion`
-TODO...
+In this example we have excluded the foreing key attributes, useful in diagrams where the relationships gives enough details anyway.
 #### The commandline
 `dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-attribute-type-exclusion.!.!. --attribute-type-exclusion foreignkeys`
 #### The resulting Mermaid diagram
@@ -194,7 +192,7 @@ erDiagram
 
 ```
 ### Example three: Control what relationships are displayed with `--relationship-type-exclusion`
-TODO...
+If you want a ER diagram that's more like an entity listing, you can exclude all relationships.
 #### The commandline
 `dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-relationship-type-exclusion.!.!. --relationship-type-exclusion all`
 #### The resulting Mermaid diagram
@@ -236,7 +234,7 @@ erDiagram
 
 ```
 ### Example four: Hide attribute key type column with `--exclude-attribute-keytypes`
-TODO...
+You can hide the attribute's key type (primary key and/or foreign key) information in situations where is not an important aspect of your diagram.
 #### The commandline
 `dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-exclude-attribute-keytypes.!.!. --exclude-attribute-keytypes true`
 #### The resulting Mermaid diagram
@@ -284,7 +282,7 @@ erDiagram
 
 ```
 ### Example five: Hide attribute comments column with `--exclude-attribute-comments`
-TODO...
+You can hide the attribute's comments in situations where is not an important aspect of your diagram.
 #### The commandline
 `dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-exclude-attribute-comments.!.!. --exclude-attribute-comments true`
 #### The resulting Mermaid diagram
@@ -331,9 +329,10 @@ erDiagram
 	Warehouse ||--o{ Stock : ""
 
 ```
+### Example six: Filter out attributes with `--exclude-propertynames`
+If your C# code follows a convention where all entities have some pure technical properties, e.g. CreatedBy, CreatedAt, ModifiedBy and ModifiedAt, your diagram might be more focused if these properties are excluded. The same might be true if you uses synthetic generated identifiers in your entities.
 
-### Example five: Filter out attributes with `--exclude-propertynames`
-TODO...
+In this example we show how we can excluded syntetic generated identifiers from our model, both primary keys and forign keys, with `--exclude-propertynames .*Id$`
 #### The commandline
 `dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-exclude-propertynames.!.!. --exclude-propertynames .*Id$`
 #### The resulting Mermaid diagram
