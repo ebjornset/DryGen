@@ -6,6 +6,7 @@ title: Examples of how to filter Mermaid diagram content from C# code
 description: Examples of how to filter Mermaid diagram content from C# code
 show_sidebar: false
 toc: true
+menubar: examples_menu
 hero_height: is-fullwidth
 ---
 ### About these examples

@@ -187,7 +187,41 @@ namespace DryGen.Docs
                     InputFile = "DryGen.Docs.dll",
                     OutputFile = "mermaid-er-diagram-details.md",
                     ReplaceToken = "mermaid-er-diagram-details-example-no-filtering",
-                    //AdditionalOptions = new[] { "--include-typenames", "^ErDiagram.*", },
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidErDiagramFromEfCore.Verb,
+                    InputFile = "DryGen.Docs.dll",
+                    OutputFile = "mermaid-er-diagram-details.md",
+                    ReplaceToken = "mermaid-er-diagram-details-example-attribute-type-exclusion",
+                    AdditionalOptions = new[] { "--attribute-type-exclusion", "foreignkeys", },
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidErDiagramFromEfCore.Verb,
+                    InputFile = "DryGen.Docs.dll",
+                    OutputFile = "mermaid-er-diagram-details.md",
+                    ReplaceToken = "mermaid-er-diagram-details-example-relationship-type-exclusion",
+                    AdditionalOptions = new[] { "--relationship-type-exclusion", "all", },
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidErDiagramFromEfCore.Verb,
+                    InputFile = "DryGen.Docs.dll",
+                    OutputFile = "mermaid-er-diagram-details.md",
+                    ReplaceToken = "mermaid-er-diagram-details-example-exclude-attribute-keytypes",
+                    AdditionalOptions = new[] { "--exclude-attribute-keytypes", "true", },
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidErDiagramFromEfCore.Verb,
+                    InputFile = "DryGen.Docs.dll",
+                    OutputFile = "mermaid-er-diagram-details.md",
+                    ReplaceToken = "mermaid-er-diagram-details-example-exclude-attribute-comments",
+                    AdditionalOptions = new[] { "--exclude-attribute-comments", "true", },
+                },
+                new ExamplesGeneratorData {
+                    Verb = Constants.MermaidErDiagramFromEfCore.Verb,
+                    InputFile = "DryGen.Docs.dll",
+                    OutputFile = "mermaid-er-diagram-details.md",
+                    ReplaceToken = "mermaid-er-diagram-details-example-exclude-propertynames",
+                    AdditionalOptions = new[] { "--exclude-propertynames", ".*Id$", },
                 },
             };
         }

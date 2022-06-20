@@ -14,6 +14,7 @@ public class Order
 {
     public int Id { get; set; }
     public int CustomerId { get; set; }
+    public bool? IsCompleted { get; set; }
     public Customer Customer { get; set; }
     public ICollection<OrderLine> Lines { get; set; }
 }

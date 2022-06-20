@@ -6,13 +6,16 @@ title: Examples of how to control the Mermaid Class diagram detail level
 description: Examples of how to control the Mermaid Class diagram detail level
 show_sidebar: false
 toc: true
+menubar: examples_menu
 hero_height: is-fullwidth
 ---
 ### About these examples
 TODO...
 
+{% include notification.html status="is-dark" 
+message="The option `--exclude-propertynames` works the same way for Mermaid class diagram as for Er diagrams. Look at the example in the [Mermaid ER diagram details examples](../mermaid-er-diagram-details/) for details." %}
 ### Example one: No filtering
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+TODO...
 #### The commandline
 `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering.!.!. --include-typenames ^ClassDiagramGenerator$`
 #### The resulting Mermaid diagram
@@ -53,8 +56,22 @@ classDiagram
 	}
 
 ```
-### Example : Exclude static methods
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+### Example two: Filter methods by visibility with `--method-level`
+TODO...
+NOTE: attribute-level
+#### The commandline
+`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-method-level.!.!. --include-typenames ^ClassDiagramGenerator$ --method-level public`
+#### The resulting Mermaid diagram
+```mermaid
+classDiagram
+	class ClassDiagramGenerator {
+		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
+	}
+
+```
+### Example two: Exclude static methods with `---exclude-static-methods`
+TODO...
+NOTE: exclude-static-attributes
 #### The commandline
 `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods.!.!. --include-typenames ^ClassDiagramGenerator$ --exclude-static-methods true`
 #### The resulting Mermaid diagram
@@ -75,8 +92,8 @@ classDiagram
 	}
 
 ```
-### Example : Exclude method params
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+### Example two: Simplify method signatures with `--exclude-method-params`
+TODO...
 #### The commandline
 `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params.!.!. --include-typenames ^ClassDiagramGenerator$ --exclude-method-params true`
 #### The resulting Mermaid diagram
@@ -117,20 +134,8 @@ classDiagram
 	}
 
 ```
-### Example : Method level
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
-#### The commandline
-`dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-method-level.!.!. --include-typenames ^ClassDiagramGenerator$ --method-level public`
-#### The resulting Mermaid diagram
-```mermaid
-classDiagram
-	class ClassDiagramGenerator {
-		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
-	}
-
-```
-### Example : Name replacement
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+### Example four: Name replacement with `--name-replace-from` and `--name-replace-to`
+TODO...
 #### The commandline
 `dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace.!.!. --name-replace-from ClassDiagram --name-replace-to  --include-typenames ^ClassDiagram.* --attribute-level none --method-level none --direction TB`
 #### The resulting Mermaid diagram
@@ -176,5 +181,4 @@ classDiagram
 	Relationship --> "0..1" RelationshipCardinality : to cardinality
 
 ```
-
 {% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}

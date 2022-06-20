@@ -6,50 +6,54 @@ title: Examples of how to control the Mermaid Class diagram detail level
 description: Examples of how to control the Mermaid Class diagram detail level
 show_sidebar: false
 toc: true
+menubar: examples_menu
 hero_height: is-fullwidth
 ---
 ### About these examples
 TODO...
 
+{% include notification.html status="is-dark" 
+message="The option `--exclude-propertynames` works the same way for Mermaid class diagram as for Er diagrams. Look at the example in the [Mermaid ER diagram details examples](../mermaid-er-diagram-details/) for details." %}
 ### Example one: No filtering
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+TODO...
 #### The commandline
 `.!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering-commandline.!.!.`
 #### The resulting Mermaid diagram
 ```mermaid
 .!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering.!.!.
 ```
-### Example : Exclude static methods
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
-#### The commandline
-`.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods-commandline.!.!.`
-#### The resulting Mermaid diagram
-```mermaid
-.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods.!.!.
-```
-### Example : Exclude method params
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
-#### The commandline
-`.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params-commandline.!.!.`
-#### The resulting Mermaid diagram
-```mermaid
-.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params.!.!.
-```
-### Example : Method level
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+### Example two: Filter methods by visibility with `--method-level`
+TODO...
+NOTE: attribute-level
 #### The commandline
 `.!.!.replace-token-for-mermaid-class-diagram-details-example-method-level-commandline.!.!.`
 #### The resulting Mermaid diagram
 ```mermaid
 .!.!.replace-token-for-mermaid-class-diagram-details-example-method-level.!.!.
 ```
-### Example : Name replacement
-Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
+### Example two: Exclude static methods with `---exclude-static-methods`
+TODO...
+NOTE: exclude-static-attributes
+#### The commandline
+`.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods-commandline.!.!.`
+#### The resulting Mermaid diagram
+```mermaid
+.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods.!.!.
+```
+### Example two: Simplify method signatures with `--exclude-method-params`
+TODO...
+#### The commandline
+`.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params-commandline.!.!.`
+#### The resulting Mermaid diagram
+```mermaid
+.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params.!.!.
+```
+### Example four: Name replacement with `--name-replace-from` and `--name-replace-to`
+TODO...
 #### The commandline
 `.!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace-commandline.!.!.`
 #### The resulting Mermaid diagram
 ```mermaid
 .!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace.!.!.
 ```
-
 {% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}
