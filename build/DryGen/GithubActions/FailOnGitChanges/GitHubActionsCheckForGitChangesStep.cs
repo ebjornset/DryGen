@@ -7,7 +7,7 @@ namespace DryGen.GithubActions.FailOnGitChanges
     {
         public override void Write(CustomFileWriter writer)
         {
-            writer.WriteLine("- name: Check if there is any git changes");
+            writer.WriteLine("- name: Check if there are any git changes");
             using (writer.Indent())
             {
                 writer.WriteLine("id: get_changes");

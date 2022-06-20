@@ -7,7 +7,7 @@ namespace DryGen.GithubActions.FailOnGitChanges
     {
         public override void Write(CustomFileWriter writer)
         {
-            writer.WriteLine("- name: Fail if there is any git changes");
+            writer.WriteLine("- name: Fail if there are any git changes");
             using (writer.Indent())
             {
                 writer.WriteLine("if: steps.get_changes.outputs.changed != 0");
@@ -18,7 +18,7 @@ namespace DryGen.GithubActions.FailOnGitChanges
                     writer.WriteLine("script: |");
                     using (writer.Indent())
                     {
-                        writer.WriteLine($"core.setFailed('Git modifications found after <nuke>. Maybe <nuke [docs] --configuration release> was omitted before commit? Check the output from the step \"{GitHubActionsDisplayGitDiffsStep.StepName}\" for details about the changes.')");
+                        writer.WriteLine($"core.setFailed('Git modifications found after <nuke>. Maybe <nuke [docs]> was omitted before commit? Check the output from the step \"{GitHubActionsDisplayGitDiffsStep.StepName}\" and/or \"{GitHubActionsListGitChangesStep.StepName}\" for details about the detected git changes.')");
                     }
                 }
             }
