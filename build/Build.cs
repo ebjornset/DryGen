@@ -31,8 +31,8 @@ public partial class Build : NukeBuild
 
     public static int Main() => Execute<Build>(x => x.Clean, x => x.UTests, x => x.ITests, x => x.Docs, x => x.Specs);
 
-    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    internal readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    [Parameter("Configuration to build - Default is 'Release'")]
+    internal readonly Configuration Configuration = Configuration.Release;
 
     [Parameter("The Nuget source url")]
     internal readonly string NuGetSource = "https://api.nuget.org/v3/index.json";
@@ -55,7 +55,6 @@ public partial class Build : NukeBuild
 
     internal static AbsolutePath SourceDirectory => RootDirectory / "src";
     internal static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-    internal static AbsolutePath DocsDirectory => RootDirectory / "docs";
     internal static AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
 
     internal Target Clean => _ => _
@@ -176,7 +175,7 @@ public partial class Build : NukeBuild
                 .SetProjectFile(Solution.GetProject("DryGen.Docs"))
                 .SetConfiguration(Configuration)
                 .SetFramework("net6.0")
-                .SetApplicationArguments($"--docs-directory {DocsDirectory}")
+                .SetApplicationArguments($"--root-directory {RootDirectory}")
                 .EnableNoBuild()
                 .SetNoLaunchProfile(true)
                 );

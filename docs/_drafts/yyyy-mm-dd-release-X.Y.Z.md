@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Version 0.6.0 is released
-subtitle: Tree shaking in Mermaid diagrams and replacing of token in the output file with the generated representation.
+title: Version X.Y.Z is released
+subtitle: XXX
 summary: |-
-    Tree shaking in Mermaid diagrams and replacing of token in the output file with the generated representation.
+    XXX.
 hero_height: is-fullwidth
 ---
 ### In this version

@@ -5,6 +5,7 @@ title: mermaid-er-diagram-from-efcore
 description: Details about the dry-gen verb mermaid-er-diagram-from-efcore
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate a Mermaid Entity Relationship diagram from a C# assembly using Entity Framework Core. 
 
@@ -32,8 +33,10 @@ The verb 'mermaid-er-diagram-from-efcore' uses the following options.
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 |--tree-shaking-roots||List of string|A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
-{% include notification.html
-message="You can always get information about this verb's options by running the command `dry-gen mermaid-er-diagram-from-efcore --help`."
+{% include notification.html status="is-dark" 
+message="You can always get information about this verb's options by running the command 
+
+`dry-gen mermaid-er-diagram-from-efcore --help`."
 %}
 ## Options file template
 Here is a template for an options file for 'mermaid-er-diagram-from-efcore'. 
@@ -61,6 +64,8 @@ Here is a template for an options file for 'mermaid-er-diagram-from-efcore'.
 #tree-shaking-roots: # List of string
 #- 
 ```
-{% include notification.html
-message="You can generate the same template your self with the command `dry-gen options-from-commandline --verb mermaid-er-diagram-from-efcore`."
+{% include notification.html status="is-dark" 
+message="You can generate the same template your self with the command 
+
+`dry-gen options-from-commandline --verb mermaid-er-diagram-from-efcore`"
 %}

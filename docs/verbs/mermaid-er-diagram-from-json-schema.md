@@ -5,6 +5,7 @@ title: mermaid-er-diagram-from-json-schema
 description: Details about the dry-gen verb mermaid-er-diagram-from-json-schema
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate a Mermaid Entity Relationship diagram from a Json shcema. 
 
@@ -23,8 +24,10 @@ The verb 'mermaid-er-diagram-from-json-schema' uses the following options.
 |--schema-file-format||byextension / json / yaml|What format should be used when reading the schema file? 'ByExtension' (default) treats files with extension 'yaml' or 'yml' as yaml, others as json. Use 'Yaml' or 'Json' to force the format explicitly.|
 |--tree-shaking-roots||List of string|A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
-{% include notification.html
-message="You can always get information about this verb's options by running the command `dry-gen mermaid-er-diagram-from-json-schema --help`."
+{% include notification.html status="is-dark" 
+message="You can always get information about this verb's options by running the command 
+
+`dry-gen mermaid-er-diagram-from-json-schema --help`."
 %}
 ## Options file template
 Here is a template for an options file for 'mermaid-er-diagram-from-json-schema'. 
@@ -42,6 +45,8 @@ Here is a template for an options file for 'mermaid-er-diagram-from-json-schema'
 #tree-shaking-roots: # List of string
 #- 
 ```
-{% include notification.html
-message="You can generate the same template your self with the command `dry-gen options-from-commandline --verb mermaid-er-diagram-from-json-schema`."
+{% include notification.html status="is-dark" 
+message="You can generate the same template your self with the command 
+
+`dry-gen options-from-commandline --verb mermaid-er-diagram-from-json-schema`"
 %}
