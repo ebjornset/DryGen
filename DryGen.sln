@@ -35,6 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build.yml = .github\workflows\build.yml
 		.github\workflows\pr.yml = .github\workflows\pr.yml
+		.github\workflows\publish-docs.yml = .github\workflows\publish-docs.yml
 		.github\workflows\release.yml = .github\workflows\release.yml
 	EndProjectSection
 EndProject
@@ -56,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.CSharpFromJsonSchema
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.MermaidFromJsonSchema", "src\DryGen.MermaidFromJsonSchema\DryGen.MermaidFromJsonSchema.csproj", "{A7557D3C-CCE3-4F26-8AAF-D06FC0E7877E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryGen.Core", "src\DryGen.Core\DryGen.Core.csproj", "{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Core", "src\DryGen.Core\DryGen.Core.csproj", "{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

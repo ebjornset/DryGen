@@ -15,6 +15,9 @@ namespace DryGen.GithubActions.NugetPush
         {
             var job = base.GetJobs(image, relevantTargets);
             job = GhPagesGitHubActionsJobSetup.ConfigureJob(job, rubyStepOffset: 9, jekyllStepOffset: 6);
+            var newSteps = new List<GitHubActionsStep>(job.Steps);
+            newSteps.Insert(newSteps.Count - 1, new GitHubActionsNugetPushStep());
+            job.Steps = newSteps.ToArray();
             return job;
         }
     }
