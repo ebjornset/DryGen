@@ -5,6 +5,7 @@ title: mermaid-class-diagram-from-json-schema
 description: Details about the dry-gen verb mermaid-class-diagram-from-json-schema
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate a Mermaid Class diagram from a json schema. 
 
@@ -13,7 +14,7 @@ The verb 'mermaid-class-diagram-from-json-schema' uses the following options.
 
 |Option|Alias|Type|Description|
 |---|---|---|---|
-|--direction||default / bt / tb / lr / rl|In which direction should the diagram be generated|
+|--direction||default / bt / tb / lr / rl|In what direction should the diagram be generated?|
 |--input-file|-i|string|Full path to the input file to generate a new representation for.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
@@ -22,8 +23,10 @@ The verb 'mermaid-class-diagram-from-json-schema' uses the following options.
 |--schema-file-format||byextension / json / yaml|What format should be used when reading the schema file? 'ByExtension' (default) treats files with extension 'yaml' or 'yml' as yaml, others as json. Use 'Yaml' or 'Json' to force the format explicitly.|
 |--tree-shaking-roots||List of string|A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
-{% include notification.html
-message="You can always get information about this verb's options by running the command `dry-gen mermaid-class-diagram-from-json-schema --help`."
+{% include notification.html status="is-dark" 
+message="You can always get information about this verb's options by running the command 
+
+`dry-gen mermaid-class-diagram-from-json-schema --help`."
 %}
 ## Options file template
 Here is a template for an options file for 'mermaid-class-diagram-from-json-schema'. 
@@ -40,6 +43,8 @@ Here is a template for an options file for 'mermaid-class-diagram-from-json-sche
 #tree-shaking-roots: # List of string
 #- 
 ```
-{% include notification.html
-message="You can generate the same template your self with the command `dry-gen options-from-commandline --verb mermaid-class-diagram-from-json-schema`."
+{% include notification.html status="is-dark" 
+message="You can generate the same template your self with the command 
+
+`dry-gen options-from-commandline --verb mermaid-class-diagram-from-json-schema`"
 %}

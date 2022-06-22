@@ -5,6 +5,7 @@ title: mermaid-class-diagram-from-csharp
 description: Details about the dry-gen verb mermaid-class-diagram-from-csharp
 show_sidebar: false
 menubar: verbs_menu
+hero_height: is-fullwidth
 ---
 Generate a Mermaid Class diagram from a C# assembly using reflection. 
 
@@ -14,7 +15,7 @@ The verb 'mermaid-class-diagram-from-csharp' uses the following options.
 |Option|Alias|Type|Description|
 |---|---|---|---|
 |--attribute-level||all / public / internal / protected / none|What visibility must an attribute have to be included in the diagram?|
-|--direction||default / bt / tb / lr / rl|In which direction should the diagram be generated|
+|--direction||default / bt / tb / lr / rl|In what direction should the diagram be generated?|
 |--exclude-method-params||true/false|Should method params be excluded from the diagram? (Replaced by count)|
 |--exclude-propertynames||List of string|A list of regular expressions for property names to exclude from each type.|
 |--exclude-static-attributes||true/false|Should static attributes be excluded from the diagram?|
@@ -31,8 +32,10 @@ The verb 'mermaid-class-diagram-from-csharp' uses the following options.
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 |--tree-shaking-roots||List of string|A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
-{% include notification.html
-message="You can always get information about this verb's options by running the command `dry-gen mermaid-class-diagram-from-csharp --help`."
+{% include notification.html status="is-dark" 
+message="You can always get information about this verb's options by running the command 
+
+`dry-gen mermaid-class-diagram-from-csharp --help`."
 %}
 ## Options file template
 Here is a template for an options file for 'mermaid-class-diagram-from-csharp'. 
@@ -62,6 +65,8 @@ Here is a template for an options file for 'mermaid-class-diagram-from-csharp'.
 #tree-shaking-roots: # List of string
 #- 
 ```
-{% include notification.html
-message="You can generate the same template your self with the command `dry-gen options-from-commandline --verb mermaid-class-diagram-from-csharp`."
+{% include notification.html status="is-dark" 
+message="You can generate the same template your self with the command 
+
+`dry-gen options-from-commandline --verb mermaid-class-diagram-from-csharp`"
 %}

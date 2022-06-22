@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace DryGen.Docs
 {
+    [ExcludeFromCodeCoverage] // We run this from nuke docs, so we are not to worried about the code coverage at the moment...
     public static class Program
     {
         public static int Main(string[] args)
@@ -20,157 +21,213 @@ namespace DryGen.Docs
 
         static int RunAndReturnExitCode(Options options)
         {
-            var docsDirectory = Path.GetFullPath(options.DocsDirectory);
-            if (!Directory.Exists(docsDirectory))
+            var rootDirectory = Path.GetFullPath(options.RootDirectory);
+            if (!Directory.Exists(rootDirectory))
             {
-                throw new ArgumentException($"Docs directory '{docsDirectory}' does not exist!");
+                throw new ArgumentException($"Root directory '{rootDirectory}' does not exist!");
             }
-            GenerateVerbsMenu(docsDirectory);
-            GenerateVerbsMarkdown(docsDirectory);
-            return 0;
-            //// TODO. The examples are not quite ready to be released yet
-            GenerateExamplesMenu(docsDirectory);
-            CopyExamplesTemplates(docsDirectory);
+            GenerateVerbsMenu(rootDirectory);
+            GenerateVerbsMarkdown(rootDirectory);
+            GenerateExamplesMenu(rootDirectory);
+            GenerateExamplesFilesFromTemplates(rootDirectory);
             var result = 0;
             string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var generator = new Generator(Console.Out, Console.Error);
             foreach (var generatorData in BuildExamplesGeneratorData())
             {
-                result = ReplaceRepresentationInExample(docsDirectory, assemblyDirectory, generator, generatorData);
+                result = ReplaceRepresentationInExample(rootDirectory, assemblyDirectory, generator, generatorData);
                 if (result > 0)
                 {
                     break;
                 }
-                result = ReplaceHtmlEscapedRepresentationInExample(docsDirectory, assemblyDirectory, generatorData);
-                if (result > 0)
-                {
-                    break;
-                }
-                ReplaceCommandlineInExample(docsDirectory, assemblyDirectory, generator, generatorData);
+                ReplaceCommandlineInExample(rootDirectory, assemblyDirectory, generator, generatorData);
             }
+            ReplaceErDigramExampleCodeInExample(rootDirectory, generator);
             return result;
         }
 
-        private static int ReplaceRepresentationInExample(string docsDirectory, string assemblyDirectory, Generator generator, ExamplesGeneratorData generatorData)
+        private static int ReplaceRepresentationInExample(string rootDirectory, string assemblyDirectory, Generator generator, ExamplesGeneratorData generatorData)
         {
             int result;
-            var commandline = BuildExamplesGeneratorCommandline(generatorData, docsDirectory, assemblyDirectory, relativeRoot: null);
+            var commandline = BuildExamplesGeneratorCommandline(generatorData, rootDirectory, assemblyDirectory);
             Console.WriteLine($"Generating: {string.Join(' ', commandline)}");
             result = generator.Run(commandline);
             return result;
         }
 
-        private static int ReplaceHtmlEscapedRepresentationInExample(string docsDirectory, string assemblyDirectory, ExamplesGeneratorData generatorData)
+        private static void ReplaceCommandlineInExample(string rootDirectory, string assemblyDirectory, Generator generator, ExamplesGeneratorData generatorData)
         {
-            /// Workaround for some strange issue where Jekyll won't replace << or >> correctly in the resulting html.
-            int result;
-            var commandline = BuildExamplesGeneratorCommandline(generatorData, docsDirectory, assemblyDirectory, relativeRoot: null, excludeOutputFile: true);
-            Console.WriteLine($"Generating: {string.Join(' ', commandline)}");
-            using var outWriter = new StringWriter();
-            var generator = new Generator(outWriter, Console.Error);
-            result = generator.Run(commandline);
-            if (result == 0)
-            {
-                var generatedRepresentation = outWriter.ToString().Replace("<", "&lt;").Replace(">", "&gt;");
-                var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(docsDirectory, generatorData), generatorData.ReplaceToken.AsHtmlEscapedGeneratedRepresentationReplaceToken());
-                generatedRepresentation = existingRepresentation.Replace(generatorData.ReplaceToken.AsHtmlEscapedGeneratedRepresentationReplaceToken(), generatedRepresentation);
-                File.WriteAllText(GetOutputFile(docsDirectory, generatorData), generatedRepresentation);
-            }
-            return result;
-        }
-
-        private static void ReplaceCommandlineInExample(string docsDirectory, string assemblyDirectory, Generator generator, ExamplesGeneratorData generatorData)
-        {
-            var relativeRoot = Path.GetFullPath(Path.Combine(docsDirectory, ".."));
-            var commandline = BuildExamplesGeneratorCommandline(generatorData, docsDirectory, assemblyDirectory, relativeRoot);
+            var commandline = BuildExamplesGeneratorCommandline(generatorData, rootDirectory, assemblyDirectory);
             var examplesCommandLine = $"dry-gen {string.Join(' ', commandline)}";
-            var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(docsDirectory, generatorData), generatorData.ReplaceToken.AsCommandLineReplaceToken(), verbose: false);
+            var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(rootDirectory, generatorData), generatorData.ReplaceToken.AsCommandLineReplaceToken(), verbose: false);
             var generatedRepresentation = existingRepresentation.Replace(generatorData.ReplaceToken.AsCommandLineReplaceToken(), examplesCommandLine);
-            File.WriteAllText(GetOutputFile(docsDirectory, generatorData), generatedRepresentation);
+            File.WriteAllText(GetOutputFile(rootDirectory, generatorData), generatedRepresentation);
         }
 
-        private static string GetOutputFile(string docsDirectory, ExamplesGeneratorData generatorData)
+        private static string GetOutputFile(string rootDirectory, ExamplesGeneratorData generatorData)
         {
-            return Path.Combine(docsDirectory, "examples", generatorData.OutputFile.ToLowerInvariant());
+            return Path.Combine(rootDirectory.AsExamplesDirectory(), generatorData.OutputFile.ToLowerInvariant()).AsLinuxPath();
         }
 
-        private static void GenerateVerbsMarkdown(string docsDirectory)
+        private static void GenerateVerbsMarkdown(string rootDirectory)
         {
             var verbs = typeof(Generator).Assembly.GetTypes().Where(x => x.HasVerbAttribute()).Select(x => x.GetVerb());
             foreach (var verb in verbs.OrderBy(x => x))
             {
-                var verbMarkdownPath = Path.Combine(docsDirectory, "verbs", $"{verb}.md");
+                var verbMarkdownPath = Path.Combine(rootDirectory.AsVerbsDirectory(), $"{verb}.md").AsLinuxPath();
                 Console.WriteLine($"Generating verb markdown for '{verb}' to \"{verbMarkdownPath}\"");
                 using var verbMarkdownWriter = new StreamWriter(verbMarkdownPath);
                 VerbMarkdowGenerator.Generate(verb, verbMarkdownWriter);
             }
         }
 
-        private static void GenerateVerbsMenu(string docsDirectory)
+        private static void GenerateVerbsMenu(string rootDirectory)
         {
-            var verbMenuPath = Path.Combine(docsDirectory, "_data", "verbs_menu.yml");
+            var verbMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "verbs_menu.yml").AsLinuxPath();
             Console.WriteLine($"Generating verbs menu to \"{verbMenuPath}\"");
             using var verbMenuWriter = new StreamWriter(verbMenuPath);
             VerbMenuGenerator.Generate(verbMenuWriter);
         }
 
-        private static void GenerateExamplesMenu(string docsDirectory)
+        private static void GenerateExamplesMenu(string rootDirectory)
         {
-            var examplesTemplateDirectory = Path.Combine(docsDirectory, "_templates", "examples");
-            var examplesMenuPath = Path.Combine(docsDirectory, "_data", "examples_menu.yml");
+            var examplesTemplateDirectory = rootDirectory.AsExamplesTemplatesDirectory();
+            var examplesMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "examples_menu.yml").AsLinuxPath();
             Console.WriteLine($"Generating examples menu to \"{examplesMenuPath}\"");
             using var examplesMenuWriter = new StreamWriter(examplesMenuPath);
             ExamplesMenuGenerator.Generate(examplesMenuWriter, examplesTemplateDirectory);
         }
 
-        private static void CopyExamplesTemplates(string docsDirectory)
+        private static void GenerateExamplesFilesFromTemplates(string rootDirectory)
         {
-            var examplesTemplatesDirectory = Path.Combine(docsDirectory, "_templates", "examples");
-            var examplesDirectory = Path.Combine(docsDirectory, "examples");
-            Console.WriteLine($"Copying examples template files from \"{examplesTemplatesDirectory}\" to \"{examplesDirectory}\"");
-            foreach (var exampleTemplateFile in Directory.GetFiles(examplesTemplatesDirectory))
+            var examplesTemplatesDirectory = rootDirectory.AsExamplesTemplatesDirectory();
+            var examplesDirectory = rootDirectory.AsExamplesDirectory();
+            foreach (var exampleTemplateFile in Directory.GetFiles(examplesTemplatesDirectory).Select(x => Path.GetFileName(x)))
             {
-                File.Copy(exampleTemplateFile, Path.Combine(examplesDirectory, Path.GetFileName(exampleTemplateFile.ToLowerInvariant())), true);
+                Console.WriteLine($"Generating examples from template file \"{exampleTemplateFile}\" in directory \"{examplesTemplatesDirectory}\" to \"{examplesDirectory}\"");
+                ExamplesFileGenerator.Generate(rootDirectory, exampleTemplateFile);
             }
         }
 
         private static IEnumerable<ExamplesGeneratorData> BuildExamplesGeneratorData()
         {
             return new[] {
-                new ExamplesGeneratorData {
-                    Verb = Constants.MermaidClassDiagramFromCsharp.Verb,
-                    InputFile = "DryGen.MermaidFromCSharp.dll",
-                    OutputFile = "Mermaid-Class-diagrams.md",
-                    ReplaceToken = "class-diagram-one",
-                },
+                GetExamplesGeneratorDataForFilteringMermaidDiagramContent("no-filtering", new[] {"--attribute-level", "none", "--method-level", "none", "--direction", "RL" }),
+                GetExamplesGeneratorDataForFilteringMermaidDiagramContent("tree-shaking-roots", new[] {"--tree-shaking-roots", "^ITypeFilter$", "--attribute-level", "none", "--method-level", "none", "--direction", "RL" }),
+                GetExamplesGeneratorDataForFilteringMermaidDiagramContent("include-namespaces", new[] { "--include-namespaces", "^DryGen.MermaidFromCSharp.ClassDiagram$", "--attribute-level", "none", "--method-level", "none", "--direction", "TB" }),
+                GetExamplesGeneratorDataForFilteringMermaidDiagramContent("include-typenames", new[] { "--include-typenames", ".*ClassDiagram.*", "--attribute-level", "none", "--method-level", "none", "--direction", "TB" }),
+                GetExamplesGeneratorDataForFilteringMermaidDiagramContent("exclude-typenames", new[] { "--exclude-typenames", ".*TypeFilter.*;.*ClassDiagram.*", "--attribute-level", "none", "--method-level", "none", "--direction", "RL" }),
+
+                GetExamplesGeneratorDataForMermaidClassDiagramDetails("no-filtering", new[] {"--include-typenames", "^ClassDiagramGenerator$"}),
+                GetExamplesGeneratorDataForMermaidClassDiagramDetails("exclude-static-methods", new[] { "--include-typenames", "^ClassDiagramGenerator$", "--exclude-static-methods", "true"}),
+                GetExamplesGeneratorDataForMermaidClassDiagramDetails("exclude-method-params", new[] { "--include-typenames", "^ClassDiagramGenerator$", "--exclude-method-params", "true"}),
+                GetExamplesGeneratorDataForMermaidClassDiagramDetails("method-level", new[] { "--include-typenames", "^ClassDiagramGenerator$", "--method-level", "public"}),
+                GetExamplesGeneratorDataForMermaidClassDiagramDetails("name-replace", new[] { "--name-replace-from", "ClassDiagram", "--name-replace-to", "", "--include-typenames", "^ClassDiagram.*", "--attribute-level", "none", "--method-level", "none", "--direction", "TB"}),
+
+                GetExamplesGeneratorDataForMermaidErDiagramDetails("no-filtering", null),
+                GetExamplesGeneratorDataForMermaidErDiagramDetails("attribute-type-exclusion", new [] { "--attribute-type-exclusion", "foreignkeys" }),
+                GetExamplesGeneratorDataForMermaidErDiagramDetails("relationship-type-exclusion", new [] { "--relationship-type-exclusion", "all" }),
+                GetExamplesGeneratorDataForMermaidErDiagramDetails("exclude-attribute-keytypes", new [] { "--exclude-attribute-keytypes", "true" }),
+                GetExamplesGeneratorDataForMermaidErDiagramDetails("exclude-attribute-comments", new [] { "--exclude-attribute-comments", "true" }),
+                GetExamplesGeneratorDataForMermaidErDiagramDetails("exclude-propertynames", new [] { "--exclude-propertynames", ".*Id$" }),
             };
         }
 
-        private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string docsDirectory, string assemblyDirectory, string relativeRoot, bool excludeOutputFile = false)
+        private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string rootDirectory, string assemblyDirectory)
         {
-            var inputFile = Path.Combine(assemblyDirectory, generatorData.InputFile);
-            if (!string.IsNullOrEmpty(relativeRoot))
-            {
-                inputFile = Path.GetRelativePath(relativeRoot, inputFile).Replace("\\", "/");
-            }
+            var inputFile = Path.GetRelativePath(rootDirectory, Path.Combine(assemblyDirectory, generatorData.InputFile)).Replace("\\", "/");
+            var outputFile = Path.GetRelativePath(rootDirectory, GetOutputFile(rootDirectory, generatorData)).Replace("\\", "/");
             var result = new List<string> {
                 generatorData.Verb,
                 $"--{Constants.InputFileOption}",
                 inputFile,
+                $"--{Constants.OutputFileOption}",
+                outputFile,
+                $"--{Constants.ReplaceTokenInOutputFile}",
+                generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken(),
             };
-            if (!excludeOutputFile)
+            if (generatorData.AdditionalOptions?.Any() == true)
             {
-                var outputFile = GetOutputFile(docsDirectory, generatorData);
-                if (!string.IsNullOrEmpty(relativeRoot))
-                {
-                    outputFile = Path.GetRelativePath(relativeRoot, outputFile).Replace("\\", "/");
-                }
-                result.Add($"--{Constants.OutputFileOption}");
-                result.Add(outputFile);
-                result.Add($"--{Constants.ReplaceTokenInOutputFile}");
-                result.Add(generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken());
+                result.AddRange(generatorData.AdditionalOptions);
             }
             return result.ToArray();
+        }
+
+        private static void ReplaceErDigramExampleCodeInExample(string rootDirectory, Generator generator)
+        {
+            var generatorData = new ExamplesGeneratorData
+            {
+                OutputFile = "mermaid-er-diagram-details.md",
+                ReplaceToken = "mermaid-er-diagram-details-example-code",
+            };
+            var exampleCodeFile = Path.Combine(rootDirectory, "src", "develop", "DryGen.Docs", "ErDiagramExample", "Example.cs");
+            var exampleCode = File.ReadAllText(exampleCodeFile).Replace("[ExcludeFromCodeCoverage]", string.Empty).Replace("using System.Diagnostics.CodeAnalysis;", string.Empty);
+            var replaceToken = generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken();
+            var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(rootDirectory, generatorData), replaceToken, verbose: false);
+            var generatedRepresentation = existingRepresentation.Replace(replaceToken, exampleCode);
+            File.WriteAllText(GetOutputFile(rootDirectory, generatorData), generatedRepresentation);
+        }
+
+        private static ExamplesGeneratorData GetExamplesGeneratorDataForFilteringMermaidDiagramContent(string replaceTopic, string[] additionalOptions)
+        {
+            return GetExamplesGeneratorData(
+                replaceTopic,
+                additionalOptions,
+                verb: Constants.MermaidClassDiagramFromCsharp.Verb,
+                inputFile: "DryGen.MermaidFromCSharp.dll",
+                outputFile: "filtering-mermaid-diagram-content.md",
+                replaceTokenPrefix: "mermaid-diagram-filter-example-");
+        }
+
+        private static ExamplesGeneratorData GetExamplesGeneratorDataForMermaidClassDiagramDetails(string replaceTopic, string[] additionalOptions)
+        {
+            return GetExamplesGeneratorData(
+                replaceTopic,
+                additionalOptions,
+                verb: Constants.MermaidClassDiagramFromCsharp.Verb,
+                inputFile: "DryGen.MermaidFromCSharp.dll",
+                outputFile: "mermaid-class-diagram-details.md",
+                replaceTokenPrefix: "mermaid-class-diagram-details-example-");
+        }
+
+        private static ExamplesGeneratorData GetExamplesGeneratorDataForMermaidErDiagramDetails(string replaceTopic, string[] additionalOptions)
+        {
+            return GetExamplesGeneratorData(
+                replaceTopic,
+                additionalOptions,
+                verb: Constants.MermaidErDiagramFromEfCore.Verb,
+                inputFile: "DryGen.Docs.dll",
+                outputFile: "mermaid-er-diagram-details.md",
+                replaceTokenPrefix: "mermaid-er-diagram-details-example-");
+        }
+
+        private static ExamplesGeneratorData GetExamplesGeneratorData(
+            string replaceTopic,
+            string[] additionalOptions,
+            string verb,
+            string inputFile,
+            string outputFile,
+            string replaceTokenPrefix)
+        {
+            var result = new ExamplesGeneratorData
+            {
+                Verb = verb,
+                InputFile = inputFile,
+                OutputFile = outputFile,
+                ReplaceToken = $"{replaceTokenPrefix}{replaceTopic}",
+            };
+            if (additionalOptions != null)
+            {
+                result.AdditionalOptions = additionalOptions;
+            }
+            return result;
+        }
+
+        [ExcludeFromCodeCoverage]
+        internal class Options
+        {
+            [Option("root-directory", Required = true, HelpText = "Sets the root directory, assuming this is the parent directory of the docs directory where stuff will be generated.")]
+            public string RootDirectory { get; set; }
         }
     }
 }

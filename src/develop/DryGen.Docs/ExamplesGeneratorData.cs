@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DryGen.Docs
 {
+    [ExcludeFromCodeCoverage]
     public class ExamplesGeneratorData
     {
         public string InputFile { get; set; }

@@ -7,13 +7,14 @@ using Nuke.Common.Execution;
 
 namespace DryGen.GithubActions.SonarCloud
 {
-    public class SonarCloudGitHubActionsAttribute : FailOnGitChangesGitHubActionsAttribute
+    public class SonarCloudGitHubActionsAttribute : DotNetGitHubActionsAttribute
     {
         public SonarCloudGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
 
         protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
         {
             var job = base.GetJobs(image, relevantTargets);
+            job = FailOnGitChangesGitHubActionsJobSetup.ConfigureJob(job, stepsOffset: 0);
             var newSteps = new List<GitHubActionsStep>(job.Steps);
             newSteps.Insert(newSteps.Count - 6, new GitHubActionsSetupJavaStep());
             newSteps.Insert(newSteps.Count - 6, new GitHubActionsInstallSonarCloudScannerStep());

@@ -10,7 +10,7 @@ namespace DryGen.Options
     public class MermaidClassDiagramFromJsonSchemaOptions : FromJsonSchemaBaseOptions, IMermaidClassDiagramFromJsonSchemaOptions
     {
         [YamlMember(Alias = "direction", ApplyNamingConventions = false)]
-        [Option("direction", HelpText = "In which direction should the diagram be generated")]
+        [Option("direction", HelpText = "In what direction should the diagram be generated?")]
         public ClassDiagramDirection? Direction { get; set; }
 
         [YamlMember(Alias = "tree-shaking-roots", ApplyNamingConventions = false)]
