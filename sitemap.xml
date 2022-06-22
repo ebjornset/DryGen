@@ -21,6 +21,10 @@
 <lastmod>2022-06-06T00:00:00+00:00</lastmod>
 </url>
 <url>
+<loc>/2022/06/21/release-0.7.0/</loc>
+<lastmod>2022-06-21T00:00:00+00:00</lastmod>
+</url>
+<url>
 <loc>/verbs/csharp-from-json-schema/</loc>
 </url>
 <url>
@@ -30,10 +34,10 @@
 <loc>/blog/</loc>
 </url>
 <url>
-<loc>/verbs/</loc>
+<loc>/examples/</loc>
 </url>
 <url>
-<loc>/examples/</loc>
+<loc>/verbs/</loc>
 </url>
 <url>
 <loc>/</loc>
@@ -61,5 +65,8 @@
 </url>
 <url>
 <loc>/verbs/options-from-commandline/</loc>
+</url>
+<url>
+<loc>/blog/page2/</loc>
 </url>
 </urlset>
