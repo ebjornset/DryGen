@@ -34,6 +34,9 @@
 <loc>/blog/</loc>
 </url>
 <url>
+<loc>/development/</loc>
+</url>
+<url>
 <loc>/verbs/</loc>
 </url>
 <url>
@@ -68,5 +71,13 @@
 </url>
 <url>
 <loc>/blog/page2/</loc>
+</url>
+<url>
+<loc>/development/specs/drygen-itests.html</loc>
+<lastmod>2022-09-02T20:32:08+00:00</lastmod>
+</url>
+<url>
+<loc>/development/specs/drygen-utests.html</loc>
+<lastmod>2022-09-02T20:32:11+00:00</lastmod>
 </url>
 </urlset>
