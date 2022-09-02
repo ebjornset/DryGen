@@ -1,0 +1,2 @@
+# Ignore the specs folder, as the content is generating during the build process
+specs/
