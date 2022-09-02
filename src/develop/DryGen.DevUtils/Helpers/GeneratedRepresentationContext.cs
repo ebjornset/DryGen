@@ -3,7 +3,7 @@ using System.IO;
 
 namespace DryGen.DevUtils.Helpers
 {
-    public class GeneratedRepresentationContext : IDisposable
+    public sealed class GeneratedRepresentationContext : IDisposable
     {
         private readonly ExceptionContext exceptionContext;
         private string? generatedRepresentation;
@@ -18,10 +18,7 @@ namespace DryGen.DevUtils.Helpers
         {
             get
             {
-                if (generatedRepresentationFileName == null)
-                {
-                    generatedRepresentationFileName = Path.GetTempFileName();
-                }
+                generatedRepresentationFileName ??= Path.GetTempFileName();
                 return generatedRepresentationFileName;
             }
         }
@@ -33,7 +30,7 @@ namespace DryGen.DevUtils.Helpers
             get
             {
                 exceptionContext.ExpectNoException();
-                return generatedRepresentation ?? throw new ArgumentNullException(nameof(generatedRepresentation));
+                return generatedRepresentation ?? throw new PropertyNotSetException(nameof(GeneratedRepresentation));
             }
             set
             {
@@ -47,7 +44,7 @@ namespace DryGen.DevUtils.Helpers
             {
                 if (generatedRepresentationFileName == null)
                 {
-                    throw new ArgumentNullException(nameof(generatedRepresentationFileName));
+                    throw new PropertyNotSetException(nameof(GeneratedRepresentationFromFile));
                 }
                 return File.ReadAllText(generatedRepresentationFileName);
             }
