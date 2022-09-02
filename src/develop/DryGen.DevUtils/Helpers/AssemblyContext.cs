@@ -41,4 +41,5 @@ namespace DryGen.DevUtils.Helpers
             typeof(Enumerable).Assembly, typeof(Collection<>).Assembly, typeof(KeyAttribute).Assembly, typeof(Expression<>).Assembly, typeof(DbContext).Assembly, typeof(JsonPropertyAttribute).Assembly
         };
     }
+
 }
