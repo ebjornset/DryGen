@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -167,8 +168,35 @@ public partial class Build : NukeBuild
                     , degreeOfParallelism: 4, completeOnFailure: true);
             });
 
+    internal Target Specs => _ => _
+            .DependsOn(UTests)
+            .DependsOn(ITests)
+            .Executes(() =>
+            {
+                DotNetToolUpdate(c => c
+                    .SetGlobal(true)
+                    .SetPackageName("SpecFlow.Plus.LivingDoc.CLI")
+                    );
+                var subprojectNames = new Dictionary<string, string> { { "UTests", "Unit tests" }, { "ITests", "Integration tests" } };
+                foreach (var testProject in new[] { "UTests", "ITests" })
+                {
+                    var arguments = new[] {
+                        "test-assembly",
+                        "--title",
+                        $"\"DryGen {subprojectNames[testProject]}\"",
+                        $"./**/*.{testProject}/bin/{Configuration}/netcoreapp3.1/*.{testProject}.dll",
+                        "-t",
+                        $"./**/*.{testProject}/bin/{Configuration}/netcoreapp3.1/.specflow.livingdoc.data.json",
+                        "--output",
+                        $"{DocsDirectory}/development/specs/drygen-{testProject.ToLowerInvariant()}.html",
+                    };
+                    ProcessTasks.StartProcess("livingdoc", string.Join(' ', arguments), logOutput: true, logInvocation: true);
+                }
+            });
+
     internal Target Docs => _ => _
         .DependsOn(Compile)
+        .DependsOn(Specs)
         .Executes(() =>
         {
             DotNetRun(c => c
@@ -180,33 +208,6 @@ public partial class Build : NukeBuild
                 .SetNoLaunchProfile(true)
                 );
         });
-
-    internal Target Specs => _ => _
-            .DependsOn(UTests)
-            .DependsOn(ITests)
-            .Executes(() =>
-            {
-                // TODO: It would be faster to just install the tool, but how do we prevent the install from failing when it's already installed?
-                // TODO. The specs generation must be rethought after picking Jekyll as doc generator
-                //DotNetToolUpdate(c => c
-                //    .SetGlobal(true)
-                //    .SetPackageName("SpecFlow.Plus.LivingDoc.CLI")
-                //    );
-                //foreach (var testProject in new[] { "UTests", "ITests" })
-                //{
-                //    var arguments = new[] {
-                //        "test-assembly",
-                //        "--title",
-                //        "DryGen",
-                //        $"./**/*.{testProject}/bin/Debug/netcoreapp3.1/*.{testProject}.dll",
-                //        "-t",
-                //        $"./**/*.{testProject}/bin/Debug/netcoreapp3.1/.specflow.livingdoc.data.json",
-                //        "--output",
-                //        $"{DocsDirectory}/specs/drygen-{testProject.ToLowerInvariant()}.html",
-                //    };
-                //    ProcessTasks.StartProcess("livingdoc", string.Join(' ', arguments), logOutput: true, logInvocation: true);
-                //}
-            });
 
     internal Target Push => _ => _
        .DependsOn(UTests)
@@ -258,4 +259,6 @@ public partial class Build : NukeBuild
                 .SetConfigFile(Path.Combine(Path.Combine(workingDirectory, "Properties"), "NuGet.Config"))
                 );
         });
+
+    private string DocsDirectory => Path.Combine(RootDirectory, "docs").Replace("\\", "/");
 }

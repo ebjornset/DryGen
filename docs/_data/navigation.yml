@@ -4,3 +4,5 @@
   link: /examples/
 - name: Releases
   link: /blog/
+- name: About
+  link: /development/
