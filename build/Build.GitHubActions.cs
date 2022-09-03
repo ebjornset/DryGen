@@ -8,6 +8,7 @@ namespace DryGen.Build;
 [SonarCloudGitHubActions(
     name: "pr",
     GitHubActionsImage.UbuntuLatest,
+    FetchDepth = 0,
     OnPullRequestBranches = new[] { "main" },
     PublishArtifacts = false,
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" }),
@@ -15,6 +16,7 @@ namespace DryGen.Build;
 [SonarCloudGitHubActions(
     name: "build",
     GitHubActionsImage.UbuntuLatest,
+    FetchDepth = 0,
     OnPushBranches = new[] { "main" },
     OnWorkflowDispatchOptionalInputs = new[] { "dummy" },
     PublishArtifacts = true,
@@ -23,6 +25,7 @@ namespace DryGen.Build;
 [NugetPushGitHubActions(
     name: "release",
     GitHubActionsImage.UbuntuLatest,
+    FetchDepth = 0,
     OnPushTags = new[] { "v*.*.*" },
     PublishArtifacts = true,
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
@@ -30,6 +33,7 @@ namespace DryGen.Build;
 [GhPagesGitHubActions(
     name: "publish-docs",
     GitHubActionsImage.UbuntuLatest,
+    FetchDepth = 0,
     OnWorkflowDispatchOptionalInputs = new[] { "dummy" },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
 ]
