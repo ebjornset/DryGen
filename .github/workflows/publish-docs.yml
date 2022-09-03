@@ -16,12 +16,7 @@
 
 name: publish-docs
 
-on:
-  workflow_dispatch:
-    inputs:
-      dummy:
-        description: "dummy"
-        required: false
+on: [workflow_dispatch]
 
 jobs:
   ubuntu-latest:
@@ -52,8 +47,6 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
       - name: Run './build.cmd '
         run: ./build.cmd 
-        env:
-          dummy: ${{ github.event.inputs.dummy }}
       - name: Generate docs with Jekyll
         uses: limjh16/jekyll-action-ts@v2
         with:

@@ -34,7 +34,7 @@ namespace DryGen.Build;
     name: "publish-docs",
     GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
-    OnWorkflowDispatchOptionalInputs = new[] { "dummy" },
+    On = new[] { GitHubActionsTrigger.WorkflowDispatch },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
 ]
 public partial class Build { }
