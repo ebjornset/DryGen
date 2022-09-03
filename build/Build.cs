@@ -188,7 +188,7 @@ public partial class Build : NukeBuild
                         "-t",
                         $"./**/*.{testProject}/bin/{Configuration}/netcoreapp3.1/.specflow.livingdoc.data.json",
                         "--output",
-                        $"{DocsDirectory}/development/specs/drygen-{testProject.ToLowerInvariant()}.html",
+                        $"{DocsDirectory}/about/specs/drygen-{testProject.ToLowerInvariant()}.html",
                     };
                     ProcessTasks.StartProcess("livingdoc", string.Join(' ', arguments), logOutput: true, logInvocation: true);
                 }
