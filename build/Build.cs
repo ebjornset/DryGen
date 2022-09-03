@@ -260,5 +260,5 @@ public partial class Build : NukeBuild
                 );
         });
 
-    private string DocsDirectory => Path.Combine(RootDirectory, "docs").Replace("\\", "/");
+    private static string DocsDirectory => Path.Combine(RootDirectory, "docs").Replace("\\", "/");
 }
