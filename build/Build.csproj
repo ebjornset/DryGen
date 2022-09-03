@@ -13,11 +13,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Nuke.Common" Version="6.2.1" />
-		<PackageDownload Include="GitVersion.Tool" Version="[5.8.0]" />
+		<PackageDownload Include="GitVersion.Tool" Version="[5.10.3]" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<!-- This code is for the Nuke during build, so we don't care about its code coverage -->
+		<!-- This code is for the Nuke build, so we don't care about its code coverage -->
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
 			<Value>**</Value>
 		</SonarQubeSetting>
