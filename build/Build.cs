@@ -233,8 +233,8 @@ public partial class Build : NukeBuild
        });
 
     internal Target GlobalTool => _ => _
-        .DependsOn(Pack)
         .DependsOn(Init)
+        .DependsOn(Pack)
         .Executes(() =>
         {
             try

@@ -17,6 +17,7 @@ using YamlDotNet.Serialization.NamingConventions;
 using DryGen.CSharpFromJsonSchema;
 using DryGen.Options;
 using DryGen.MermaidFromJsonSchema;
+using System.Runtime.Loader;
 
 namespace DryGen
 {
@@ -304,9 +305,7 @@ namespace DryGen
 
         private static string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
         {
-            /// It seems like Assembly.Load from a file name will hold the file open, and thus our tests cannot clean up by deleting the tmp files they uses, so we read the file to memory our self...
-            var assemblyBytes = File.ReadAllBytes(options.InputFile ?? throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file."));
-            var assembly = Assembly.Load(assemblyBytes);
+            var assembly = LoadAsseblyFromFile(options.InputFile);
             var namespaceFilters = options.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
             var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };
             if (options.IncludeTypeNames?.Any() == true)
@@ -323,6 +322,40 @@ namespace DryGen
             var nameRewriter = new ReplaceNameRewriter(options.NameReplaceFrom ?? string.Empty, options.NameReplaceTo ?? string.Empty);
             var treeShakingDiagramFilter = GetTreeShakingDiagramFilter(options.TreeShakingRoots);
             return diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter, treeShakingDiagramFilter);
+        }
+
+        private static Assembly LoadAsseblyFromFile(string? inputFile)
+        {
+            /// It seems like Assembly.Load from a file name will hold the file open, 
+            /// and thus our tests cannot clean up by deleting the tmp files they uses, so we read the file to memory our self...
+            if (string.IsNullOrWhiteSpace(inputFile))
+            {
+                throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file.");
+            }
+            var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new InvalidOperationException($"Could not determin directory from inputFile '{inputFile}'");
+            SetupAssemblyResolving(inputDirectory);
+            var assemblyBytes = File.ReadAllBytes(inputFile);
+            var assembly = AssemblyLoadContext.Default.LoadFromStream(new MemoryStream(assemblyBytes));
+            return assembly;
+        }
+
+        [ExcludeFromCodeCoverage] // The loading of assembly dependencies is so difficult to trigger in an automated test, since we need two asseblies in the same directory with dependencies, so this is tested manually (once).
+        private static void SetupAssemblyResolving(string inputDirectory)
+        {
+            AssemblyLoadContext.Default.Resolving += (assemblyContext, assemblyName) =>
+            {
+                foreach (var extension in new[] { ".dll", ".exe" })
+                {
+                    var assemblyFileName = $"{inputDirectory}{Path.DirectorySeparatorChar}{assemblyName.Name}{extension}";
+                    if (File.Exists(assemblyFileName))
+                    {
+                        var assemblyBytes = File.ReadAllBytes(assemblyFileName);
+                        return assemblyContext.LoadFromStream(new MemoryStream(assemblyBytes));
+                    }
+                }
+                // We cant find the assembly file, let the runtime try to handle it
+                return null;
+            };
         }
 
         private static TreeShakingDiagramFilter GetTreeShakingDiagramFilter(IEnumerable<string>? treeShakingRoots)
