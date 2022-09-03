@@ -32,7 +32,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="About dry-gen" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"About dry-gen","headline":"About dry-gen","url":"/development/"}</script>
+{"@context":"https://schema.org","@type":"WebSite","description":"About dry-gen","headline":"About dry-gen","name":"DryGen","url":"/about/"}</script>
 <!-- End Jekyll SEO tag -->
 
     <!-- head scripts --></head>
@@ -68,7 +68,7 @@
                     
                 
                     
-                    <a href="/development/" class="navbar-item is-active">About</a>
+                    <a href="/about/" class="navbar-item is-active">About</a>
                     
                 
                 
@@ -111,18 +111,18 @@
 
 <h3 id="inspiration">Inspiration</h3>
 
-<p>You’ve probably already figured out that the <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">“don’t repeat yourself” (DRY) prinsiple</a>, formulated in the book <a href="https://en.wikipedia.org/wiki/The_Pragmatic_Programmer">The Pragmatic Programmer</a> is a major inspiration for this tool. As you’ve splunked along as a developer you have most certainly experienced the same pain and suffering as I’ve done from not living the DRY principle, as the documentation (someone else demanded you to provide) constantly was be out of sync with your actual implementaion. It’s not that you didn’t want to be DRY, its just that is was so hard, since you didn’t have the right tool at hand! There are probably many underlying reasons why we ended up like this, but one that often surfaced for me was that the leading documentation tools uses complex (and propertar)y formats as their representation. But when I accidentalliy found <a href="https://mermaid-js.github.io/mermaid/#/">Mermaid (.js)</a> something just clicked. Their format is so terse and simple that I was able to get my first diagram up and running in a few minutes by just typing plain text in my editor! But I soon realized that the fact that I typed the plain text for the diargam and then had to type text (in C# code this time) for the same representation still wasn’t DRY. But hey, I know my way around C# reflection, so finally I had the pieces I needed to live the DRY lifestyle, and thus dry-gen was borned.</p>
+<p>Beside the <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">“don’t repeat yourself” (DRY) prinsiple</a>, formulated in the book <a href="https://en.wikipedia.org/wiki/The_Pragmatic_Programmer">The Pragmatic Programmer</a>, <a href="https://mermaid-js.github.io/mermaid/#/">Mermaid (.js)</a> is the main inspiration for dry-gen. Their documentation formats are so terse and simple that I was able to get my first diagram up and running in a few minutes by just typing plain text in my editor! Knowing a bit about C# reflection I realized that generating Mermaid diagrams from C# assemblies would be a managable task, and thus dry-gen was borned.</p>
 
 <h3 id="development-tools">Development tools</h3>
 
 <p>As an open source tool <strong>“we’re standing on the shoulder of giants”</strong>, and we heavily rely on the hard work of others volunteers. Drygen would probably never have seen the light of day without these other execelent tools:</p>
 
 <ul>
-  <li>Our main developement tool is <a href="https://dotnet.microsoft.com/">.Net</a>, a free, cross-platform, and open source developer platform.</li>
-  <li>Github is our hosting environment, used for our <a href="https://github.com/ebjornset/DryGen">code repository</a>, <a href="https://github.com/ebjornset/DryGen/issues">issue tracker</a>, <a href="https://github.com/ebjornset/DryGen/actions">deployment tool</a> and <a href="https://docs.drygen.net/">documetation site</a></li>
+  <li>The main developement tool is <a href="https://dotnet.microsoft.com/">.Net</a>, a free, cross-platform, and open source developer platform.</li>
+  <li>Github is used for our <a href="https://github.com/ebjornset/DryGen">code repository</a>, <a href="https://github.com/ebjornset/DryGen/issues">issue tracker</a>, <a href="https://github.com/ebjornset/DryGen/actions">deployment tool</a> and <a href="https://docs.drygen.net/">documetation site</a></li>
   <li>We use <a href="https://www.sonarqube.org/">SonarQube</a> and their SAAS offering <a href="https://sonarcloud.io/project/overview?id=ebjornset_DryGen">SonarCloud</a> (free for open source projects) as our static code analysis tool.</li>
   <li>We use <a href="https://www.mend.io/free-developer-tools/bolt/">Mend bolt</a> (free for open source projects) as our security alerts and compliance tool.</li>
-  <li>The static website for our <a href="https://docs.drygen.net/">documentation site</a> is generated at deploy time using the <a href="https://jekyllrb.com/">Jekyll</a> engine.</li>
+  <li>The <a href="https://docs.drygen.net/">documentation site</a> is generated at deploy time using the <a href="https://jekyllrb.com/">Jekyll</a> engine.</li>
   <li>As a commandline tool, we rely heavily on the <a href="https://github.com/commandlineparser/commandline">Command Line Parser Library</a>.</li>
   <li><a href="https://github.com/aaubry/YamlDotNet">YamlDotNet</a> is used to implement the <code class="language-plaintext highlighter-rouge">--options-file</code> option.</li>
   <li>The verb <code class="language-plaintext highlighter-rouge">csharp-from-json-schema</code> is using <a href="https://github.com/RicoSuter/NJsonSchema">NJsonSchema</a> as the internal engine doing all the hard work.</li>
