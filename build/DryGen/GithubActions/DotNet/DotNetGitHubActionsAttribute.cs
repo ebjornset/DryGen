@@ -7,7 +7,7 @@ namespace DryGen.GithubActions.DotNet
 {
     public class DotNetGitHubActionsAttribute : GitHubActionsAttribute
     {
-        public DotNetGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
+        public DotNetGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) {}
 
         protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
         {
