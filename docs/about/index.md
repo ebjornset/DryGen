@@ -10,17 +10,17 @@ The dry-gen tool is developed as an open source software project hosted on [Gith
 
 ### Inspiration
 
-You've probably already figured out that the ["don't repeat yourself" (DRY) prinsiple](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), formulated in the book [The Pragmatic Programmer](https://en.wikipedia.org/wiki/The_Pragmatic_Programmer) is a major inspiration for this tool. As you've splunked along as a developer you have most certainly experienced the same pain and suffering as I've done from not living the DRY principle, as the documentation (someone else demanded you to provide) constantly was be out of sync with your actual implementaion. It's not that you didn't want to be DRY, its just that is was so hard, since you didn't have the right tool at hand! There are probably many underlying reasons why we ended up like this, but one that often surfaced for me was that the leading documentation tools uses complex (and propertar)y formats as their representation. But when I accidentalliy found [Mermaid (.js)](https://mermaid-js.github.io/mermaid/#/) something just clicked. Their format is so terse and simple that I was able to get my first diagram up and running in a few minutes by just typing plain text in my editor! But I soon realized that the fact that I typed the plain text for the diargam and then had to type text (in C# code this time) for the same representation still wasn't DRY. But hey, I know my way around C# reflection, so finally I had the pieces I needed to live the DRY lifestyle, and thus dry-gen was borned.
+Beside the ["don't repeat yourself" (DRY) prinsiple](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), formulated in the book [The Pragmatic Programmer](https://en.wikipedia.org/wiki/The_Pragmatic_Programmer), [Mermaid (.js)](https://mermaid-js.github.io/mermaid/#/) is the main inspiration for dry-gen. Their documentation formats are so terse and simple that I was able to get my first diagram up and running in a few minutes by just typing plain text in my editor! Knowing a bit about C# reflection I realized that generating Mermaid diagrams from C# assemblies would be a managable task, and thus dry-gen was borned.
 
 ### Development tools
 
 As an open source tool **"we're standing on the shoulder of giants"**, and we heavily rely on the hard work of others volunteers. Drygen would probably never have seen the light of day without these other execelent tools:
 
-- Our main developement tool is [.Net](https://dotnet.microsoft.com/), a free, cross-platform, and open source developer platform.
-- Github is our hosting environment, used for our [code repository](https://github.com/ebjornset/DryGen), [issue tracker](https://github.com/ebjornset/DryGen/issues), [deployment tool](https://github.com/ebjornset/DryGen/actions) and [documetation site](https://docs.drygen.net/)
+- The main developement tool is [.Net](https://dotnet.microsoft.com/), a free, cross-platform, and open source developer platform.
+- Github is used for our [code repository](https://github.com/ebjornset/DryGen), [issue tracker](https://github.com/ebjornset/DryGen/issues), [deployment tool](https://github.com/ebjornset/DryGen/actions) and [documetation site](https://docs.drygen.net/)
 - We use [SonarQube](https://www.sonarqube.org/) and their SAAS offering [SonarCloud](https://sonarcloud.io/project/overview?id=ebjornset_DryGen) (free for open source projects) as our static code analysis tool.
 - We use [Mend bolt](https://www.mend.io/free-developer-tools/bolt/) (free for open source projects) as our security alerts and compliance tool.
-- The static website for our [documentation site](https://docs.drygen.net/) is generated at deploy time using the [Jekyll](https://jekyllrb.com/) engine.
+- The [documentation site](https://docs.drygen.net/) is generated at deploy time using the [Jekyll](https://jekyllrb.com/) engine.
 - As a commandline tool, we rely heavily on the [Command Line Parser Library](https://github.com/commandlineparser/commandline).
 - [YamlDotNet](https://github.com/aaubry/YamlDotNet) is used to implement the `--options-file` option.
 - The verb `csharp-from-json-schema` is using [NJsonSchema](https://github.com/RicoSuter/NJsonSchema) as the internal engine doing all the hard work.
