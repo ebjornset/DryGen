@@ -154,22 +154,28 @@
 
 
 <div class="content">
-    <p>These examples shows how you can control what C# types that will be included in your Mermaid diagrams. 
+    <p>These examples shows how you can control what C# types that will be included in your Mermaid diagrams.
 Here we will only focus on the Class diagrams, but the filtering capabilities are the same for ER diagrams, so you can use the same filters for those diagrams.</p>
 
-<p>In the following examples we exclude most of the diagram content details, to make it easier to follow the examples. 
-<a href="../mermaid-class-diagram-details/">The Mermaid Class diagram details examples</a> digs into more details on how to control the content details in your Mermaid Class diagrams and 
+<p>In the following examples we exclude most of the diagram content details, to make it easier to follow the examples.
+<a href="../mermaid-class-diagram-details/">The Mermaid Class diagram details examples</a> digs into more details on how to control the content details in your Mermaid Class diagrams and
 <a href="../mermaid-er-diagram-details/">the Mermaid ER diagram details examples</a> does the same for Mermaid Er diagrams.</p>
 
-<p>All these examples uses <code class="language-plaintext highlighter-rouge">DryGen.MermaidFromCSharp.dll</code> (the assembly for generating Mermaid diagram from C# code using reflection ) as <code class="language-plaintext highlighter-rouge">--input-file</code>. 
+<p>All these examples uses <code class="language-plaintext highlighter-rouge">DryGen.MermaidFromCSharp.dll</code> (the assembly for generating Mermaid diagram from C# code using reflection ) as <code class="language-plaintext highlighter-rouge">--input-file</code>.
 They also uses the same <code class="language-plaintext highlighter-rouge">--output-file</code> options, to give you an idea of how to control the generated representation by using the highlighted options.</p>
 
 <p>The <code class="language-plaintext highlighter-rouge">--direction</code> option used in the examples are choosen by trial and error.</p>
+
 <h3 id="example-one-no-filtering">Example one: No filtering</h3>
+
 <p>Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.</p>
+
 <h4 id="the-commandline">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-no-filtering.!.!. --attribute-level none --method-level none --direction RL</code></p>
+
 <h4 id="the-resulting-mermaid-diagram">The resulting Mermaid diagram</h4>
+
 <pre><code class="language-mermaid">classDiagram
 	direction RL
 	class AllChildFiltersTypeFilter {
@@ -185,9 +191,6 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	}
 	class ClassDiagramDirection {
 		&lt;&lt;enumeration&gt;&gt;
-	}
-	class ClassDiagramExtensions {
-		&lt;&lt;abstract&gt;&gt;
 	}
 	class ClassDiagramGenerator {
 	}
@@ -215,9 +218,6 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 		&lt;&lt;enumeration&gt;&gt;
 	}
 	class ErDiagramEntity {
-	}
-	class ErDiagramExtensions {
-		&lt;&lt;abstract&gt;&gt;
 	}
 	class ErDiagramGenerator {
 	}
@@ -248,9 +248,6 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	class ExcludeSystemObjectTypeFilter {
 	}
 	class ExcludeTypeNameTypeFilter {
-	}
-	class Extensions {
-		&lt;&lt;abstract&gt;&gt;
 	}
 	class IClassDiagramGenerator {
 		&lt;&lt;interface&gt;&gt;
@@ -358,13 +355,19 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	TypeLoaderByReflection ..|&gt; ITypeLoader
 
 </code></pre>
+
 <h3 id="example-two-filtering-with---tree-shaking-roots">Example two: Filtering with <code class="language-plaintext highlighter-rouge">--tree-shaking-roots</code></h3>
-<p>Use <code class="language-plaintext highlighter-rouge">--tree-shakong-roots</code> if you want a diagram with just the C# types with a relationship with one or more type(s).</p>
+
+<p>Use <code class="language-plaintext highlighter-rouge">--tree-shaking-roots</code> if you want a diagram with just the C# types with a relationship with one or more type(s).</p>
 
 <p>In this example we show all the dry-gen types related to the interface <code class="language-plaintext highlighter-rouge">ITypeFilter</code>.</p>
+
 <h4 id="the-commandline-1">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-tree-shaking-roots.!.!. --tree-shaking-roots ^ITypeFilter$ --attribute-level none --method-level none --direction RL</code></p>
+
 <h4 id="the-resulting-mermaid-diagram-1">The resulting Mermaid diagram</h4>
+
 <div x-data="{visible: true}">
     <div class="notification is-dark" x-show.transition.duration.300ms="visible">
         
@@ -381,6 +384,7 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
         </article>
     </div>
 </div>
+
 <pre><code class="language-mermaid">classDiagram
 	direction RL
 	class AllChildFiltersTypeFilter {
@@ -431,13 +435,19 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	TreeShakingDiagramFilter ..|&gt; IDiagramFilter
 
 </code></pre>
+
 <h3 id="example-three-filtering-with---include-namespaces">Example three: Filtering with <code class="language-plaintext highlighter-rouge">--include-namespaces</code></h3>
+
 <p>Use <code class="language-plaintext highlighter-rouge">--include-namespaces</code> if you want a diagram with all C# types in one or more of your namespaces.</p>
 
 <p>In this example we show all the dry-gen types in the namespace <code class="language-plaintext highlighter-rouge">DryGen.MermaidFromCSharp.ClassDiagram</code>.</p>
+
 <h4 id="the-commandline-2">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-include-namespaces.!.!. --include-namespaces ^DryGen.MermaidFromCSharp.ClassDiagram$ --attribute-level none --method-level none --direction TB</code></p>
+
 <h4 id="the-resulting-mermaid-diagram-2">The resulting Mermaid diagram</h4>
+
 <div x-data="{visible: true}">
     <div class="notification is-dark" x-show.transition.duration.300ms="visible">
         
@@ -454,6 +464,7 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
         </article>
     </div>
 </div>
+
 <pre><code class="language-mermaid">classDiagram
 	direction TB
 	class ClassDiagramAttribute {
@@ -465,9 +476,6 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	}
 	class ClassDiagramDirection {
 		&lt;&lt;enumeration&gt;&gt;
-	}
-	class ClassDiagramExtensions {
-		&lt;&lt;abstract&gt;&gt;
 	}
 	class ClassDiagramGenerator {
 	}
@@ -502,13 +510,19 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	IMermaidClassDiagramFromCSharpOptions --&gt; "0..1" ClassDiagramDirection : direction
 
 </code></pre>
+
 <h3 id="example-four-filtering-with---include-typenames">Example four: Filtering with <code class="language-plaintext highlighter-rouge">--include-typenames</code></h3>
+
 <p>Use <code class="language-plaintext highlighter-rouge">--include-typenames</code> if you want a diagram with all C# types where the type name matches one or more regex(es).</p>
 
 <p>In this example we show all the dry-gen types where the type name matches the regex <code class="language-plaintext highlighter-rouge">.*ClassDiagram.*</code>.</p>
+
 <h4 id="the-commandline-3">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-include-typenames.!.!. --include-typenames .*ClassDiagram.* --attribute-level none --method-level none --direction TB</code></p>
+
 <h4 id="the-resulting-mermaid-diagram-3">The resulting Mermaid diagram</h4>
+
 <div x-data="{visible: true}">
     <div class="notification is-dark" x-show.transition.duration.300ms="visible">
         
@@ -525,6 +539,7 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
         </article>
     </div>
 </div>
+
 <pre><code class="language-mermaid">classDiagram
 	direction TB
 	class ClassDiagramAttribute {
@@ -536,9 +551,6 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	}
 	class ClassDiagramDirection {
 		&lt;&lt;enumeration&gt;&gt;
-	}
-	class ClassDiagramExtensions {
-		&lt;&lt;abstract&gt;&gt;
 	}
 	class ClassDiagramGenerator {
 	}
@@ -577,13 +589,19 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	IMermaidClassDiagramFromCSharpOptions --&gt; "0..1" ClassDiagramDirection : direction
 
 </code></pre>
+
 <h3 id="example-five-filtering-with---exclude-typenames">Example five: Filtering with <code class="language-plaintext highlighter-rouge">--exclude-typenames</code></h3>
+
 <p>Use <code class="language-plaintext highlighter-rouge">--exclude-typenames</code> if you want a diagram with all C# types except those where the type name matches one or more regex(es).</p>
 
 <p>In this example we show all the dry-gen types where the type name does not match the regex <code class="language-plaintext highlighter-rouge">.*ClassDiagram.*</code>.</p>
+
 <h4 id="the-commandline-4">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/filtering-mermaid-diagram-content.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-diagram-filter-example-exclude-typenames.!.!. --exclude-typenames .*TypeFilter.*;.*ClassDiagram.* --attribute-level none --method-level none --direction RL</code></p>
+
 <h4 id="the-resulting-mermaid-diagram-4">The resulting Mermaid diagram</h4>
+
 <div x-data="{visible: true}">
     <div class="notification is-dark" x-show.transition.duration.300ms="visible">
         
@@ -600,6 +618,7 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
         </article>
     </div>
 </div>
+
 <pre><code class="language-mermaid">classDiagram
 	direction RL
 	class ErDiagramAttribute {
@@ -611,9 +630,6 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 		&lt;&lt;enumeration&gt;&gt;
 	}
 	class ErDiagramEntity {
-	}
-	class ErDiagramExtensions {
-		&lt;&lt;abstract&gt;&gt;
 	}
 	class ErDiagramGenerator {
 	}
@@ -628,9 +644,6 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	class ErDiagramStructureBuilderByReflection {
 	}
 	class ExcludePropertyNamePropertyFilter {
-	}
-	class Extensions {
-		&lt;&lt;abstract&gt;&gt;
 	}
 	class IDiagramFilter {
 		&lt;&lt;interface&gt;&gt;
@@ -696,6 +709,7 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	TypeLoaderByReflection ..|&gt; ITypeLoader
 
 </code></pre>
+
 <script src="https://unpkg.com/mermaid@9.1.6/dist/mermaid.min.js"></script>
 
 <script>
