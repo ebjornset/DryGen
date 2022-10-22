@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace DryGen.MermaidFromCSharp.ClassDiagram
@@ -35,17 +36,18 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
 
         public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter, IDiagramFilter diagramFilter)
         {
-            IEnumerable<ClassDiagramClass> classes = typeloader.Load(assembly, ClassDiagramFilters(typeFilters), nameRewriter).Select(x => new ClassDiagramClass(x)).ToList();
-            GenerateClassDiagramStructure(classes, attributeFilters);
-            classes = diagramFilter.Filter(classes);
-            var result = GenerateClassDiagramMermaid(classes, nameRewriter);
+            IEnumerable<ClassDiagramClass> classDiagramClasses = typeloader.Load(assembly, ClassDiagramFilters(typeFilters), nameRewriter).Select(x => new ClassDiagramClass(x)).ToList();
+            GenerateClassDiagramStructure(classDiagramClasses, attributeFilters);
+            classDiagramClasses = diagramFilter.Filter(classDiagramClasses);
+            classDiagramClasses = ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(classDiagramClasses);
+            var result = GenerateClassDiagramMermaid(classDiagramClasses, nameRewriter);
             return result;
         }
 
-        private void GenerateClassDiagramStructure(IEnumerable<ClassDiagramClass> classes, IReadOnlyList<IPropertyFilter> attributeFilters)
+        private void GenerateClassDiagramStructure(IEnumerable<ClassDiagramClass> classDiagramClasses, IReadOnlyList<IPropertyFilter> attributeFilters)
         {
-            var classLookup = classes.ToDictionary(x => x.Type, x => x);
-            foreach (var classDiagramClass in classes)
+            var classLookup = classDiagramClasses.ToDictionary(x => x.Type, x => x);
+            foreach (var classDiagramClass in classDiagramClasses)
             {
                 if (classDiagramClass.Type.IsEnum)
                 {
@@ -58,10 +60,33 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                 GenerateClassInheritanceOrRealizationForInterfaces(classLookup, classDiagramClass);
                 GenerateClassInheritanceForBaseType(classLookup, classDiagramClass);
             }
-            foreach (var classDiagramClass in classes)
+            foreach (var classDiagramClass in classDiagramClasses)
             {
                 classDiagramClass.RemoveBidirectionalRelationshipDuplicates();
             }
+        }
+
+        private IEnumerable<ClassDiagramClass> ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(IEnumerable<ClassDiagramClass> classDiagramClasses)
+        {
+            var classLookup = classDiagramClasses.ToDictionary(x => x.Type, x => x);
+            var removedExtensionClasses = new List<ClassDiagramClass>();
+            foreach (var extensionClass in classDiagramClasses.Where(x => x.Type.IsExtensionType()))
+            {
+                foreach (var extensionMethod in extensionClass.Methods.Where(x => x.MethodInfo.IsExtensionMethod()).ToArray())
+                {
+                    var extendedType = extensionMethod.MethodInfo.GetParameters()[0].ParameterType;
+                    if (classLookup.ContainsKey(extendedType))
+                    {
+                        var extendedClass = classLookup[extendedType];
+                        extensionClass.PromoteMethodToExtendedClass(extensionMethod, extendedClass);
+                    }
+                }
+                if (!extensionClass.Methods.Any())
+                {
+                    removedExtensionClasses.Add(extensionClass);
+                }
+            }
+            return classDiagramClasses.Except(removedExtensionClasses).ToArray();
         }
 
         private static void GenerateClassAssociationsCompositionsAndAggregations(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
@@ -273,23 +298,23 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             {
                 bindingFlags |= BindingFlags.NonPublic;
             }
-            foreach (var method in classDiagramClass.Type.GetMethods(bindingFlags).Where(x => IsNotGetterOrSetterOrLocalFunction(x)))
+            foreach (var methodInfo in classDiagramClass.Type.GetMethods(bindingFlags).Where(x => IsNotGetterOrSetterOrLocalFunction(x)))
             {
-                if (IsMethodWithToLowVisibility(method))
+                if (IsMethodWithToLowVisibility(methodInfo))
                 {
                     continue;
                 }
-                if (IsSyntheticCompilerGeneratedMethod(method))
+                if (IsSyntheticCompilerGeneratedMethod(methodInfo))
                 {
                     continue;
                 }
-                var returnTypeType = GetDataType(method.ReturnType);
-                var methodName = method.Name;
-                var visibility = GetVisibility(method);
-                var isStatic = method.IsStatic;
-                var isAbstract = method.IsAbstract;
-                var parameters = method.GetParameters().Select(x => new ClassDiagramMethodParameter(GetDataType(x.ParameterType), x.Name)).ToList();
-                classDiagramClass.AddMethod(new ClassDiagramMethod(returnTypeType, methodName, visibility, isStatic, isAbstract, parameters));
+                var returnTypeType = GetDataType(methodInfo.ReturnType);
+                var methodName = methodInfo.Name;
+                var visibility = GetVisibility(methodInfo);
+                var isStatic = methodInfo.IsStatic;
+                var isAbstract = methodInfo.IsAbstract;
+                var parameters = methodInfo.GetParameters().Select(x => new ClassDiagramMethodParameter(GetDataType(x.ParameterType), x.Name)).ToList();
+                classDiagramClass.AddMethod(new ClassDiagramMethod(returnTypeType, methodName, visibility, isStatic, isAbstract, parameters, methodInfo));
             }
         }
 
@@ -305,12 +330,12 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             return method.IsPrivate && method.Name.StartsWith('<');
         }
 
-        private string GenerateClassDiagramMermaid(IEnumerable<ClassDiagramClass> classes, INameRewriter? nameRewriter)
+        private string GenerateClassDiagramMermaid(IEnumerable<ClassDiagramClass> classDiagramClasses, INameRewriter? nameRewriter)
         {
             var sb = new StringBuilder().AppendLine("classDiagram");
             AppendDirection(sb);
-            AppendClasses(classes, nameRewriter, sb);
-            AppendRelationships(classes, nameRewriter, sb);
+            AppendClasses(classDiagramClasses, nameRewriter, sb);
+            AppendRelationships(classDiagramClasses, nameRewriter, sb);
             return sb.ToString();
         }
 
@@ -322,9 +347,9 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
             }
         }
 
-        private void AppendClasses(IEnumerable<ClassDiagramClass> classes, INameRewriter? nameRewriter, StringBuilder sb)
+        private void AppendClasses(IEnumerable<ClassDiagramClass> classDiagramClasses, INameRewriter? nameRewriter, StringBuilder sb)
         {
-            foreach (var classDiagramClass in classes)
+            foreach (var classDiagramClass in classDiagramClasses)
             {
                 // Append class with any attributes
                 var dataType = GetDataType(classDiagramClass.Type, nameRewriter);

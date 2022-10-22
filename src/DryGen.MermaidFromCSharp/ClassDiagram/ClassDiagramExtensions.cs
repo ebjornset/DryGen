@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace DryGen.MermaidFromCSharp.ClassDiagram
 {
@@ -106,6 +108,17 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
         public static string GetRelationshipLabel(this ClassDiagramRelationship relationship)
         {
             return string.IsNullOrWhiteSpace(relationship.Label) ? string.Empty : $" : {relationship.Label}";
+        }
+
+        public static bool IsExtensionType(this Type type)
+        {
+
+            return type.IsAbstract && type.IsSealed && !type.IsNested && type.CustomAttributes.Any(x => x.AttributeType == typeof(ExtensionAttribute));
+        }
+
+        public static bool IsExtensionMethod(this MethodInfo methodInfo)
+        {
+            return methodInfo.IsStatic && methodInfo.GetParameters().Any() && methodInfo.CustomAttributes.Any(x => x.AttributeType == typeof(ExtensionAttribute));
         }
     }
 }
