@@ -22,7 +22,8 @@ Sometimes a C# type can contain quite a few methods and or properties, and thus 
 classDiagram
 	class ClassDiagramGenerator {
 		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
-		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classes, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classDiagramClasses, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(IEnumerable~ClassDiagramClass~ classDiagramClasses) IEnumerable~ClassDiagramClass~
 		-GenerateClassAssociationsCompositionsAndAggregations(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass)$
 		-GetPropertyTypeRelationshipInfo(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ ValueTuple~bool,bool,bool,Type~
 		-IsCollectionOfKnownType(IDictionary~Type,ClassDiagramClass~ classLookup, Type type)$ bool
@@ -35,9 +36,9 @@ classDiagram
 		-GenerateClassMethods(ClassDiagramClass classDiagramClass)
 		-IsMethodWithToLowVisibility(MethodInfo method) bool
 		-IsSyntheticCompilerGeneratedMethod(MethodInfo method)$ bool
-		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter) string
+		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classDiagramClasses, INameRewriter nameRewriter) string
 		-AppendDirection(StringBuilder sb)
-		-AppendClasses(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)
+		-AppendClasses(IEnumerable~ClassDiagramClass~ classDiagramClasses, INameRewriter nameRewriter, StringBuilder sb)
 		-AppendEnumerationToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
 		-AppendAttributesToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)$
 		-AppendMethodsToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
@@ -87,13 +88,14 @@ message="You can also exclude any static attibutes with `--exclude-static-attrib
 classDiagram
 	class ClassDiagramGenerator {
 		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
-		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classes, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-GenerateClassDiagramStructure(IEnumerable~ClassDiagramClass~ classDiagramClasses, IReadOnlyList~IPropertyFilter~ attributeFilters)
+		-ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(IEnumerable~ClassDiagramClass~ classDiagramClasses) IEnumerable~ClassDiagramClass~
 		-GenerateClassAttributes(IDictionary~Type,ClassDiagramClass~ classLookup, ClassDiagramClass classDiagramClass, IReadOnlyList~IPropertyFilter~ attributeFilters)
 		-GenerateClassMethods(ClassDiagramClass classDiagramClass)
 		-IsMethodWithToLowVisibility(MethodInfo method) bool
-		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter) string
+		-GenerateClassDiagramMermaid(IEnumerable~ClassDiagramClass~ classDiagramClasses, INameRewriter nameRewriter) string
 		-AppendDirection(StringBuilder sb)
-		-AppendClasses(IEnumerable~ClassDiagramClass~ classes, INameRewriter nameRewriter, StringBuilder sb)
+		-AppendClasses(IEnumerable~ClassDiagramClass~ classDiagramClasses, INameRewriter nameRewriter, StringBuilder sb)
 		-AppendEnumerationToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
 		-AppendMethodsToClass(StringBuilder sb, ClassDiagramClass classDiagramClass)
 		-ClassDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
@@ -111,6 +113,7 @@ classDiagram
 	class ClassDiagramGenerator {
 		+Generate(5 params) string
 		-GenerateClassDiagramStructure(2 params)
+		-ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(1 param) IEnumerable~ClassDiagramClass~
 		-GenerateClassAssociationsCompositionsAndAggregations(2 params)$
 		-GetPropertyTypeRelationshipInfo(2 params)$ ValueTuple~bool,bool,bool,Type~
 		-IsCollectionOfKnownType(2 params)$ bool
@@ -166,9 +169,6 @@ classDiagram
 	}
 	class Direction {
 		<<enumeration>>
-	}
-	class Extensions {
-		<<abstract>>
 	}
 	class Generator {
 	}

@@ -80,6 +80,18 @@ namespace DryGen.MermaidFromCSharp.ClassDiagram
                     r.To.Relationships.Any(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Aggregation));
         }
 
+        internal void PromoteMethodToExtendedClass(ClassDiagramMethod method, ClassDiagramClass classDiagramClass)
+        {
+            methods.Remove(method);
+            classDiagramClass.PromoteMethodToExtensionMethod(method);
+        }
+
+        internal void PromoteMethodToExtensionMethod(ClassDiagramMethod method)
+        {
+            method.ConvertToExtensionMethod();
+            methods.Add(method);
+        }
+
         protected override bool IsRelatedTo(IDiagramType type)
         {
             var result = Relationships.Any(x => x.To.Type == type.Type);

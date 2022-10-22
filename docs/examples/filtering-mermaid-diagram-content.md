@@ -49,9 +49,6 @@ classDiagram
 	class ClassDiagramDirection {
 		<<enumeration>>
 	}
-	class ClassDiagramExtensions {
-		<<abstract>>
-	}
 	class ClassDiagramGenerator {
 	}
 	class ClassDiagramMethod {
@@ -78,9 +75,6 @@ classDiagram
 		<<enumeration>>
 	}
 	class ErDiagramEntity {
-	}
-	class ErDiagramExtensions {
-		<<abstract>>
 	}
 	class ErDiagramGenerator {
 	}
@@ -111,9 +105,6 @@ classDiagram
 	class ExcludeSystemObjectTypeFilter {
 	}
 	class ExcludeTypeNameTypeFilter {
-	}
-	class Extensions {
-		<<abstract>>
 	}
 	class IClassDiagramGenerator {
 		<<interface>>
@@ -317,9 +308,6 @@ classDiagram
 	class ClassDiagramDirection {
 		<<enumeration>>
 	}
-	class ClassDiagramExtensions {
-		<<abstract>>
-	}
 	class ClassDiagramGenerator {
 	}
 	class ClassDiagramMethod {
@@ -381,9 +369,6 @@ classDiagram
 	}
 	class ClassDiagramDirection {
 		<<enumeration>>
-	}
-	class ClassDiagramExtensions {
-		<<abstract>>
 	}
 	class ClassDiagramGenerator {
 	}
@@ -451,9 +436,6 @@ classDiagram
 	}
 	class ErDiagramEntity {
 	}
-	class ErDiagramExtensions {
-		<<abstract>>
-	}
 	class ErDiagramGenerator {
 	}
 	class ErDiagramRelationship {
@@ -467,9 +449,6 @@ classDiagram
 	class ErDiagramStructureBuilderByReflection {
 	}
 	class ExcludePropertyNamePropertyFilter {
-	}
-	class Extensions {
-		<<abstract>>
 	}
 	class IDiagramFilter {
 		<<interface>>
