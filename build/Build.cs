@@ -77,8 +77,8 @@ public partial class Build : NukeBuild
             Serilog.Log.Information("Description = {description}", Description);
             Serilog.Log.Information("Copyright = {copyright}", Copyright);
             Serilog.Log.Information("GitRepository = {GitRepository}", GitRepository);
-            Serilog.Log.Information("GitRepository.Branch = {GitRepositoryBranch}", GitRepository.Branch);
-            Serilog.Log.Information("GitRepository.Tags = {GitRepositoryTags}", GitRepository.Tags);
+            Serilog.Log.Information("GitRepository.Branch = {GitRepositoryBranch}", GitRepository?.Branch);
+            Serilog.Log.Information("GitRepository.Tags = {GitRepositoryTags}", GitRepository?.Tags);
             Serilog.Log.Information("IsVersionTag = {isVersionTag}", IsVersionTag);
             Serilog.Log.Information("GitVersion.NuGetVersionV2 = {GitVersionNuGetVersionV2}", GitVersion.NuGetVersionV2);
         });
@@ -133,7 +133,7 @@ public partial class Build : NukeBuild
                     .SetAuthors(Authors)
                     .SetCopyright(Copyright)
                     .SetDescription(Description)
-                    .SetRepositoryUrl(GitRepository.ToString())
+                    .SetRepositoryUrl(GitRepository?.ToString())
                     .SetPackageProjectUrl(ProjectUrlInNugetPackage)
                     .SetVersion(GitVersion.NuGetVersionV2));
             });
