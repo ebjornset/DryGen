@@ -8,7 +8,7 @@ Scenario: Loading json schema file from yaml file by extension
 	Given this json schema
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		title: Test Schema
 		type: object
 		properties:
@@ -27,7 +27,7 @@ Scenario: Loading json schema file from json file by extension
 		"""
 		{
 			"$schema": "https://json-schema.org/draft/2020-12/schema",
-			"id": "https://drygen.net/test-json-schemas/some.json",
+			"id": "https://drygen.dev/test-json-schemas/some.json",
 			"title": "Test Schema",
 			"type": "object",
 			"properties": {
@@ -48,7 +48,7 @@ Scenario: Force loading of json schema as yaml
 	Given this json schema
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		title: Test Schema
 		type: object
 		properties:
@@ -66,7 +66,7 @@ Scenario: Force loading of json schema as json
 		"""
 		{
 			"$schema": "https://json-schema.org/draft/2020-12/schema",
-			"id": "https://drygen.net/test-json-schemas/some.json",
+			"id": "https://drygen.dev/test-json-schemas/some.json",
 			"title": "Test Schema",
 			"type": "object",
 			"properties": {
