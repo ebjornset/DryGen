@@ -49,7 +49,7 @@ public partial class Build : NukeBuild
     string Description;
     internal bool IsVersionTag;
 #pragma warning disable S1075 // URIs should not be hardcoded
-    private readonly string ProjectUrlInNugetPackage = "https://docs.drygen.net/";
+    private readonly string ProjectUrlInNugetPackage = "https://docs.drygen.dev/";
 #pragma warning restore S1075 // URIs should not be hardcoded
 
     internal static AbsolutePath SourceDirectory => RootDirectory / "src";

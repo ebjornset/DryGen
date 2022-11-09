@@ -8,7 +8,7 @@ Scenario: Should generate c# code to console from 'csharp-from-json-schema' verb
 	Given this json schema input file with the extension "yaml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		type: object
 		properties:
 		  prop1:
@@ -48,7 +48,7 @@ Scenario: Should generate c# code to file from 'csharp-from-json-schema' verb
 		"""
 		{
 			"$schema": "https://json-schema.org/draft/2020-12/schema",
-			"id": "https://drygen.net/test-json-schemas/some.json",
+			"id": "https://drygen.dev/test-json-schemas/some.json",
 			"type": "object",
 			"properties": {
 				"prop1": {
@@ -91,7 +91,7 @@ Scenario: Should use option 'schema-file-format'
 	Given this json schema input file with the extension "json"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		type: object
 		properties:
 		  prop1:
@@ -114,7 +114,7 @@ Scenario: Should use option 'namespace'
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		type: object
 		properties:
 		  prop1:
@@ -137,7 +137,7 @@ Scenario: Should use CSharpFromJsonSchema as namespace when option 'namespace' i
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		type: object
 		properties:
 		  prop1:
@@ -154,7 +154,7 @@ Scenario: Should use option 'root-classname'
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		type: object
 		properties:
 		  prop1:
@@ -177,7 +177,7 @@ Scenario: Should use schema title as root classname when option r'oot-classname'
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		title: Test Schema
 		type: object
 		properties:
@@ -195,7 +195,7 @@ Scenario: Should use ClassFromJsonSchema as root classname when run without opti
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		type: object
 		properties:
 		  prop1:
@@ -212,7 +212,7 @@ Scenario: Should use options 'array-type' and 'array-instance-type'
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		type: object
 		properties:
 		  prop1:
@@ -241,7 +241,7 @@ Scenario: Should use ICollection and Collection when options 'array-type' and 'a
 	Given this json schema input file with the extension "yml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		type: object
 		properties:
 		  prop1:

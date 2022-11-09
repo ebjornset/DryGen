@@ -12,7 +12,7 @@ Background:
 	Given this json schema input file with the extension "yaml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		type: object
 		properties:
 		  prop1:
@@ -87,7 +87,7 @@ Scenario: Should generate Mermaid Er diagram with tree shaking from 'tree-shakin
 	Given this json schema input file with the extension "yaml"
 		"""
 		$schema: https://json-schema.org/draft/2020-12/schema
-		id: https://drygen.net/test-json-schemas/some.json
+		id: https://drygen.dev/test-json-schemas/some.json
 		title: Test Schema
 		type: object
 		properties:
