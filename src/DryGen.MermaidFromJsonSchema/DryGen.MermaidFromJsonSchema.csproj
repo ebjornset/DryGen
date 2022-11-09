@@ -9,9 +9,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
-	  <ProjectReference Include="..\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj" />
-	  <ProjectReference Include="..\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />
+		<ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
+		<ProjectReference Include="..\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj" />
+		<ProjectReference Include="..\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />
 	</ItemGroup>
 
 </Project>
