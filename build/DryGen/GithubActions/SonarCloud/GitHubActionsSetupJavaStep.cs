@@ -7,14 +7,15 @@ namespace DryGen.GithubActions.SonarCloud
     {
         public override void Write(CustomFileWriter writer)
         {
-            writer.WriteLine("- name: Setup JDK v 11 (for SonarCloud)");
+            writer.WriteLine("- name: Setup JDK (for SonarCloud)");
             using (writer.Indent())
             {
-                writer.WriteLine("uses: actions/setup-java@v2");
+                writer.WriteLine("uses: actions/setup-java@v3");
                 writer.WriteLine("with:");
                 using (writer.Indent())
                 {
-                    writer.WriteLine("java-version: 1.11");
+                    writer.WriteLine("distribution: zulu");
+                    writer.WriteLine("java-version: 17");
                 }
             }
         }

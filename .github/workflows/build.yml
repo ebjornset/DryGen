@@ -42,10 +42,11 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.*
-      - name: Setup JDK v 11 (for SonarCloud)
-        uses: actions/setup-java@v2
+      - name: Setup JDK (for SonarCloud)
+        uses: actions/setup-java@v3
         with:
-          java-version: 1.11
+          distribution: zulu
+          java-version: 17
       - name: Install/Update SonarCloud scanner
         run:
           dotnet tool update dotnet-sonarscanner --global
