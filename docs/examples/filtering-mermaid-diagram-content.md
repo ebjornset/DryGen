@@ -94,6 +94,8 @@ classDiagram
 	}
 	class ExcludeEnumTypeFilter {
 	}
+	class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter {
+	}
 	class ExcludeNonPublicClassTypeFilter {
 	}
 	class ExcludePropertyNamePropertyFilter {
@@ -103,6 +105,8 @@ classDiagram
 	class ExcludeSystemObjectAndSystemEnumTypeFilter {
 	}
 	class ExcludeSystemObjectTypeFilter {
+	}
+	class ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter {
 	}
 	class ExcludeTypeNameTypeFilter {
 	}
@@ -186,11 +190,13 @@ classDiagram
 	ExcludeAbstractClassTypeFilter ..|> ITypeFilter
 	ExcludeClosedGenericTypeTypeFilter ..|> ITypeFilter
 	ExcludeEnumTypeFilter ..|> ITypeFilter
+	ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter ..|> ITypeFilter
 	ExcludeNonPublicClassTypeFilter ..|> ITypeFilter
 	ExcludePropertyNamePropertyFilter ..|> IPropertyFilter
 	ExcludeSystemEnumTypeFilter ..|> ITypeFilter
 	ExcludeSystemObjectAndSystemEnumTypeFilter --|> AllChildFiltersTypeFilter
 	ExcludeSystemObjectTypeFilter ..|> ITypeFilter
+	ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter ..|> ITypeFilter
 	ExcludeTypeNameTypeFilter ..|> ITypeFilter
 	IClassDiagramGenerator --|> IDiagramGenerator
 	IErDiagramGenerator --|> IDiagramGenerator
@@ -241,6 +247,8 @@ classDiagram
 	}
 	class ExcludeEnumTypeFilter {
 	}
+	class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter {
+	}
 	class ExcludeNonPublicClassTypeFilter {
 	}
 	class ExcludeSystemEnumTypeFilter {
@@ -248,6 +256,8 @@ classDiagram
 	class ExcludeSystemObjectAndSystemEnumTypeFilter {
 	}
 	class ExcludeSystemObjectTypeFilter {
+	}
+	class ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter {
 	}
 	class ExcludeTypeNameTypeFilter {
 	}
@@ -268,10 +278,12 @@ classDiagram
 	ExcludeAbstractClassTypeFilter ..|> ITypeFilter
 	ExcludeClosedGenericTypeTypeFilter ..|> ITypeFilter
 	ExcludeEnumTypeFilter ..|> ITypeFilter
+	ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter ..|> ITypeFilter
 	ExcludeNonPublicClassTypeFilter ..|> ITypeFilter
 	ExcludeSystemEnumTypeFilter ..|> ITypeFilter
 	ExcludeSystemObjectAndSystemEnumTypeFilter --|> AllChildFiltersTypeFilter
 	ExcludeSystemObjectTypeFilter ..|> ITypeFilter
+	ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter ..|> ITypeFilter
 	ExcludeTypeNameTypeFilter ..|> ITypeFilter
 	IncludeNamespaceTypeFilter ..|> ITypeFilter
 	IncludeTypeNameTypeFilter ..|> ITypeFilter

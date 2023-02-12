@@ -31,7 +31,7 @@ jobs:
     name: ubuntu-latest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Setup .Net 6.0.*
@@ -56,7 +56,7 @@ jobs:
         run:
           dotnet-sonarscanner begin /k:"ebjornset_DryGen" /o:"ebjornset" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="./.sonarqubecoverage/SonarQube.xml"
       - name: Cache .nuke/temp, ~/.nuget/packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             .nuke/temp

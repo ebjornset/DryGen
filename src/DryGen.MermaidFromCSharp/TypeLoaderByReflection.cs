@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DryGen.MermaidFromCSharp.TypeFilters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +11,7 @@ namespace DryGen.MermaidFromCSharp
         public IReadOnlyList<NamedType> Load(Assembly assembly, IReadOnlyList<ITypeFilter>? typeFilters, INameRewriter? nameRewriter)
         {
             var classLookup = new Dictionary<Type, Type>();
+            typeFilters = WrapWithGlobalFilters(typeFilters);
             var classesFromAssembly = assembly
                 .GetTypes()
                 .Where(type => typeFilters.All(filter => filter.Accepts(type)))
@@ -38,5 +40,16 @@ namespace DryGen.MermaidFromCSharp
                 AddClassHierarchy(typeFilters, classLookup, type.BaseType);
             }
         }
+
+        private IReadOnlyList<ITypeFilter> WrapWithGlobalFilters(IReadOnlyList<ITypeFilter> filters)
+        {
+            var result = new List<ITypeFilter> { 
+                new ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter(), 
+                new ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter()
+            };
+            result.AddRange(filters);
+            return result;
+        }
+
     }
 }
