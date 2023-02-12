@@ -2,6 +2,7 @@
 using DryGen.CSharpFromJsonSchema;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -33,13 +34,13 @@ namespace DryGen.MermaidFromJsonSchema
 
             public bool? ExcludeMethodParams => default;
 
-            public IEnumerable<string>? IncludeNamespaces => default;
+            public IEnumerable<string>? IncludeNamespaces => Array.Empty<string>();
 
-            public IEnumerable<string>? IncludeTypeNames => default;
+            public IEnumerable<string>? IncludeTypeNames => Array.Empty<string>();
 
-            public IEnumerable<string>? ExcludeTypeNames => default;
+            public IEnumerable<string>? ExcludeTypeNames => Array.Empty<string>();
 
-            public IEnumerable<string>? ExcludePropertyNames => default;
+            public IEnumerable<string>? ExcludePropertyNames => Array.Empty<string>();
 
             public string? NameReplaceFrom => default;
 
