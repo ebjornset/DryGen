@@ -10,7 +10,7 @@ namespace DryGen.GithubActions.SonarCloud
             writer.WriteLine("- name: Setup JDK v 11 (for SonarCloud)");
             using (writer.Indent())
             {
-                writer.WriteLine("uses: actions/setup-java@v1");
+                writer.WriteLine("uses: actions/setup-java@v2");
                 writer.WriteLine("with:");
                 using (writer.Indent())
                 {
