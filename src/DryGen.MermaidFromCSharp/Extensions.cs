@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace DryGen.MermaidFromCSharp
 {
@@ -43,13 +44,18 @@ namespace DryGen.MermaidFromCSharp
                 }
             }
             // Rexex code from https://dotnetfiddle.net/VBuoy7
-            var first = System.Text.RegularExpressions.Regex
-                .Replace(propertyName, "(?<before>[^A-Z])(?<after>([A-Z]))", "${before} ${after}", System.Text.RegularExpressions.RegexOptions.Compiled)
+            var first = Regex
+                .Replace(propertyName, "(?<before>[^A-Z])(?<after>([A-Z]))", "${before} ${after}", RegexOptions.Compiled, TimeSpan.FromSeconds(1))
                 .Trim();
-            var result = System.Text.RegularExpressions.Regex
-                .Replace(first, "(?<before>[^ ])(?<after>([A-Z][^A-Zs]))", "${before} ${after}", System.Text.RegularExpressions.RegexOptions.Compiled)
+            var result = Regex
+                .Replace(first, "(?<before>[^ ])(?<after>([A-Z][^A-Zs]))", "${before} ${after}", RegexOptions.Compiled, TimeSpan.FromSeconds(1))
                 .Trim();
             return result.ToLower();
+        }
+
+        public static Regex ToSingleLineCompiledRegexWithTimeout(this string regex)
+        {
+            return new Regex(regex, RegexOptions.Singleline | RegexOptions.Compiled, TimeSpan.FromSeconds(1));
         }
     }
 }

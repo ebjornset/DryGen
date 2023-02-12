@@ -9,8 +9,6 @@ namespace DryGen.MermaidFromCSharp.TypeFilters
                 new ExcludeSystemObjectTypeFilter(),
                 new ExcludeSystemEnumTypeFilter()
             })
-        {
-
-        }
+        { }
     }
 }
