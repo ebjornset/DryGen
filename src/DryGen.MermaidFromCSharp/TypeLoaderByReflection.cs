@@ -41,13 +41,16 @@ namespace DryGen.MermaidFromCSharp
             }
         }
 
-        private IReadOnlyList<ITypeFilter> WrapWithGlobalFilters(IReadOnlyList<ITypeFilter> filters)
+        private IReadOnlyList<ITypeFilter> WrapWithGlobalFilters(IReadOnlyList<ITypeFilter>? filters)
         {
             var result = new List<ITypeFilter> { 
                 new ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter(), 
                 new ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter()
             };
-            result.AddRange(filters);
+            if (filters?.Any() == true)
+            {
+                result.AddRange(filters);
+            }
             return result;
         }
 
