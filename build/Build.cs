@@ -182,9 +182,9 @@ public partial class Build : NukeBuild
                         "test-assembly",
                         "--title",
                         $"\"DryGen {subprojectNames[testProject]}\"",
-                        $"./**/*.{testProject}/bin/{Configuration}/netcoreapp3.1/*.{testProject}.dll",
+                        $"./**/*.{testProject}/bin/{Configuration}/net6.0/*.{testProject}.dll",
                         "-t",
-                        $"./**/*.{testProject}/bin/{Configuration}/netcoreapp3.1/.specflow.livingdoc.data.json",
+                        $"./**/*.{testProject}/bin/{Configuration}/net6.0/.specflow.livingdoc.data.json",
                         "--output",
                         $"{DocsDirectory}/about/specs/drygen-{testProject.ToLowerInvariant()}.html",
                     };
