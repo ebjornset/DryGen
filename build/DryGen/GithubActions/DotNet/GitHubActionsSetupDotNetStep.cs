@@ -17,7 +17,7 @@ namespace DryGen.GithubActions.DotNet
             writer.WriteLine($"- name: Setup .Net {Version}");
             using (writer.Indent())
             {
-                writer.WriteLine("uses: actions/setup-dotnet@v1");
+                writer.WriteLine("uses: actions/setup-dotnet@v3");
                 writer.WriteLine("with:");
                 using (writer.Indent())
                 {

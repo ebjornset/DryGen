@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFrameworks>netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>false</ImplicitUsings>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>dry-gen</ToolCommandName>
@@ -17,7 +17,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
-		<PackageReference Include="YamlDotNet" Version="12.0.2" />
+		<PackageReference Include="YamlDotNet" Version="13.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

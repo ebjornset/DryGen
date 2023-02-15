@@ -1,6 +1,4 @@
-﻿using DryGen.MermaidFromCSharp;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DryGen.MermaidFromCSharp.TypeFilters
 {
@@ -11,8 +9,6 @@ namespace DryGen.MermaidFromCSharp.TypeFilters
                 new ExcludeSystemObjectTypeFilter(),
                 new ExcludeSystemEnumTypeFilter()
             })
-        {
-
-        }
+        { }
     }
 }

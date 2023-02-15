@@ -53,9 +53,8 @@ namespace DryGen.MermaidFromEfCore
                                     ?? throw new ArgumentException($"Cant find navigation for foreignKey '{foreignKey}', when isBidirectional is '{isBidirectional}'");
                 var propertyType = navigation.ClrType;
                 var propertyName = navigation.Name;
-                if (entityLookup.ContainsKey(principalType))
+                if (entityLookup.TryGetValue(principalType, out var principalEntity))
                 {
-                    var principalEntity = entityLookup[principalType];
                     var isIdentifying = foreignKey.Properties?.All(p => p.IsKey()) == true;
                     if (IsGenericRelationshipCollection(propertyType))
                     {

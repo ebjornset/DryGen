@@ -10,7 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
+		<ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
 	</ItemGroup>
 
 </Project>

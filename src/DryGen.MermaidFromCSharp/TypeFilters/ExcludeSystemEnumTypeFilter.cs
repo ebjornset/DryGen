@@ -1,5 +1,4 @@
-﻿using DryGen.MermaidFromCSharp;
-using System;
+﻿using System;
 
 namespace DryGen.MermaidFromCSharp.TypeFilters
 {
