@@ -461,5 +461,5 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
     private const string INavigationTypeName = "Microsoft.EntityFrameworkCore.Metadata.INavigation";
     private const string IPropertyTypeName = "Microsoft.EntityFrameworkCore.Metadata.IProperty";
 
-    private static readonly string[] EfCoreRequiredAssemblyNames = new[] { "Microsoft.Extensions.Primitives", "Microsoft.EntityFrameworkCore", "Microsoft.EntityFrameworkCore.InMemory" };
+    private static readonly string[] EfCoreRequiredAssemblyNames = new[] { "Microsoft.EntityFrameworkCore", "Microsoft.EntityFrameworkCore.InMemory" };
 }

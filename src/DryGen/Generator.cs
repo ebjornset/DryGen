@@ -333,7 +333,7 @@ namespace DryGen
             {
                 throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file.");
             }
-            var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new InvalidOperationException($"Could not determin directory from inputFile '{inputFile}'");
+            var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new InvalidOperationException($"Could not determine directory from inputFile '{inputFile}'");
             AssemblyResolvingHelper.SetupAssemblyResolving(inputDirectory);
             var assemblyBytes = File.ReadAllBytes(inputFile);
             var assembly = AssemblyLoadContext.Default.LoadFromStream(new MemoryStream(assemblyBytes));
