@@ -18,6 +18,7 @@ using DryGen.CSharpFromJsonSchema;
 using DryGen.Options;
 using DryGen.MermaidFromJsonSchema;
 using System.Runtime.Loader;
+using System.Text;
 
 namespace DryGen
 {
@@ -142,7 +143,7 @@ namespace DryGen
                     errorWriter.WriteLine($"VERB: {verbAttribute.Name} ({verbAttribute.HelpText})");
                 }
                 errorWriter.WriteLine();
-                errorWriter.WriteLine($"ERROR: {ex.Message}");
+                errorWriter.WriteLine($"ERROR:{BuildExceptionMessages(ex)}");
                 errorWriter.WriteLine($"Rerun the command with --help to get more help information");
                 return 1;
             }
@@ -346,7 +347,8 @@ namespace DryGen
             return treeShakingDiagramFilter;
         }
 
-        [ExcludeFromCodeCoverage] // The loading of assembly dependencies is so difficult to trigger in an automated test, since we need two asseblies in the same directory with dependencies, so this is tested manually (once).
+        [ExcludeFromCodeCoverage] 
+        // The loading of assembly dependencies is so difficult to trigger in an automated test, since we need two asseblies in the same directory with dependencies, so this is tested manually (once).
         private static class AssemblyResolvingHelper
         {
             internal static void SetupAssemblyResolving(string inputDirectory)
@@ -367,5 +369,37 @@ namespace DryGen
                 };
             }
         }
+
+        private static string BuildExceptionMessages(Exception ex)
+        {
+            var sb = new StringBuilder().AppendLine();
+            sb = BuildExceptionMessages(ex, sb, string.Empty);
+            return sb.ToString();
+        }
+
+        private static StringBuilder BuildExceptionMessages(Exception ex, StringBuilder sb, string indent)
+        {
+            sb.Append(indent).AppendLine(ex.Message);
+            if (ex is AggregateException aggregateException)
+            {
+                sb = BuildExceptionMessages(aggregateException, sb, indent + oneLevelIndent);
+            }
+            else if (ex.InnerException != null)
+            {
+                sb = BuildExceptionMessages(ex.InnerException, sb, indent + oneLevelIndent);
+            }
+            return sb;
+        }
+
+        private static StringBuilder BuildExceptionMessages(AggregateException ex, StringBuilder sb, string indent)
+        {
+            foreach (var exception in ex.InnerExceptions)
+            {
+                sb = BuildExceptionMessages(exception, sb, indent + oneLevelIndent);
+            }
+            return sb;
+        }
+
+        private const string oneLevelIndent = "    ";
     }
 }

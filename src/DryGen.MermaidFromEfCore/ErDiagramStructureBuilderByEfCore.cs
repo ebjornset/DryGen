@@ -13,6 +13,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
 {
     public IReadOnlyList<ErDiagramEntity> GenerateErStructure(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter)
     {
+        LoadEfCoreRequiredAssemblies();
         var dbContextType = LoadTypeByName(DBContextTypeName);
         var efCoreEntityTypes = new List<ModelEntityType>();
         var dbContextTypesFromAssembly = assembly
@@ -182,6 +183,30 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
             }
         }
         return result;
+    }
+
+    private static void LoadEfCoreRequiredAssemblies()
+    {
+        var alreadyLoadedEfCoreRequiredAssemblies = new bool?[EfCoreRequiredAssemblyNames.Length];
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies().Reverse())
+        {
+            var assemblyName = assembly.GetName().Name;
+            for (var i = 0; i < alreadyLoadedEfCoreRequiredAssemblies.Length; i++)
+            {
+                if (EfCoreRequiredAssemblyNames[i] == assemblyName)
+                {
+                    alreadyLoadedEfCoreRequiredAssemblies[i] = true;
+                    break;
+                }
+            }
+        }
+        for (var i = 0; i < alreadyLoadedEfCoreRequiredAssemblies.Length; i++)
+        {
+            if (alreadyLoadedEfCoreRequiredAssemblies[i] != true)
+            {
+                AppDomain.CurrentDomain.Load(EfCoreRequiredAssemblyNames[i]);
+            }
+        }
     }
 
     private static Type LoadTypeByName(string name)
@@ -435,4 +460,6 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
     private const string IForeignKeyTypeName = "Microsoft.EntityFrameworkCore.Metadata.IForeignKey";
     private const string INavigationTypeName = "Microsoft.EntityFrameworkCore.Metadata.INavigation";
     private const string IPropertyTypeName = "Microsoft.EntityFrameworkCore.Metadata.IProperty";
+
+    private static readonly string[] EfCoreRequiredAssemblyNames = new[] { "Microsoft.Extensions.Primitives", "Microsoft.EntityFrameworkCore", "Microsoft.EntityFrameworkCore.InMemory" };
 }

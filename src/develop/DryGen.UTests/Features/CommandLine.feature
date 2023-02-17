@@ -66,7 +66,8 @@ Scenario: Print usage to console error when an underlying exception is thrown
 		| mermaid-class-diagram-from-csharp |
 	Then I should get exit code '1'
 	And I should find the text "class-diagram-from-csharp" in console error
-	And I should find the text "ERROR: Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file." in console error
+	And I should find the text "ERROR:" in console error
+	And I should find the text "Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file." in console error
 	And I should find the text "Rerun the command with --help to get more help information" in console error
 
 Scenario: Print usage to console error when unknown verb is specified
