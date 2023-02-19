@@ -15,11 +15,8 @@ The verb 'mermaid-er-diagram-from-efcore' uses the following options.
 |Option|Alias|Type|Description|
 |---|---|---|---|
 |--attribute-type-exclusion||none / foreignkeys / all|What kind of attributes should be excluded from the diagram?|
-|--exclude-all-attributes||true/false|Deprecated, use 'attribute-type-exclusion instead.|
-|--exclude-all-relationships||true/false|Deprecated, use 'relationship-type-exclusion instead.|
 |--exclude-attribute-comments||true/false|Should attributes comments be excluded from the diagram?|
 |--exclude-attribute-keytypes||true/false|Should attributes key types be excluded from the diagram?|
-|--exclude-foreignkey-attributes||true/false|Deprecated, use 'attribute-type-exclusion instead.|
 |--exclude-propertynames||List of string|A list of regular expressions for property names to exclude from each type.|
 |--exclude-typenames||List of string|A list of regular expressions for type names to exclude.|
 |--include-namespaces||List of string|A list of regular expressions for namespaces to include.|
