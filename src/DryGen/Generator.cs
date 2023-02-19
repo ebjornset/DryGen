@@ -154,17 +154,14 @@ namespace DryGen
             return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
             {
                 var diagramGenerator = new ErDiagramGenerator(options);
-                if (!string.IsNullOrEmpty(options.OutputFile))
-                {
-                    WarnIfDeprecatedIsUsed(options.ExcludeAllAttributes.HasValue, Constants.MermaidErDiagramFromCsharp.ExcludeAllAttributesOption, Constants.MermaidErDiagramFromCsharp.AttributeTypeExclusionOption);
-                    WarnIfDeprecatedIsUsed(options.ExcludeForeignkeyAttributes.HasValue, Constants.MermaidErDiagramFromCsharp.ExcludeForeignkeyAttributesOption, Constants.MermaidErDiagramFromCsharp.AttributeTypeExclusionOption);
-                    WarnIfDeprecatedIsUsed(options.ExcludeAllRelationships.HasValue, Constants.MermaidErDiagramFromCsharp.ExcludeAllRelationshipsOption, Constants.MermaidErDiagramFromCsharp.RelationshipTypeExclusionOption);
-                }
                 return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
             });
         }
 
+        [ExcludeFromCodeCoverage] // At the moment we have do deprecated option, but we migth get some again in the future...
+#pragma warning disable IDE0051 // Remove unused private members
         private void WarnIfDeprecatedIsUsed(bool isDeprecatedOptionUsed, string deprecatedOption, string replacedByOption)
+#pragma warning restore IDE0051 // Remove unused private members
         {
             if (isDeprecatedOptionUsed)
             {

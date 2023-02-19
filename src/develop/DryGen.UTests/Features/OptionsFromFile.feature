@@ -91,11 +91,10 @@ Scenario: All Er diagram options can be specified in a file
 	Given this input file as a command line option
 	# The commandline arguments -f <this filename> will be appended to the command line
 		"""
-		exclude-all-attributes: true
 		exclude-attribute-keytypes: false
 		exclude-attribute-comments: true
-		exclude-foreignkey-attributes: false
-		exclude-all-relationships: true
+		attribute-type-exclusion: none
+		relationship-type-exclusion: none
 		"""
 	When I call the program with this command line arguments
 		| Arg    |
