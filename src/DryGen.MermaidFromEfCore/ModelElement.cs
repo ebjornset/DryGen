@@ -10,10 +10,7 @@ public abstract class ModelElement
     private readonly object element;
     protected ModelElement(object element)
     {
-        if (!ElementType.IsInstanceOfType(element))
-        {
-            throw new TypeMemberException($"'{ElementType.FullName}' is not assignable from '{element.GetType().FullName}'");
-        }
+        CheckElementType(element);
         this.element = element;
     }
 
@@ -111,6 +108,15 @@ public abstract class ModelElement
         if (!typeof(TType).IsAssignableFrom(instance?.GetType()))
         {
             throw new TypeMemberException($"'{typeof(TType).FullName}' is not assignable from '{instance?.GetType().FullName}'");
+        }
+    }
+
+    [ExcludeFromCodeCoverage] // Just a guard rail for unexpected structures
+    private void CheckElementType(object element)
+    {
+        if (!ElementType.IsInstanceOfType(element))
+        {
+            throw new TypeMemberException($"'{ElementType.FullName}' is not assignable from '{element.GetType().FullName}'");
         }
     }
 
