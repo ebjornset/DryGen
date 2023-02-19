@@ -1,4 +1,5 @@
-﻿using DryGen.MermaidFromCSharp;
+﻿using DryGen.Core;
+using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using System;
 using System.Collections;
@@ -225,7 +226,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
                 {
                     var sb = new StringBuilder().Append("Could not load the '").Append(EfCoreRequiredAssemblyNames[i]).AppendLine("' assembly");
                     sb.Append(EfCoreRequiredAssemblyErrorFixSuggestions[i]);
-                    throw new EfCoreTypeOrAssemblyException(sb.ToString());
+                    throw new AssemblyLoadException(sb.ToString());
                 }
                 throw;
             }
@@ -242,7 +243,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
                 return type;
             }
         }
-        throw new EfCoreTypeOrAssemblyException($"Could not load Ef Code type '{name}'");
+        throw new AssemblyLoadException($"Could not load Ef Code type '{name}'");
     }
 
     private sealed class EfCoreErEntity : ErDiagramEntity
@@ -268,196 +269,6 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         }
     }
 
-    private abstract class ModelElement
-    {
-        private readonly object element;
-        protected ModelElement(object element)
-        {
-            if (!ElementType.IsInstanceOfType(element))
-            {
-                throw new EfCoreTypeOrAssemblyException($"'{ElementType.FullName}' is not assignable from '{element.GetType().FullName}'");
-            }
-            this.element = element;
-        }
-
-        protected abstract Type ElementType { get; }
-
-        protected TType GetElementMandatoryPropertyValue<TType>(string propertyName)
-        {
-            var result = GetElementOptionalPropertyValue<TType>(propertyName);
-            return result ?? throw new EfCoreTypeOrAssemblyException($"'{typeof(TType).FullName}' return null for mandatory property '{propertyName}'");
-        }
-
-        protected TType? GetElementOptionalPropertyValue<TType>(string propertyName)
-        {
-            var propertyInfo = GetElementPropertyInfo(propertyName);
-            var result = propertyInfo?.GetValue(element);
-            if (result == default)
-            {
-                return default;
-            }
-            CheckExpectedType<TType>(result);
-            return (TType)result;
-        }
-
-        protected PropertyInfo GetElementPropertyInfo(string propertyName)
-        {
-            var propertyInfo = GetPropertyInfoFromType(ElementType, propertyName);
-            return propertyInfo ?? throw new EfCoreTypeOrAssemblyException($"'{ElementType.FullName}' does not have a property named '{propertyName}'");
-        }
-
-        protected TType GetElementMandatoryMethodValue<TType>(string methodName)
-        {
-            var result = GetElementOptionalMethodValue<TType>(methodName);
-            return result ?? throw new EfCoreTypeOrAssemblyException($"'{typeof(TType).FullName}' return null for mandatory method '{methodName}'");
-        }
-
-        protected TType? GetElementOptionalMethodValue<TType>(string methodName)
-        {
-            var methodInfo = GetElementMethodInfo(methodName);
-            var result = methodInfo.Invoke(element, null);
-            if (result == default)
-            {
-                return default;
-            }
-            CheckExpectedType<TType>(result);
-            return (TType)result;
-        }
-
-        protected MethodInfo GetElementMethodInfo(string methodName)
-        {
-            var methodInfo = GetMethodInfoFromType(ElementType, methodName);
-            return methodInfo ?? throw new EfCoreTypeOrAssemblyException($"'{ElementType.FullName}' does not have a method named '{methodName}'");
-        }
-
-        private PropertyInfo? GetPropertyInfoFromType(Type? type, string propertyName)
-        {
-            if (type == null)
-            {
-                return null;
-            }
-            var propertyInfo = type.GetProperty(propertyName);
-            if (propertyInfo != null) { return propertyInfo; }
-            foreach (var allInterface in type.GetInterfaces())
-            {
-                propertyInfo = GetPropertyInfoFromType(allInterface, propertyName);
-                if (propertyInfo != null)
-                {
-                    return propertyInfo;
-                }
-            }
-            return GetPropertyInfoFromType(type.BaseType, propertyName);
-        }
-
-        private MethodInfo? GetMethodInfoFromType(Type? type, string methodName)
-        {
-            if (type == null)
-            {
-                return null;
-            }
-            var methodInfo = type.GetMethod(methodName);
-            if (methodInfo != null) { return methodInfo; }
-            foreach (var allInterface in type.GetInterfaces())
-            {
-                methodInfo = GetMethodInfoFromType(allInterface, methodName);
-                if (methodInfo != null)
-                {
-                    return methodInfo;
-                }
-            }
-            return GetMethodInfoFromType(type.BaseType, methodName);
-        }
-
-        [ExcludeFromCodeCoverage] // Just a guard rail for unexpected structures
-        private static void CheckExpectedType<TType>(object? instance)
-        {
-            if (!typeof(TType).IsAssignableFrom(instance?.GetType()))
-            {
-                throw new EfCoreTypeOrAssemblyException($"'{typeof(TType).FullName}' is not assignable from '{instance?.GetType().FullName}'");
-            }
-        }
-    }
-
-    private sealed class ModelEntityType : ModelElement
-    {
-        private static Type? elementType;
-        private IEnumerable<ModelProperty>? properties;
-        private IEnumerable<ModelForeignKey>? foreignKeys;
-
-        public ModelEntityType(object entityType) : base(entityType)
-        {
-            ClrType = GetElementMandatoryPropertyValue<Type>(nameof(ClrType));
-        }
-
-        public Type ClrType { get; }
-        public IEnumerable<ModelProperty> GetProperties() => properties ??= GetElementMandatoryMethodValue<IEnumerable<object>>(nameof(GetProperties)).Select(x => new ModelProperty(x));
-        public IEnumerable<ModelForeignKey> GetForeignKeys() => foreignKeys ??= GetElementMandatoryMethodValue<IEnumerable<object>>(nameof(GetForeignKeys)).Select(x => new ModelForeignKey(x));
-        protected override Type ElementType => elementType ??= LoadTypeByName(IEntityTypeTypeName);
-    }
-
-
-    private sealed class ModelForeignKey : ModelElement
-    {
-        private static Type? elementType;
-
-        public ModelForeignKey(object foreignKey) : base(foreignKey)
-        {
-            PrincipalEntityType = new(GetElementMandatoryPropertyValue<object>(nameof(PrincipalEntityType)));
-            Properties = GetElementMandatoryPropertyValue<IReadOnlyList<object>>(nameof(Properties)).Select(x => new ModelProperty(x)).ToArray();
-            IsRequired = GetElementMandatoryPropertyValue<bool>(nameof(IsRequired));
-            var principalToDependent = GetElementOptionalPropertyValue<object>(nameof(PrincipalToDependent));
-            PrincipalToDependent = principalToDependent == null ? null : new ModelNavigation(principalToDependent);
-            var dependentToPrincipal = GetElementOptionalPropertyValue<object>(nameof(DependentToPrincipal));
-            DependentToPrincipal = dependentToPrincipal == null ? null : new ModelNavigation(dependentToPrincipal);
-        }
-
-        public ModelEntityType PrincipalEntityType { get; }
-        public IReadOnlyList<ModelProperty> Properties { get; }
-        public ModelNavigation? PrincipalToDependent { get; }
-        public ModelNavigation? DependentToPrincipal { get; }
-        public bool IsRequired { get; }
-        protected override Type ElementType => elementType ??= LoadTypeByName(IForeignKeyTypeName);
-    }
-
-    private sealed class ModelNavigation : ModelElement
-    {
-        private static Type? elementType;
-
-        public ModelNavigation(object navigation) : base(navigation)
-        {
-            ClrType = GetElementMandatoryPropertyValue<Type>(nameof(ClrType));
-            Name = GetElementMandatoryPropertyValue<string>(nameof(Name));
-            PropertyInfo = GetElementOptionalPropertyValue<PropertyInfo>(nameof(PropertyInfo));
-        }
-
-        public Type ClrType { get; }
-        public string Name { get; }
-        public PropertyInfo? PropertyInfo { get; }
-        protected override Type ElementType => elementType ??= LoadTypeByName(INavigationTypeName);
-    }
-
-    private sealed class ModelProperty : ModelElement
-    {
-        private static Type? elementType;
-        private bool? isKey;
-        private bool? isForeignKey;
-        private bool? isPrimaryKey;
-
-        public ModelProperty(object property) : base(property)
-        {
-            ClrType = GetElementMandatoryPropertyValue<Type>(nameof(ClrType));
-            Name = GetElementMandatoryPropertyValue<string>(nameof(Name));
-            PropertyInfo = GetElementOptionalPropertyValue<PropertyInfo>(nameof(PropertyInfo));
-        }
-
-        public Type ClrType { get; }
-        public string Name { get; }
-        public PropertyInfo? PropertyInfo { get; }
-        public bool IsKey() => isKey ??= GetElementMandatoryMethodValue<bool>("IsKey");
-        public bool IsForeignKey() => isForeignKey ??= GetElementMandatoryMethodValue<bool>("IsForeignKey");
-        public bool IsPrimaryKey() => isPrimaryKey ??= GetElementMandatoryMethodValue<bool>("IsPrimaryKey");
-        protected override Type ElementType => elementType ??= LoadTypeByName(IPropertyTypeName);
-    }
 
     private const string DBContextTypeName = "Microsoft.EntityFrameworkCore.DbContext";
     private const string DBContextOptionsTypeName = "Microsoft.EntityFrameworkCore.DbContextOptions";
@@ -466,10 +277,6 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
     private const string InMemoryDbContextOptionsExtensionsTypeName = "Microsoft.EntityFrameworkCore.InMemoryDbContextOptionsExtensions";
     private const string InMemoryDbContextOptionsBuilderTypeName = "Microsoft.EntityFrameworkCore.Infrastructure.InMemoryDbContextOptionsBuilder";
     private const string IModelTypeName = "Microsoft.EntityFrameworkCore.Metadata.IModel";
-    private const string IEntityTypeTypeName = "Microsoft.EntityFrameworkCore.Metadata.IEntityType";
-    private const string IForeignKeyTypeName = "Microsoft.EntityFrameworkCore.Metadata.IForeignKey";
-    private const string INavigationTypeName = "Microsoft.EntityFrameworkCore.Metadata.INavigation";
-    private const string IPropertyTypeName = "Microsoft.EntityFrameworkCore.Metadata.IProperty";
 
     private static readonly string[] EfCoreRequiredAssemblyNames = 
         new[] { "Microsoft.EntityFrameworkCore", 
