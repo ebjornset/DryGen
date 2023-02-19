@@ -1,40 +1,39 @@
 ﻿using System;
 using System.IO;
 
-namespace DryGen.DevUtils.Helpers
+namespace DryGen.DevUtils.Helpers;
+
+public class InputFileContext : IDisposable
 {
-    public class InputFileContext : IDisposable
+    private string? inputFileName;
+
+    public string InputFileName
     {
-        private string? inputFileName;
-
-        public string InputFileName
+        get
         {
-            get
-            {
-                return inputFileName ?? throw new ArgumentNullException(nameof(inputFileName));
-            }
-            set
-            {
-                DeleteExistingInputFile();
-                inputFileName = value;
-            }
+            return inputFileName ?? throw new ArgumentNullException(nameof(inputFileName));
         }
-
-        public bool HasInputFileName => !string.IsNullOrEmpty(inputFileName);
-
-        public void Dispose()
+        set
         {
             DeleteExistingInputFile();
-            GC.SuppressFinalize(this);
+            inputFileName = value;
         }
+    }
 
-        private void DeleteExistingInputFile()
+    public bool HasInputFileName => !string.IsNullOrEmpty(inputFileName);
+
+    public void Dispose()
+    {
+        DeleteExistingInputFile();
+        GC.SuppressFinalize(this);
+    }
+
+    private void DeleteExistingInputFile()
+    {
+        if (!string.IsNullOrEmpty(inputFileName) && File.Exists(inputFileName))
         {
-            if (!string.IsNullOrEmpty(inputFileName) && File.Exists(inputFileName))
-            {
-                File.Delete(inputFileName);
-                inputFileName = null;
-            }
+            File.Delete(inputFileName);
+            inputFileName = null;
         }
     }
 }

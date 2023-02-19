@@ -1,7 +1,6 @@
-﻿namespace DryGen.MermaidFromCSharp
+﻿namespace DryGen.MermaidFromCSharp;
+
+public interface INameRewriter
 {
-    public interface INameRewriter
-    {
-        string Rewrite(string name);
-    }
+    string Rewrite(string name);
 }

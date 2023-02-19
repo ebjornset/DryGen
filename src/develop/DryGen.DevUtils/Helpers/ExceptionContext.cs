@@ -1,46 +1,45 @@
 ﻿using FluentAssertions;
 using System;
 
-namespace DryGen.DevUtils.Helpers
+namespace DryGen.DevUtils.Helpers;
+
+public class ExceptionContext
 {
-    public class ExceptionContext
+    public Exception? Exception { get; private set; }
+
+    public void HarvestExceptionFrom(Action action)
     {
-        public Exception? Exception { get; private set; }
-
-        public void HarvestExceptionFrom(Action action)
+        try
         {
-            try
-            {
-                action();
-            }
-            catch (Exception ex)
-            {
-                Exception = ex;
-            }
+            action();
         }
-
-        public TResult? HarvestExceptionFrom<TResult>(Func<TResult> func)
+        catch (Exception ex)
         {
-            try
-            {
-                return func();
-            }
-            catch (Exception ex)
-            {
-                Exception = ex;
-            }
-            return default;
+            Exception = ex;
         }
+    }
 
-        public void ExpectExceptionContainingTheText(string text)
+    public TResult? HarvestExceptionFrom<TResult>(Func<TResult> func)
+    {
+        try
         {
-            Exception.Should().NotBeNull();
-            Exception?.Message.Should().Contain(text);
+            return func();
         }
+        catch (Exception ex)
+        {
+            Exception = ex;
+        }
+        return default;
+    }
 
-        public void ExpectNoException()
-        {
-            Exception.Should().BeNull();
-        }
+    public void ExpectExceptionContainingTheText(string text)
+    {
+        Exception.Should().NotBeNull();
+        Exception?.Message.Should().Contain(text);
+    }
+
+    public void ExpectNoException()
+    {
+        Exception.Should().BeNull();
     }
 }

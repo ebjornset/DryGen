@@ -5,88 +5,87 @@ using System;
 using System.IO;
 using TechTalk.SpecFlow;
 
-namespace DryGen.UTests.Steps
+namespace DryGen.UTests.Steps;
+
+[Binding]
+public class JsonSchemaSteps
 {
-    [Binding]
-    public class JsonSchemaSteps
+    private string? jsonSchemaText;
+    private readonly ExceptionContext exceptionContext;
+    private readonly InputFileContext inputFileContext;
+    private readonly GeneratedRepresentationContext generatedRepresentationContext;
+
+    public JsonSchemaSteps(
+        ExceptionContext exceptionContext,
+        InputFileContext inputFileContext,
+        GeneratedRepresentationContext generatedRepresentationContext)
     {
-        private string? jsonSchemaText;
-        private readonly ExceptionContext exceptionContext;
-        private readonly InputFileContext inputFileContext;
-        private readonly GeneratedRepresentationContext generatedRepresentationContext;
+        this.exceptionContext = exceptionContext;
+        this.inputFileContext = inputFileContext;
+        this.generatedRepresentationContext = generatedRepresentationContext;
+    }
 
-        public JsonSchemaSteps(
-            ExceptionContext exceptionContext,
-            InputFileContext inputFileContext,
-            GeneratedRepresentationContext generatedRepresentationContext)
+    [Given(@"this json schema")]
+    public void GivenThisJsonSchema(string multilineText)
+    {
+        jsonSchemaText = multilineText;
+    }
+
+    [Given(@"this json schema input file with the extension ""([^""]*)""")]
+    public void GivenThisJsonSchemaInputFileWithTheExtension(string extension, string multilineText)
+    {
+        GivenThisJsonSchema(multilineText);
+        CreateTestJsonFile(extension);
+    }
+
+    [When(@"I load the json schema from a file with the extension ""([^""]*)""")]
+    public void WhenILoadTheJsonSchemaFromAFileWithTheExtension(string extension)
+    {
+        CreateAndLoadTestJsonFile(extension, JsonSchemaFileFormat.ByExtension);
+    }
+
+    [When(@"I load the json schema from a file forcing the schema format ""([^""]*)""")]
+    public void WhenILoadTheJsonSchemaFromAFileForcingTheSchemaFormat(string forcedSchemaFormat)
+    {
+        var jsonSchemaFileFormat = (JsonSchemaFileFormat)Enum.Parse(typeof(JsonSchemaFileFormat), forcedSchemaFormat, true);
+        CreateAndLoadTestJsonFile("forced", jsonSchemaFileFormat);
+    }
+
+    private void CreateAndLoadTestJsonFile(string extension, JsonSchemaFileFormat jsonSchemaFileFormat)
+    {
+        CreateTestJsonFile(extension);
+        LoadJsonSchemaFromFile(jsonSchemaFileFormat);
+    }
+
+    private void CreateTestJsonFile(string extension)
+    {
+        if (string.IsNullOrWhiteSpace(jsonSchemaText))
         {
-            this.exceptionContext = exceptionContext;
-            this.inputFileContext = inputFileContext;
-            this.generatedRepresentationContext = generatedRepresentationContext;
+            throw new ArgumentException("Json schema is not specified");
         }
-
-        [Given(@"this json schema")]
-        public void GivenThisJsonSchema(string multilineText)
+        string jsonSchemaFileName;
+        do
         {
-            jsonSchemaText = multilineText;
-        }
-
-        [Given(@"this json schema input file with the extension ""([^""]*)""")]
-        public void GivenThisJsonSchemaInputFileWithTheExtension(string extension, string multilineText)
-        {
-            GivenThisJsonSchema(multilineText);
-            CreateTestJsonFile(extension);
-        }
-
-        [When(@"I load the json schema from a file with the extension ""([^""]*)""")]
-        public void WhenILoadTheJsonSchemaFromAFileWithTheExtension(string extension)
-        {
-            CreateAndLoadTestJsonFile(extension, JsonSchemaFileFormat.ByExtension);
-        }
-
-        [When(@"I load the json schema from a file forcing the schema format ""([^""]*)""")]
-        public void WhenILoadTheJsonSchemaFromAFileForcingTheSchemaFormat(string forcedSchemaFormat)
-        {
-            var jsonSchemaFileFormat = (JsonSchemaFileFormat)Enum.Parse(typeof(JsonSchemaFileFormat), forcedSchemaFormat, true);
-            CreateAndLoadTestJsonFile("forced", jsonSchemaFileFormat);
-        }
-
-        private void CreateAndLoadTestJsonFile(string extension, JsonSchemaFileFormat jsonSchemaFileFormat)
-        {
-            CreateTestJsonFile(extension);
-            LoadJsonSchemaFromFile(jsonSchemaFileFormat);
-        }
-
-        private void CreateTestJsonFile(string extension)
-        {
-            if (string.IsNullOrWhiteSpace(jsonSchemaText))
+            var tmpFileName = Path.GetTempFileName();
+            jsonSchemaFileName = Path.ChangeExtension(tmpFileName, extension);
+            if (File.Exists(tmpFileName))
             {
-                throw new ArgumentException("Json schema is not specified");
+                File.Delete(tmpFileName);
             }
-            string jsonSchemaFileName;
-            do
-            {
-                var tmpFileName = Path.GetTempFileName();
-                jsonSchemaFileName = Path.ChangeExtension(tmpFileName, extension);
-                if (File.Exists(tmpFileName))
-                {
-                    File.Delete(tmpFileName);
-                }
-            }
-            while (File.Exists(jsonSchemaFileName));
-            File.WriteAllText(jsonSchemaFileName, jsonSchemaText);
-            inputFileContext.InputFileName = jsonSchemaFileName;
         }
+        while (File.Exists(jsonSchemaFileName));
+        File.WriteAllText(jsonSchemaFileName, jsonSchemaText);
+        inputFileContext.InputFileName = jsonSchemaFileName;
+    }
 
-        private void LoadJsonSchemaFromFile(JsonSchemaFileFormat jsonSchemaFileFormat)
+    private void LoadJsonSchemaFromFile(JsonSchemaFileFormat jsonSchemaFileFormat)
+    {
+        var generator = new CSharpFromJsonSchemaGenerator();
+        var options = new CSharpFromJsonSchemaOptions
         {
-            var generator = new CSharpFromJsonSchemaGenerator();
-            var options = new CSharpFromJsonSchemaOptions
-            {
-                InputFile = inputFileContext.InputFileName,
-                SchemaFileFormat = jsonSchemaFileFormat
-            };
-            generatedRepresentationContext.GeneratedRepresentation = exceptionContext.HarvestExceptionFrom(() => generator.Generate(options).Result);
-        }
+            InputFile = inputFileContext.InputFileName,
+            SchemaFileFormat = jsonSchemaFileFormat
+        };
+        generatedRepresentationContext.GeneratedRepresentation = exceptionContext.HarvestExceptionFrom(() => generator.Generate(options).Result);
     }
 }

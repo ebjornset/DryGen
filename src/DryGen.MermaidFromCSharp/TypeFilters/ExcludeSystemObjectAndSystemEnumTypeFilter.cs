@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace DryGen.MermaidFromCSharp.TypeFilters
+namespace DryGen.MermaidFromCSharp.TypeFilters;
+
+public class ExcludeSystemObjectAndSystemEnumTypeFilter : AllChildFiltersTypeFilter
 {
-    public class ExcludeSystemObjectAndSystemEnumTypeFilter : AllChildFiltersTypeFilter
-    {
-        public ExcludeSystemObjectAndSystemEnumTypeFilter() : base(
-            new List<ITypeFilter> {
-                new ExcludeSystemObjectTypeFilter(),
-                new ExcludeSystemEnumTypeFilter()
-            })
-        { }
-    }
+    public ExcludeSystemObjectAndSystemEnumTypeFilter() : base(
+        new List<ITypeFilter> {
+            new ExcludeSystemObjectTypeFilter(),
+            new ExcludeSystemEnumTypeFilter()
+        })
+    { }
 }

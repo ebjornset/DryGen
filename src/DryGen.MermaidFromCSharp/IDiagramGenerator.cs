@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace DryGen.MermaidFromCSharp
+namespace DryGen.MermaidFromCSharp;
+
+public interface IDiagramGenerator
 {
-    public interface IDiagramGenerator
-    {
-        string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter);
-    }
+    string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter);
 }

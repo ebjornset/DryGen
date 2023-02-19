@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace DryGen.MermaidFromCSharp.TypeFilters
+namespace DryGen.MermaidFromCSharp.TypeFilters;
+
+public class ExcludeNonPublicClassTypeFilter : ITypeFilter
 {
-    public class ExcludeNonPublicClassTypeFilter : ITypeFilter
+    public bool Accepts(Type type)
     {
-        public bool Accepts(Type type)
-        {
-            return type.IsPublic;
-        }
+        return type.IsPublic;
     }
 }

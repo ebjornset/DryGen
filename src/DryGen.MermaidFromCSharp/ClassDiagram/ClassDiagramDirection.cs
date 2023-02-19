@@ -1,11 +1,10 @@
-﻿namespace DryGen.MermaidFromCSharp.ClassDiagram
+﻿namespace DryGen.MermaidFromCSharp.ClassDiagram;
+
+public enum ClassDiagramDirection
 {
-    public enum ClassDiagramDirection
-    {
-        Default,
-        BT,
-        TB,
-        LR,
-        RL
-    }
+    Default,
+    BT,
+    TB,
+    LR,
+    RL
 }

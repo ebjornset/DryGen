@@ -1,13 +1,12 @@
 ﻿using DryGen.MermaidFromCSharp;
 using System;
 
-namespace DryGen.MermaidFromCSharp.TypeFilters
+namespace DryGen.MermaidFromCSharp.TypeFilters;
+
+public class ExcludeAbstractClassTypeFilter : ITypeFilter
 {
-    public class ExcludeAbstractClassTypeFilter : ITypeFilter
+    public bool Accepts(Type type)
     {
-        public bool Accepts(Type type)
-        {
-            return !type.IsAbstract;
-        }
+        return !type.IsAbstract;
     }
 }

@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DryGen.Docs
+namespace DryGen.Docs;
+
+[ExcludeFromCodeCoverage]
+public class ExamplesGeneratorData
 {
-    [ExcludeFromCodeCoverage]
-    public class ExamplesGeneratorData
-    {
-        public string InputFile { get; set; }
-        public string OutputFile { get; set; }
-        public string ReplaceToken { get; set; }
-        public string Verb { get; set; }
-        public IEnumerable<string> AdditionalOptions { get; set; }
-    }
+    public string InputFile { get; set; }
+    public string OutputFile { get; set; }
+    public string ReplaceToken { get; set; }
+    public string Verb { get; set; }
+    public IEnumerable<string> AdditionalOptions { get; set; }
 }

@@ -1,68 +1,67 @@
 ﻿using System;
 using System.IO;
 
-namespace DryGen.DevUtils.Helpers
+namespace DryGen.DevUtils.Helpers;
+
+public sealed class GeneratedRepresentationContext : IDisposable
 {
-    public sealed class GeneratedRepresentationContext : IDisposable
+    private readonly ExceptionContext exceptionContext;
+    private string? generatedRepresentation;
+    private string? generatedRepresentationFileName;
+
+    public GeneratedRepresentationContext(ExceptionContext exceptionContext)
     {
-        private readonly ExceptionContext exceptionContext;
-        private string? generatedRepresentation;
-        private string? generatedRepresentationFileName;
+        this.exceptionContext = exceptionContext;
+    }
 
-        public GeneratedRepresentationContext(ExceptionContext exceptionContext)
+    public string GeneratedRepresentationFileName
+    {
+        get
         {
-            this.exceptionContext = exceptionContext;
+            generatedRepresentationFileName ??= Path.GetTempFileName();
+            return generatedRepresentationFileName;
         }
+    }
 
-        public string GeneratedRepresentationFileName
+    public bool HasGeneratedRepresentationFileName => ! string.IsNullOrEmpty(generatedRepresentationFileName);
+
+    public string? GeneratedRepresentation
+    {
+        get
         {
-            get
+            exceptionContext.ExpectNoException();
+            return generatedRepresentation ?? throw new PropertyNotSetException(nameof(GeneratedRepresentation));
+        }
+        set
+        {
+            generatedRepresentation = value;
+        }
+    }
+
+    public string GeneratedRepresentationFromFile
+    {
+        get
+        {
+            if (generatedRepresentationFileName == null)
             {
-                generatedRepresentationFileName ??= Path.GetTempFileName();
-                return generatedRepresentationFileName;
+                throw new PropertyNotSetException(nameof(GeneratedRepresentationFromFile));
             }
+            return File.ReadAllText(generatedRepresentationFileName);
         }
+    }
 
-        public bool HasGeneratedRepresentationFileName => ! string.IsNullOrEmpty(generatedRepresentationFileName);
+    public void WriteGeneratedRepresentationFile(string fileContent)
+    {
+        File.WriteAllText(GeneratedRepresentationFileName, fileContent);
+    }
 
-        public string? GeneratedRepresentation
+    public void Dispose()
+    {
+        if (!string.IsNullOrEmpty(generatedRepresentationFileName) && File.Exists(generatedRepresentationFileName))
         {
-            get
-            {
-                exceptionContext.ExpectNoException();
-                return generatedRepresentation ?? throw new PropertyNotSetException(nameof(GeneratedRepresentation));
-            }
-            set
-            {
-                generatedRepresentation = value;
-            }
+            File.Delete(generatedRepresentationFileName);
+            generatedRepresentationFileName = null;
         }
-
-        public string GeneratedRepresentationFromFile
-        {
-            get
-            {
-                if (generatedRepresentationFileName == null)
-                {
-                    throw new PropertyNotSetException(nameof(GeneratedRepresentationFromFile));
-                }
-                return File.ReadAllText(generatedRepresentationFileName);
-            }
-        }
-
-        public void WriteGeneratedRepresentationFile(string fileContent)
-        {
-            File.WriteAllText(GeneratedRepresentationFileName, fileContent);
-        }
-
-        public void Dispose()
-        {
-            if (!string.IsNullOrEmpty(generatedRepresentationFileName) && File.Exists(generatedRepresentationFileName))
-            {
-                File.Delete(generatedRepresentationFileName);
-                generatedRepresentationFileName = null;
-            }
-            GC.SuppressFinalize(this);
-        }
+        GC.SuppressFinalize(this);
     }
 }
