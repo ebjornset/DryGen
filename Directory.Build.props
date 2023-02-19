@@ -5,6 +5,7 @@
 		<LangVersion>10.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<Product>DryGen</Product>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<!-- This file prevents unintended imports of unrelated MSBuild files -->

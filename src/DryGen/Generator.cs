@@ -18,6 +18,7 @@ using DryGen.CSharpFromJsonSchema;
 using DryGen.Options;
 using DryGen.MermaidFromJsonSchema;
 using System.Runtime.Loader;
+using System.Text;
 
 namespace DryGen
 {
@@ -142,7 +143,7 @@ namespace DryGen
                     errorWriter.WriteLine($"VERB: {verbAttribute.Name} ({verbAttribute.HelpText})");
                 }
                 errorWriter.WriteLine();
-                errorWriter.WriteLine($"ERROR: {ex.Message}");
+                errorWriter.WriteLine($"ERROR:{BuildExceptionMessages(ex)}");
                 errorWriter.WriteLine($"Rerun the command with --help to get more help information");
                 return 1;
             }
@@ -289,7 +290,7 @@ namespace DryGen
             }
         }
 
-        [ExcludeFromCodeCoverage] // We uses the tmp files feature from the .Net runtime so the tests don't have any issues with directory names
+        [ExcludeFromCodeCoverage] // We uses the tmp files feature from the .Net runtime so our tests don't have any issues with directory names
         private static void CreateMissingOutputDirectory(string outputFile)
         {
             var outputDirectory = Path.GetDirectoryName(outputFile);
@@ -332,7 +333,7 @@ namespace DryGen
             {
                 throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file.");
             }
-            var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new InvalidOperationException($"Could not determin directory from inputFile '{inputFile}'");
+            var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new InvalidOperationException($"Could not determine directory from inputFile '{inputFile}'");
             AssemblyResolvingHelper.SetupAssemblyResolving(inputDirectory);
             var assemblyBytes = File.ReadAllBytes(inputFile);
             var assembly = AssemblyLoadContext.Default.LoadFromStream(new MemoryStream(assemblyBytes));
@@ -346,7 +347,8 @@ namespace DryGen
             return treeShakingDiagramFilter;
         }
 
-        [ExcludeFromCodeCoverage] // The loading of assembly dependencies is so difficult to trigger in an automated test, since we need two asseblies in the same directory with dependencies, so this is tested manually (once).
+        [ExcludeFromCodeCoverage] 
+        // The loading of assembly dependencies is so difficult to trigger in an automated test, since we need two asseblies in the same directory with dependencies, so this is tested manually (once).
         private static class AssemblyResolvingHelper
         {
             internal static void SetupAssemblyResolving(string inputDirectory)
@@ -367,5 +369,37 @@ namespace DryGen
                 };
             }
         }
+
+        private static string BuildExceptionMessages(Exception ex)
+        {
+            var sb = new StringBuilder().AppendLine();
+            sb = BuildExceptionMessages(ex, sb, string.Empty);
+            return sb.ToString();
+        }
+
+        private static StringBuilder BuildExceptionMessages(Exception ex, StringBuilder sb, string indent)
+        {
+            sb.Append(indent).AppendLine(ex.Message);
+            if (ex is AggregateException aggregateException)
+            {
+                sb = BuildAggregateExceptionMessages(aggregateException, sb, indent + oneLevelIndent);
+            }
+            else if (ex.InnerException != null)
+            {
+                sb = BuildExceptionMessages(ex.InnerException, sb, indent + oneLevelIndent);
+            }
+            return sb;
+        }
+
+        private static StringBuilder BuildAggregateExceptionMessages(AggregateException ex, StringBuilder sb, string indent)
+        {
+            foreach (var exception in ex.InnerExceptions)
+            {
+                sb = BuildExceptionMessages(exception, sb, indent + oneLevelIndent);
+            }
+            return sb;
+        }
+
+        private const string oneLevelIndent = "    ";
     }
 }
