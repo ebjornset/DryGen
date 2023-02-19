@@ -1,154 +1,153 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace DryGen.MermaidFromCSharp.ClassDiagram
+namespace DryGen.MermaidFromCSharp.ClassDiagram;
+
+public class ClassDiagramClass : NamedType
 {
-    public class ClassDiagramClass : NamedType
+    private readonly List<ClassDiagramAttribute> attributes;
+    private readonly List<ClassDiagramMethod> methods;
+    private readonly List<ClassDiagramRelationship> relationships;
+
+    public ClassDiagramClass(NamedType other) : base(other.Name, other.Type)
     {
-        private readonly List<ClassDiagramAttribute> attributes;
-        private readonly List<ClassDiagramMethod> methods;
-        private readonly List<ClassDiagramRelationship> relationships;
+        attributes = new List<ClassDiagramAttribute>();
+        methods = new List<ClassDiagramMethod>();
+        relationships = new List<ClassDiagramRelationship>();
+    }
 
-        public ClassDiagramClass(NamedType other) : base(other.Name, other.Type)
+    public IReadOnlyList<ClassDiagramAttribute> Attributes => attributes;
+    public IReadOnlyList<ClassDiagramMethod> Methods => methods;
+    public IReadOnlyList<ClassDiagramRelationship> Relationships => relationships;
+
+    public void AddAttribute(ClassDiagramAttribute attribute)
+    {
+        attributes.Add(attribute);
+    }
+
+    public void AddMethod(ClassDiagramMethod method)
+    {
+        methods.Add(method);
+    }
+
+    public void AddRelationship(
+        ClassDiagramRelationshipCardinality fromCardinality,
+        ClassDiagramRelationshipType relationshipType,
+        ClassDiagramRelationshipCardinality toCardinality,
+        ClassDiagramClass to, string label, string propertyName)
+    {
+        var isBidirectional = false;
+        if (relationshipType == ClassDiagramRelationshipType.Dependency)
         {
-            attributes = new List<ClassDiagramAttribute>();
-            methods = new List<ClassDiagramMethod>();
-            relationships = new List<ClassDiagramRelationship>();
-        }
-
-        public IReadOnlyList<ClassDiagramAttribute> Attributes => attributes;
-        public IReadOnlyList<ClassDiagramMethod> Methods => methods;
-        public IReadOnlyList<ClassDiagramRelationship> Relationships => relationships;
-
-        public void AddAttribute(ClassDiagramAttribute attribute)
-        {
-            attributes.Add(attribute);
-        }
-
-        public void AddMethod(ClassDiagramMethod method)
-        {
-            methods.Add(method);
-        }
-
-        public void AddRelationship(
-            ClassDiagramRelationshipCardinality fromCardinality,
-            ClassDiagramRelationshipType relationshipType,
-            ClassDiagramRelationshipCardinality toCardinality,
-            ClassDiagramClass to, string label, string propertyName)
-        {
-            var isBidirectional = false;
-            if (relationshipType == ClassDiagramRelationshipType.Dependency)
+            if (IsDuplicateDependency(to))
             {
-                if (IsDuplicateDependency(to))
+                return;
+            }
+        }
+        else
+        {
+            RemoveAnyDependenciesCreatedFromContrutorParameters(to);
+            if (relationshipType == ClassDiagramRelationshipType.Association)
+            {
+                SwitchFromComposisionToAggregationForAllBidirectionalCollectionReferences(toCardinality, to, label);
+                // Skip the relation if we already has a bidirectional collection reference 
+                if (HasBidirectionalRelationship(to))
                 {
                     return;
                 }
-            }
-            else
-            {
-                RemoveAnyDependenciesCreatedFromContrutorParameters(to);
-                if (relationshipType == ClassDiagramRelationshipType.Association)
+                var otherAssociation = FindNonBidirectionalAssociationToThisThatMatchesThisAssociation(to);
+                if (otherAssociation != null)
                 {
-                    SwitchFromComposisionToAggregationForAllBidirectionalCollectionReferences(toCardinality, to, label);
-                    // Skip the relation if we already has a bidirectional collection reference 
-                    if (HasBidirectionalRelationship(to))
-                    {
-                        return;
-                    }
-                    var otherAssociation = FindNonBidirectionalAssociationToThisThatMatchesThisAssociation(to);
-                    if (otherAssociation != null)
-                    {
-                        otherAssociation.IsBidirectional = true;
-                        otherAssociation.FromCardinality = toCardinality;
-                        return;
-                    }
-                }
-                else if (relationshipType == ClassDiagramRelationshipType.Composition)
-                {
-                    SwitchFroComposisionToAggregationIfThisIsABidirectionalCollectionReferences(ref fromCardinality, ref relationshipType, to, ref label, ref isBidirectional);
+                    otherAssociation.IsBidirectional = true;
+                    otherAssociation.FromCardinality = toCardinality;
+                    return;
                 }
             }
-            var relationShip = new ClassDiagramRelationship(fromCardinality, relationshipType, toCardinality, to, label, propertyName, isBidirectional);
-            relationships.Add(relationShip);
-        }
-
-        public void RemoveBidirectionalRelationshipDuplicates()
-        {
-            relationships.RemoveAll(r =>
-                    r.RelationsshipType == ClassDiagramRelationshipType.Association &&
-                    !r.IsBidirectional &&
-                    r.To.Relationships.Any(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Aggregation));
-        }
-
-        internal void PromoteMethodToExtendedClass(ClassDiagramMethod method, ClassDiagramClass classDiagramClass)
-        {
-            methods.Remove(method);
-            classDiagramClass.PromoteMethodToExtensionMethod(method);
-        }
-
-        internal void PromoteMethodToExtensionMethod(ClassDiagramMethod method)
-        {
-            method.ConvertToExtensionMethod();
-            methods.Add(method);
-        }
-
-        protected override bool IsRelatedTo(IDiagramType type)
-        {
-            var result = Relationships.Any(x => x.To.Type == type.Type);
-            if (!result && type is ClassDiagramClass to)
+            else if (relationshipType == ClassDiagramRelationshipType.Composition)
             {
-                result = to.Relationships.Any(x => x.To.Type == Type);
-            }
-            return result;
-        }
-
-        private void SwitchFromComposisionToAggregationForAllBidirectionalCollectionReferences(ClassDiagramRelationshipCardinality toCardinality, ClassDiagramClass to, string label)
-        {
-            foreach (var relationship in to.Relationships.Where(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Composition))
-            {
-                relationship.RelationsshipType = ClassDiagramRelationshipType.Aggregation;
-                relationship.IsBidirectional = true;
-                relationship.FromCardinality = toCardinality;
-                if (!string.IsNullOrWhiteSpace(label) && string.IsNullOrWhiteSpace(relationship.Label))
-                {
-                    relationship.Label = label;
-                }
+                SwitchFroComposisionToAggregationIfThisIsABidirectionalCollectionReferences(ref fromCardinality, ref relationshipType, to, ref label, ref isBidirectional);
             }
         }
+        var relationShip = new ClassDiagramRelationship(fromCardinality, relationshipType, toCardinality, to, label, propertyName, isBidirectional);
+        relationships.Add(relationShip);
+    }
 
-        private bool HasBidirectionalRelationship(ClassDiagramClass to)
+    public void RemoveBidirectionalRelationshipDuplicates()
+    {
+        relationships.RemoveAll(r =>
+                r.RelationsshipType == ClassDiagramRelationshipType.Association &&
+                !r.IsBidirectional &&
+                r.To.Relationships.Any(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Aggregation));
+    }
+
+    internal void PromoteMethodToExtendedClass(ClassDiagramMethod method, ClassDiagramClass classDiagramClass)
+    {
+        methods.Remove(method);
+        classDiagramClass.PromoteMethodToExtensionMethod(method);
+    }
+
+    internal void PromoteMethodToExtensionMethod(ClassDiagramMethod method)
+    {
+        method.ConvertToExtensionMethod();
+        methods.Add(method);
+    }
+
+    protected override bool IsRelatedTo(IDiagramType type)
+    {
+        var result = Relationships.Any(x => x.To.Type == type.Type);
+        if (!result && type is ClassDiagramClass to)
         {
-            return to.Relationships.Any(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Aggregation);
+            result = to.Relationships.Any(x => x.To.Type == Type);
         }
+        return result;
+    }
 
-        private void SwitchFroComposisionToAggregationIfThisIsABidirectionalCollectionReferences(ref ClassDiagramRelationshipCardinality fromCardinality, ref ClassDiagramRelationshipType relationshipType, ClassDiagramClass to, ref string label, ref bool isBidirectional)
+    private void SwitchFromComposisionToAggregationForAllBidirectionalCollectionReferences(ClassDiagramRelationshipCardinality toCardinality, ClassDiagramClass to, string label)
+    {
+        foreach (var relationship in to.Relationships.Where(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Composition))
         {
-            var otherAssociation = to.Relationships.FirstOrDefault(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Association && !x.IsBidirectional);
-            if (otherAssociation != null)
+            relationship.RelationsshipType = ClassDiagramRelationshipType.Aggregation;
+            relationship.IsBidirectional = true;
+            relationship.FromCardinality = toCardinality;
+            if (!string.IsNullOrWhiteSpace(label) && string.IsNullOrWhiteSpace(relationship.Label))
             {
-                relationshipType = ClassDiagramRelationshipType.Aggregation;
-                isBidirectional = true;
-                fromCardinality = otherAssociation.ToCardinality;
-                if (string.IsNullOrWhiteSpace(label) && !string.IsNullOrWhiteSpace(otherAssociation.Label))
-                {
-                    label = otherAssociation.Label;
-                }
+                relationship.Label = label;
             }
         }
+    }
 
-        private void RemoveAnyDependenciesCreatedFromContrutorParameters(ClassDiagramClass to)
-        {
-            relationships.RemoveAll(r => r.RelationsshipType == ClassDiagramRelationshipType.Dependency && r.To == to);
-        }
+    private bool HasBidirectionalRelationship(ClassDiagramClass to)
+    {
+        return to.Relationships.Any(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Aggregation);
+    }
 
-        private bool IsDuplicateDependency(ClassDiagramClass to)
+    private void SwitchFroComposisionToAggregationIfThisIsABidirectionalCollectionReferences(ref ClassDiagramRelationshipCardinality fromCardinality, ref ClassDiagramRelationshipType relationshipType, ClassDiagramClass to, ref string label, ref bool isBidirectional)
+    {
+        var otherAssociation = to.Relationships.FirstOrDefault(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Association && !x.IsBidirectional);
+        if (otherAssociation != null)
         {
-            return Relationships.Any(x => x.RelationsshipType == ClassDiagramRelationshipType.Dependency && x.To == to);
+            relationshipType = ClassDiagramRelationshipType.Aggregation;
+            isBidirectional = true;
+            fromCardinality = otherAssociation.ToCardinality;
+            if (string.IsNullOrWhiteSpace(label) && !string.IsNullOrWhiteSpace(otherAssociation.Label))
+            {
+                label = otherAssociation.Label;
+            }
         }
+    }
 
-        private ClassDiagramRelationship FindNonBidirectionalAssociationToThisThatMatchesThisAssociation(ClassDiagramClass to)
-        {
-            return to.Relationships.FirstOrDefault(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Association && !x.IsBidirectional);
-        }
+    private void RemoveAnyDependenciesCreatedFromContrutorParameters(ClassDiagramClass to)
+    {
+        relationships.RemoveAll(r => r.RelationsshipType == ClassDiagramRelationshipType.Dependency && r.To == to);
+    }
+
+    private bool IsDuplicateDependency(ClassDiagramClass to)
+    {
+        return Relationships.Any(x => x.RelationsshipType == ClassDiagramRelationshipType.Dependency && x.To == to);
+    }
+
+    private ClassDiagramRelationship FindNonBidirectionalAssociationToThisThatMatchesThisAssociation(ClassDiagramClass to)
+    {
+        return to.Relationships.FirstOrDefault(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Association && !x.IsBidirectional);
     }
 }

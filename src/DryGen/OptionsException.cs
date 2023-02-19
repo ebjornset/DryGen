@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
-namespace DryGen
+namespace DryGen;
+
+[Serializable]
+[ExcludeFromCodeCoverage]
+public sealed class OptionsException : Exception
 {
-    #pragma warning disable S3925 // "ISerializable" should be implemented correctly
-    public class OptionsException : Exception
-    #pragma warning restore S3925 // "ISerializable" should be implemented correctly
+    public OptionsException(string message) : base(message) { }
+
+    private OptionsException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
-        public OptionsException(string message) : base(message) { }
     }
 }

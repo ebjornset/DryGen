@@ -3,35 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DryGen.MermaidFromCSharp.ClassDiagram
+namespace DryGen.MermaidFromCSharp.ClassDiagram;
+
+public class ClassDiagramMethod
 {
-    public class ClassDiagramMethod
+    private readonly List<ClassDiagramMethodParameter> parameters;
+
+    public ClassDiagramMethod(string returnType, string methodName, string visibility, bool isStatic, bool isAbstract, List<ClassDiagramMethodParameter> parameters, MethodInfo methodInfo)
     {
-        private readonly List<ClassDiagramMethodParameter> parameters;
+        ReturnType = returnType;
+        MethodName = methodName;
+        Visibility = visibility;
+        IsStatic = isStatic;
+        IsAbstract = isAbstract;
+        this.parameters = parameters;
+        MethodInfo = methodInfo;
+    }
 
-        public ClassDiagramMethod(string returnType, string methodName, string visibility, bool isStatic, bool isAbstract, List<ClassDiagramMethodParameter> parameters, MethodInfo methodInfo)
-        {
-            ReturnType = returnType;
-            MethodName = methodName;
-            Visibility = visibility;
-            IsStatic = isStatic;
-            IsAbstract = isAbstract;
-            this.parameters = parameters;
-            MethodInfo = methodInfo;
-        }
+    public string ReturnType { get; }
+    public string MethodName { get; }
+    public string Visibility { get; }
+    public bool IsStatic { get; private set; }
+    public bool IsAbstract { get; }
+    public IReadOnlyList<ClassDiagramMethodParameter> Parameters => parameters;
+    public MethodInfo MethodInfo { get; }
 
-        public string ReturnType { get; }
-        public string MethodName { get; }
-        public string Visibility { get; }
-        public bool IsStatic { get; private set; }
-        public bool IsAbstract { get; }
-        public IReadOnlyList<ClassDiagramMethodParameter> Parameters => parameters;
-        public MethodInfo MethodInfo { get; }
-
-        internal void ConvertToExtensionMethod()
-        {
-            parameters.Remove(parameters.First());
-            IsStatic = false;
-        }
+    internal void ConvertToExtensionMethod()
+    {
+        parameters.Remove(parameters.First());
+        IsStatic = false;
     }
 }

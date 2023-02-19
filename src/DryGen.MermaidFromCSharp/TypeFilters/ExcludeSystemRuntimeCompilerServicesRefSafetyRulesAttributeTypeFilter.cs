@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace DryGen.MermaidFromCSharp.TypeFilters
+namespace DryGen.MermaidFromCSharp.TypeFilters;
+
+public class ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter : ITypeFilter
 {
-    public class ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter : ITypeFilter
+    public bool Accepts(Type type)
     {
-        public bool Accepts(Type type)
-        {
-            return type.FullName != "System.Runtime.CompilerServices.RefSafetyRulesAttribute";
-        }
+        return type.FullName != "System.Runtime.CompilerServices.RefSafetyRulesAttribute";
     }
 }

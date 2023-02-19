@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace DryGen.MermaidFromCSharp.TypeFilters
+namespace DryGen.MermaidFromCSharp.TypeFilters;
+
+public class ExcludeSystemObjectTypeFilter : ITypeFilter
 {
-    public class ExcludeSystemObjectTypeFilter : ITypeFilter
+    public bool Accepts(Type type)
     {
-        public bool Accepts(Type type)
-        {
-            return type != typeof(object);
-        }
+        return type != typeof(object);
     }
 }

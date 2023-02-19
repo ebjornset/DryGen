@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace DryGen.MermaidFromCSharp.TypeFilters
+namespace DryGen.MermaidFromCSharp.TypeFilters;
+
+public class ExcludeEnumTypeFilter : ITypeFilter
 {
-    public class ExcludeEnumTypeFilter : ITypeFilter
+    public bool Accepts(Type type)
     {
-        public bool Accepts(Type type)
-        {
-            return !type.IsEnum;
-        }
+        return !type.IsEnum;
     }
 }

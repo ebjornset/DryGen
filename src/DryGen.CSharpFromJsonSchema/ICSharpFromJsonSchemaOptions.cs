@@ -1,9 +1,8 @@
-﻿namespace DryGen.CSharpFromJsonSchema
+﻿namespace DryGen.CSharpFromJsonSchema;
+
+public interface ICSharpFromJsonSchemaOptions : IFromJsonSchemaOptions
 {
-    public interface ICSharpFromJsonSchemaOptions : IFromJsonSchemaOptions
-    {
-        string? Namespace { get; }
-        string? ArrayType { get; }
-        string? ArrayInstanceType { get; }
-    }
+    string? Namespace { get; }
+    string? ArrayType { get; }
+    string? ArrayInstanceType { get; }
 }

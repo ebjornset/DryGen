@@ -4,135 +4,134 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace DryGen.MermaidFromCSharp.ErDiagram
+namespace DryGen.MermaidFromCSharp.ErDiagram;
+
+public class ErDiagramGenerator : IErDiagramGenerator
 {
-    public class ErDiagramGenerator : IErDiagramGenerator
+    private readonly IErDiagramStructureBuilder structureBuilder;
+    private readonly ErDiagramAttributeTypeExclusion attributeTypeExclusion;
+    private readonly ErDiagramAttributeDetailExclusions attributeDetailExclusions;
+    private readonly ErDiagramRelationshipTypeExclusion relationshipTypeExclusion;
+
+    public ErDiagramGenerator(IMermaidErDiagramFromCSharpOptions options) : this(
+        options.StructureBuilder,
+        options.AttributeTypeExclusion ?? ErDiagramAttributeTypeExclusion.None,
+        options.AttributeDetailExclusions,
+        options.RelationshipTypeExclusion ?? ErDiagramRelationshipTypeExclusion.None
+        )
+    { }
+
+    public ErDiagramGenerator(
+        IErDiagramStructureBuilder structureBuilder,
+        ErDiagramAttributeTypeExclusion attributeTypeExclusion,
+        ErDiagramAttributeDetailExclusions attributeDetailExclusions,
+        ErDiagramRelationshipTypeExclusion relationshipTypeExclusion
+        )
     {
-        private readonly IErDiagramStructureBuilder structureBuilder;
-        private readonly ErDiagramAttributeTypeExclusion attributeTypeExclusion;
-        private readonly ErDiagramAttributeDetailExclusions attributeDetailExclusions;
-        private readonly ErDiagramRelationshipTypeExclusion relationshipTypeExclusion;
+        this.structureBuilder = structureBuilder;
+        this.attributeTypeExclusion = attributeTypeExclusion;
+        this.attributeDetailExclusions = attributeDetailExclusions;
+        this.relationshipTypeExclusion = relationshipTypeExclusion;
+    }
 
-        public ErDiagramGenerator(IMermaidErDiagramFromCSharpOptions options) : this(
-            options.StructureBuilder,
-            options.AttributeTypeExclusion ?? ErDiagramAttributeTypeExclusion.None,
-            options.AttributeDetailExclusions,
-            options.RelationshipTypeExclusion ?? ErDiagramRelationshipTypeExclusion.None
-            )
-        { }
+    public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter, IDiagramFilter diagramFilter)
+    {
+        IEnumerable<ErDiagramEntity> entities = structureBuilder.GenerateErStructure(assembly, ErDiagramFilters(typeFilters), attributeFilters, nameRewriter);
+        entities = diagramFilter.Filter(entities);
+        var result = GenerateErDiagramMermaid(entities);
+        return result;
+    }
 
-        public ErDiagramGenerator(
-            IErDiagramStructureBuilder structureBuilder,
-            ErDiagramAttributeTypeExclusion attributeTypeExclusion,
-            ErDiagramAttributeDetailExclusions attributeDetailExclusions,
-            ErDiagramRelationshipTypeExclusion relationshipTypeExclusion
-            )
+    private string GenerateErDiagramMermaid(IEnumerable<ErDiagramEntity> entities)
+    {
+        var sb = new StringBuilder().AppendLine("erDiagram");
+        AppendEntitiesToDiagram(entities, sb);
+        if (relationshipTypeExclusion != ErDiagramRelationshipTypeExclusion.All)
         {
-            this.structureBuilder = structureBuilder;
-            this.attributeTypeExclusion = attributeTypeExclusion;
-            this.attributeDetailExclusions = attributeDetailExclusions;
-            this.relationshipTypeExclusion = relationshipTypeExclusion;
+            AppendRelationshipsToDiagram(entities, sb);
         }
+        return sb.ToString();
+    }
 
-        public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter, IDiagramFilter diagramFilter)
+    private static void AppendRelationshipsToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
+    {
+        foreach (var entity in entities)
         {
-            IEnumerable<ErDiagramEntity> entities = structureBuilder.GenerateErStructure(assembly, ErDiagramFilters(typeFilters), attributeFilters, nameRewriter);
-            entities = diagramFilter.Filter(entities);
-            var result = GenerateErDiagramMermaid(entities);
-            return result;
-        }
-
-        private string GenerateErDiagramMermaid(IEnumerable<ErDiagramEntity> entities)
-        {
-            var sb = new StringBuilder().AppendLine("erDiagram");
-            AppendEntitiesToDiagram(entities, sb);
-            if (relationshipTypeExclusion != ErDiagramRelationshipTypeExclusion.All)
+            foreach (var relationship in entity.GetRelationships())
             {
-                AppendRelationshipsToDiagram(entities, sb);
-            }
-            return sb.ToString();
-        }
-
-        private static void AppendRelationshipsToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
-        {
-            foreach (var entity in entities)
-            {
-                foreach (var relationship in entity.GetRelationships())
-                {
-                    sb.Append("\t").Append(entity.Name).Append(' ')
-                        .Append(relationship.FromCardinality.GetFromCardinalityValue()).Append(relationship.GetRelationshipLine()).Append(relationship.ToCardinality.GetToCardinalityValue())
-                        .Append(' ').Append(relationship.To.Name).AppendLine($" : \"{relationship.Label}\"");
-                }
+                sb.Append("\t").Append(entity.Name).Append(' ')
+                    .Append(relationship.FromCardinality.GetFromCardinalityValue()).Append(relationship.GetRelationshipLine()).Append(relationship.ToCardinality.GetToCardinalityValue())
+                    .Append(' ').Append(relationship.To.Name).AppendLine($" : \"{relationship.Label}\"");
             }
         }
+    }
 
-        private void AppendEntitiesToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
+    private void AppendEntitiesToDiagram(IEnumerable<ErDiagramEntity> entities, StringBuilder sb)
+    {
+        foreach (var entity in entities)
         {
-            foreach (var entity in entities)
+            if (attributeTypeExclusion != ErDiagramAttributeTypeExclusion.All && entity.GetAttributes().Any())
             {
-                if (attributeTypeExclusion != ErDiagramAttributeTypeExclusion.All && entity.GetAttributes().Any())
-                {
-                    AppendAttributeToEnitity(sb, entity);
-                }
-                else
-                {
-                    sb.Append("\t").AppendLine(entity.Name);
-                }
+                AppendAttributeToEnitity(sb, entity);
+            }
+            else
+            {
+                sb.Append("\t").AppendLine(entity.Name);
             }
         }
+    }
 
-        private void AppendAttributeToEnitity(StringBuilder sb, ErDiagramEntity entity)
+    private void AppendAttributeToEnitity(StringBuilder sb, ErDiagramEntity entity)
+    {
+        sb.Append("\t").Append(entity.Name).AppendLine(" {");
+        foreach (var attribute in entity.GetAttributes())
         {
-            sb.Append("\t").Append(entity.Name).AppendLine(" {");
-            foreach (var attribute in entity.GetAttributes())
+            if (attributeTypeExclusion == ErDiagramAttributeTypeExclusion.Foreignkeys && attribute.IsForeignKey)
             {
-                if (attributeTypeExclusion == ErDiagramAttributeTypeExclusion.Foreignkeys && attribute.IsForeignKey)
-                {
-                    continue;
-                }
-                sb.Append("\t").Append("\t").Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
-                AppendKeyTypeToAttribute(sb, attribute);
-                AppendCommentsToAttribute(sb, attribute);
-                sb.AppendLine();
+                continue;
             }
-            sb.Append("\t").AppendLine("}");
+            sb.Append("\t").Append("\t").Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
+            AppendKeyTypeToAttribute(sb, attribute);
+            AppendCommentsToAttribute(sb, attribute);
+            sb.AppendLine();
         }
+        sb.Append("\t").AppendLine("}");
+    }
 
-        private void AppendKeyTypeToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+    private void AppendKeyTypeToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+    {
+        if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.KeyTypes))
         {
-            if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.KeyTypes))
+            if (attribute.IsPrimaryKey)
             {
-                if (attribute.IsPrimaryKey)
-                {
-                    sb.Append(" PK");
-                }
-                else if (attribute.IsForeignKey)
-                {
-                    sb.Append(" FK");
-                }
+                sb.Append(" PK");
             }
-        }
-
-        private void AppendCommentsToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
-        {
-            if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.Comments))
+            else if (attribute.IsForeignKey)
             {
-                if (attribute.IsAlternateKey)
-                {
-                    sb.Append(" \"AK\"");
-                }
-                else if (attribute.IsNullable)
-                {
-                    sb.Append(" \"Null\"");
-                }
+                sb.Append(" FK");
             }
         }
+    }
 
-        private IReadOnlyList<ITypeFilter> ErDiagramFilters(IReadOnlyList<ITypeFilter> filters)
+    private void AppendCommentsToAttribute(StringBuilder sb, ErDiagramAttribute attribute)
+    {
+        if (!attributeDetailExclusions.HasFlag(ErDiagramAttributeDetailExclusions.Comments))
         {
-            var result = new List<ITypeFilter> { new ExcludeAbstractClassTypeFilter(), new ExcludeNonPublicClassTypeFilter(), new ExcludeEnumTypeFilter(), new ExcludeSystemObjectTypeFilter() };
-            result.AddRange(filters);
-            return result;
+            if (attribute.IsAlternateKey)
+            {
+                sb.Append(" \"AK\"");
+            }
+            else if (attribute.IsNullable)
+            {
+                sb.Append(" \"Null\"");
+            }
         }
+    }
+
+    private IReadOnlyList<ITypeFilter> ErDiagramFilters(IReadOnlyList<ITypeFilter> filters)
+    {
+        var result = new List<ITypeFilter> { new ExcludeAbstractClassTypeFilter(), new ExcludeNonPublicClassTypeFilter(), new ExcludeEnumTypeFilter(), new ExcludeSystemObjectTypeFilter() };
+        result.AddRange(filters);
+        return result;
     }
 }

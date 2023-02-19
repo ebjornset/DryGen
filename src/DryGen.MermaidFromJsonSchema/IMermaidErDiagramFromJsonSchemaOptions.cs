@@ -1,10 +1,9 @@
 ﻿using DryGen.CSharpFromJsonSchema;
 
-namespace DryGen.MermaidFromJsonSchema
+namespace DryGen.MermaidFromJsonSchema;
+
+public interface IMermaidErDiagramFromJsonSchemaOptions : IFromJsonSchemaOptions
 {
-    public interface IMermaidErDiagramFromJsonSchemaOptions : IFromJsonSchemaOptions
-    {
-        bool? ExcludeAllAttributes { get; }
-        bool? ExcludeAllRelationships { get; }
-    }
+    bool? ExcludeAllAttributes { get; }
+    bool? ExcludeAllRelationships { get; }
 }

@@ -1,10 +1,9 @@
 ﻿using DryGen.Core;
 
-namespace DryGen.CSharpFromJsonSchema
+namespace DryGen.CSharpFromJsonSchema;
+
+public interface IFromJsonSchemaOptions : IInputFileOptions
 {
-    public interface IFromJsonSchemaOptions : IInputFileOptions
-    {
-        JsonSchemaFileFormat SchemaFileFormat { get; }
-        string? RootClassname { get; }
-    }
+    JsonSchemaFileFormat SchemaFileFormat { get; }
+    string? RootClassname { get; }
 }

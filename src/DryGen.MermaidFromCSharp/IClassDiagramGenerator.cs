@@ -1,7 +1,6 @@
-﻿namespace DryGen.MermaidFromCSharp
-{
-    public interface IClassDiagramGenerator : IDiagramGenerator
-    {
+﻿namespace DryGen.MermaidFromCSharp;
 
-    }
+public interface IClassDiagramGenerator : IDiagramGenerator
+{
+
 }

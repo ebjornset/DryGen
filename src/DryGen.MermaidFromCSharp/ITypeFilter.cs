@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace DryGen.MermaidFromCSharp
+namespace DryGen.MermaidFromCSharp;
+
+public interface ITypeFilter
 {
-    public interface ITypeFilter
-    {
-        bool Accepts(Type type);
-    }
+    bool Accepts(Type type);
 }

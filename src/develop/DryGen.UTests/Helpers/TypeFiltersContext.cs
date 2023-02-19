@@ -1,23 +1,22 @@
 ﻿using DryGen.MermaidFromCSharp;
 using System.Collections.Generic;
 
-namespace DryGen.UTests.Helpers
+namespace DryGen.UTests.Helpers;
+
+public class TypeFiltersContext
 {
-    public class TypeFiltersContext
+    private readonly List<ITypeFilter> filters = new();
+
+    public IReadOnlyList<ITypeFilter> Filters => filters;
+
+    public void Add(ITypeFilter typeFilter)
     {
-        private readonly List<ITypeFilter> filters = new();
+        filters.Add(typeFilter);
+    }
 
-        public IReadOnlyList<ITypeFilter> Filters => filters;
-
-        public void Add(ITypeFilter typeFilter)
-        {
-            filters.Add(typeFilter);
-        }
-
-        public void Set(ITypeFilter typeFilter)
-        {
-            filters.Clear();
-            filters.Add(typeFilter);
-        }
+    public void Set(ITypeFilter typeFilter)
+    {
+        filters.Clear();
+        filters.Add(typeFilter);
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace DryGen.MermaidFromCSharp
+namespace DryGen.MermaidFromCSharp;
+
+public interface IDiagramFilter
 {
-    public interface IDiagramFilter
-    {
-        IEnumerable<TDiagramType> Filter<TDiagramType>(IEnumerable<TDiagramType> types) where TDiagramType : IDiagramType;
-    }
+    IEnumerable<TDiagramType> Filter<TDiagramType>(IEnumerable<TDiagramType> types) where TDiagramType : IDiagramType;
 }

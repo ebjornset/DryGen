@@ -1,8 +1,7 @@
-﻿namespace DryGen.MermaidFromCSharp.ErDiagram
+﻿namespace DryGen.MermaidFromCSharp.ErDiagram;
+
+public enum ErDiagramRelationshipTypeExclusion
 {
-    public enum ErDiagramRelationshipTypeExclusion
-    {
-        None = 0,
-        All = 1,
-    }
+    None = 0,
+    All = 1,
 }

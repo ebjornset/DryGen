@@ -1,9 +1,8 @@
 ﻿using System.Reflection;
 
-namespace DryGen.MermaidFromCSharp
+namespace DryGen.MermaidFromCSharp;
+
+public interface IPropertyFilter
 {
-    public interface IPropertyFilter
-    {
-        bool Accepts(PropertyInfo property);
-    }
+    bool Accepts(PropertyInfo property);
 }
