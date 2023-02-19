@@ -290,7 +290,7 @@ namespace DryGen
             }
         }
 
-        [ExcludeFromCodeCoverage] // We uses the tmp files feature from the .Net runtime so the tests don't have any issues with directory names
+        [ExcludeFromCodeCoverage] // We uses the tmp files feature from the .Net runtime so our tests don't have any issues with directory names
         private static void CreateMissingOutputDirectory(string outputFile)
         {
             var outputDirectory = Path.GetDirectoryName(outputFile);
@@ -382,7 +382,7 @@ namespace DryGen
             sb.Append(indent).AppendLine(ex.Message);
             if (ex is AggregateException aggregateException)
             {
-                sb = BuildExceptionMessages(aggregateException, sb, indent + oneLevelIndent);
+                sb = BuildAggregateExceptionMessages(aggregateException, sb, indent + oneLevelIndent);
             }
             else if (ex.InnerException != null)
             {
@@ -391,7 +391,7 @@ namespace DryGen
             return sb;
         }
 
-        private static StringBuilder BuildExceptionMessages(AggregateException ex, StringBuilder sb, string indent)
+        private static StringBuilder BuildAggregateExceptionMessages(AggregateException ex, StringBuilder sb, string indent)
         {
             foreach (var exception in ex.InnerExceptions)
             {

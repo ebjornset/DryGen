@@ -4,8 +4,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace DryGen.MermaidFromEfCore;
 
@@ -107,7 +111,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
 
     private static void GenerateErAttributes(IReadOnlyList<IPropertyFilter> attributeFilters, EfCoreErEntity entity)
     {
-        foreach (var efProperty in entity.EntityType.GetProperties().Where(p => attributeFilters.All(f => p?.PropertyInfo != null && f.Accepts(p.PropertyInfo))))
+        foreach (var efProperty in entity.EntityType.GetProperties().Where(p => p?.PropertyInfo != null && attributeFilters.All(f => f.Accepts(p.PropertyInfo))))
         {
             var propertyType = efProperty.ClrType;
             if (propertyType.IsErDiagramAttributePropertyType())
@@ -202,9 +206,28 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         }
         for (var i = 0; i < alreadyLoadedEfCoreRequiredAssemblies.Length; i++)
         {
-            if (alreadyLoadedEfCoreRequiredAssemblies[i] != true)
+            TryLoadEfCoreAssebly(alreadyLoadedEfCoreRequiredAssemblies, i);
+        }
+    }
+
+    [ExcludeFromCodeCoverage] // It's to tedious to create a test case where any of the EF Core assemblies are missing. This has been tested (once) manually
+    private static void TryLoadEfCoreAssebly(bool?[] alreadyLoadedEfCoreRequiredAssemblies, int i)
+    {
+        if (alreadyLoadedEfCoreRequiredAssemblies[i] != true)
+        {
+            try
             {
                 AppDomain.CurrentDomain.Load(EfCoreRequiredAssemblyNames[i]);
+            }
+            catch (FileNotFoundException ex)
+            {
+                if (ex.Message.Contains(EfCoreRequiredAssemblyNames[i]))
+                {
+                    var sb = new StringBuilder().Append("Could not load the '").Append(EfCoreRequiredAssemblyNames[i]).AppendLine("' assembly");
+                    sb.Append(EfCoreRequiredAssemblyErrorFixSuggestions[i]);
+                    throw new EfCoreTypeOrAssemblyException(sb.ToString());
+                }
+                throw;
             }
         }
     }
@@ -219,7 +242,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
                 return type;
             }
         }
-        throw new EfCoreTypeException($"Could not load Ef Code type '{name}'");
+        throw new EfCoreTypeOrAssemblyException($"Could not load Ef Code type '{name}'");
     }
 
     private sealed class EfCoreErEntity : ErDiagramEntity
@@ -252,7 +275,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         {
             if (!ElementType.IsInstanceOfType(element))
             {
-                throw new EfCoreTypeException($"'{ElementType.FullName}' is not assignable from '{element.GetType().FullName}'");
+                throw new EfCoreTypeOrAssemblyException($"'{ElementType.FullName}' is not assignable from '{element.GetType().FullName}'");
             }
             this.element = element;
         }
@@ -262,11 +285,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         protected TType GetElementMandatoryPropertyValue<TType>(string propertyName)
         {
             var result = GetElementOptionalPropertyValue<TType>(propertyName);
-            if (result == null)
-            {
-                throw new EfCoreTypeException($"'{typeof(TType).FullName}' return null for mandatory property '{propertyName}'");
-            }
-            return result;
+            return result ?? throw new EfCoreTypeOrAssemblyException($"'{typeof(TType).FullName}' return null for mandatory property '{propertyName}'");
         }
 
         protected TType? GetElementOptionalPropertyValue<TType>(string propertyName)
@@ -277,31 +296,20 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
             {
                 return default;
             }
-            if (!typeof(TType).IsAssignableFrom(result?.GetType()))
-            {
-                throw new EfCoreTypeException($"'{typeof(TType).FullName}' is not assignable from '{result?.GetType().FullName}'");
-            }
+            CheckExpectedType<TType>(result);
             return (TType)result;
         }
 
         protected PropertyInfo GetElementPropertyInfo(string propertyName)
         {
             var propertyInfo = GetPropertyInfoFromType(ElementType, propertyName);
-            if (propertyInfo == null)
-            {
-                throw new EfCoreTypeException($"'{ElementType.FullName}' does not have a property named '{propertyName}'");
-            }
-            return propertyInfo;
+            return propertyInfo ?? throw new EfCoreTypeOrAssemblyException($"'{ElementType.FullName}' does not have a property named '{propertyName}'");
         }
 
         protected TType GetElementMandatoryMethodValue<TType>(string methodName)
         {
             var result = GetElementOptionalMethodValue<TType>(methodName);
-            if (result == null)
-            {
-                throw new EfCoreTypeException($"'{typeof(TType).FullName}' return null for mandatory method '{methodName}'");
-            }
-            return result;
+            return result ?? throw new EfCoreTypeOrAssemblyException($"'{typeof(TType).FullName}' return null for mandatory method '{methodName}'");
         }
 
         protected TType? GetElementOptionalMethodValue<TType>(string methodName)
@@ -312,21 +320,14 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
             {
                 return default;
             }
-            if (!typeof(TType).IsAssignableFrom(result?.GetType()))
-            {
-                throw new EfCoreTypeException($"'{typeof(TType).FullName}' is not assignable from '{result?.GetType().FullName}'");
-            }
+            CheckExpectedType<TType>(result);
             return (TType)result;
         }
 
         protected MethodInfo GetElementMethodInfo(string methodName)
         {
             var methodInfo = GetMethodInfoFromType(ElementType, methodName);
-            if (methodInfo == null)
-            {
-                throw new EfCoreTypeException($"'{ElementType.FullName}' does not have a method named '{methodName}'");
-            }
-            return methodInfo;
+            return methodInfo ?? throw new EfCoreTypeOrAssemblyException($"'{ElementType.FullName}' does not have a method named '{methodName}'");
         }
 
         private PropertyInfo? GetPropertyInfoFromType(Type? type, string propertyName)
@@ -366,6 +367,15 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
             }
             return GetMethodInfoFromType(type.BaseType, methodName);
         }
+
+        [ExcludeFromCodeCoverage] // Just a guard rail for unexpected structures
+        private static void CheckExpectedType<TType>(object? instance)
+        {
+            if (!typeof(TType).IsAssignableFrom(instance?.GetType()))
+            {
+                throw new EfCoreTypeOrAssemblyException($"'{typeof(TType).FullName}' is not assignable from '{instance?.GetType().FullName}'");
+            }
+        }
     }
 
     private sealed class ModelEntityType : ModelElement
@@ -376,12 +386,12 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
 
         public ModelEntityType(object entityType) : base(entityType)
         {
-            ClrType = GetElementMandatoryPropertyValue<Type>("ClrType");
+            ClrType = GetElementMandatoryPropertyValue<Type>(nameof(ClrType));
         }
 
         public Type ClrType { get; }
-        public IEnumerable<ModelProperty> GetProperties() => properties ??= GetElementMandatoryMethodValue<IEnumerable<object>>("GetProperties").Select(x => new ModelProperty(x));
-        public IEnumerable<ModelForeignKey> GetForeignKeys() => foreignKeys ??= GetElementMandatoryMethodValue<IEnumerable<object>>("GetForeignKeys").Select(x => new ModelForeignKey(x));
+        public IEnumerable<ModelProperty> GetProperties() => properties ??= GetElementMandatoryMethodValue<IEnumerable<object>>(nameof(GetProperties)).Select(x => new ModelProperty(x));
+        public IEnumerable<ModelForeignKey> GetForeignKeys() => foreignKeys ??= GetElementMandatoryMethodValue<IEnumerable<object>>(nameof(GetForeignKeys)).Select(x => new ModelForeignKey(x));
         protected override Type ElementType => elementType ??= LoadTypeByName(IEntityTypeTypeName);
     }
 
@@ -392,12 +402,12 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
 
         public ModelForeignKey(object foreignKey) : base(foreignKey)
         {
-            PrincipalEntityType = new(GetElementMandatoryPropertyValue<object>("PrincipalEntityType"));
-            Properties = GetElementMandatoryPropertyValue<IReadOnlyList<object>>("Properties").Select(x => new ModelProperty(x)).ToArray();
-            IsRequired = GetElementMandatoryPropertyValue<bool>("IsRequired");
-            var principalToDependent = GetElementOptionalPropertyValue<object>("PrincipalToDependent");
+            PrincipalEntityType = new(GetElementMandatoryPropertyValue<object>(nameof(PrincipalEntityType)));
+            Properties = GetElementMandatoryPropertyValue<IReadOnlyList<object>>(nameof(Properties)).Select(x => new ModelProperty(x)).ToArray();
+            IsRequired = GetElementMandatoryPropertyValue<bool>(nameof(IsRequired));
+            var principalToDependent = GetElementOptionalPropertyValue<object>(nameof(PrincipalToDependent));
             PrincipalToDependent = principalToDependent == null ? null : new ModelNavigation(principalToDependent);
-            var dependentToPrincipal = GetElementOptionalPropertyValue<object>("DependentToPrincipal");
+            var dependentToPrincipal = GetElementOptionalPropertyValue<object>(nameof(DependentToPrincipal));
             DependentToPrincipal = dependentToPrincipal == null ? null : new ModelNavigation(dependentToPrincipal);
         }
 
@@ -415,9 +425,9 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
 
         public ModelNavigation(object navigation) : base(navigation)
         {
-            ClrType = GetElementMandatoryPropertyValue<Type>("ClrType");
-            Name = GetElementMandatoryPropertyValue<string>("Name");
-            PropertyInfo = GetElementOptionalPropertyValue<PropertyInfo>("PropertyInfo");
+            ClrType = GetElementMandatoryPropertyValue<Type>(nameof(ClrType));
+            Name = GetElementMandatoryPropertyValue<string>(nameof(Name));
+            PropertyInfo = GetElementOptionalPropertyValue<PropertyInfo>(nameof(PropertyInfo));
         }
 
         public Type ClrType { get; }
@@ -435,9 +445,9 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
 
         public ModelProperty(object property) : base(property)
         {
-            ClrType = GetElementMandatoryPropertyValue<Type>("ClrType");
-            Name = GetElementMandatoryPropertyValue<string>("Name");
-            PropertyInfo = GetElementOptionalPropertyValue<PropertyInfo>("PropertyInfo");
+            ClrType = GetElementMandatoryPropertyValue<Type>(nameof(ClrType));
+            Name = GetElementMandatoryPropertyValue<string>(nameof(Name));
+            PropertyInfo = GetElementOptionalPropertyValue<PropertyInfo>(nameof(PropertyInfo));
         }
 
         public Type ClrType { get; }
@@ -461,5 +471,44 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
     private const string INavigationTypeName = "Microsoft.EntityFrameworkCore.Metadata.INavigation";
     private const string IPropertyTypeName = "Microsoft.EntityFrameworkCore.Metadata.IProperty";
 
-    private static readonly string[] EfCoreRequiredAssemblyNames = new[] { "Microsoft.EntityFrameworkCore", "Microsoft.EntityFrameworkCore.InMemory" };
+    private static readonly string[] EfCoreRequiredAssemblyNames = 
+        new[] { "Microsoft.EntityFrameworkCore", 
+            "Microsoft.EntityFrameworkCore.InMemory" };
+    private static readonly string[] EfCoreRequiredAssemblyErrorFixSuggestions =
+        new[] {
+@"
+You can either copy it manually to the target folder or force .Net to copy it to the build output folder 
+with the 'CopyLocalLockFileAssemblies' property in your .csproj file, e.g.
+
+  <PropertyGroup>
+    <!-- Existing properties -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+NB! If you choose to copy the file manually, you must also make sure to copy all its dependencies."
+,
+@"
+dry-gen requires this assembly to be able to introspect your model.
+You can either copy it manually to the folder or include it as a package reference in your .csproj file.
+It's sufficent to include it as a private asset, (with the same version as the rest of your Ef Core dependencies) e.g.
+
+  <ItemGroup>
+    <!-- Other packagge references -->
+    <PackageReference Include='Microsoft.EntityFrameworkCore.InMemory' Version='X.Y.Z'>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+If its already included as a package reference you can try to force .Net to copy 
+it to the build output folder with the 'CopyLocalLockFileAssemblies' 
+propert in your .csproj file, e.g.
+
+  <PropertyGroup>
+    <!-- Existing properties -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+NB! If you choose to copy the file manually, you must also make sure to copy all its dependencies."
+,
+        };
 }
