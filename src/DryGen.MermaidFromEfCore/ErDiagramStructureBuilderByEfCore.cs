@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using TypeLoadException = DryGen.Core.TypeLoadException;
 
 namespace DryGen.MermaidFromEfCore;
 
@@ -243,7 +244,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
                 return type;
             }
         }
-        throw new AssemblyLoadException($"Could not load Ef Code type '{name}'");
+        throw new TypeLoadException($"Could not load Ef Code type '{name}'");
     }
 
     private sealed class EfCoreErEntity : ErDiagramEntity
