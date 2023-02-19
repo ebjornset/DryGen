@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace DryGen.MermaidFromCSharp.ErDiagram
+namespace DryGen.MermaidFromCSharp.ErDiagram;
+
+public interface IErDiagramStructureBuilder
 {
-    public interface IErDiagramStructureBuilder
-    {
-        IReadOnlyList<ErDiagramEntity> GenerateErStructure(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter);
-    }
+    IReadOnlyList<ErDiagramEntity> GenerateErStructure(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter);
 }

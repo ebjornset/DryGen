@@ -1,12 +1,11 @@
-﻿namespace DryGen.MermaidFromCSharp.ClassDiagram
+﻿namespace DryGen.MermaidFromCSharp.ClassDiagram;
+
+public enum ClassDiagramRelationshipType
 {
-    public enum ClassDiagramRelationshipType
-    {
-        Realization,
-        Inheritance,
-        Association,
-        Composition,
-        Aggregation,
-        Dependency,
-    }
+    Realization,
+    Inheritance,
+    Association,
+    Composition,
+    Aggregation,
+    Dependency,
 }

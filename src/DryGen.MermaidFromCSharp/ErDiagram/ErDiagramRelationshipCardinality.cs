@@ -1,10 +1,9 @@
-﻿namespace DryGen.MermaidFromCSharp.ErDiagram
+﻿namespace DryGen.MermaidFromCSharp.ErDiagram;
+
+public enum ErDiagramRelationshipCardinality
 {
-    public enum ErDiagramRelationshipCardinality
-    {
-        ZeroOrOne,
-        ExactlyOne,
-        ZeroOrMore,
-        OneOrMore
-    }
+    ZeroOrOne,
+    ExactlyOne,
+    ZeroOrMore,
+    OneOrMore
 }

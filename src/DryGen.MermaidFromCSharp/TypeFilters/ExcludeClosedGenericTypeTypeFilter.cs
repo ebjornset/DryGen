@@ -1,16 +1,15 @@
 ﻿using System;
 
-namespace DryGen.MermaidFromCSharp.TypeFilters
+namespace DryGen.MermaidFromCSharp.TypeFilters;
+
+public class ExcludeClosedGenericTypeTypeFilter : ITypeFilter
 {
-    public class ExcludeClosedGenericTypeTypeFilter : ITypeFilter
+    public bool Accepts(Type type)
     {
-        public bool Accepts(Type type)
+        if (type.IsGenericType && !type.IsGenericTypeDefinition)
         {
-            if (type.IsGenericType && !type.IsGenericTypeDefinition)
-            {
-                return false;
-            }
-            return true;
+            return false;
         }
+        return true;
     }
 }

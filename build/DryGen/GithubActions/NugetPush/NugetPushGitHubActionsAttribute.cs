@@ -5,20 +5,19 @@ using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.CI.GitHubActions.Configuration;
 using Nuke.Common.Execution;
 
-namespace DryGen.GithubActions.NugetPush
-{
-    public class NugetPushGitHubActionsAttribute : SonarCloudGitHubActionsAttribute
-    {
-        public NugetPushGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
+namespace DryGen.GithubActions.NugetPush;
 
-        protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
-        {
-            var job = base.GetJobs(image, relevantTargets);
-            job = GhPagesGitHubActionsJobSetup.ConfigureJob(job, rubyStepOffset: 9, jekyllStepOffset: 6);
-            var newSteps = new List<GitHubActionsStep>(job.Steps);
-            newSteps.Insert(newSteps.Count - 1, new GitHubActionsNugetPushStep());
-            job.Steps = newSteps.ToArray();
-            return job;
-        }
+public class NugetPushGitHubActionsAttribute : SonarCloudGitHubActionsAttribute
+{
+    public NugetPushGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
+
+    protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
+    {
+        var job = base.GetJobs(image, relevantTargets);
+        job = GhPagesGitHubActionsJobSetup.ConfigureJob(job, rubyStepOffset: 9, jekyllStepOffset: 6);
+        var newSteps = new List<GitHubActionsStep>(job.Steps);
+        newSteps.Insert(newSteps.Count - 1, new GitHubActionsNugetPushStep());
+        job.Steps = newSteps.ToArray();
+        return job;
     }
 }

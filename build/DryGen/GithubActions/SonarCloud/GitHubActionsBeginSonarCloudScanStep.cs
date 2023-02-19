@@ -1,20 +1,19 @@
 ﻿using Nuke.Common.CI.GitHubActions.Configuration;
 using Nuke.Common.Utilities;
 
-namespace DryGen.GithubActions.SonarCloud
+namespace DryGen.GithubActions.SonarCloud;
+
+public class GitHubActionsBeginSonarCloudScanStep : GitHubActionsStep
 {
-    public class GitHubActionsBeginSonarCloudScanStep : GitHubActionsStep
+    public override void Write(CustomFileWriter writer)
     {
-        public override void Write(CustomFileWriter writer)
+        writer.WriteLine("- name: Begin SonarCloud scan");
+        using (writer.Indent())
         {
-            writer.WriteLine("- name: Begin SonarCloud scan");
+            writer.WriteLine("run:");
             using (writer.Indent())
             {
-                writer.WriteLine("run:");
-                using (writer.Indent())
-                {
-                    writer.WriteLine("dotnet-sonarscanner begin /k:\"ebjornset_DryGen\" /o:\"ebjornset\" /d:sonar.login=\"${{ secrets.SONAR_TOKEN }}\" /d:sonar.host.url=\"https://sonarcloud.io\" /d:sonar.coverageReportPaths=\"./.sonarqubecoverage/SonarQube.xml\"");
-                }
+                writer.WriteLine("dotnet-sonarscanner begin /k:\"ebjornset_DryGen\" /o:\"ebjornset\" /d:sonar.login=\"${{ secrets.SONAR_TOKEN }}\" /d:sonar.host.url=\"https://sonarcloud.io\" /d:sonar.coverageReportPaths=\"./.sonarqubecoverage/SonarQube.xml\"");
             }
         }
     }

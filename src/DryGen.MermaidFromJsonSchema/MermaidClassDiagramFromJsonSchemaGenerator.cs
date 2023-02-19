@@ -6,45 +6,44 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DryGen.MermaidFromJsonSchema
+namespace DryGen.MermaidFromJsonSchema;
+
+public class MermaidClassDiagramFromJsonSchemaGenerator
 {
-    public class MermaidClassDiagramFromJsonSchemaGenerator
+    public async Task<string> Generate(IMermaidClassDiagramFromJsonSchemaOptions options, IDiagramFilter diagramFilter)
     {
-        public async Task<string> Generate(IMermaidClassDiagramFromJsonSchemaOptions options, IDiagramFilter diagramFilter)
-        {
-            var cSharpCodeGenerator = new CSharpFromJsonSchemaGenerator();
-            var mermaidClassDiagramGenerator = new ClassDiagramGenerator(new TypeLoaderByReflection(), new MermaidClassDiagramFromCSharpOptions { Direction = options.Direction });
-            string cSharpCode = await cSharpCodeGenerator.Generate(new InternalCSharpFromJsonSchemaOptions(options));
-            var tempAssembly = cSharpCode.CompileCodeToMemory(ReferencedAssemblies.Get());
-            var mermaid = mermaidClassDiagramGenerator.Generate(tempAssembly, new ITypeFilter[0], new IPropertyFilter[0], nameRewriter: null, diagramFilter);
-            return mermaid;
-        }
+        var cSharpCodeGenerator = new CSharpFromJsonSchemaGenerator();
+        var mermaidClassDiagramGenerator = new ClassDiagramGenerator(new TypeLoaderByReflection(), new MermaidClassDiagramFromCSharpOptions { Direction = options.Direction });
+        string cSharpCode = await cSharpCodeGenerator.Generate(new InternalCSharpFromJsonSchemaOptions(options));
+        var tempAssembly = cSharpCode.CompileCodeToMemory(ReferencedAssemblies.Get());
+        var mermaid = mermaidClassDiagramGenerator.Generate(tempAssembly, new ITypeFilter[0], new IPropertyFilter[0], nameRewriter: null, diagramFilter);
+        return mermaid;
+    }
 
-        private sealed class MermaidClassDiagramFromCSharpOptions : IMermaidClassDiagramFromCSharpOptions
-        {
-            public ClassDiagramAttributeLevel? AttributeLevel => default;
+    private sealed class MermaidClassDiagramFromCSharpOptions : IMermaidClassDiagramFromCSharpOptions
+    {
+        public ClassDiagramAttributeLevel? AttributeLevel => default;
 
-            public ClassDiagramMethodLevel? MethodLevel => default;
+        public ClassDiagramMethodLevel? MethodLevel => default;
 
-            public ClassDiagramDirection? Direction { get; set; }
+        public ClassDiagramDirection? Direction { get; set; }
 
-            public bool? ExcludeStaticAttributes => default;
+        public bool? ExcludeStaticAttributes => default;
 
-            public bool? ExcludeStaticMethods => default;
+        public bool? ExcludeStaticMethods => default;
 
-            public bool? ExcludeMethodParams => default;
+        public bool? ExcludeMethodParams => default;
 
-            public IEnumerable<string>? IncludeNamespaces => Array.Empty<string>();
+        public IEnumerable<string>? IncludeNamespaces => Array.Empty<string>();
 
-            public IEnumerable<string>? IncludeTypeNames => Array.Empty<string>();
+        public IEnumerable<string>? IncludeTypeNames => Array.Empty<string>();
 
-            public IEnumerable<string>? ExcludeTypeNames => Array.Empty<string>();
+        public IEnumerable<string>? ExcludeTypeNames => Array.Empty<string>();
 
-            public IEnumerable<string>? ExcludePropertyNames => Array.Empty<string>();
+        public IEnumerable<string>? ExcludePropertyNames => Array.Empty<string>();
 
-            public string? NameReplaceFrom => default;
+        public string? NameReplaceFrom => default;
 
-            public string? NameReplaceTo => default;
-        }
+        public string? NameReplaceTo => default;
     }
 }

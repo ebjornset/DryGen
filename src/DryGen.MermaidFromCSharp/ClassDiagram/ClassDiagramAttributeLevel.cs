@@ -1,11 +1,10 @@
-﻿namespace DryGen.MermaidFromCSharp.ClassDiagram
+﻿namespace DryGen.MermaidFromCSharp.ClassDiagram;
+
+public enum ClassDiagramAttributeLevel
 {
-    public enum ClassDiagramAttributeLevel
-    {
-        All,
-        Public,
-        Internal,
-        Protected,
-        None
-    }
+    All,
+    Public,
+    Internal,
+    Protected,
+    None
 }

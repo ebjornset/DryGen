@@ -1,9 +1,8 @@
-﻿namespace DryGen.CSharpFromJsonSchema
+﻿namespace DryGen.CSharpFromJsonSchema;
+
+public enum JsonSchemaFileFormat
 {
-    public enum JsonSchemaFileFormat
-    {
-        ByExtension = 0,
-        Json = 1,
-        Yaml = 2,
-    }
+    ByExtension = 0,
+    Json = 1,
+    Yaml = 2,
 }

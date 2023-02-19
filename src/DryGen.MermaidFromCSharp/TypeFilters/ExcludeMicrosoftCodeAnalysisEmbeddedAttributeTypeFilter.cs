@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace DryGen.MermaidFromCSharp.TypeFilters
+namespace DryGen.MermaidFromCSharp.TypeFilters;
+
+public class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter : ITypeFilter
 {
-    public class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter : ITypeFilter
+    public bool Accepts(Type type)
     {
-        public bool Accepts(Type type)
-        {
-            return type.FullName != "Microsoft.CodeAnalysis.EmbeddedAttribute";
-        }
+        return type.FullName != "Microsoft.CodeAnalysis.EmbeddedAttribute";
     }
 }

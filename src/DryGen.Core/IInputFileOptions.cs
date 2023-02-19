@@ -1,10 +1,9 @@
-﻿namespace DryGen.Core
+﻿namespace DryGen.Core;
+
+public interface IInputFileOptions
 {
-    public interface IInputFileOptions
+    string? InputFile
     {
-        string? InputFile
-        {
-            get;
-        }
+        get;
     }
 }
