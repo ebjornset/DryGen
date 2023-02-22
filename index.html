@@ -132,26 +132,35 @@
 <p><strong>A little warning befor you start</strong>: As with all .Net tools, you run <code class="language-plaintext highlighter-rouge">dry-gen</code> as an application with full trust, so make sure you know exactly where you write your output files.</p>
 
 <h2 id="installation">Installation</h2>
+
 <h4 id="as-a-global-tool">As a global tool</h4>
+
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet tool install --global dry-gen
 </code></pre></div></div>
+
 <h4 id="as-a-local-tool">As a local tool</h4>
+
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new tool-manifest # if you haven't set up the .Net tools for this project already.
 dotnet tool install --local dry-gen
 </code></pre></div></div>
+
 <h2 id="use">Use</h2>
+
 <p>You invoke DryGen from the commandline as <code class="language-plaintext highlighter-rouge">dry-gen</code> when its installed as a global tool, and with <code class="language-plaintext highlighter-rouge">dotnet dry-gen</code> when its installed as a local tool.</p>
 
 <p>The general structure of the command line is <code class="language-plaintext highlighter-rouge">dry-gen &lt;verb&gt; [options]</code></p>
 
 <h5 id="verb">Verb</h5>
+
 <p>The verb defines your target and source representation. The supported verbs are using the pattern <code class="language-plaintext highlighter-rouge">&lt;target-representation&gt;-from-&lt;source-representation&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">mermaid-class-diagram-from-csharp</code>. Execute <code class="language-plaintext highlighter-rouge">dry-gen</code> without any parameters to get a list of the supported verbs.</p>
 
 <h5 id="options">Options</h5>
-<p>The options are spesific to each verb, and are used to fine tune the result representation. Most options uses the standard long notation of <code class="language-plaintext highlighter-rouge">--&lt;option-name&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">--input-file</code>. Some options also supports the shorthand notation of <code class="language-plaintext highlighter-rouge">-&lt;letter&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">-i</code> for input file, but we suggest you use the long format.  Execute <code class="language-plaintext highlighter-rouge">dry-gen &lt;verb&gt; --help</code> to get the list of options for a specific verb, e.g. <code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --help</code></p>
+
+<p>The options are spesific to each verb, and are used to fine tune the result representation. Most options uses the standard long notation of <code class="language-plaintext highlighter-rouge">--&lt;option-name&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">--input-file</code>. Some options also supports the shorthand notation of <code class="language-plaintext highlighter-rouge">-&lt;letter&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">-i</code> for input file, but we suggest you use the long format. Execute <code class="language-plaintext highlighter-rouge">dry-gen &lt;verb&gt; --help</code> to get the list of options for a specific verb, e.g. <code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --help</code></p>
 
 <h5 id="going-further">Going further</h5>
-<p>Head over to the <a href="/verbs">verbs page</a> to see the list of verbs dry-gen supports, or take a look on <a href="/examples">our examples</a>.</p>
+
+<p>Head over to the <a href="/verbs">verbs page</a> to see the list of verbs dry-gen supports, or take a look at <a href="/examples">our examples</a>.</p>
 
 <p>Have fun!</p>
 
