@@ -1,0 +1,5 @@
+# Ignore the test folder
+test/**
+
+# Ignore the generated folders, since these will be recreated when the user installs the template
+generated/**

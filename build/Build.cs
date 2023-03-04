@@ -46,7 +46,8 @@ public partial class Build : NukeBuild
 
     internal string Copyright;
     internal string Authors;
-    string Description;
+    string ToolsDescription;
+    string TemplatesDescription;
     internal bool IsVersionTag;
 #pragma warning disable S1075 // URIs should not be hardcoded
     private readonly string ProjectUrlInNugetPackage = "https://docs.drygen.dev/";
@@ -68,19 +69,19 @@ public partial class Build : NukeBuild
     internal Target Init => _ => _
         .Executes(() =>
         {
-            var endyear = DateTime.Today.Year;
-            var endYearPattern = endyear > 2022 ? $"-{endyear}" : string.Empty;
-            Description = "A dotnet tool to generate other representations of a piece of knowlege from one representation.";
+            ToolsDescription = "A dotnet tool to generate other representations of a piece of knowlege from one representation.";
+            TemplatesDescription = $".Net templates that make getting started with [dry-gen]({ProjectUrlInNugetPackage}) easy.";
             Authors = "Eirik Bjornset";
-            Copyright = $"Copyright 2022{endYearPattern} {Authors}";
+            Copyright = $"Copyright 2022-{DateTime.Today.Year} {Authors}";
             IsVersionTag = GitRepository != null && GitRepository.Branch.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase);
-            Serilog.Log.Information("Description = {description}", Description);
-            Serilog.Log.Information("Copyright = {copyright}", Copyright);
-            Serilog.Log.Information("GitRepository = {GitRepository}", GitRepository);
-            Serilog.Log.Information("GitRepository.Branch = {GitRepositoryBranch}", GitRepository?.Branch);
-            Serilog.Log.Information("GitRepository.Tags = {GitRepositoryTags}", GitRepository?.Tags);
-            Serilog.Log.Information("IsVersionTag = {isVersionTag}", IsVersionTag);
-            Serilog.Log.Information("GitVersion.NuGetVersionV2 = {GitVersionNuGetVersionV2}", GitVersion.NuGetVersionV2);
+            Serilog.Log.Information("ToolsDescription = '{ToolsDescription}'", ToolsDescription);
+            Serilog.Log.Information("TemplatesDescription = '{TemplatesDescription}'", TemplatesDescription);
+            Serilog.Log.Information("Copyright = '{Copyright}'", Copyright);
+            Serilog.Log.Information("GitRepository = '{GitRepository}'", GitRepository);
+            Serilog.Log.Information("GitRepository.Branch = '{GitRepositoryBranch}'", GitRepository?.Branch);
+            Serilog.Log.Information("GitRepository.Tags = '{GitRepositoryTags}'", GitRepository?.Tags);
+            Serilog.Log.Information("IsVersionTag = '{IsVersionTag}'", IsVersionTag);
+            Serilog.Log.Information("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'", GitVersion.NuGetVersionV2);
         });
 
     internal Target Restore => _ => _
@@ -103,7 +104,7 @@ public partial class Build : NukeBuild
                 .SetFileVersion(GitVersion.AssemblySemFileVer)
                 .SetInformationalVersion(GitVersion.InformationalVersion)
                 .SetCopyright(Copyright)
-                .SetDescription(Description)
+                .SetDescription(ToolsDescription)
                 .EnableNoRestore());
         });
 
@@ -132,7 +133,19 @@ public partial class Build : NukeBuild
                     .EnableContinuousIntegrationBuild() // Necessary for deterministic builds
                     .SetAuthors(Authors)
                     .SetCopyright(Copyright)
-                    .SetDescription(Description)
+                    .SetDescription(ToolsDescription)
+                    .SetRepositoryUrl(GitRepository?.ToString())
+                    .SetPackageProjectUrl(ProjectUrlInNugetPackage)
+                    .SetVersion(GitVersion.NuGetVersionV2));
+                DotNetPack(s => s
+                    .SetProject(Solution.GetProject("DryGen.Templates"))
+                    .SetOutputDirectory(ArtifactsDirectory)
+                    .SetConfiguration(Configuration)
+                    .EnableNoBuild()
+                    .EnableContinuousIntegrationBuild() // Necessary for deterministic builds
+                    .SetAuthors(Authors)
+                    .SetCopyright(Copyright)
+                    .SetDescription(TemplatesDescription)
                     .SetRepositoryUrl(GitRepository?.ToString())
                     .SetPackageProjectUrl(ProjectUrlInNugetPackage)
                     .SetVersion(GitVersion.NuGetVersionV2));
@@ -188,7 +201,7 @@ public partial class Build : NukeBuild
                         "--output",
                         $"{DocsDirectory}/about/specs/drygen-{testProject.ToLowerInvariant()}.html",
                     };
-                    ProcessTasks.StartProcess("livingdoc", string.Join(' ', arguments), logOutput: true, logInvocation: true);
+                    ProcessTasks.StartProcess("livingdoc", arguments: string.Join(' ', arguments), logOutput: true, logInvocation: true).WaitForExit();
                 }
             });
 
@@ -256,6 +269,26 @@ public partial class Build : NukeBuild
                 .SetVersion(GitVersion.NuGetVersionV2)
                 .SetConfigFile(Path.Combine(Path.Combine(workingDirectory, "Properties"), "NuGet.Config"))
                 );
+        });
+
+    internal Target InstallTemplates => _ => _
+        .DependsOn(Init)
+        .DependsOn(Pack)
+        .Executes(() =>
+        {
+            var uninstallArguments = new[] {
+                        "new",
+                        "uninstall",
+                        "dry-gen.templates"
+                    };
+            ProcessTasks.StartProcess("dotnet", arguments: string.Join(' ', uninstallArguments), logOutput: false, logInvocation: false).WaitForExit();
+            var toolsPackageName = Path.Combine(ArtifactsDirectory, $"dry-gen.templates.{GitVersion.NuGetVersionV2}.nupkg");
+            var installArguments = new[] {
+                        "new",
+                        "install",
+                        $"\"{toolsPackageName}\""
+                    };
+            ProcessTasks.StartProcess("dotnet", arguments: string.Join(' ', installArguments), logOutput: true, logInvocation: true).AssertZeroExitCode();
         });
 
     private static string DocsDirectory => Path.Combine(RootDirectory, "docs").Replace("\\", "/");
