@@ -143,8 +143,12 @@ public class Generator
                 errorWriter.WriteLine($"VERB: {verbAttribute.Name} ({verbAttribute.HelpText})");
             }
             errorWriter.WriteLine();
-            errorWriter.WriteLine($"ERROR:{BuildExceptionMessages(ex)}");
-            errorWriter.WriteLine($"Rerun the command with --help to get more help information");
+            errorWriter.WriteLine($"ERROR:{BuildExceptionMessages(ex, options.IncludeExceptionStackTrace)}");
+            errorWriter.WriteLine("Rerun the command with --help to get more help information");
+            if (ex is not OptionsException && !options.IncludeExceptionStackTrace)
+            {
+                errorWriter.WriteLine("NB! You can also add --include-exception-stacktrace to get the stack trace for the exception");
+            }
             return 1;
         }
     }
@@ -232,12 +236,16 @@ public class Generator
             var deserializer = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             var yaml = File.ReadAllText(commandlineOptions.OptionsFile);
             var optionsFromFile = deserializer.Deserialize<TOptions>(yaml);
-            // Must read the options from the file twice, since the command line parser clear the collection when the option is not specified on the command line
-            var parserResult = parser.ParseArguments(() => deserializer.Deserialize<TOptions>(yaml), args);
-            CheckForReparseProblem(parserResult);
-            var result = ((Parsed<TOptions>)parserResult).Value;
-            ReplaceEmptyIEnumerabeStrings(result, optionsFromFile);
-            return result;
+            if (optionsFromFile != null) 
+            // The yaml deserialization returns null if the file is empty or all options are commented out
+            {
+                // Must read the options from the file twice, since the command line parser clear the collection when the option is not specified on the command line
+                var parserResult = parser.ParseArguments(() => deserializer.Deserialize<TOptions>(yaml), args);
+                CheckForReparseProblem(parserResult);
+                var result = ((Parsed<TOptions>)parserResult).Value;
+                ReplaceEmptyIEnumerabeStrings(result, optionsFromFile);
+                return result;
+            }
         }
         return commandlineOptions;
     }
@@ -290,11 +298,7 @@ public class Generator
     [ExcludeFromCodeCoverage] // We uses the tmp files feature from the .Net runtime so our tests don't have any issues with directory names
     private static void CreateMissingOutputDirectory(string outputFile)
     {
-        var outputDirectory = Path.GetDirectoryName(outputFile);
-        if (outputDirectory == null)
-        {
-            throw new InvalidOperationException($"Can't get directory from output file'{outputFile}'.");
-        }
+        var outputDirectory = Path.GetDirectoryName(outputFile) ?? throw new OptionsException($"Can't get directory from output file'{outputFile}'.");
         if (!Directory.Exists(outputDirectory))
         {
             Directory.CreateDirectory(outputDirectory);
@@ -328,9 +332,9 @@ public class Generator
         /// and thus our tests cannot clean up by deleting the tmp files they uses, so we read the file to memory our self...
         if (string.IsNullOrWhiteSpace(inputFile))
         {
-            throw new InvalidOperationException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file.");
+            throw new OptionsException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file.");
         }
-        var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new InvalidOperationException($"Could not determine directory from inputFile '{inputFile}'");
+        var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new OptionsException($"Could not determine directory from inputFile '{inputFile}'");
         AssemblyResolvingHelper.SetupAssemblyResolving(inputDirectory);
         var assemblyBytes = File.ReadAllBytes(inputFile);
         var assembly = AssemblyLoadContext.Default.LoadFromStream(new MemoryStream(assemblyBytes));
@@ -344,7 +348,7 @@ public class Generator
         return treeShakingDiagramFilter;
     }
 
-    [ExcludeFromCodeCoverage] 
+    [ExcludeFromCodeCoverage]
     // The loading of assembly dependencies is so difficult to trigger in an automated test, since we need two asseblies in the same directory with dependencies, so this is tested manually (once).
     private static class AssemblyResolvingHelper
     {
@@ -367,10 +371,17 @@ public class Generator
         }
     }
 
-    private static string BuildExceptionMessages(Exception ex)
+    private static string BuildExceptionMessages(Exception ex, bool includeExceptionStackTrace)
     {
         var sb = new StringBuilder().AppendLine();
-        sb = BuildExceptionMessages(ex, sb, string.Empty);
+        if (includeExceptionStackTrace)
+        {
+            sb.AppendLine(ex.ToString());
+        }
+        else
+        {
+            sb = BuildExceptionMessages(ex, sb, string.Empty);
+        }
         return sb.ToString();
     }
 

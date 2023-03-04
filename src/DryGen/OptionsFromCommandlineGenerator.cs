@@ -1,5 +1,4 @@
-﻿using CommandLine;
-using DryGen.Options;
+﻿using DryGen.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +13,7 @@ namespace DryGen
         {
             if (string.IsNullOrWhiteSpace(options.Verb))
             {
-                throw new RequiredOptionMissingException(nameof(options.Verb));
+                throw new OptionsException($"option {nameof(options.Verb)} is required");
             }
             var optionsTypeFromVerb = options.Verb.GetVerbOptionsType();
             var optionsYaml = GetOptionsYaml(optionsTypeFromVerb, options.Verb);
@@ -31,9 +30,9 @@ namespace DryGen
         private static List<string> GenerateOptionsList(Type optionsTypeFromVerb)
         {
             var optionList = new List<string>();
-            foreach (var propery in optionsTypeFromVerb.GetProperties())
+            foreach (var property in optionsTypeFromVerb.GetProperties())
             {
-                var yamlMemberAttribute = propery.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(YamlMemberAttribute));
+                var yamlMemberAttribute = property.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(YamlMemberAttribute));
                 var alias = yamlMemberAttribute?.NamedArguments.Any(x => x.MemberName == nameof(YamlMemberAttribute.Alias)) == true
                     ? yamlMemberAttribute?.NamedArguments.Single(x => x.MemberName == nameof(YamlMemberAttribute.Alias)).TypedValue.ToString().Replace("\"", string.Empty)
                     : null;
@@ -41,7 +40,7 @@ namespace DryGen
                 {
                     continue;
                 }
-                var optionAttribute = propery.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(OptionAttribute));
+                var optionAttribute = property.GetVisibleOptionAttribute();
                 if (optionAttribute == null)
                 {
                     continue;
@@ -51,7 +50,7 @@ namespace DryGen
                 {
                     continue;
                 }
-                var propertyTypeInfo = propery.PropertyType.GeneratePropertyTypeInfo(asYamlComment: true);
+                var propertyTypeInfo = property.PropertyType.GeneratePropertyTypeInfo(asYamlComment: true);
                 optionList.Add($"#{alias}: {propertyTypeInfo}");
             }
             return optionList;

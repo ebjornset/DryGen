@@ -60,7 +60,7 @@ Scenario: Print header to console output when output file is specified
 	Then I should get exit code '0'
 	And I should find the text "Generating Mermaid class diagram to file '" in console out
 
-Scenario: Print usage to console error when an underlying exception is thrown
+Scenario: Print usage to console error without exception stacktrace info when there is a option problem
 	When I call the program with this command line arguments
 		| Arg                               |
 		| mermaid-class-diagram-from-csharp |
@@ -69,6 +69,41 @@ Scenario: Print usage to console error when an underlying exception is thrown
 	And I should find the text "ERROR:" in console error
 	And I should find the text "Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file." in console error
 	And I should find the text "Rerun the command with --help to get more help information" in console error
+	But I should not find the text "NB! You can also add --include-exception-stacktrace to get the stack trace for the exception" in console error
+
+Scenario: Print usage to console error with exception stacktrace info when an exception is thrown
+# Uses yaml read as json to trigger an exception
+	Given this json schema input file with the extension "json"
+		"""
+		$schema: https://json-schema.org/draft/2020-12/schema
+		id: https://drygen.dev/test-json-schemas/some.json
+		type: object
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| csharp-from-json-schema |
+	Then I should get exit code '1'
+	And I should find the text "ERROR:" in console error
+	And I should find the text "Rerun the command with --help to get more help information" in console error
+	And I should find the text "NB! You can also add --include-exception-stacktrace to get the stack trace for the exception" in console error
+
+Scenario: Print usage to console error without exception stacktrace info when an exception is thrown
+# Uses yaml read as json to trigger an exception
+	Given this json schema input file with the extension "json"
+		"""
+		$schema: https://json-schema.org/draft/2020-12/schema
+		id: https://drygen.dev/test-json-schemas/some.json
+		type: object
+		"""
+	When I call the program with this command line arguments
+		| Arg                            |
+		| csharp-from-json-schema        |
+		| --include-exception-stacktrace |
+	Then I should get exit code '1'
+	And I should find the text "ERROR:" in console error
+	And I should find the text "Rerun the command with --help to get more help information" in console error
+	But I should not find the text "NB! You can also add --include-exception-stacktrace to get the stack trace for the exception" in console error
+	But I should find the text "stack trace" in console error
 
 Scenario: Print usage to console error when unknown verb is specified
 	When I call the program with this command line arguments
