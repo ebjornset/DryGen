@@ -160,8 +160,8 @@ public static class Program
             OutputFile = "mermaid-er-diagram-details.md",
             ReplaceToken = "mermaid-er-diagram-details-example-code",
         };
-        var exampleCodeFile = Path.Combine(rootDirectory, "src", "develop", "DryGen.Docs", "ErDiagramExample", "Example.cs");
-        var exampleCode = File.ReadAllText(exampleCodeFile).Replace("[ExcludeFromCodeCoverage]", string.Empty).Replace("using System.Diagnostics.CodeAnalysis;", string.Empty);
+        var exampleCodeFile = Path.Combine(rootDirectory, "src", "DryGen.Templates", "templates", "DryGen.Templates.Mermaid", "Example.cs");
+        var exampleCode = File.ReadAllText(exampleCodeFile);
         var replaceToken = generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken();
         var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(rootDirectory, generatorData), replaceToken, verbose: false);
         var generatedRepresentation = existingRepresentation.Replace(replaceToken, exampleCode);

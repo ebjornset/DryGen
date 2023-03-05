@@ -15,9 +15,7 @@ These examples shows how you can control the property and method information fro
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-
-namespace DryGen.Docs.ErDiagramExample;
-
+namespace DryGen.Templates.Mermaid;
 
 public class Customer
 {
