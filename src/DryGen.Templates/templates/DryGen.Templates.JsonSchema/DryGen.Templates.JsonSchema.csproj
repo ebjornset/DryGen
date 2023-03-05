@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+	</ItemGroup>
+	
+	<!-- 
+	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template. 
+	You can safely remove the two DryGenTemplatesBuild conditions below from a .csproj file generated with the template.
+	-->
+
+	<Target Name="SetupDryGen" BeforeTargets="Build">
+		<PropertyGroup>
+			<DryGenInputFile>./Example.yaml</DryGenInputFile>
+			<!-- Add more input file properties here if you are generating C# code from several json schemas. -->
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(DryGenTemplatesBuild)' == ''">
+			<DryGenToolCommandName>dotnet dry-gen</DryGenToolCommandName>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="ExecDryGenBeforeBuild" AfterTargets="SetupDryGen" BeforeTargets="Build" Condition="Exists('$(DryGenInputFile)')">
+		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''"/>
+		<!-- Prepare the template for inline generation of diagrams in the docs markdown file. -->
+		<Copy SourceFiles="./docs/templates/docs.md" DestinationFolder="./docs/generated" />
+		<!-- Generate C# code from the example json schema. -->
+		<Exec Command="$(DryGenToolCommandName) csharp-from-json-schema -o ./Example.generated.cs -f ./options/csharp-from-json-schema.yaml -i $(DryGenInputFile)" />
+		<!-- Generate a standalone Mermaid class diagram from the example json schema. -->
+		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-json-schema -o ./docs/generated/mermaid-class-diagram-from-json-schema.mmd -f ./options/mermaid-class-diagram-from-json-schema.yaml -i $(DryGenInputFile)" />
+		<!-- Generate the same Mermaid class diagram inside a markdown file -->
+		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-json-schema -o ./docs/generated/docs.md -f ./options/mermaid-class-diagram-from-json-schema.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-from-json-schema.!.!. -i $(DryGenInputFile)" />
+	</Target>
+
+</Project>

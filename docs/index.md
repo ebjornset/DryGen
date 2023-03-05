@@ -47,7 +47,7 @@ The options are spesific to each verb, and are used to fine tune the result repr
 
 Head over to the [verbs page](/verbs) to see the list of verbs dry-gen supports, or take a look at [our examples](/examples).
 
-## Development process integration
+## Development process integration {#developmentprocessintegration}
 
 When you decide to generate other representations from one, it's important to keep them all in sync all the time. The easiest way to achieve this is to integrate the generation directly into the development process. There are many ways to do this, and if you already have a method you prefer, you should definitely use it with dry-gen as well. If not, you can quickly get up and running, without needing any other tools than `dotnet`, by using [MSBuild Targets](https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-targets){:target="\_blank"} in your .csproj files. To make it easy to get started with this approach, dry-gen provides some sample .Net project templates that you can use with the [dotnet new](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new){:target="\_blank"} command. To install the templates, run
 
@@ -61,10 +61,16 @@ The templates contains some example code, and some MSBuild targets in the .cspro
 dotnet new list --tag dry-gen
 ```
 
-You generate a new project from a temlate by using its short name, e.g.
+You generate a new project from a template by using its short name, e.g.
 
 ```
-dotnet new dry-gen.mermaid --name MyProject.GenerateMermaidWithDryGen
+dotnet new dry-gen.mermaid --name MyProject.GenerateMermaidFromCSharpWithDryGen
+```
+
+or
+
+```
+dotnet new dry-gen.jsonschema --name MyProject.GenerateFromJsonSchemaWithDryGen
 ```
 
 When you have generated a project you must build it to generate the other representations, e.g.

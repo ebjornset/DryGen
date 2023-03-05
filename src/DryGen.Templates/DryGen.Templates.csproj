@@ -30,6 +30,7 @@
 	-->
 	<Target Name="BuildTemplates" BeforeTargets="Build">
 		<Message Text="Building template DryGen.Templates.Mermaid" Importance="High" />
+		<Exec Command="dotnet build ./templates/DryGen.Templates.JsonSchema/  --configuration $(Configuration)" />
 		<Exec Command="dotnet build ./templates/DryGen.Templates.Mermaid/  --configuration $(Configuration)" />
 	</Target>
 

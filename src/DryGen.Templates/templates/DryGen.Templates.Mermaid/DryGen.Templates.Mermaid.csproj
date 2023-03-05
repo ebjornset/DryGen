@@ -28,21 +28,22 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<Target Name="SetupDryGenInputFiles" AfterTargets="Build">
+	<!-- 
+	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template. 
+	You can safely remove the two DryGenTemplatesBuild conditions below from a .csproj file generated with the template.
+	-->
+
+	<Target Name="SetupDryGen" AfterTargets="Build">
 		<PropertyGroup>
 			<DryGenInputFile>$(OutputPath)$(AssemblyName).dll</DryGenInputFile>
-			<!-- Add more input file properties here if you are generatin diagrams from several assemblies. -->
+			<!-- Add more input file properties here if you are generating diagrams from several assemblies. -->
 		</PropertyGroup>
-	</Target>
-
-	<Target Name="GenerateMermaidDiagrams" AfterTargets="SetupDryGenInputFiles" Condition="Exists('$(DryGenInputFile)')">
-		<!-- 
-		The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template. 
-		You can safely remove the two DryGenTemplatesBuild conditions below from a .csproj file generated with the template.
-		-->
 		<PropertyGroup Condition="'$(DryGenTemplatesBuild)' == ''">
 			<DryGenToolCommandName>dotnet dry-gen</DryGenToolCommandName>
 		</PropertyGroup>
+	</Target>
+
+	<Target Name="ExecDryGenAfterBuild" AfterTargets="SetupDryGen,Build" Condition="Exists('$(DryGenInputFile)')">
 		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''"/>
 		<!-- Prepare the template for inline generation of diagrams in the docs markdown file. -->
 		<Copy SourceFiles="./docs/templates/docs.md" DestinationFolder="./docs/generated" />

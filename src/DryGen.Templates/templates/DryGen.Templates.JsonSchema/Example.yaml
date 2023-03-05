@@ -1,0 +1,122 @@
+﻿$schema: https://json-schema.org/draft/2020-12/schema
+id: https://my.local/DryGen.Templates.JsonSchema/order
+title: order
+type: object
+properties:
+  id:
+    type: integer
+  isCompleted:
+    type: boolean
+  customer:
+    $ref: "#/definitions/customer"
+  lines:
+    type: array
+    items:
+      $ref: "#/definitions/orderLine"
+    minItems: 1
+    uniqueItems: true
+required:
+  - id
+  - customer
+  - lines
+additionalProperties: false
+
+definitions:
+  customer:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      orders:
+        type: array
+        items:
+          $ref: "#"
+    required:
+      - id
+      - name
+    additionalProperties: false
+
+  order:
+
+  orderLine:
+    properties:
+      lineNumber:
+        type: integer
+      quantity:
+        type: integer
+      product:
+        $ref: "#/definitions/product"
+      order:
+        $ref: "#"
+    required:
+      - lineNumber
+      - quantity
+      - product
+      - order
+    additionalProperties: false
+
+  product:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      productCategory:
+        $ref: "#/definitions/productCategory"
+      inStock:
+        type: array
+        items:
+          $ref: "#/definitions/stock"
+    required:
+      - id
+      - name
+      - productCategory
+    additionalProperties: false
+
+  productCategory:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      products:
+        type: array
+        items:
+          $ref: "#/definitions/product"
+
+    required:
+      - id
+      - name
+    additionalProperties: false
+
+  warehouse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      productsInStock:
+        type: array
+        items:
+          $ref: "#/definitions/stock"
+    required:
+      - id
+      - name
+    additionalProperties: false
+
+  stock:
+    properties:
+      quantity:
+        type: integer
+      product:
+        $ref: "#/definitions/product"
+      warehouse:
+        $ref: "#/definitions/warehouse"
+      name:
+        type: string
+    required:
+      - quantity
+      - product
+      - warehouse
+    additionalProperties: false
