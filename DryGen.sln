@@ -42,6 +42,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Docs", "src\develop\DryGen.Docs\DryGen.Docs.csproj", "{0A437C8D-E321-4AA2-8195-AD259BF63C7F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4007DCD3-A238-4438-A5A0-3E1A1333335D} = {4007DCD3-A238-4438-A5A0-3E1A1333335D}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "develop", "develop", "{729F6B2E-E6FC-43A3-A614-6E6E59B24F25}"
 EndProject

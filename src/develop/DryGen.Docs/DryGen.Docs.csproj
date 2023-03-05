@@ -8,7 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\DryGen.Templates\DryGen.Templates.csproj" />
 		<ProjectReference Include="..\..\DryGen\DryGen.csproj" />
 		<ProjectReference Include="..\DryGen.DevUtils\DryGen.DevUtils.csproj" />
 	</ItemGroup>
