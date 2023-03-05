@@ -8,9 +8,9 @@ hero_height: is-fullwidth
 
 DryGen is a .Net tool to generate other representations of a piece of knowledge from one representation.
 
-It's inspired by the ["Don't repeat yourself" (DRY) prinsiple](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system"
+It's inspired by the ["Don't repeat yourself" (DRY) prinsiple](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself){:target="\_blank"} "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system"
 
-Beeing a .Net tool (with tool name `dry-gen`), you'll need a [.NET SDK](https://dotnet.microsoft.com/en-us/download) installed on your machine to use it. With a .Net SDK in place `dry-gen` is installed and used like any other [.Net tool](https://aka.ms/global-tools).
+Beeing a .Net tool (with tool name `dry-gen`), you'll need a [.NET SDK](https://dotnet.microsoft.com/en-us/download){:target="\_blank"} installed on your machine to use it. With a .Net SDK in place `dry-gen` is installed and used like any other [.Net tool](https://aka.ms/global-tools){:target="\_blank"}.
 
 **A little warning befor you start**: As with all .Net tools, you run `dry-gen` as an application with full trust, so make sure you know exactly where you write your output files.
 
@@ -43,8 +43,16 @@ The verb defines your target and source representation. The supported verbs are 
 
 The options are spesific to each verb, and are used to fine tune the result representation. Most options uses the standard long notation of `--<option-name>`, e.g. `--input-file`. Some options also supports the shorthand notation of `-<letter>`, e.g. `-i` for input file, but we suggest you use the long format. Execute `dry-gen <verb> --help` to get the list of options for a specific verb, e.g. `dry-gen mermaid-class-diagram-from-csharp --help`
 
-##### Going further
+##### Explore the dry-gen features
 
 Head over to the [verbs page](/verbs) to see the list of verbs dry-gen supports, or take a look at [our examples](/examples).
+
+## Integrate dry-gen into your development process
+
+dry-gen contains some example .Net templates that you can use with the [`dotnet new` command](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new){:target="\_blank"}
+
+```
+dotnet new install dry-gen.templates
+```
 
 Have fun!

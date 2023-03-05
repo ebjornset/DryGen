@@ -14,6 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- We reuse the example code from the dry-gen.mermaid template for the Er diagram example -->
 		<Compile Include="..\..\DryGen.Templates\templates\DryGen.Templates.Mermaid\Example.cs" />
 	</ItemGroup>
 
