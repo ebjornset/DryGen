@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageId>dry-gen.templates</PackageId>
 		<Title>DryGen Templates</Title>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -21,6 +21,10 @@
 	<ItemGroup>
 		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\generated\**;templates\**\*.ncrunchproject" />
 		<Compile Remove="**\*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
 	</ItemGroup>
 
 	<!-- 

@@ -28,11 +28,6 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<!-- NB! You don't want to exclude production code from code coverage metrics, but in dry-gen this project is just example code -->
-		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
-	</ItemGroup>
-
 	<!-- 
 	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template. 
 	You can safely remove the two DryGenTemplatesBuild conditions below from a .csproj file generated with the template.
