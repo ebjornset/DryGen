@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- 
+	Setup the DryGenToolCommandName of the templates to run DryGen.dll directly from dotnet during the standard DryGen build
+	The DryGenTemplatesBuild property is used as a guard in the template projects to make sure its not overridden.
+	DryGenTemplatesRunAsTool is turned on from Nuke when the final version is build from the Pack target, 
+	to make sure we run dry-gen as a local tool once before wecreate the package
+	-->
+	<Target Name="SetupDryGenTemplatesBuild" BeforeTargets="CoreBuild">
+		<PropertyGroup Condition="'$(TargetFramework)' == ''">
+			<TargetFramework >net6.0</TargetFramework>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(DryGenTemplatesRunAsTool)' == ''">
+			<DryGenToolCommandName>dotnet --roll-forward minor ../../../DryGen/bin/$(Configuration)/$(TargetFramework)/DryGen.dll</DryGenToolCommandName>
+			<DryGenTemplatesBuild>true</DryGenTemplatesBuild>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(DryGenTemplatesRunAsTool)' != ''">
+			<DryGenToolCommandName>dotnet dry-gen</DryGenToolCommandName>
+			<DryGenTemplatesBuild></DryGenTemplatesBuild>
+		</PropertyGroup>
+		<Message Text="DryGenToolCommandName: '$(DryGenToolCommandName)'" Importance="High" />
+	</Target>
+
+	<Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))" />
+
+</Project>

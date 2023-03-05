@@ -42,7 +42,7 @@ public sealed class ToolInvocationSteps
             argList.Add(optionsFileContext.OptionsFileName);
         }
         var args = string.Join(' ', argList);
-        commandArgs = $"{GetDotnetToolCommand()} {args}";
+        commandArgs = $"{GetDotNetToolCommand()} {args}";
         var start = new ProcessStartInfo
         {
             FileName = "dotnet",
@@ -88,21 +88,21 @@ public sealed class ToolInvocationSteps
         processOutput.Should().Be(multilineText);
     }
 
-    private static string GetDotnetToolCommand()
+    private static string GetDotNetToolCommand()
     {
         var runAsTool = Environment.GetEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.RunAsTool");
         if (string.IsNullOrWhiteSpace(runAsTool))
         {
             // Run the application directly, with the version of dotnet that runs the test
-            return $"--fx-version {GetDotnetVersion()} DryGen.dll";
+            return $"--fx-version {GetDotNetVersion()} DryGen.dll";
         }
         return "dry-gen";
     }
 
-    private static string GetDotnetVersion()
+    private static string GetDotNetVersion()
     {
-        var netVersion = Environment.Version;
-        return $"{netVersion.Major}.{netVersion.Minor}.{netVersion.Build}";
+        var dotNetVersion = Environment.Version;
+        return $"{dotNetVersion.Major}.{dotNetVersion.Minor}.{dotNetVersion.Build}";
     }
 
     private static string? GetDotnetWorkingDirectory()

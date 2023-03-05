@@ -28,18 +28,36 @@ public static class Extensions
     public static IReadOnlyList<OptionMetadata> GetOptionMetadataList(this Type type)
     {
         var optionList = new List<OptionMetadata>();
-        foreach (var propery in type.GetProperties())
+        foreach (var property in type.GetProperties())
         {
-            var optionAttribute = propery.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(OptionAttribute));
+            var optionAttribute = property.GetVisibleOptionAttribute();
             if (optionAttribute == null)
             {
                 continue;
             }
-            var optionMetadata = new OptionMetadata(optionAttribute);
-            optionMetadata.Type = propery.PropertyType.GeneratePropertyTypeInfo(asYamlComment: false);
+            var optionMetadata = new OptionMetadata(optionAttribute)
+            {
+                Type = property.PropertyType.GeneratePropertyTypeInfo(asYamlComment: false)
+            };
             optionList.Add(optionMetadata);
         }
         return optionList.OrderBy(x => x.LongName).ToArray();
+    }
+
+    public static CustomAttributeData? GetVisibleOptionAttribute(this PropertyInfo property)
+    {
+        var optionAttribute = property.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(OptionAttribute));
+        // Remove Hidden Option
+        if (optionAttribute == null ||
+            (optionAttribute.NamedArguments.Any(x => x.MemberName == nameof(OptionAttribute.Hidden)) && 
+                string.Equals(
+                    bool.TrueString, 
+                    optionAttribute.NamedArguments.Single(x => x.MemberName == nameof(OptionAttribute.Hidden)).TypedValue.Value?.ToString(), 
+                    StringComparison.InvariantCultureIgnoreCase)))
+        {
+            return null;
+        }
+        return optionAttribute;
     }
 
     public static Type GetVerbOptionsType(this string verb)
@@ -47,7 +65,7 @@ public static class Extensions
         var optionsTypes = typeof(Extensions).Assembly.GetTypes().Where(type => VerbAttributeMatches(type, verb)).ToList();
         if (optionsTypes.Count == 0)
         {
-            throw new ArgumentException($"Unknown verb '{verb}'", nameof(verb));
+            throw new OptionsException($"Unknown verb '{nameof(verb)}'");
         }
         return optionsTypes.Single();
     }
@@ -73,7 +91,7 @@ public static class Extensions
         if (collectionType != null)
         {
             var typeInfo = GeneratePropertyTypeInfo(collectionType, asYamlComment);
-            return asYamlComment? $"# List of {typeInfo}\n#- " : $"List of {typeInfo}";
+            return asYamlComment ? $"# List of {typeInfo}\n#- " : $"List of {typeInfo}";
         }
         if (propertyType.IsEnum)
         {

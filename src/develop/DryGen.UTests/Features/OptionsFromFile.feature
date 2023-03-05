@@ -71,6 +71,21 @@ Scenario: Command line options overrides options from file
 		
 		"""
 
+Scenario: Command line should not fail if options file is empty
+	And this input file as a command line option
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		#
+		"""
+	When I call the program with this command line arguments
+		| Arg                            |
+		| mermaid-er-diagram-from-csharp |
+		| --exclude-typenames            |
+		| ^NotAMatch$                    |
+		| --exclude-propertynames        |
+		| ^NotAMatch$                    |
+	Then I should get exit code '0'
+
 Scenario: All class diagram options can be specified in a file
 	Given this input file as a command line option
 	# The commandline arguments -f <this filename> will be appended to the command line

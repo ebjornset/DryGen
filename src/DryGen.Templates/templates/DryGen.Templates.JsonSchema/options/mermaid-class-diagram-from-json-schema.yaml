@@ -1,0 +1,11 @@
+#
+# dry-gen options for verb 'mermaid-class-diagram-from-json-schema'
+#
+#direction: default | bt | tb | lr | rl
+#input-file: string
+#output-file: string
+#replace-token-in-output-file: string
+#root-classname: string
+#schema-file-format: byextension | json | yaml
+#tree-shaking-roots: # List of string
+#- 

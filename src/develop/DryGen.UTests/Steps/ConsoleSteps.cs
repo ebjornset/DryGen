@@ -21,6 +21,13 @@ public sealed class ConsoleSteps
         consoleError.Should().Contain(text);
     }
 
+    [Then(@"I should not find the text ""([^""]*)"" in console error")]
+    public void ThenIShouldNotFindTheTextInConsoleError(string text)
+    {
+        var consoleError = consoleContext.ErrorWriter.ToString();
+        consoleError.Should().NotContain(text);
+    }
+
     [Then(@"I should find the text ""([^""]*)"" in console out")]
     public void ThenIShouldFindTheTextInConsoleOut(string text)
     {

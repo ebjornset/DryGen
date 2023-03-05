@@ -13,10 +13,7 @@ public class TreeShakingContext
 
     public void AddTreeShakingRoots(Table table)
     {
-        if (treeShakingRoots == null)
-        {
-            treeShakingRoots = new();
-        }
+        treeShakingRoots ??= new();
         var newRoots = table.Rows.Select(x => new IncludeTypeNameTypeFilter(x[0]));
         treeShakingRoots.AddRange(newRoots);
     }

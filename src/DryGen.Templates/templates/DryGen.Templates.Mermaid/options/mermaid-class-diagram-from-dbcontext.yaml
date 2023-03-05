@@ -1,0 +1,25 @@
+#
+# dry-gen options for verb 'mermaid-class-diagram-from-csharp'
+#
+#attribute-level: all | public | internal | protected | none
+#direction: default | bt | tb | lr | rl
+#exclude-method-params: true|false
+#exclude-propertynames: # List of string
+#- 
+#exclude-static-attributes: true|false
+#exclude-static-methods: true|false
+#exclude-typenames: # List of string
+#- 
+#include-namespaces: # List of string
+#- 
+#include-typenames: # List of string
+#- 
+#input-file: string
+#method-level: all | public | internal | protected | none
+method-level: protected
+#name-replace-from: string
+#name-replace-to: string
+#output-file: string
+#replace-token-in-output-file: string
+tree-shaking-roots: # List of string
+- ExampleDbContext

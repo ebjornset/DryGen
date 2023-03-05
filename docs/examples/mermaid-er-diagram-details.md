@@ -15,9 +15,7 @@ These examples shows how you can control the property and method information fro
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-
-namespace DryGen.Docs.ErDiagramExample;
-
+namespace DryGen.Templates.Mermaid;
 
 public class Customer
 {
@@ -96,7 +94,6 @@ public class ExampleDbContext : DbContext
         modelBuilder.Entity<Stock>().HasKey(x => new { x.ProductId, x.WarehouseId });
     }
 }
-
 ```
 </details> 
 &nbsp;

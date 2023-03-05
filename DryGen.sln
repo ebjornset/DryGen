@@ -42,6 +42,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Docs", "src\develop\DryGen.Docs\DryGen.Docs.csproj", "{0A437C8D-E321-4AA2-8195-AD259BF63C7F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4007DCD3-A238-4438-A5A0-3E1A1333335D} = {4007DCD3-A238-4438-A5A0-3E1A1333335D}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "develop", "develop", "{729F6B2E-E6FC-43A3-A614-6E6E59B24F25}"
 EndProject
@@ -60,6 +63,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.MermaidFromJsonSchema", "src\DryGen.MermaidFromJsonSchema\DryGen.MermaidFromJsonSchema.csproj", "{A7557D3C-CCE3-4F26-8AAF-D06FC0E7877E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Core", "src\DryGen.Core\DryGen.Core.csproj", "{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Templates", "src\DryGen.Templates\DryGen.Templates.csproj", "{4007DCD3-A238-4438-A5A0-3E1A1333335D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BDA7420D-4FD3-48E9-A1FA-4BF4447892E1} = {BDA7420D-4FD3-48E9-A1FA-4BF4447892E1}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +117,10 @@ Global
 		{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4007DCD3-A238-4438-A5A0-3E1A1333335D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4007DCD3-A238-4438-A5A0-3E1A1333335D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4007DCD3-A238-4438-A5A0-3E1A1333335D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4007DCD3-A238-4438-A5A0-3E1A1333335D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

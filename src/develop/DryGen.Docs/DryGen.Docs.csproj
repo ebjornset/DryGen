@@ -2,13 +2,19 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<!-- We only target net6.0, since thats the only target version of the docs we run during the Nuke build -->
+		<TargetFrameworks>net6.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\DryGen\DryGen.csproj" />
 		<ProjectReference Include="..\DryGen.DevUtils\DryGen.DevUtils.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- We reuse the example code from the dry-gen.mermaid template for the Er diagram example -->
+		<Compile Include="..\..\DryGen.Templates\templates\DryGen.Templates.Mermaid\Example.cs" />
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,11 @@
+#
+# dry-gen options for verb 'csharp-from-json-schema'
+#
+#array-instance-type: string
+#array-type: string
+#input-file: string
+namespace: DryGen.Templates.JsonSchema
+#output-file: string
+#replace-token-in-output-file: string
+#root-classname: string
+#schema-file-format: byextension | json | yaml

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Eirik Bjornset",
+  "classifications": [ "dry-gen", "mermaid" ],
+  "identity": "DryGen.Mermaid",
+  "name": "dry-gen: Generate Mermaid diagrams after build",
+  "shortName": "dry-gen.mermaid",
+  "sourceName": "DryGen.Templates.Mermaid",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}

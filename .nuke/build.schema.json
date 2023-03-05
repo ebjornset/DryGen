@@ -83,8 +83,9 @@
             "enum": [
               "Clean",
               "Compile",
+              "Dev_GlobalTool",
+              "Dev_InstallTemplates",
               "Docs",
-              "GlobalTool",
               "Init",
               "ITests",
               "Pack",
@@ -107,8 +108,9 @@
             "enum": [
               "Clean",
               "Compile",
+              "Dev_GlobalTool",
+              "Dev_InstallTemplates",
               "Docs",
-              "GlobalTool",
               "Init",
               "ITests",
               "Pack",

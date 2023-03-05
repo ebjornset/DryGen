@@ -1,17 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
-namespace DryGen.Docs.ErDiagramExample;
-
-[ExcludeFromCodeCoverage]
+namespace DryGen.Templates.Mermaid;
+[ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Customer
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public ICollection<Order> Orders { get; set; }
 }
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Order
 {
     public int Id { get; set; }
@@ -20,7 +18,7 @@ public class Order
     public Customer Customer { get; set; }
     public ICollection<OrderLine> Lines { get; set; }
 }
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class OrderLine
 {
     public int LineNumber { get; set; }
@@ -30,7 +28,7 @@ public class OrderLine
     public int ProductId { get; set; }
     public Product Product { get; set; }
 }
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Product
 {
     public int Id { get; set; }
@@ -39,21 +37,21 @@ public class Product
     public ProductCategory ProductCategory { get; set; }
     public ICollection<Stock> InStock { get; set; }
 }
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class ProductCategory
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public ICollection<Product> Products { get; set; }
 }
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Warehouse
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public ICollection<Stock> ProductsInStock { get; set; }
 }
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Stock
 {
     public int ProductId { get; set; }
@@ -62,7 +60,7 @@ public class Stock
     public Warehouse Warehouse { get; set; }
     public int Quantity { get; set; }
 }
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class ExampleDbContext : DbContext
 {
     public DbSet<Customer> Customers { get; set; }

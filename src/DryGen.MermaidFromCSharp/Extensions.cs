@@ -30,7 +30,7 @@ public static class Extensions
         var endCandidates = new List<string> { entityName, $"{entityName}s", $"{entityName}es" };
         if (entityName.Length > 1)
         {
-            endCandidates.Add($"{entityName.Substring(0, entityName.Length - 1)}ies");
+            endCandidates.Add($"{entityName[..^1]}ies");
         }
         if (endCandidates.Any(X => X == propertyName))
         {
@@ -40,7 +40,7 @@ public static class Extensions
         {
             foreach (var endCandidate in endCandidates.Where(endCandidate => propertyName.EndsWith(endCandidate)))
             {
-                propertyName = propertyName.Substring(0, propertyName.Length - endCandidate.Length);
+                propertyName = propertyName[..^endCandidate.Length];
             }
         }
         // Rexex code from https://dotnetfiddle.net/VBuoy7
