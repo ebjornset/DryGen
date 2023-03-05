@@ -1,5 +1,8 @@
 # Ignore the test folder
-test/**
+test
 
-# Ignore the generated folders, since these will be recreated when the user installs the template
-generated/**
+# Ignore the generated folders, since they will be recreated when the user installs and builds the templates
+templates/**/generated
+
+# Ignore the local tool-manifest folder as this is regenerated with the correct dry-gen version during packaging
+templates/**/.config

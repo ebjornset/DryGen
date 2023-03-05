@@ -62,6 +62,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Core", "src\DryGen.Core\DryGen.Core.csproj", "{E228EC63-433D-40B0-AF5C-CE1FA4A19AE0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Templates", "src\DryGen.Templates\DryGen.Templates.csproj", "{4007DCD3-A238-4438-A5A0-3E1A1333335D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BDA7420D-4FD3-48E9-A1FA-4BF4447892E1} = {BDA7420D-4FD3-48E9-A1FA-4BF4447892E1}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
@@ -13,14 +13,24 @@
 		<ContentTargetFolders>content</ContentTargetFolders>
 		<NoWarn>$(NoWarn);NU5128</NoWarn>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
 		<None Include="Properties\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
+		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\generated\**;templates\**\*.ncrunchproject" />
 		<Compile Remove="**\*" />
 	</ItemGroup>
+
+	<!-- 
+	Build all the templates, to verify that they are structurally ok.
+	NB! During normal build we are running the DryGen.dll directly from dotnet.
+	This is setup in Directory.Build.targets
+	-->
+	<Target Name="BuildTemplates" BeforeTargets="Build">
+		<Message Text="Building template DryGen.Templates.Mermaid" Importance="High" />
+		<Exec Command="dotnet build ./templates/DryGen.Templates.Mermaid/  --configuration $(Configuration)" />
+	</Target>
 
 </Project>

@@ -16,9 +16,10 @@
 #- 
 #input-file: string
 #method-level: all | public | internal | protected | none
+method-level: protected
 #name-replace-from: string
 #name-replace-to: string
 #output-file: string
 #replace-token-in-output-file: string
-#tree-shaking-roots: # List of string
-#- 
+tree-shaking-roots: # List of string
+- ExampleDbContext

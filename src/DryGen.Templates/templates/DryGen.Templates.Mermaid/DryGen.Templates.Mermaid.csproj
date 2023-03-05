@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<IsPackable>false</IsPackable>
+		<!-- 
+		If you are generating Mermaid diagrams from Ef Core in a library assembly the Ef Core assemblies might not be accessible to dry-gen,
+		and you'll get the error "Could not load file or assembly 'Microsoft.EntityFrameworkCore, Version=X.X.X.X ..." 
+		This can be fixed by setting the CopyLocalLockFileAssemblies to true, so .Net will copy the Ef Core assemblies to the output folder during build.
+		-->
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="[6.*,7.0)" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="[6.*,7.0)">
+			<!-- 
+			dry-gen needs the InMemory database to be able to introspect the datamodel in the DbContexts.
+			The InMemory database is normally not used at runtime, so it can be referenced as a private asset
+			-->
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- NB! You don't want to exclude production code from code coverage metrics, but in dry-gen this project is just example code -->
+		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+	</ItemGroup>
+
+	<Target Name="GenerateMermaidDiagrams" AfterTargets="Build" Condition="Exists('$(OutputPath)$(AssemblyName).dll')">
+		<!-- 
+		The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template. 
+		You can safely remove the two conditions below thats using it from a project  generated from the template
+		-->
+		<PropertyGroup Condition="'$(DryGenTemplatesBuild)' == ''">
+			<DryGenToolCommandName>dotnet dry-gen</DryGenToolCommandName>
+		</PropertyGroup>
+		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''"/>
+		<!-- Prepare the template for inline generation of diagrams in the markdown file -->
+		<Copy SourceFiles="./docs/templates/docs.md" DestinationFolder="./docs/generated" />
+		<!-- Generate a standalone Mermaid class diagram from the example C# code-->
+		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/mermaid-class-diagram-from-csharp.mmd -f ./options/mermaid-class-diagram-from-csharp.yaml -i $(OutputPath)$(AssemblyName).dll" />
+		<!-- Generate the same Mermaid class diagram inside a markdown file -->
+		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/docs.md -f ./options/mermaid-class-diagram-from-csharp.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-from-csharp.!.!. -i $(OutputPath)$(AssemblyName).dll" />
+		<!-- Generate a standalone Mermaid ER diagram from the example EF Core DbContext-->
+		<Exec Command="$(DryGenToolCommandName) mermaid-er-diagram-from-efcore -o ./docs/generated/mermaid-er-diagram-from-efcore.mmd -f ./options/mermaid-er-diagram-from-efcore.yaml -i $(OutputPath)$(AssemblyName).dll" />
+		<!-- Generate the same Mermaid ER diagram inside a markdown file -->
+		<Exec Command="$(DryGenToolCommandName) mermaid-er-diagram-from-efcore -o ./docs/generated/docs.md -f ./options/mermaid-er-diagram-from-efcore.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-from-efcore.!.!. -i $(OutputPath)$(AssemblyName).dll" />
+		<!-- Generate a standalone Mermaid class diagram from the Ef Core DbContext-->
+		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/mermaid-class-diagram-from-dbcontext.mmd -f ./options/mermaid-class-diagram-from-dbcontext.yaml -i $(OutputPath)$(AssemblyName).dll" />
+		<!-- Generate the same Mermaid class diagram inside a markdown file -->
+		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/docs.md -f ./options/mermaid-class-diagram-from-dbcontext.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-from-dbcontext.!.!. -i $(OutputPath)$(AssemblyName).dll" />
+	</Target>
+
+</Project>

@@ -88,8 +88,7 @@ public partial class Build : NukeBuild
        .After(Clean)
        .Executes(() =>
        {
-           DotNetRestore(s => s
-               .SetProjectFile(Solution));
+           DotNetRestore(s => s.SetProjectFile(Solution));
        });
 
     internal Target Compile => _ => _
@@ -121,8 +120,8 @@ public partial class Build : NukeBuild
         });
 
     internal Target Pack => _ => _
-            .DependsOn(Compile)
             .DependsOn(Init)
+            .DependsOn(Compile)
             .Executes(() =>
             {
                 DotNetPack(s => s
@@ -137,6 +136,32 @@ public partial class Build : NukeBuild
                     .SetRepositoryUrl(GitRepository?.ToString())
                     .SetPackageProjectUrl(ProjectUrlInNugetPackage)
                     .SetVersion(GitVersion.NuGetVersionV2));
+                // Regenerate the .config/dotnet-tools.json in the templates with the latest version of dry-gen
+                var templateProjectDirectory = Solution.GetProject("DryGen.Templates").Directory;
+                foreach (var templateProject in Directory.GetDirectories(Path.Combine(templateProjectDirectory, "templates")))
+                {
+                    var workingDirectory = Path.Combine(templateProjectDirectory, "templates", templateProject);
+                    DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
+                    DotNetToolUpdate(c => c
+                        .SetPackageName("dry-gen")
+                        .AddSources(ArtifactsDirectory)
+                        .SetProcessWorkingDirectory(workingDirectory)
+                        .SetVersion(GitVersion.NuGetVersionV2)
+                        .SetConfigFile(Path.Combine(templateProjectDirectory, "Properties", "NuGet.Config"))
+                        );
+                }
+                // Rebuild the templates before we create the package, to use the newly generated .config/dotnet-tools.json in the templates
+                DotNetBuild(s => s
+                    .SetProjectFile(Solution.GetProject("DryGen.Templates"))
+                    .SetOutputDirectory(ArtifactsDirectory)
+                    .SetConfiguration(Configuration)
+                    .SetAssemblyVersion(GitVersion.AssemblySemVer)
+                    .SetFileVersion(GitVersion.AssemblySemFileVer)
+                    .SetInformationalVersion(GitVersion.InformationalVersion)
+                    .SetCopyright(Copyright)
+                    .SetDescription(ToolsDescription)
+                    .SetProcessEnvironmentVariable("DryGenTemplatesRunAsTool", "some value")
+                    .EnableNoRestore());
                 DotNetPack(s => s
                     .SetProject(Solution.GetProject("DryGen.Templates"))
                     .SetOutputDirectory(ArtifactsDirectory)
@@ -184,10 +209,7 @@ public partial class Build : NukeBuild
             .DependsOn(ITests)
             .Executes(() =>
             {
-                DotNetToolUpdate(c => c
-                    .SetGlobal(true)
-                    .SetPackageName("SpecFlow.Plus.LivingDoc.CLI")
-                    );
+                DotNetToolUpdate(c => c.SetGlobal(true).SetPackageName("SpecFlow.Plus.LivingDoc.CLI"));
                 var subprojectNames = new Dictionary<string, string> { { "UTests", "Unit tests" }, { "ITests", "Integration tests" } };
                 foreach (var testProject in new[] { "UTests", "ITests" })
                 {
@@ -201,7 +223,7 @@ public partial class Build : NukeBuild
                         "--output",
                         $"{DocsDirectory}/about/specs/drygen-{testProject.ToLowerInvariant()}.html",
                     };
-                    ProcessTasks.StartProcess("livingdoc", arguments: string.Join(' ', arguments), logOutput: true, logInvocation: true).WaitForExit();
+                    ProcessTasks.StartProcess("livingdoc", arguments: string.Join(' ', arguments), logOutput: true, logInvocation: true).AssertZeroExitCode();
                 }
             });
 
@@ -243,18 +265,14 @@ public partial class Build : NukeBuild
                 (v, path) => v.SetTargetPath(path)));
        });
 
-    internal Target GlobalTool => _ => _
+    internal Target Dev_GlobalTool => _ => _
         .DependsOn(Init)
         .DependsOn(Pack)
         .Executes(() =>
         {
             try
             {
-                DotNetToolUninstall(c => c
-                    .SetGlobal(true)
-                    .SetPackageName("dry-gen")
-                    .SetProcessLogOutput(false)
-                    );
+                DotNetToolUninstall(c => c.SetGlobal(true).SetPackageName("dry-gen").SetProcessLogOutput(false));
             }
             catch
             {
@@ -271,24 +289,21 @@ public partial class Build : NukeBuild
                 );
         });
 
-    internal Target InstallTemplates => _ => _
+    internal Target Dev_InstallTemplates => _ => _
         .DependsOn(Init)
         .DependsOn(Pack)
         .Executes(() =>
         {
-            var uninstallArguments = new[] {
-                        "new",
-                        "uninstall",
-                        "dry-gen.templates"
-                    };
-            ProcessTasks.StartProcess("dotnet", arguments: string.Join(' ', uninstallArguments), logOutput: false, logInvocation: false).WaitForExit();
+            try
+            {
+                DotNet("new uninstall dry-gen.templates", logOutput: false, logInvocation: false);
+            }
+            catch
+            {
+                // Noop, to prevent the build from stopping when dry-gen.templates is not installed as a template (yet)
+            }
             var toolsPackageName = Path.Combine(ArtifactsDirectory, $"dry-gen.templates.{GitVersion.NuGetVersionV2}.nupkg");
-            var installArguments = new[] {
-                        "new",
-                        "install",
-                        $"\"{toolsPackageName}\""
-                    };
-            ProcessTasks.StartProcess("dotnet", arguments: string.Join(' ', installArguments), logOutput: true, logInvocation: true).AssertZeroExitCode();
+            DotNet($"new install \"{toolsPackageName}\"", logOutput: true, logInvocation: true);
         });
 
     private static string DocsDirectory => Path.Combine(RootDirectory, "docs").Replace("\\", "/");
