@@ -23,10 +23,6 @@
 		<Compile Remove="**\*" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
-	</ItemGroup>
-
 	<!-- 
 	Build all the templates, to verify that they are structurally ok.
 	NB! During normal build we are running the DryGen.dll directly from dotnet.

@@ -94,7 +94,6 @@ public class ExampleDbContext : DbContext
         modelBuilder.Entity<Stock>().HasKey(x => new { x.ProductId, x.WarehouseId });
     }
 }
-
 ```
 </details> 
 &nbsp;

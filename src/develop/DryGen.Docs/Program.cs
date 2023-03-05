@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using CommandLine.Text;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -161,7 +162,7 @@ public static class Program
             ReplaceToken = "mermaid-er-diagram-details-example-code",
         };
         var exampleCodeFile = Path.Combine(rootDirectory, "src", "DryGen.Templates", "templates", "DryGen.Templates.Mermaid", "Example.cs");
-        var exampleCode = File.ReadAllText(exampleCodeFile);
+        var exampleCode = File.ReadAllText(exampleCodeFile).Replace("[ExcludeFromCodeCoverage(Justification = \"Just example code\")]", string.Empty).Replace("using System.Diagnostics.CodeAnalysis;", string.Empty);
         var replaceToken = generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken();
         var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(rootDirectory, generatorData), replaceToken, verbose: false);
         var generatedRepresentation = existingRepresentation.Replace(replaceToken, exampleCode);
