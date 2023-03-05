@@ -47,12 +47,36 @@ The options are spesific to each verb, and are used to fine tune the result repr
 
 Head over to the [verbs page](/verbs) to see the list of verbs dry-gen supports, or take a look at [our examples](/examples).
 
-## Integrate dry-gen into your development process
+## Development process integration
 
-dry-gen contains some example .Net templates that you can use with the [`dotnet new` command](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new){:target="\_blank"}
+When you decide to generate other representations from one, it's important to keep them all in sync all the time. The easiest way to achieve this is to integrate the generation directly into the development process. There are many ways to do this, and if you already have a method you prefer, you should definitely use it with dry-gen as well. If not, you can quickly get up and running, without needing any other tools than `dotnet`, by using [MSBuild Targets](https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-targets){:target="\_blank"} in your .csproj files. To make it easy to get started with this approach, dry-gen provides some sample .Net project templates that you can use with the [dotnet new](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new){:target="\_blank"} command. To install the templates, run
 
 ```
 dotnet new install dry-gen.templates
+```
+
+The templates contains some example code, and some MSBuild targets in the .csproj file, that you can customixe to your needs. You can always get the list of installed dry-gen related templates by running `dotnet new list`, e.g.
+
+```
+dotnet new list --tag dry-gen
+```
+
+You generate a new project from a temlate by using its short name, e.g.
+
+```
+dotnet new dry-gen.mermaid --name MyProject.GenerateMermaidWithDryGen
+```
+
+When you have generated a project you must build it to generate the other representations, e.g.
+
+```
+dotnet build
+```
+
+Then you can open the readme file with your favorite editor/viewer to look at the generated representations and learn more about how you can customize the project to your need, e.g.
+
+```
+./README.md
 ```
 
 Have fun!
