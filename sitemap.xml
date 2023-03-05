@@ -41,6 +41,10 @@
 <lastmod>2023-02-22T00:00:00+00:00</lastmod>
 </url>
 <url>
+<loc>/2023/03/05/release-1.1.0/</loc>
+<lastmod>2023-03-05T00:00:00+00:00</lastmod>
+</url>
+<url>
 <loc>/verbs/csharp-from-json-schema/</loc>
 </url>
 <url>
@@ -89,11 +93,14 @@
 <loc>/blog/page2/</loc>
 </url>
 <url>
+<loc>/blog/page3/</loc>
+</url>
+<url>
 <loc>/about/specs/drygen-itests.html</loc>
-<lastmod>2023-02-22T22:24:22+00:00</lastmod>
+<lastmod>2023-03-05T17:01:15+00:00</lastmod>
 </url>
 <url>
 <loc>/about/specs/drygen-utests.html</loc>
-<lastmod>2023-02-22T22:24:25+00:00</lastmod>
+<lastmod>2023-03-05T17:01:14+00:00</lastmod>
 </url>
 </urlset>

@@ -1,4 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2023-02-22T22:25:45+00:00</updated><id>/feed.xml</id><title type="html">DryGen</title><subtitle>A .Net tool to generate other representations of a piece of knowledge from one representation.</subtitle><entry><title type="html">Version 1.0.0 is released</title><link href="/2023/02/22/release-1.0.0/" rel="alternate" type="text/html" title="Version 1.0.0 is released" /><published>2023-02-22T00:00:00+00:00</published><updated>2023-02-22T00:00:00+00:00</updated><id>/2023/02/22/release-1.0.0</id><content type="html" xml:base="/2023/02/22/release-1.0.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2023-03-05T17:01:22+00:00</updated><id>/feed.xml</id><title type="html">DryGen</title><subtitle>A .Net tool to generate other representations of a piece of knowledge from one representation.</subtitle><entry><title type="html">Version 1.1.0 is released</title><link href="/2023/03/05/release-1.1.0/" rel="alternate" type="text/html" title="Version 1.1.0 is released" /><published>2023-03-05T00:00:00+00:00</published><updated>2023-03-05T00:00:00+00:00</updated><id>/2023/03/05/release-1.1.0</id><content type="html" xml:base="/2023/03/05/release-1.1.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<ul>
+  <li>..Net templates for easy integration of dry-gen into the development process using <a href="https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-targets" target="\_blank">MSBuild targets</a>, see <a href="/#developmentprocessintegration">Getting strarted</a>
+    <ul>
+      <li>Project template for generating Mermaid diagrams from C# code</li>
+      <li>Project template for generating C# code and Mermaid diagrams from json schemas</li>
+    </ul>
+  </li>
+  <li>Added the option <code class="language-plaintext highlighter-rouge">--include-exception-stacktrace</code> to help debug issues with <code class="language-plaintext highlighter-rouge">dry-gen</code> it self. NB! This option is only shown if an exception is trown during a <code class="language-plaintext highlighter-rouge">dry-gen</code> run.</li>
+  <li>Fixed issue where <code class="language-plaintext highlighter-rouge">dry-gen</code> would fail if passed an empty options file (or an options file with only blank lines or comments)</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.0.0 is released</title><link href="/2023/02/22/release-1.0.0/" rel="alternate" type="text/html" title="Version 1.0.0 is released" /><published>2023-02-22T00:00:00+00:00</published><updated>2023-02-22T00:00:00+00:00</updated><id>/2023/02/22/release-1.0.0</id><content type="html" xml:base="/2023/02/22/release-1.0.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
 
 <ul>
   <li>.Net Core 3.1 is longer supported, since its no longer supported by Microsoft.</li>
@@ -64,14 +77,4 @@
 
 <p>Run <code class="language-plaintext highlighter-rouge">dry-gen &lt;verb&gt; --help</code> for usage information</p>
 
-<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version Support for the following new verbs: csharp-from-json-schema mermaid-class-diagram-from-json-schema mermaid-er-diagram-from-json-schema]]></summary></entry><entry><title type="html">V 0.3.0 is released</title><link href="/2022/04/23/release-0.3.0/" rel="alternate" type="text/html" title="V 0.3.0 is released" /><published>2022-04-23T00:00:00+00:00</published><updated>2022-04-23T00:00:00+00:00</updated><id>/2022/04/23/release-0.3.0</id><content type="html" xml:base="/2022/04/23/release-0.3.0/"><![CDATA[<p>0.3.0 is the first public release of dry-gen. It supports the following verbs:</p>
-
-<ol>
-  <li>mermaid-class-diagram-from-csharp</li>
-  <li>mermaid-er-diagram-from-csharp</li>
-  <li>mermaid-er-diagram-from-efcore</li>
-</ol>
-
-<p>Run <code class="language-plaintext highlighter-rouge">dry-gen &lt;verb&gt; --help</code> for usage information</p>
-
-<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[0.3.0 is the first public release of dry-gen. It supports the following verbs:]]></summary></entry></feed>
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version Support for the following new verbs: csharp-from-json-schema mermaid-class-diagram-from-json-schema mermaid-er-diagram-from-json-schema]]></summary></entry></feed>

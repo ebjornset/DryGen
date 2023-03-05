@@ -115,6 +115,7 @@
         <ul class="menu-list">
   <li><a href="#installation">Installation</a></li>
   <li><a href="#use">Use</a></li>
+  <li><a href="#developmentprocessintegration">Development process integration</a></li>
 </ul>
     </div>
 </div>
@@ -125,9 +126,9 @@
 <div class="content">
     <p>DryGen is a .Net tool to generate other representations of a piece of knowledge from one representation.</p>
 
-<p>It’s inspired by the <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">“Don’t repeat yourself” (DRY) prinsiple</a> “Every piece of knowledge must have a single, unambiguous, authoritative representation within a system”</p>
+<p>It’s inspired by the <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="\_blank">“Don’t repeat yourself” (DRY) prinsiple</a> “Every piece of knowledge must have a single, unambiguous, authoritative representation within a system”</p>
 
-<p>Beeing a .Net tool (with tool name <code class="language-plaintext highlighter-rouge">dry-gen</code>), you’ll need a <a href="https://dotnet.microsoft.com/en-us/download">.NET SDK</a> installed on your machine to use it. With a .Net SDK in place <code class="language-plaintext highlighter-rouge">dry-gen</code> is installed and used like any other <a href="https://aka.ms/global-tools">.Net tool</a>.</p>
+<p>Beeing a .Net tool (with tool name <code class="language-plaintext highlighter-rouge">dry-gen</code>), you’ll need a <a href="https://dotnet.microsoft.com/en-us/download" target="\_blank">.NET SDK</a> installed on your machine to use it. With a .Net SDK in place <code class="language-plaintext highlighter-rouge">dry-gen</code> is installed and used like any other <a href="https://aka.ms/global-tools" target="\_blank">.Net tool</a>.</p>
 
 <p><strong>A little warning befor you start</strong>: As with all .Net tools, you run <code class="language-plaintext highlighter-rouge">dry-gen</code> as an application with full trust, so make sure you know exactly where you write your output files.</p>
 
@@ -158,9 +159,41 @@ dotnet tool install --local dry-gen
 
 <p>The options are spesific to each verb, and are used to fine tune the result representation. Most options uses the standard long notation of <code class="language-plaintext highlighter-rouge">--&lt;option-name&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">--input-file</code>. Some options also supports the shorthand notation of <code class="language-plaintext highlighter-rouge">-&lt;letter&gt;</code>, e.g. <code class="language-plaintext highlighter-rouge">-i</code> for input file, but we suggest you use the long format. Execute <code class="language-plaintext highlighter-rouge">dry-gen &lt;verb&gt; --help</code> to get the list of options for a specific verb, e.g. <code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --help</code></p>
 
-<h5 id="going-further">Going further</h5>
+<h5 id="explore-the-dry-gen-features">Explore the dry-gen features</h5>
 
 <p>Head over to the <a href="/verbs">verbs page</a> to see the list of verbs dry-gen supports, or take a look at <a href="/examples">our examples</a>.</p>
+
+<h2 id="developmentprocessintegration">Development process integration</h2>
+
+<p>When you decide to generate other representations from one, it’s important to keep them all in sync all the time. The easiest way to achieve this is to integrate the generation directly into the development process. There are many ways to do this, and if you already have a method you prefer, you should definitely use it with dry-gen as well. If not, you can quickly get up and running, without needing any other tools than <code class="language-plaintext highlighter-rouge">dotnet</code>, by using <a href="https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-targets" target="\_blank">MSBuild Targets</a> in your .csproj files. To make it easy to get started with this approach, dry-gen provides some sample .Net project templates that you can use with the <a href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new" target="\_blank">dotnet new</a> command. To install the templates, run</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new install dry-gen.templates
+</code></pre></div></div>
+
+<p>The templates contains some example code, and some MSBuild targets in the .csproj file, that you can customixe to your needs. You can always get the list of installed dry-gen related templates by running <code class="language-plaintext highlighter-rouge">dotnet new list</code>, e.g.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new list --tag dry-gen
+</code></pre></div></div>
+
+<p>You generate a new project from a template by using its short name, e.g.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new dry-gen.mermaid --name MyProject.GenerateMermaidFromCSharpWithDryGen
+</code></pre></div></div>
+
+<p>or</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new dry-gen.jsonschema --name MyProject.GenerateFromJsonSchemaWithDryGen
+</code></pre></div></div>
+
+<p>When you have generated a project you must build it to generate the other representations, e.g.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet build
+</code></pre></div></div>
+
+<p>Then you can open the readme file with your favorite editor/viewer to look at the generated representations and learn more about how you can customize the project to your need, e.g.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./README.md
+</code></pre></div></div>
 
 <p>Have fun!</p>
 
