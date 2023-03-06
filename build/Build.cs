@@ -73,7 +73,7 @@ public partial class Build : NukeBuild
             TemplatesDescription = $".Net templates that make getting started with [dry-gen]({ProjectUrlInNugetPackage}) easy.";
             Authors = "Eirik Bjornset";
             Copyright = $"Copyright 2022-{DateTime.Today.Year} {Authors}";
-            IsVersionTag = GitRepository != null && GitRepository.Branch.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase);
+            IsVersionTag = GitRepository != null && (GitRepository.Branch?.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase) ?? false);
             Serilog.Log.Information("ToolsDescription = '{ToolsDescription}'", ToolsDescription);
             Serilog.Log.Information("TemplatesDescription = '{TemplatesDescription}'", TemplatesDescription);
             Serilog.Log.Information("Copyright = '{Copyright}'", Copyright);
