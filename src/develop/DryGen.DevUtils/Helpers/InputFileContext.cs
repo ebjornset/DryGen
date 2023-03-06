@@ -22,6 +22,30 @@ public class InputFileContext : IDisposable
 
     public bool HasInputFileName => !string.IsNullOrEmpty(inputFileName);
 
+    public void CreateInputFile(string content, string extension)
+    {
+        if (string.IsNullOrWhiteSpace(extension))
+        {
+            throw new ArgumentNullException(nameof(content));
+        }
+        string tmpInputFileName;
+        do
+        {
+            var tmpFileName = Path.GetTempFileName();
+            tmpInputFileName = Path.ChangeExtension(tmpFileName, extension);
+            if (File.Exists(tmpFileName))
+            {
+                File.Delete(tmpFileName);
+            }
+        }
+        while (File.Exists(tmpInputFileName));
+        if (!string.IsNullOrEmpty(content))
+        {
+            File.WriteAllText(tmpInputFileName, content);
+        }
+        InputFileName = tmpInputFileName;
+    }
+
     public void Dispose()
     {
         DeleteExistingInputFile();

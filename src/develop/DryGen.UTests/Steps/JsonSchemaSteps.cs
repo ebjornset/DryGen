@@ -63,19 +63,7 @@ public class JsonSchemaSteps
         {
             throw new ArgumentException("Json schema is not specified");
         }
-        string jsonSchemaFileName;
-        do
-        {
-            var tmpFileName = Path.GetTempFileName();
-            jsonSchemaFileName = Path.ChangeExtension(tmpFileName, extension);
-            if (File.Exists(tmpFileName))
-            {
-                File.Delete(tmpFileName);
-            }
-        }
-        while (File.Exists(jsonSchemaFileName));
-        File.WriteAllText(jsonSchemaFileName, jsonSchemaText);
-        inputFileContext.InputFileName = jsonSchemaFileName;
+        inputFileContext.CreateInputFile(jsonSchemaText, extension);
     }
 
     private void LoadJsonSchemaFromFile(JsonSchemaFileFormat jsonSchemaFileFormat)

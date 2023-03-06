@@ -19,6 +19,7 @@ using DryGen.Options;
 using DryGen.MermaidFromJsonSchema;
 using System.Runtime.Loader;
 using System.Text;
+using DryGen.MermaidFromDotnetDepsJson;
 
 namespace DryGen;
 
@@ -43,6 +44,7 @@ public class Generator
     {
         var parserResult = parser.ParseArguments<
             CSharpFromJsonSchemaOptions,
+            MermaidC4ComponentDiagramFromDotnetDepsJsonOptions,
             MermaidClassDiagramFromCSharpOptions,
             MermaidClassDiagramFromJsonSchemaOptions,
             MermaidErDiagramFromCSharpOptions,
@@ -52,7 +54,8 @@ public class Generator
              >(args);
         return parserResult.MapResult(
           (CSharpFromJsonSchemaOptions options) => GenerateCSharpFromJsonSchema(options, args),
-          (MermaidClassDiagramFromCSharpOptions options) => GenerateMermaidClassDiagramFropmCSharp(options, args),
+          (MermaidC4ComponentDiagramFromDotnetDepsJsonOptions options) => GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(options, args),
+          (MermaidClassDiagramFromCSharpOptions options) => GenerateMermaidClassDiagramFromCSharp(options, args),
           (MermaidClassDiagramFromJsonSchemaOptions options) => GenerateMermaidClassDiagramFromJsonSchema(options, args),
           (MermaidErDiagramFromCSharpOptions options) => GenerateMermaidErDiagramFromCSharp(options, args),
           (MermaidErDiagramFromEfCoreOptions options) => GenerateMermaidErDiagramFromEfCore(options, args),
@@ -183,7 +186,7 @@ public class Generator
 
     }
 
-    private int GenerateMermaidClassDiagramFropmCSharp(MermaidClassDiagramFromCSharpOptions options, string[] args)
+    private int GenerateMermaidClassDiagramFromCSharp(MermaidClassDiagramFromCSharpOptions options, string[] args)
     {
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
         {
@@ -191,6 +194,16 @@ public class Generator
             return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
         });
     }
+
+    private int GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(MermaidC4ComponentDiagramFromDotnetDepsJsonOptions options, string[] args)
+    {
+        return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid C4 component diagram", options =>
+        {
+            var generator = new MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator();
+            return generator.Generate(options).Result;
+        });
+    }
+
 
     private int GenerateCSharpFromJsonSchema(CSharpFromJsonSchemaOptions options, string[] args)
     {
