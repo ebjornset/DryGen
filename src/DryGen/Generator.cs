@@ -20,6 +20,7 @@ using DryGen.MermaidFromJsonSchema;
 using System.Runtime.Loader;
 using System.Text;
 using DryGen.MermaidFromDotnetDepsJson;
+using DryGen.Core;
 
 namespace DryGen;
 
@@ -146,9 +147,10 @@ public class Generator
                 errorWriter.WriteLine($"VERB: {verbAttribute.Name} ({verbAttribute.HelpText})");
             }
             errorWriter.WriteLine();
+            ex = PopWellKnownInnAggregateException(ex);
             errorWriter.WriteLine($"ERROR:{BuildExceptionMessages(ex, options.IncludeExceptionStackTrace)}");
             errorWriter.WriteLine("Rerun the command with --help to get more help information");
-            if (ex is not OptionsException && !options.IncludeExceptionStackTrace)
+            if (!(ex is InvalidContentException || ex is OptionsException) && !options.IncludeExceptionStackTrace)
             {
                 errorWriter.WriteLine("NB! You can also add --include-exception-stacktrace to get the stack trace for the exception");
             }
@@ -249,7 +251,7 @@ public class Generator
             var deserializer = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             var yaml = File.ReadAllText(commandlineOptions.OptionsFile);
             var optionsFromFile = deserializer.Deserialize<TOptions>(yaml);
-            if (optionsFromFile != null) 
+            if (optionsFromFile != null)
             // The yaml deserialization returns null if the file is empty or all options are commented out
             {
                 // Must read the options from the file twice, since the command line parser clear the collection when the option is not specified on the command line
@@ -382,6 +384,15 @@ public class Generator
                 return null;
             };
         }
+    }
+
+    private static Exception PopWellKnownInnAggregateException(Exception ex)
+    {
+        if (ex is AggregateException aEx && aEx.InnerExceptions?.Count == 1)
+        {
+            ex = aEx.InnerExceptions[0];
+        }
+        return ex;
     }
 
     private static string BuildExceptionMessages(Exception ex, bool includeExceptionStackTrace)
