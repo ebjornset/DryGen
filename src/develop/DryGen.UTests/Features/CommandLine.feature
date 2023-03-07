@@ -87,7 +87,7 @@ Scenario: Print usage to console error with exception stacktrace info when an ex
 	And I should find the text "Rerun the command with --help to get more help information" in console error
 	And I should find the text "NB! You can also add --include-exception-stacktrace to get the stack trace for the exception" in console error
 
-Scenario: Print usage to console error without exception stacktrace info when an exception is thrown
+Scenario: Print usage to console error without exception stacktrace info when --include-exception-stacktrace is used and an exception is thrown
 # Uses yaml read as json to trigger an exception
 	Given this json schema input file with the extension "json"
 		"""
@@ -102,8 +102,22 @@ Scenario: Print usage to console error without exception stacktrace info when an
 	Then I should get exit code '1'
 	And I should find the text "ERROR:" in console error
 	And I should find the text "Rerun the command with --help to get more help information" in console error
+	And I should find the text " at " in console error
 	But I should not find the text "NB! You can also add --include-exception-stacktrace to get the stack trace for the exception" in console error
-	But I should find the text "stack trace" in console error
+
+Scenario: Print usage to console error without exception stacktrace info when an well known exception is thrown
+Given this .Net depts json input file
+		"""
+		{
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                                               |
+		| mermaid-c4container-diagram-from-dotnet-deps-json |
+	Then I should get exit code '1'
+	And I should find the text "Invalid deps.json" in console error
+	And I should find the text "Rerun the command with --help to get more help information" in console error
+	But I should not find the text "NB! You can also add --include-exception-stacktrace to get the stack trace for the exception" in console error
 
 Scenario: Print usage to console error when unknown verb is specified
 	When I call the program with this command line arguments
