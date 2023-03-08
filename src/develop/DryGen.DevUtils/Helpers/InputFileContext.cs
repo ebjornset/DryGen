@@ -31,12 +31,7 @@ public class InputFileContext : IDisposable
         string tmpInputFileName;
         do
         {
-            var tmpFileName = Path.GetTempFileName();
-            tmpInputFileName = Path.ChangeExtension(tmpFileName, extension);
-            if (File.Exists(tmpFileName))
-            {
-                File.Delete(tmpFileName);
-            }
+            tmpInputFileName = Path.Combine(Path.GetTempPath(), $"dry-gen-test-{Guid.NewGuid()}.{extension}");
         }
         while (File.Exists(tmpInputFileName));
         if (!string.IsNullOrEmpty(content))

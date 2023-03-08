@@ -4,7 +4,7 @@ To get a visual good visual overview of the dependencies for a .Net assembly
 As a dry-gen user
 I should be able to generate Mermaid C4 Component diagram from .Net deps.json file with the verb 'mermaid-c4container-diagram-from-dotnet-deps-json'
 
-Scenario: Should generate Mermaid C4 Component diagram from .Net deps.json to console from 'mermaid-c4container-diagram-from-dotnet-deps-json' verb
+Scenario: Should generate Mermaid C4 Component diagram from .Net deps.json for runtime dependencies
 	Given this .Net depts json input file
 		"""
 		{
@@ -12,10 +12,21 @@ Scenario: Should generate Mermaid C4 Component diagram from .Net deps.json to co
 				".NETCoreApp,Version=v7.0": {
 				},
 				".NETCoreApp,Version=v7.0/win-x64": {
-					"TestAssembly/1.0.0": {
+					"MainAssembly/1.0.0": {
+						"dependencies": {
+							"DeptAssemblyOne": "1.1.0",
+							"DeptAssemblyTwo": "1.2.0"
+						},
 						"runtime": {
-							"TestAssembly.dll": {}
+							"MainAssembly.dll": {}
 						}
+					},
+					"DeptAssemblyOne/1.1.0": {
+						"runtime": {
+							"DeptAssemblyOne.dll": {}
+						}
+					},
+					"DeptAssemblyTwo/1.2.0": {
 					}
 				}
 			}
@@ -28,7 +39,9 @@ Scenario: Should generate Mermaid C4 Component diagram from .Net deps.json to co
 	And console out should contain the text
 		"""
 		C4Component
-			Component("TestAssembly/1.0.0", "TestAssembly/1.0.0")
+			Component("MainAssembly/1.0.0", "MainAssembly", "", "v 1.0.0")
+			Component("DeptAssemblyOne/1.1.0", "DeptAssemblyOne", "", "v 1.1.0")
+			Rel("MainAssembly/1.0.0", "DeptAssemblyOne/1.1.0", "", "")
 		
 		"""
 
