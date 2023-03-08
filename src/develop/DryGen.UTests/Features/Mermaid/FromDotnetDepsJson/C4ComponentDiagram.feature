@@ -39,9 +39,10 @@ Scenario: Should generate Mermaid C4 Component diagram from .Net deps.json for r
 	And console out should contain the text
 		"""
 		C4Component
-			Component("MainAssembly/1.0.0", "MainAssembly", "", "v 1.0.0")
-			Component("DeptAssemblyOne/1.1.0", "DeptAssemblyOne", "", "v 1.1.0")
-			Rel("MainAssembly/1.0.0", "DeptAssemblyOne/1.1.0", "", "")
+		title Component diagram for MainAssembly v1.0.0 running as .NETCoreApp v7.0/win-x64
+		Component("MainAssembly/1.0.0", "MainAssembly", "", "v1.0.0")
+		Component("DeptAssemblyOne/1.1.0", "DeptAssemblyOne", "", "v1.1.0")
+		Rel("MainAssembly/1.0.0", "DeptAssemblyOne/1.1.0", "", "")
 		
 		"""
 

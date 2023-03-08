@@ -5,10 +5,9 @@ using System.Linq;
 
 namespace DryGen.MermaidFromDotnetDepsJson.Model
 {
-
     internal class Target : BaseModelElement
     {
-        public Target(JObject targetObject, string id) : base(id, '=')
+        public Target(JObject targetObject, string id) : base(id, delimiter: ",Version=")
         {
             RuntimeDependencies = LoadDependencies(targetObject);
             BindDependencies();

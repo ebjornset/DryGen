@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,17 +13,24 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     {
         var target = await LoadValidTargetJson(options.InputFile);
         var sb = new StringBuilder().AppendLine("C4Component");
+        if (target.RuntimeDependencies.Any())
+        {
+            var mainAssembly = target.RuntimeDependencies.First();
+            sb.Append("title Component diagram for ").Append(mainAssembly.Name).Append(" v").Append(mainAssembly.Version)
+                .Append(" running as ").Append(target.Name).Append(' ').AppendLine(target.Version);
+        }
+
         foreach (var runtimeDependency in target.RuntimeDependencies)
         {
             // Component(alias, label, ?techn, ?descr, ?sprite, ?tags, ?link)
-            sb.Append("\tComponent(\"").Append(runtimeDependency.Id).Append("\", \"").Append(runtimeDependency.Name).Append("\", \"\", \"v ").Append(runtimeDependency.Version).AppendLine("\")");
+            sb.Append("Component(\"").Append(runtimeDependency.Id).Append("\", \"").Append(runtimeDependency.Name).Append("\", \"\", \"v").Append(runtimeDependency.Version).AppendLine("\")");
         }
         foreach (var fromDependency in target.RuntimeDependencies)
         {
             foreach(var toDependency in fromDependency.RuntimeDependencyRefs.Select( x => x.Dependency))
             {
                 //Rel(from, to, label, ?techn, ?descr, ?sprite, ?tags, ?link)
-                sb.Append("\tRel(\"").Append(fromDependency.Id).Append("\", \"").Append(toDependency?.Id).AppendLine("\", \"\", \"\")");
+                sb.Append("Rel(\"").Append(fromDependency.Id).Append("\", \"").Append(toDependency?.Id).AppendLine("\", \"\", \"\")");
             }
         }
         return sb.ToString();

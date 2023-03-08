@@ -4,14 +4,14 @@ namespace DryGen.MermaidFromDotnetDepsJson.Model
 {
     internal abstract class BaseModelElement
     {
-        protected BaseModelElement(string id, char delimiter = '/')
+        protected BaseModelElement(string id, string delimiter = "/")
         {
             if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentException($"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
             }
             Id = id;
-            var idParts = id.Split(delimiter);
+            var idParts = id.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
             if (idParts.Length != 2)
             {
                 throw $"Could not spilt '{id}' in name and version on delimiter '{delimiter}'".ToInvalidContentException();
