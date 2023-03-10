@@ -1,8 +1,7 @@
-﻿namespace DryGen.MermaidFromDotnetDepsJson.Model
+﻿namespace DryGen.MermaidFromDotnetDepsJson.Model;
+
+internal class DependencyRef : BaseModelElement
 {
-    internal class DependencyRef : BaseModelElement
-    {
-        public DependencyRef(string id) : base(id) { }
-        public Dependency? Dependency { get; set; }
-    }
+    public DependencyRef(string id) : base(id) { }
+    public Dependency? Dependency { get; set; }
 }
