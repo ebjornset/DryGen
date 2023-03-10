@@ -90,7 +90,7 @@ Scenario: Should select 'native' as 'techn' when it's present in depts.json file
 		
 		"""
 
-Scenario: Should select runtime 'lib/' as 'techn' when 'native' has no content
+Scenario: Should select runtime 'lib/' as 'techn' when 'native' has no content and another slash ('/') is found 
 	Given this .Net depts json input file
 		"""
 		{
@@ -121,7 +121,7 @@ Scenario: Should select runtime 'lib/' as 'techn' when 'native' has no content
 		
 		"""
 
-Scenario: Should select runtime extension as 'techn' as a last resort
+Scenario: Should select runtime extension as 'techn' when 'lib/' as no next slash ('/') and runtime has extension
 	Given this .Net depts json input file
 		"""
 		{
@@ -131,7 +131,7 @@ Scenario: Should select runtime extension as 'techn' as a last resort
 				".NETCoreApp,Version=v7.0/win-x64": {
 					"MainAssembly/1.0.0": {
 						"runtime": {
-							"MainAssembly.dll": {}
+							"lib/MainAssembly.dll": {}
 						},
 						"native": {
 						}
@@ -149,5 +149,36 @@ Scenario: Should select runtime extension as 'techn' as a last resort
 		C4Component
 		title Component diagram for MainAssembly v1.0.0 running on .NETCoreApp v7.0/win-x64
 		Component("MainAssembly/1.0.0", "MainAssembly", "dll", "v1.0.0")
+		
+		"""
+
+Scenario: Should select empty string  as 'techn' as a last resort
+	Given this .Net depts json input file
+		"""
+		{
+			"targets": {
+				".NETCoreApp,Version=v7.0": {
+				},
+				".NETCoreApp,Version=v7.0/win-x64": {
+					"MainAssembly/1.0.0": {
+						"runtime": {
+							"lib/MainAssemblyWiothoutExtension": {}
+						},
+						"native": {
+						}
+					}
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                                               |
+		| mermaid-c4container-diagram-from-dotnet-deps-json |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		C4Component
+		title Component diagram for MainAssembly v1.0.0 running on .NETCoreApp v7.0/win-x64
+		Component("MainAssembly/1.0.0", "MainAssembly", "", "v1.0.0")
 		
 		"""

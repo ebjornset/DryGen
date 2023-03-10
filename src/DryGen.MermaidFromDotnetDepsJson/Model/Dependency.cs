@@ -83,7 +83,7 @@ internal class Dependency : BaseModelElement
         var lastDotIndex = runtimeFirstName.LastIndexOf('.');
         if (lastDotIndex > -1)
         {
-            return runtimeFirstName.Substring(lastDotIndex + 1);
+            return runtimeFirstName[(lastDotIndex + 1)..];
         }
         return string.Empty;
 
