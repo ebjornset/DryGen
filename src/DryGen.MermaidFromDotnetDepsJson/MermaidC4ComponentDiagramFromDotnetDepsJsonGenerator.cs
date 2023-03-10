@@ -23,12 +23,13 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         {
             var mainAssembly = target.RuntimeDependencies.First();
             sb.Append("title Component diagram for ").Append(mainAssembly.Name).Append(" v").Append(mainAssembly.Version)
-                .Append(" running as ").Append(target.Name).Append(' ').AppendLine(target.Version);
+                .Append(" running on ").Append(target.Name).Append(' ').AppendLine(target.Version);
         }
         foreach (var runtimeDependency in target.RuntimeDependencies)
         {
             // Component(alias, label, ?techn, ?descr, ?sprite, ?tags, ?link)
-            sb.Append("Component(\"").Append(runtimeDependency.Id).Append("\", \"").Append(runtimeDependency.Name).Append("\", \"\", \"v").Append(runtimeDependency.Version).AppendLine("\")");
+            sb.Append("Component(\"").Append(runtimeDependency.Id).Append("\", \"").Append(runtimeDependency.Name).Append("\", \"")
+                .Append(runtimeDependency.Technology).Append("\", \"v").Append(runtimeDependency.Version).AppendLine("\")");
         }
         foreach (var fromDependency in target.RuntimeDependencies)
         {
