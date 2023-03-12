@@ -86,6 +86,5 @@ internal class Dependency : BaseModelElement
             return runtimeFirstName[(lastDotIndex + 1)..];
         }
         return string.Empty;
-
     }
 }

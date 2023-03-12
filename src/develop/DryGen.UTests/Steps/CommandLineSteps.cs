@@ -67,6 +67,7 @@ public sealed class CommandLineSteps
     [Then(@"I should get exit code '([^']*)'")]
     public void ThenIShouldGetExitCode(int expected)
     {
-        exitCode.Should().Be(expected, because: $"args '{string.Join(' ', args ?? throw new InvalidOperationException(nameof(args)))}'");
+        var argsString = $"args '{string.Join(' ', args ?? throw new InvalidOperationException(nameof(args)))}'";
+        exitCode.Should().Be(expected, because: $"{argsString}. {consoleContext.ErrorWriter}");
     }
 }

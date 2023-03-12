@@ -7,6 +7,7 @@
 
 	<ItemGroup>
 	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagram - Copy.feature.cs" />
+	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagramTechn - Copy.feature.cs" />
 	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\ClassDiagram.feature.cs" />
 	</ItemGroup>
 
