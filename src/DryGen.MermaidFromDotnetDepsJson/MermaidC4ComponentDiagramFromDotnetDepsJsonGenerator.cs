@@ -51,108 +51,101 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
 
     private static void AppendDiagramStructureElement(StringBuilder sb, DiagramStructureElement diagramStructureElement)
     {
-        AppendDependencies(sb, diagramStructureElement.PreGroupingDependencies);
-        AppendContainerBoundaries(sb, diagramStructureElement.ContainerBoundaries);
-        AppendDependencies(sb, diagramStructureElement.PostGroupingDependencies);
-    }
-
-    private static void AppendContainerBoundaries(StringBuilder sb, IEnumerable<ContainerBoundary>? containerBoundaries)
-    {
-        if (containerBoundaries?.Any() != true)
+        foreach (var element in diagramStructureElement.Elements)
         {
-            return;
-        }
-        foreach (var containerBoundary in containerBoundaries)
-        {
-            ///Container_Boundary(alias, label) {        }
-            var shouldWriteBoundry = containerBoundary.HasMultipleChildren;
-            if (shouldWriteBoundry)
+            if (element is ContainerBoundary containerBoundary)
             {
-                sb.Append("Container_Boundary(\"").Append(containerBoundary.Alias).Append("\", \"").Append(containerBoundary.Label).AppendLine("\") {");
+                AppendContainerBoundary(sb, containerBoundary);
             }
-            AppendDiagramStructureElement(sb, containerBoundary);
-            if (shouldWriteBoundry)
+            else if (element is Component component)
             {
-                sb.AppendLine("}");
+                AppendComponent(sb, component);
             }
         }
     }
 
-    private static void AppendDependencies(StringBuilder sb, IEnumerable<Dependency>? dependencies)
+    private static void AppendContainerBoundary(StringBuilder sb, ContainerBoundary containerBoundary)
     {
-        if (dependencies?.Any() != true)
+        ///Container_Boundary(alias, label) {        }
+        var shouldWriteBoundry = containerBoundary.HasMultipleChildren;
+        if (shouldWriteBoundry)
         {
-            return;
+            sb.Append("Container_Boundary(\"").Append(containerBoundary.Alias).Append("\", \"").Append(containerBoundary.Label).AppendLine("\") {");
         }
-        foreach (var dependency in dependencies)
+        AppendDiagramStructureElement(sb, containerBoundary);
+        if (shouldWriteBoundry)
         {
-            // Component(alias, label, ?techn, ?descr, ?sprite, ?tags, ?link)
-            sb.Append("Component(\"").Append(dependency.Id).Append("\", \"").Append(dependency.Name).Append("\", \"")
-                .Append(dependency.Technology).Append("\", \"v").Append(dependency.Version).AppendLine("\")");
+            sb.AppendLine("}");
         }
+    }
+
+    private static void AppendComponent(StringBuilder sb, Component component)
+    {
+        var dependency = component.Dependency;
+        // Component(alias, label, ?techn, ?descr, ?sprite, ?tags, ?link)
+        sb.Append("Component(\"").Append(dependency.Id).Append("\", \"").Append(dependency.Name).Append("\", \"")
+            .Append(dependency.Technology).Append("\", \"v").Append(dependency.Version).AppendLine("\")");
     }
 
     private static DiagramStructure CreateDiagramStructure(Target target)
     {
-        var result = new DiagramStructure(target.RuntimeDependencies[0])
-        {
-            PreGroupingDependencies = target.RuntimeDependencies,
-        };
+        var result = new DiagramStructure(target.RuntimeDependencies[0]);
         FillDiagramStructureElement(result, target.RuntimeDependencies, startIndex: 0);
         return result;
     }
 
     private static void FillDiagramStructureElement(DiagramStructureElement diagramStructureElement, IEnumerable<Dependency> dependencies, int startIndex)
     {
-        var nonGroupedCandidates = dependencies.Where(x =>
+        var childrenLists = new List<(string, List<Dependency>)>();
+        var groups = new Dictionary<string, List<Dependency>>();
+        foreach (var dependency in dependencies)
         {
-            var dotIndex = x.Name.IndexOf('.', startIndex);
-            return dotIndex <= startIndex;
-        }).ToList();
-        var containerBoundaryCandidates = dependencies.Except(nonGroupedCandidates).ToList();
-        var containerBoundaryGroups = containerBoundaryCandidates.GroupBy(x =>
+            var dotIndex = dependency.Name.Length > startIndex ? dependency.Name.IndexOf('.', startIndex) : -1;
+            var groupName = dotIndex > startIndex ? dependency.Name[..dotIndex] : dependency.Name;
+            List<Dependency> groupList;
+            if (groups.ContainsKey(groupName))
             {
-                var dotIndex = x.Name.IndexOf(".", startIndex);
-                var key = x.Name[..dotIndex];
-                return key;
-            });
-        if (!containerBoundaryGroups.Any())
-        {
-            diagramStructureElement.PreGroupingDependencies = nonGroupedCandidates;
-            return;
-        }
-        var containerBoundaries = new List<ContainerBoundary>();
-        foreach (var containerBoundaryGroup in containerBoundaryGroups)
-        {
-            var containerBoundary = new ContainerBoundary(containerBoundaryGroup.Key);
-            containerBoundaries.Add(containerBoundary);
-            var groupStartIndex = containerBoundaryGroup.Key.Length + 1;
-            FillDiagramStructureElement(containerBoundary, containerBoundaryGroup, groupStartIndex);
-        }
-        // Move any Dependency that has the same name as a ContainerBoundary into that ContainerBoundary.
-        var consolidateCandidates = nonGroupedCandidates.Where(x => containerBoundaries.Any(y => x.Name == y.Label)).ToList();
-        foreach(var consolidateCandidate in consolidateCandidates)
-        {
-            var consolidateContainerBoundary = containerBoundaries.Single(x => x.Label == consolidateCandidate.Name);
-            var consolidatePreGroupingDependencies = new List<Dependency> { consolidateCandidate };
-            if (consolidateContainerBoundary.PreGroupingDependencies?.Any() == true)
-            {
-                consolidatePreGroupingDependencies.AddRange(consolidateContainerBoundary.PreGroupingDependencies);
+                groupList = groups[groupName];
             }
-            consolidateContainerBoundary.PreGroupingDependencies = consolidatePreGroupingDependencies;
+            else
+            {
+                groupList = new List<Dependency>();
+                childrenLists.Add((groupName, groupList));
+                groups.Add(groupName, groupList);
+            }
+            groupList.Add(dependency);
         }
-        diagramStructureElement.PreGroupingDependencies = nonGroupedCandidates.Except(consolidateCandidates);
-        diagramStructureElement.ContainerBoundaries = containerBoundaries;
+        foreach (var (groupName, children) in childrenLists)
+        {
+            if (children.Count == 1)
+            {
+                diagramStructureElement.Elements.Add(new Component(children[0]));
+                continue;
+            }
+            var containerBoundary = new ContainerBoundary(groupName);
+            var groupStartIndex = groupName.Length + 1;
+            FillDiagramStructureElement(containerBoundary, children, groupStartIndex);
+            diagramStructureElement.Elements.Add(containerBoundary);
+        }
     }
 
-    private class DiagramStructureElement
+    private abstract class DiagramElement
     {
-        public IEnumerable<Dependency>? PreGroupingDependencies { get; set; }
-        public IEnumerable<Dependency>? PostGroupingDependencies { get; set; }
-        public IEnumerable<ContainerBoundary>? ContainerBoundaries { get; set; }
-        public bool HasMultipleChildren => ((PreGroupingDependencies?.Count() ?? 0) + 
-            (PostGroupingDependencies?.Count() ?? 0) + 
-            (ContainerBoundaries?.Count() ?? 0)) > 1;
+    }
+
+    private abstract class DiagramStructureElement : DiagramElement
+    {
+        protected DiagramStructureElement()
+        {
+            Elements = new List<DiagramElement>();
+        }
+
+        public IList<DiagramElement> Elements { get; set; }
+
+        public bool HasMultipleChildren =>
+            (Elements.Count(x => x is Component) > 1) ||
+            ((Elements.Count(x => x is Component) == 1) && (Elements.Count() > 1))
+            ;
     }
 
     private sealed class DiagramStructure : DiagramStructureElement
@@ -175,7 +168,17 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         public string Label { get; }
     }
 
-    [ExcludeFromCodeCoverage] // Just a guard that we dont bother to test
+    private sealed class Component : DiagramStructureElement
+    {
+        public Component(Dependency dependency)
+        {
+            Dependency = dependency;
+        }
+
+        public Dependency Dependency { get; }
+    }
+
+    [ExcludeFromCodeCoverage] // Just a guard that we don't bother to test
     private static void CheckForNull(JObject depsJson)
     {
         if (depsJson == null)
