@@ -3,17 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DryGen.MermaidFromDotnetDepsJson.Model;
+namespace DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 
 internal class Dependency : BaseModelElement
 {
-    public Dependency(JProperty depdendencyProperty) : base(depdendencyProperty.Name)
+    public Dependency(JProperty depdendencyProperty, bool isMainAssembly) : base(depdendencyProperty.Name)
     {
         RuntimeDependencyRefs = LoadDependencyRefs(depdendencyProperty);
         Technology = FindTechnology(depdendencyProperty);
+        IsMainAssembly = isMainAssembly;
     }
 
-    public string Technology { get; private set; }
+    public string Technology { get; }
+    public bool IsMainAssembly { get; }
 
     public IReadOnlyList<DependencyRef> RuntimeDependencyRefs { get; private set; }
 

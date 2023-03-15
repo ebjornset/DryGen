@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace DryGen.MermaidFromDotnetDepsJson.Model;
+namespace DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 
 internal class Target : BaseModelElement
 {
@@ -25,6 +25,7 @@ internal class Target : BaseModelElement
     {
         var targetProperties = targetObject.Properties();
         var runtimeDependencies = new List<Dependency>();
+        var isMainAssembly = true;
         foreach (var targetProperty in targetProperties)
         {
             var targetPropertyObject = targetProperty.GetPropertyObject();
@@ -36,8 +37,9 @@ internal class Target : BaseModelElement
             {
                 continue;
             }
-            var dependency = new Dependency(targetProperty);
+            var dependency = new Dependency(targetProperty, isMainAssembly);
             runtimeDependencies.Add(dependency);
+            isMainAssembly = false;
         }
         if (!runtimeDependencies.Any())
         {

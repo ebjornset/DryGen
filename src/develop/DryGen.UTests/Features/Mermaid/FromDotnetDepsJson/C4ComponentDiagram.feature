@@ -35,7 +35,7 @@ Scenario: Should generate Mermaid C4 Component diagram from .Net deps.json for r
 						}
 					},
 					"DeptAssemblyThree/1.3.0": {
-					},
+					}
 				}
 			}
 		}
@@ -49,8 +49,10 @@ Scenario: Should generate Mermaid C4 Component diagram from .Net deps.json for r
 		C4Component
 		title Component diagram for MainAssembly v1.0.0 running on .NETCoreApp v7.0/win-x64
 		Component("MainAssembly/1.0.0", "MainAssembly", "dll", "v1.0.0")
+		Container_Boundary("Standalone dependencies", "Standalone dependencies") {
 		Component("DeptAssemblyOne/1.1.0", "DeptAssemblyOne", "dll", "v1.1.0")
 		Component("DeptAssemblyTwo/1.2.0", "DeptAssemblyTwo", "dll", "v1.2.0")
+		}
 		Rel("MainAssembly/1.0.0", "DeptAssemblyOne/1.1.0", "", "")
 		Rel("MainAssembly/1.0.0", "DeptAssemblyTwo/1.2.0", "", "")
 		

@@ -1,4 +1,5 @@
-﻿using DryGen.MermaidFromDotnetDepsJson.Model;
+﻿using DryGen.MermaidFromDotnetDepsJson.DeptsModel;
+using DryGen.MermaidFromDotnetDepsJson.DiagramModel;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -67,7 +68,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     private static void AppendContainerBoundary(StringBuilder sb, ContainerBoundary containerBoundary)
     {
         ///Container_Boundary(alias, label) {        }
-        var shouldWriteBoundry = containerBoundary.HasMultipleChildren;
+        var shouldWriteBoundry = containerBoundary.DontSuppress || containerBoundary.HasMultipleChildren;
         if (shouldWriteBoundry)
         {
             sb.Append("Container_Boundary(\"").Append(containerBoundary.Alias).Append("\", \"").Append(containerBoundary.Label).AppendLine("\") {");
@@ -90,14 +91,15 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     private static DiagramStructure CreateDiagramStructure(Target target)
     {
         var result = new DiagramStructure(target.RuntimeDependencies[0]);
-        FillDiagramStructureElement(result, target.RuntimeDependencies, startIndex: 0);
+        FillDiagramStructureElement(result, target.RuntimeDependencies, startIndex: 0, useStandaloneDependencies: true);
         return result;
     }
 
-    private static void FillDiagramStructureElement(DiagramStructureElement diagramStructureElement, IEnumerable<Dependency> dependencies, int startIndex)
+    private static void FillDiagramStructureElement(DiagramStructureElement diagramStructureElement, IEnumerable<Dependency> dependencies, int startIndex, bool useStandaloneDependencies)
     {
         var childrenLists = new List<(string, List<Dependency>)>();
         var groups = new Dictionary<string, List<Dependency>>();
+        var standaloneDependenciesBoundry = useStandaloneDependencies ? new ContainerBoundary("Standalone dependencies", dontSuppress: true) : null;
         foreach (var dependency in dependencies)
         {
             var dotIndex = dependency.Name.Length > startIndex ? dependency.Name.IndexOf('.', startIndex) : -1;
@@ -119,64 +121,28 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         {
             if (children.Count == 1)
             {
-                diagramStructureElement.Elements.Add(new Component(children[0]));
+                var dependencyCoponent = new Component(children[0]);
+                if (dependencyCoponent.Dependency.IsMainAssembly || !useStandaloneDependencies)
+                {
+                    diagramStructureElement.Elements.Add(dependencyCoponent);
+                }
+                else
+                {
+                    standaloneDependenciesBoundry?.Elements.Add(dependencyCoponent);
+                }
                 continue;
             }
-            var containerBoundary = new ContainerBoundary(groupName);
+            var containerBoundary = new ContainerBoundary(groupName, dontSuppress: false);
             var groupStartIndex = groupName.Length + 1;
-            FillDiagramStructureElement(containerBoundary, children, groupStartIndex);
+            FillDiagramStructureElement(containerBoundary, children, groupStartIndex, useStandaloneDependencies: false);
             diagramStructureElement.Elements.Add(containerBoundary);
         }
-    }
-
-    private abstract class DiagramElement
-    {
-    }
-
-    private abstract class DiagramStructureElement : DiagramElement
-    {
-        protected DiagramStructureElement()
+        if (standaloneDependenciesBoundry?.Elements.Any() == true)
         {
-            Elements = new List<DiagramElement>();
+            diagramStructureElement.Elements.Add(standaloneDependenciesBoundry);
         }
-
-        public IList<DiagramElement> Elements { get; set; }
-
-        public bool HasMultipleChildren =>
-            (Elements.Count(x => x is Component) > 1) ||
-            ((Elements.Count(x => x is Component) == 1) && (Elements.Count() > 1))
-            ;
     }
 
-    private sealed class DiagramStructure : DiagramStructureElement
-    {
-        public DiagramStructure(Dependency mainAssembly)
-        {
-            MainAssembly = mainAssembly;
-        }
-        public Dependency MainAssembly { get; }
-    }
-
-    private sealed class ContainerBoundary : DiagramStructureElement
-    {
-        public ContainerBoundary(string name)
-        {
-            Alias = name;
-            Label = name;
-        }
-        public string Alias { get; }
-        public string Label { get; }
-    }
-
-    private sealed class Component : DiagramStructureElement
-    {
-        public Component(Dependency dependency)
-        {
-            Dependency = dependency;
-        }
-
-        public Dependency Dependency { get; }
-    }
 
     [ExcludeFromCodeCoverage] // Just a guard that we don't bother to test
     private static void CheckForNull(JObject depsJson)

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DryGen.MermaidFromDotnetDepsJson.Model;
+namespace DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 
 internal abstract class BaseModelElement
 {
