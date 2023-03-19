@@ -14,9 +14,12 @@ The verb 'mermaid-c4container-diagram-from-dotnet-deps-json' uses the following 
 
 |Option|Alias|Type|Description|
 |---|---|---|---|
+|--boundaries-level||all / none|What kind of 'container boundaries' should be included in the diagram based on the assembly names? (Default: all)|
+|--exclude-version||true/false|Should version information be excluded from the diagram? (Default: false)|
 |--input-file|-i|string|Full path to the input file to generate a new representation for.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+|--relations-level||all / none|What types of dependencies should be included as relations in the diagram? (Default: all)|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 
 {% include notification.html status="is-dark" 
@@ -30,8 +33,11 @@ Here is a template for an options file for 'mermaid-c4container-diagram-from-dot
 #
 # dry-gen options for verb 'mermaid-c4container-diagram-from-dotnet-deps-json'
 #
+#boundaries-level: all | none
+#exclude-version: true|false
 #input-file: string
 #output-file: string
+#relations-level: all | none
 #replace-token-in-output-file: string
 ```
 {% include notification.html status="is-dark" 

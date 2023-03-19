@@ -3,6 +3,7 @@
 namespace DryGen.MermaidFromDotnetDepsJson;
 
 public interface IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions : IInputFileOptions {
-    RelationsLevel RelationsLevel { get; set; }
-    BoundariesLevel BoundariesLevel { get; set; }
+    RelationsLevel? RelationsLevel { get; }
+    BoundariesLevel? BoundariesLevel { get; }
+    bool? ExcludeVersion { get; }
 }

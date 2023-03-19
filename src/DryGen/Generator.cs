@@ -201,11 +201,10 @@ public class Generator
     {
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid C4 component diagram", options =>
         {
-            var generator = new MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator();
-            return generator.Generate(options).Result;
+            var generator = new MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(options);
+            return generator.Generate(options.InputFile).Result;
         });
     }
-
 
     private int GenerateCSharpFromJsonSchema(CSharpFromJsonSchemaOptions options, string[] args)
     {

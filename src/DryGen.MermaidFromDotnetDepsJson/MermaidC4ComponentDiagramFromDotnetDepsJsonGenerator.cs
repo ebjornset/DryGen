@@ -12,11 +12,22 @@ namespace DryGen.MermaidFromDotnetDepsJson;
 
 public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
 {
-    public async Task<string> Generate(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
+    private readonly RelationsLevel relationsLevel;
+    private readonly BoundariesLevel boundariesLevel;
+    private readonly bool excludeVersion;
+
+    public MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
     {
-        var target = await LoadValidTargetJson(options.InputFile);
+        relationsLevel = options.RelationsLevel ?? default;
+        boundariesLevel = options.BoundariesLevel ?? default;
+        excludeVersion = options.ExcludeVersion ?? default;
+    }
+
+    public async Task<string> Generate(string? inputFile)
+    {
+        var target = await LoadValidTargetJson(inputFile);
         var diagramStructure = CreateDiagramStructure(target);
-        return GenerateDiagram(options, target, diagramStructure);
+        return GenerateDiagram(target, diagramStructure);
     }
 
     private async Task<Target> LoadValidTargetJson(string? inputFile)
@@ -28,13 +39,13 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         return target;
     }
 
-    private static string GenerateDiagram(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options, Target target, DiagramStructure diagramStructure)
+    private string GenerateDiagram(Target target, DiagramStructure diagramStructure)
     {
         var sb = new StringBuilder().AppendLine("C4Component");
         sb.Append("title Component diagram for ").Append(diagramStructure.MainAssembly.Name).Append(" v").Append(diagramStructure.MainAssembly.Version)
             .Append(" running on ").Append(target.Name).Append(' ').AppendLine(target.Version);
-        AppendDiagramStructureElement(sb, diagramStructure, options);
-        if (options.RelationsLevel == RelationsLevel.All)
+        AppendDiagramStructureElement(sb, diagramStructure);
+        if (relationsLevel == RelationsLevel.All)
         {
             AppendRels(sb, target);
         }
@@ -53,13 +64,13 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         }
     }
 
-    private static void AppendDiagramStructureElement(StringBuilder sb, DiagramStructureElement diagramStructureElement, IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
+    private void AppendDiagramStructureElement(StringBuilder sb, DiagramStructureElement diagramStructureElement)
     {
         foreach (var element in diagramStructureElement.Elements)
         {
             if (element is ContainerBoundary containerBoundary)
             {
-                AppendContainerBoundary(sb, containerBoundary, options);
+                AppendContainerBoundary(sb, containerBoundary);
             }
             else if (element is Component component)
             {
@@ -68,27 +79,31 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         }
     }
 
-    private static void AppendContainerBoundary(StringBuilder sb, ContainerBoundary containerBoundary, IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
+    private void AppendContainerBoundary(StringBuilder sb, ContainerBoundary containerBoundary)
     {
         ///Container_Boundary(alias, label) {        }
-        var shouldWriteBoundry = options.BoundariesLevel == BoundariesLevel.All && (containerBoundary.DontSuppress || containerBoundary.HasMultipleChildren);
+        var shouldWriteBoundry = boundariesLevel == BoundariesLevel.All && (containerBoundary.DontSuppress || containerBoundary.HasMultipleChildren);
         if (shouldWriteBoundry)
         {
             sb.Append("Container_Boundary(\"").Append(containerBoundary.Alias).Append("\", \"").Append(containerBoundary.Label).AppendLine("\") {");
         }
-        AppendDiagramStructureElement(sb, containerBoundary, options);
+        AppendDiagramStructureElement(sb, containerBoundary);
         if (shouldWriteBoundry)
         {
             sb.AppendLine("}");
         }
     }
 
-    private static void AppendComponent(StringBuilder sb, Component component)
+    private void AppendComponent(StringBuilder sb, Component component)
     {
         var dependency = component.Dependency;
         // Component(alias, label, ?techn, ?descr, ?sprite, ?tags, ?link)
-        sb.Append("Component(\"").Append(dependency.Id).Append("\", \"").Append(dependency.Name).Append("\", \"")
-            .Append(dependency.Technology).Append("\", \"v").Append(dependency.Version).AppendLine("\")");
+        sb.Append("Component(\"").Append(dependency.Id).Append("\", \"").Append(dependency.Name).Append("\", \"").Append(dependency.Technology).Append("\", \"");
+        if (!excludeVersion)
+        {
+            sb.Append('v').Append(dependency.Version);
+        }
+        sb.AppendLine("\")");
     }
 
     private static DiagramStructure CreateDiagramStructure(Target target)
