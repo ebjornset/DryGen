@@ -7,21 +7,21 @@ namespace DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 
 internal class Target : BaseModelElement
 {
-    public Target(JObject targetObject, string id) : base(id, delimiter: ",Version=")
+    public Target(JObject targetObject, string id, bool findTechnology) : base(id, delimiter: ",Version=")
     {
-        RuntimeDependencies = LoadDependencies(targetObject);
+        RuntimeDependencies = LoadDependencies(targetObject, findTechnology);
         BindDependencies();
     }
 
     public IReadOnlyList<Dependency> RuntimeDependencies { get; private set; }
 
-    internal static Target Load(JObject depsObject)
+    internal static Target Load(JObject depsObject, bool findTechnologies)
     {
         var (targetObject, id) = GetTargetsObjectPropertyObject(depsObject);
-        return new Target(targetObject, id);
+        return new Target(targetObject, id, findTechnologies);
     }
 
-    private IReadOnlyList<Dependency> LoadDependencies(JObject targetObject)
+    private IReadOnlyList<Dependency> LoadDependencies(JObject targetObject, bool findTechnology)
     {
         var targetProperties = targetObject.Properties();
         var runtimeDependencies = new List<Dependency>();
@@ -37,7 +37,7 @@ internal class Target : BaseModelElement
             {
                 continue;
             }
-            var dependency = new Dependency(targetProperty, isMainAssembly);
+            var dependency = new Dependency(targetProperty, isMainAssembly, findTechnology);
             runtimeDependencies.Add(dependency);
             isMainAssembly = false;
         }

@@ -44,13 +44,30 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         var depsJsonText = await File.ReadAllTextAsync(inputFile);
         var depsJson = JObject.Parse(depsJsonText);
         CheckForNull(depsJson);
-        var target = Target.Load(depsJson);
+        var target = Target.Load(depsJson, findTechnologies: !excludeTechn);
         return target;
     }
 
     private string GenerateDiagram(Target target, DiagramStructure diagramStructure)
     {
         var sb = new StringBuilder().AppendLine("C4Component");
+        AppendTitle(target, diagramStructure, sb);
+        AppendDiagramStructureElement(sb, diagramStructure);
+        AppendRels(sb, diagramStructure, target);
+        AppendUpdateLayoutConfig(sb);
+        return sb.ToString();
+    }
+
+    private void AppendUpdateLayoutConfig(StringBuilder sb)
+    {
+        if (shapeInRow.HasValue || boundaryInRow.HasValue)
+        {
+            sb.Append("UpdateLayoutConfig($c4ShapeInRow = \"").Append(shapeInRow ?? 4).Append("\", $c4BoundaryInRow = \"").Append(boundaryInRow ?? 2).AppendLine("\")");
+        }
+    }
+
+    private void AppendTitle(Target target, DiagramStructure diagramStructure, StringBuilder sb)
+    {
         if (string.IsNullOrEmpty(title))
         {
             sb.Append("title Component diagram for ").Append(diagramStructure.MainAssembly.Name).Append(" v").Append(diagramStructure.MainAssembly.Version)
@@ -60,13 +77,6 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         {
             sb.Append("title ").AppendLine(title);
         }
-        AppendDiagramStructureElement(sb, diagramStructure);
-        AppendRels(sb, diagramStructure, target);
-        if (shapeInRow.HasValue || boundaryInRow.HasValue)
-        {
-            sb.Append("UpdateLayoutConfig($c4ShapeInRow = \"").Append(shapeInRow ?? 4).Append("\", $c4BoundaryInRow = \"").Append(boundaryInRow ?? 2).AppendLine("\")");
-        }
-        return sb.ToString();
     }
 
     private void AppendRels(StringBuilder sb, DiagramStructure diagramStructure, Target target)

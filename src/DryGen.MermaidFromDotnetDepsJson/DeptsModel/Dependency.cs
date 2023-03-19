@@ -7,10 +7,10 @@ namespace DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 
 internal class Dependency : BaseModelElement
 {
-    public Dependency(JProperty depdendencyProperty, bool isMainAssembly) : base(depdendencyProperty.Name)
+    public Dependency(JProperty depdendencyProperty, bool isMainAssembly, bool findTechnology) : base(depdendencyProperty.Name)
     {
         RuntimeDependencyRefs = LoadDependencyRefs(depdendencyProperty);
-        Technology = FindTechnology(depdendencyProperty);
+        Technology = findTechnology ? FindTechnology(depdendencyProperty) : string.Empty;
         IsMainAssembly = isMainAssembly;
     }
 

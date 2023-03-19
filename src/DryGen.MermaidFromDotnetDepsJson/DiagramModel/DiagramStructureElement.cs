@@ -14,6 +14,5 @@ internal abstract class DiagramStructureElement : DiagramElement
 
     internal bool HasMultipleChildren =>
         Elements.Count(x => x is Component) > 1 ||
-        Elements.Count(x => x is Component) == 1 && Elements.Count() > 1
-        ;
+        Elements.Count(x => x is Component) == 1 && Elements.Count() > 1;
 }

@@ -8,6 +8,5 @@ internal class Component : DiagramStructureElement
     {
         Dependency = dependency;
     }
-
     internal Dependency Dependency { get; }
 }
