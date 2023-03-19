@@ -79,6 +79,9 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
             case RelationLevel.InterBoundary:
                 AppendInterBoundaryRels(sb, diagramStructure);
                 break;
+            case RelationLevel.IntraBoundary:
+                AppendIntraBoundaryRels(sb, diagramStructure);
+                break;
             case RelationLevel.None:
             default:
                 break;
@@ -98,17 +101,37 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
 
     private static void AppendInterBoundaryRels(StringBuilder sb, DiagramStructure diagramStructure)
     {
+        AppendBoundryFilteredRels(sb, diagramStructure, IsInterBoundary);
+    }
+
+    private static void AppendIntraBoundaryRels(StringBuilder sb, DiagramStructure diagramStructure)
+    {
+        AppendBoundryFilteredRels(sb, diagramStructure, IsIntraBoundary);
+    }
+
+    private static void AppendBoundryFilteredRels(StringBuilder sb, DiagramStructure diagramStructure, Func<DependencyRef, List<Dependency>, bool> filter)
+    {
         var sameBoundaryDependencies = BuildBoundaryDependencyLists(diagramStructure);
         foreach (var boundaryDependencies in sameBoundaryDependencies)
         {
             foreach (var fromDependency in boundaryDependencies)
             {
-                foreach (var toDependency in fromDependency.RuntimeDependencyRefs.Where(x => boundaryDependencies.All(y => y != x.Dependency)).Select(x => x.Dependency))
+                foreach (var toDependency in fromDependency.RuntimeDependencyRefs.Where(x => filter(x, boundaryDependencies)).Select(x => x.Dependency))
                 {
                     AppendRel(sb, fromDependency, toDependency);
                 }
             }
         }
+    }
+
+    private static bool IsInterBoundary(DependencyRef dependencyRef, List<Dependency> boundaryDependencies)
+    {
+        return boundaryDependencies.All(y => y != dependencyRef.Dependency);
+    }
+
+    private static bool IsIntraBoundary(DependencyRef dependencyRef, List<Dependency> boundaryDependencies)
+    {
+        return boundaryDependencies.Any(y => y == dependencyRef.Dependency);
     }
 
     private static void AppendRel(StringBuilder sb, Dependency fromDependency, Dependency? toDependency)
