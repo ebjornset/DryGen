@@ -3,14 +3,14 @@ using System.Linq;
 
 namespace DryGen.MermaidFromDotnetDepsJson.DiagramModel;
 
-internal abstract class DiagramStructureElement : DiagramElement
+internal abstract class DiagramStructureElement : IDiagramElement
 {
     protected DiagramStructureElement()
     {
-        Elements = new List<DiagramElement>();
+        Elements = new List<IDiagramElement>();
     }
 
-    internal IList<DiagramElement> Elements { get; set; }
+    internal IList<IDiagramElement> Elements { get; set; }
 
     internal bool HasMultipleChildren =>
         Elements.Count(x => x is Component) > 1 ||
