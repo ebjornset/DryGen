@@ -281,23 +281,16 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         var childrenLists = new List<(string, List<Dependency>)>();
         var groups = new Dictionary<string, List<Dependency>>();
         var standaloneDependenciesBoundry = useStandaloneDependencies ? new ContainerBoundary("Standalone dependencies", dontSuppress: true) : null;
-        foreach (var dependency in dependencies)
+        BuildGroups(dependencies, startIndex, childrenLists, groups);
+        CreateDiagramElements(diagramStructureElement, useStandaloneDependencies, childrenLists, standaloneDependenciesBoundry);
+        if (standaloneDependenciesBoundry?.Elements.Any() == true)
         {
-            var dotIndex = dependency.Name.Length > startIndex ? dependency.Name.IndexOf('.', startIndex) : -1;
-            var groupName = dotIndex > startIndex ? dependency.Name[..dotIndex] : dependency.Name;
-            List<Dependency> groupList;
-            if (groups.ContainsKey(groupName))
-            {
-                groupList = groups[groupName];
-            }
-            else
-            {
-                groupList = new List<Dependency>();
-                childrenLists.Add((groupName, groupList));
-                groups.Add(groupName, groupList);
-            }
-            groupList.Add(dependency);
+            diagramStructureElement.Elements.Add(standaloneDependenciesBoundry);
         }
+    }
+
+    private static void CreateDiagramElements(DiagramStructureElement diagramStructureElement, bool useStandaloneDependencies, List<(string, List<Dependency>)> childrenLists, ContainerBoundary? standaloneDependenciesBoundry)
+    {
         foreach (var (groupName, children) in childrenLists)
         {
             if (children.Count == 1)
@@ -318,9 +311,26 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
             FillDiagramStructureElementWithRealBoundaries(containerBoundary, children, groupStartIndex, useStandaloneDependencies: false);
             diagramStructureElement.Elements.Add(containerBoundary);
         }
-        if (standaloneDependenciesBoundry?.Elements.Any() == true)
+    }
+
+    private static void BuildGroups(IEnumerable<Dependency> dependencies, int startIndex, List<(string, List<Dependency>)> childrenLists, Dictionary<string, List<Dependency>> groups)
+    {
+        foreach (var dependency in dependencies)
         {
-            diagramStructureElement.Elements.Add(standaloneDependenciesBoundry);
+            var dotIndex = dependency.Name.Length > startIndex ? dependency.Name.IndexOf('.', startIndex) : -1;
+            var groupName = dotIndex > startIndex ? dependency.Name[..dotIndex] : dependency.Name;
+            List<Dependency> groupList;
+            if (groups.ContainsKey(groupName))
+            {
+                groupList = groups[groupName];
+            }
+            else
+            {
+                groupList = new List<Dependency>();
+                childrenLists.Add((groupName, groupList));
+                groups.Add(groupName, groupList);
+            }
+            groupList.Add(dependency);
         }
     }
 
