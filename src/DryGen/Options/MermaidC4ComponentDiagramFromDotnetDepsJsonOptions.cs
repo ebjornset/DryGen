@@ -20,4 +20,8 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : BaseOptions, I
     [YamlMember(Alias = "exclude-version", ApplyNamingConventions = false)]
     [Option("exclude-version", HelpText = "Should version information be excluded from the diagram? (Default: false)")]
     public bool? ExcludeVersion { get; set; }
+
+    [YamlMember(Alias = "exclude-techn", ApplyNamingConventions = false)]
+    [Option("exclude-techn", HelpText = "Should techn (technonlogy information) be excluded from the diagram? (Default: false)")]
+    public bool? ExcludeTechn { get; set; }
 }

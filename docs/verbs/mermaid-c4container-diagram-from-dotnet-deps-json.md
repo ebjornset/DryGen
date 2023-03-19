@@ -15,6 +15,7 @@ The verb 'mermaid-c4container-diagram-from-dotnet-deps-json' uses the following 
 |Option|Alias|Type|Description|
 |---|---|---|---|
 |--boundaries-level||all / none|What kind of 'container boundaries' should be included in the diagram based on the assembly names? (Default: all)|
+|--exclude-techn||true/false|Should techn (technonlogy information) be excluded from the diagram? (Default: false)|
 |--exclude-version||true/false|Should version information be excluded from the diagram? (Default: false)|
 |--input-file|-i|string|Full path to the input file to generate a new representation for.|
 |--options-file|-f|string|Read options from this file.|
@@ -34,6 +35,7 @@ Here is a template for an options file for 'mermaid-c4container-diagram-from-dot
 # dry-gen options for verb 'mermaid-c4container-diagram-from-dotnet-deps-json'
 #
 #boundaries-level: all | none
+#exclude-techn: true|false
 #exclude-version: true|false
 #input-file: string
 #output-file: string

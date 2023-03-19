@@ -147,3 +147,45 @@ Scenario: Should not include version numbers in description when '--exclude-vers
 		
 		"""
 
+Scenario: Should not include techn when '--exclude-techn' is 'true'
+	Given this .Net depts json input file
+		"""
+		{
+			"targets": {
+				".NETCoreApp,Version=v7.0": {
+					"MainAssembly/1.0.0": {
+						"runtime": {
+							"MainAssembly.dll": {}
+						}
+					},
+					"DependencyOne/1.1.0": {
+						"runtime": {
+							"lib/net7.0/DependencyOne.dll": {}
+						}
+					},
+					"DependencyTwo/1.2.0": {
+						"runtime": {
+							"lib/net6.0/DependencyTwo.dll": {}
+						}
+					}
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                                               |
+		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| --exclude-techn                                   |
+		| true                                              |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		C4Component
+		title Component diagram for MainAssembly v1.0.0 running on .NETCoreApp v7.0
+		Component("MainAssembly/1.0.0", "MainAssembly", "", "v1.0.0")
+		Container_Boundary("Standalone dependencies", "Standalone dependencies") {
+		Component("DependencyOne/1.1.0", "DependencyOne", "", "v1.1.0")
+		Component("DependencyTwo/1.2.0", "DependencyTwo", "", "v1.2.0")
+		}
+		
+		"""

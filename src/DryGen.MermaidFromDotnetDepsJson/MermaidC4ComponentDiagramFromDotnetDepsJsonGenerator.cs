@@ -15,12 +15,14 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     private readonly RelationsLevel relationsLevel;
     private readonly BoundariesLevel boundariesLevel;
     private readonly bool excludeVersion;
+    private readonly bool excludeTechn;
 
     public MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
     {
         relationsLevel = options.RelationsLevel ?? default;
         boundariesLevel = options.BoundariesLevel ?? default;
         excludeVersion = options.ExcludeVersion ?? default;
+        excludeTechn = options.ExcludeTechn ?? default;
     }
 
     public async Task<string> Generate(string? inputFile)
@@ -98,7 +100,12 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     {
         var dependency = component.Dependency;
         // Component(alias, label, ?techn, ?descr, ?sprite, ?tags, ?link)
-        sb.Append("Component(\"").Append(dependency.Id).Append("\", \"").Append(dependency.Name).Append("\", \"").Append(dependency.Technology).Append("\", \"");
+        sb.Append("Component(\"").Append(dependency.Id).Append("\", \"").Append(dependency.Name).Append("\", \"");
+        if (!excludeTechn)
+        {
+            sb.Append(dependency.Technology);
+        }
+        sb.Append("\", \"");
         if (!excludeVersion)
         {
             sb.Append('v').Append(dependency.Version);
