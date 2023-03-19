@@ -33,7 +33,7 @@ Scenario: Should use '--title'
 		
 		"""
 
-Scenario: Should not include any 'Rel' when '--relations-level' is 'none'
+Scenario: Should not include any 'Rel' when '--relation-level' is 'none'
 	Given this .Net depts json input file
 		"""
 		{
@@ -60,7 +60,7 @@ Scenario: Should not include any 'Rel' when '--relations-level' is 'none'
 	When I call the program with this command line arguments
 		| Arg                                               |
 		| mermaid-c4container-diagram-from-dotnet-deps-json |
-		| --relations-level                                 |
+		| --relation-level                                 |
 		| none                                              |
 	Then I should get exit code '0'
 	And console out should contain the text
@@ -74,7 +74,168 @@ Scenario: Should not include any 'Rel' when '--relations-level' is 'none'
 		
 		"""
 
-Scenario: Should not include any 'Container_Boundary' when '--boundaries-level' is 'none'
+Scenario: Should include 'Internal assemblies' and 'External dependencies' as 'Container_Boundary' when '--boundary-level' is 'internalexternal'
+	Given this .Net depts json input file
+		"""
+		{
+			"targets": {
+				".NETCoreApp,Version=v7.0": {
+					"MainAssembly.Cli/1.0.0": {
+						"runtime": {
+							"MainAssembly.Cli.dll": {}
+						}
+					},
+					"MainAssembly.Core/1.0.0": {
+						"runtime": {
+							"MainAssembly.Core.dll": {}
+						}
+					},
+					"Dependency.One/1.0.0": {
+						"runtime": {
+							"Dependency.One.dll": {}
+						}
+					},
+					"Dependency.One.SubOne/1.0.0": {
+						"runtime": {
+							"Dependency.One.SubOne.dll": {}
+						}
+					},
+					"Dependency.One.SubTwo/1.0.0": {
+						"runtime": {
+							"Dependency.One.SubTwo.dll": {}
+						}
+					},
+					"Dependency.Two/1.0.0": {
+						"runtime": {
+							"Dependency.Two.dll": {}
+						}
+					}
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                                               |
+		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| --boundary-level                                |
+		| internalexternal                                  |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		C4Component
+		title Component diagram for MainAssembly.Cli v1.0.0 running on .NETCoreApp v7.0
+		Container_Boundary("Internal assemblies", "Internal assemblies") {
+		Component("MainAssembly.Cli/1.0.0", "MainAssembly.Cli", "dll", "v1.0.0")
+		Component("MainAssembly.Core/1.0.0", "MainAssembly.Core", "dll", "v1.0.0")
+		}
+		Container_Boundary("External dependencies", "External dependencies") {
+		Component("Dependency.One/1.0.0", "Dependency.One", "dll", "v1.0.0")
+		Component("Dependency.One.SubOne/1.0.0", "Dependency.One.SubOne", "dll", "v1.0.0")
+		Component("Dependency.One.SubTwo/1.0.0", "Dependency.One.SubTwo", "dll", "v1.0.0")
+		Component("Dependency.Two/1.0.0", "Dependency.Two", "dll", "v1.0.0")
+		}
+		
+		"""
+
+Scenario: Should not include 'Internal assemblies' as 'Container_Boundary' when '--boundary-level' is 'internalexternal', but we oonly have one internal assembly
+	Given this .Net depts json input file
+		"""
+		{
+			"targets": {
+				".NETCoreApp,Version=v7.0": {
+					"MainAssembly/1.0.0": {
+						"runtime": {
+							"MainAssembly.dll": {}
+						}
+					},
+					"Dependency.One/1.0.0": {
+						"runtime": {
+							"Dependency.One.dll": {}
+						}
+					},
+					"Dependency.One.SubOne/1.0.0": {
+						"runtime": {
+							"Dependency.One.SubOne.dll": {}
+						}
+					},
+					"Dependency.One.SubTwo/1.0.0": {
+						"runtime": {
+							"Dependency.One.SubTwo.dll": {}
+						}
+					},
+					"Dependency.Two/1.0.0": {
+						"runtime": {
+							"Dependency.Two.dll": {}
+						}
+					}
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                                               |
+		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| --boundary-level                                |
+		| internalexternal                                  |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		C4Component
+		title Component diagram for MainAssembly v1.0.0 running on .NETCoreApp v7.0
+		Component("MainAssembly/1.0.0", "MainAssembly", "dll", "v1.0.0")
+		Container_Boundary("External dependencies", "External dependencies") {
+		Component("Dependency.One/1.0.0", "Dependency.One", "dll", "v1.0.0")
+		Component("Dependency.One.SubOne/1.0.0", "Dependency.One.SubOne", "dll", "v1.0.0")
+		Component("Dependency.One.SubTwo/1.0.0", "Dependency.One.SubTwo", "dll", "v1.0.0")
+		Component("Dependency.Two/1.0.0", "Dependency.Two", "dll", "v1.0.0")
+		}
+		
+		"""
+
+Scenario: Should not include 'External dependencies' as 'Container_Boundary' when '--boundary-level' is 'internalexternal', but we have only one externa dependency
+	Given this .Net depts json input file
+		"""
+		{
+			"targets": {
+				".NETCoreApp,Version=v7.0": {
+					"MainAssembly.Cli/1.0.0": {
+						"runtime": {
+							"MainAssembly.Cli.dll": {}
+						}
+					},
+					"MainAssembly.Core/1.0.0": {
+						"runtime": {
+							"MainAssembly.Core.dll": {}
+						}
+					},
+					"Dependency.One/1.0.0": {
+						"runtime": {
+							"Dependency.One.dll": {}
+						}
+					}
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                                               |
+		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| --boundary-level                                |
+		| internalexternal                                  |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		C4Component
+		title Component diagram for MainAssembly.Cli v1.0.0 running on .NETCoreApp v7.0
+		Container_Boundary("Internal assemblies", "Internal assemblies") {
+		Component("MainAssembly.Cli/1.0.0", "MainAssembly.Cli", "dll", "v1.0.0")
+		Component("MainAssembly.Core/1.0.0", "MainAssembly.Core", "dll", "v1.0.0")
+		}
+		Component("Dependency.One/1.0.0", "Dependency.One", "dll", "v1.0.0")
+		
+		"""
+
+Scenario: Should not include any 'Container_Boundary' when '--boundary-level' is 'none'
 	Given this .Net depts json input file
 		"""
 		{
@@ -107,7 +268,7 @@ Scenario: Should not include any 'Container_Boundary' when '--boundaries-level' 
 	When I call the program with this command line arguments
 		| Arg                                               |
 		| mermaid-c4container-diagram-from-dotnet-deps-json |
-		| --boundaries-level                                |
+		| --boundary-level                                |
 		| none                                              |
 	Then I should get exit code '0'
 	And console out should contain the text

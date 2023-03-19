@@ -1,6 +1,6 @@
 ﻿namespace DryGen.MermaidFromDotnetDepsJson;
 
-public enum RelationsLevel
+public enum RelationLevel
 {
     All,
     None,

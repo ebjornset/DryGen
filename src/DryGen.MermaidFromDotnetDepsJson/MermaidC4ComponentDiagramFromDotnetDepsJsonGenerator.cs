@@ -1,6 +1,7 @@
 ﻿using DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 using DryGen.MermaidFromDotnetDepsJson.DiagramModel;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -12,8 +13,8 @@ namespace DryGen.MermaidFromDotnetDepsJson;
 
 public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
 {
-    private readonly RelationsLevel relationsLevel;
-    private readonly BoundariesLevel boundariesLevel;
+    private readonly RelationLevel relationsLevel;
+    private readonly BoundaryLevel boundariesLevel;
     private readonly bool excludeVersion;
     private readonly bool excludeTechn;
     private readonly string? title;
@@ -22,8 +23,8 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
 
     public MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
     {
-        relationsLevel = options.RelationsLevel ?? default;
-        boundariesLevel = options.BoundariesLevel ?? default;
+        relationsLevel = options.RelationLevel ?? default;
+        boundariesLevel = options.BoundaryLevel ?? default;
         excludeVersion = options.ExcludeVersion ?? default;
         excludeTechn = options.ExcludeTechn ?? default;
         title = options.Title;
@@ -60,7 +61,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
             sb.Append("title ").AppendLine(title);
         }
         AppendDiagramStructureElement(sb, diagramStructure);
-        if (relationsLevel == RelationsLevel.All)
+        if (relationsLevel == RelationLevel.All)
         {
             AppendRels(sb, target);
         }
@@ -101,7 +102,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     private void AppendContainerBoundary(StringBuilder sb, ContainerBoundary containerBoundary)
     {
         ///Container_Boundary(alias, label) {        }
-        var shouldWriteBoundry = boundariesLevel == BoundariesLevel.All && (containerBoundary.DontSuppress || containerBoundary.HasMultipleChildren);
+        var shouldWriteBoundry = boundariesLevel != BoundaryLevel.None && (containerBoundary.DontSuppress || containerBoundary.HasMultipleChildren);
         if (shouldWriteBoundry)
         {
             sb.Append("Container_Boundary(\"").Append(containerBoundary.Alias).Append("\", \"").Append(containerBoundary.Label).AppendLine("\") {");
@@ -130,14 +131,51 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         sb.AppendLine("\")");
     }
 
-    private static DiagramStructure CreateDiagramStructure(Target target)
+    private DiagramStructure CreateDiagramStructure(Target target)
     {
         var result = new DiagramStructure(target.RuntimeDependencies[0]);
-        FillDiagramStructureElement(result, target.RuntimeDependencies, startIndex: 0, useStandaloneDependencies: true);
+        if (boundariesLevel == BoundaryLevel.InternalExternal)
+        {
+            FillDiagramStructureElementWithInternalExternalBoundaries(result, target.RuntimeDependencies);
+        }
+        else
+        {
+            FillDiagramStructureElementWithRealBoundaries(result, target.RuntimeDependencies, startIndex: 0, useStandaloneDependencies: true);
+        }
         return result;
     }
 
-    private static void FillDiagramStructureElement(DiagramStructureElement diagramStructureElement, IEnumerable<Dependency> dependencies, int startIndex, bool useStandaloneDependencies)
+    private void FillDiagramStructureElementWithInternalExternalBoundaries(DiagramStructure result, IEnumerable<Dependency> dependencies)
+    {
+        var internalAssembliesBoundary = new ContainerBoundary("Internal assemblies", dontSuppress: false);
+        var externalDependenciesBoundary = new ContainerBoundary("External dependencies", dontSuppress: false);
+        var mainAssembly = result.MainAssembly;
+        string mainAssemblyNamePrefix;
+        var mainAssemblyPrefixLength = mainAssembly.Name.IndexOf('.');
+        if (mainAssemblyPrefixLength == -1)
+        {
+            mainAssemblyNamePrefix  = mainAssembly.Name;
+        }
+        else
+        {
+            mainAssemblyNamePrefix = mainAssembly.Name[..mainAssemblyPrefixLength];
+        }
+        foreach (var dependency in dependencies)
+        {
+            if (dependency.Name.StartsWith(mainAssemblyNamePrefix))
+            {
+                internalAssembliesBoundary.Elements.Add(new Component(dependency));
+            }
+            else
+            {
+                externalDependenciesBoundary.Elements.Add(new Component(dependency));
+            }
+        }
+        result.Elements.Add(internalAssembliesBoundary);
+        result.Elements.Add(externalDependenciesBoundary);
+    }
+
+    private static void FillDiagramStructureElementWithRealBoundaries(DiagramStructureElement diagramStructureElement, IEnumerable<Dependency> dependencies, int startIndex, bool useStandaloneDependencies)
     {
         var childrenLists = new List<(string, List<Dependency>)>();
         var groups = new Dictionary<string, List<Dependency>>();
@@ -176,7 +214,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
             }
             var containerBoundary = new ContainerBoundary(groupName, dontSuppress: false);
             var groupStartIndex = groupName.Length + 1;
-            FillDiagramStructureElement(containerBoundary, children, groupStartIndex, useStandaloneDependencies: false);
+            FillDiagramStructureElementWithRealBoundaries(containerBoundary, children, groupStartIndex, useStandaloneDependencies: false);
             diagramStructureElement.Elements.Add(containerBoundary);
         }
         if (standaloneDependenciesBoundry?.Elements.Any() == true)

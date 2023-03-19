@@ -1,7 +1,8 @@
 ﻿namespace DryGen.MermaidFromDotnetDepsJson;
 
-public enum BoundariesLevel
+public enum BoundaryLevel
 {
     All,
+    InternalExternal,
     None,
 }
