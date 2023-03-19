@@ -16,6 +16,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     private readonly BoundariesLevel boundariesLevel;
     private readonly bool excludeVersion;
     private readonly bool excludeTechn;
+    private readonly string? title;
 
     public MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
     {
@@ -23,6 +24,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         boundariesLevel = options.BoundariesLevel ?? default;
         excludeVersion = options.ExcludeVersion ?? default;
         excludeTechn = options.ExcludeTechn ?? default;
+        title = options.Title;
     }
 
     public async Task<string> Generate(string? inputFile)
@@ -44,8 +46,15 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     private string GenerateDiagram(Target target, DiagramStructure diagramStructure)
     {
         var sb = new StringBuilder().AppendLine("C4Component");
-        sb.Append("title Component diagram for ").Append(diagramStructure.MainAssembly.Name).Append(" v").Append(diagramStructure.MainAssembly.Version)
-            .Append(" running on ").Append(target.Name).Append(' ').AppendLine(target.Version);
+        if (string.IsNullOrEmpty(title))
+        {
+            sb.Append("title Component diagram for ").Append(diagramStructure.MainAssembly.Name).Append(" v").Append(diagramStructure.MainAssembly.Version)
+                .Append(" running on ").Append(target.Name).Append(' ').AppendLine(target.Version);
+        }
+        else
+        {
+            sb.Append("title ").AppendLine(title);
+        }
         AppendDiagramStructureElement(sb, diagramStructure);
         if (relationsLevel == RelationsLevel.All)
         {

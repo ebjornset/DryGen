@@ -24,4 +24,8 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : BaseOptions, I
     [YamlMember(Alias = "exclude-techn", ApplyNamingConventions = false)]
     [Option("exclude-techn", HelpText = "Should techn (technonlogy information) be excluded from the diagram? (Default: false)")]
     public bool? ExcludeTechn { get; set; }
+
+    [YamlMember(Alias = "title", ApplyNamingConventions = false)]
+    [Option("title", HelpText = "Diagram title. (Default is composed from main assembly and .Net runtime information)")]
+    public string? Title { get; set; }
 }

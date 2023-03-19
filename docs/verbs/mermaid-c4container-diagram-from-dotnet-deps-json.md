@@ -22,6 +22,7 @@ The verb 'mermaid-c4container-diagram-from-dotnet-deps-json' uses the following 
 |--output-file|-o|string|Write the generated representation to this file.|
 |--relations-level||all / none|What types of dependencies should be included as relations in the diagram? (Default: all)|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
+|--title||string|Diagram title. (Default is composed from main assembly and .Net runtime information)|
 
 {% include notification.html status="is-dark" 
 message="You can always get information about this verb's options by running the command 
@@ -41,6 +42,7 @@ Here is a template for an options file for 'mermaid-c4container-diagram-from-dot
 #output-file: string
 #relations-level: all | none
 #replace-token-in-output-file: string
+#title: string
 ```
 {% include notification.html status="is-dark" 
 message="You can generate the same template your self with the command 

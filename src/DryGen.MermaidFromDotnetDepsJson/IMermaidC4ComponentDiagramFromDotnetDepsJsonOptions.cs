@@ -7,4 +7,5 @@ public interface IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions : IInputFil
     BoundariesLevel? BoundariesLevel { get; }
     bool? ExcludeVersion { get; }
     bool? ExcludeTechn { get; }
+    string? Title { get; }
 }

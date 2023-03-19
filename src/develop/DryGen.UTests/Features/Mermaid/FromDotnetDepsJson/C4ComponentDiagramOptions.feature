@@ -4,6 +4,49 @@ To be able to control the content of the generated diagram
 As a dry-gen user
 I should be able to control how the Mermaid C4 Component diagram is generated from .Net deps.json file with options
 
+Scenario: Should use '--title'
+	Given this .Net depts json input file
+		"""
+		{
+			"targets": {
+				".NETCoreApp,Version=v7.0": {
+					"MainAssembly/1.0.0": {
+						"runtime": {
+							"MainAssembly.dll": {}
+						}
+					},
+					"DependencyOne/1.1.0": {
+						"runtime": {
+							"DependencyOne.dll": {}
+						}
+					},
+					"DependencyTwo/1.2.0": {
+						"runtime": {
+							"DependencyTwo.dll": {}
+						}
+					}
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                                               |
+		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| --title                                           |
+		| Custom title                                      |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		C4Component
+		title Custom title
+		Component("MainAssembly/1.0.0", "MainAssembly", "dll", "v1.0.0")
+		Container_Boundary("Standalone dependencies", "Standalone dependencies") {
+		Component("DependencyOne/1.1.0", "DependencyOne", "dll", "v1.1.0")
+		Component("DependencyTwo/1.2.0", "DependencyTwo", "dll", "v1.2.0")
+		}
+		
+		"""
+
 Scenario: Should not include any 'Rel' when '--relations-level' is 'none'
 	Given this .Net depts json input file
 		"""
