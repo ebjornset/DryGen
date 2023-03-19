@@ -7,6 +7,7 @@
 
 	<ItemGroup>
 	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagram - Copy.feature.cs" />
+	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagramBoundaries - Copy.feature.cs" />
 	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagramTechn - Copy.feature.cs" />
 	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\ClassDiagram.feature.cs" />
 	</ItemGroup>
@@ -31,6 +32,19 @@
 		<ProjectReference Include="..\..\DryGen\DryGen.csproj" />
 		<ProjectReference Include="..\DryGen.DevUtils\DryGen.DevUtils.csproj" />
 		<ProjectReference Include="..\DryGen.Docs\DryGen.Docs.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagramOptions.feature.cs">
+	    <DependentUpon>C4ComponentDiagramOptions.feature</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <SpecFlowFeatureFiles Update="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagramOptions.feature">
+	    <Visible>$(UsingMicrosoftNETSdk)</Visible>
+	    <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+	  </SpecFlowFeatureFiles>
 	</ItemGroup>
 
 </Project>

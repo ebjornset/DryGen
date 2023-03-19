@@ -16,7 +16,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     {
         var target = await LoadValidTargetJson(options.InputFile);
         var diagramStructure = CreateDiagramStructure(target);
-        return GenerateDiagram(target, diagramStructure);
+        return GenerateDiagram(options, target, diagramStructure);
     }
 
     private async Task<Target> LoadValidTargetJson(string? inputFile)
@@ -28,13 +28,16 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         return target;
     }
 
-    private static string GenerateDiagram(Target target, DiagramStructure diagramStructure)
+    private static string GenerateDiagram(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options, Target target, DiagramStructure diagramStructure)
     {
         var sb = new StringBuilder().AppendLine("C4Component");
         sb.Append("title Component diagram for ").Append(diagramStructure.MainAssembly.Name).Append(" v").Append(diagramStructure.MainAssembly.Version)
             .Append(" running on ").Append(target.Name).Append(' ').AppendLine(target.Version);
-        AppendDiagramStructureElement(sb, diagramStructure);
-        AppendRels(sb, target);
+        AppendDiagramStructureElement(sb, diagramStructure, options);
+        if (options.RelationsLevel == RelationsLevel.All)
+        {
+            AppendRels(sb, target);
+        }
         return sb.ToString();
     }
 
@@ -50,13 +53,13 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         }
     }
 
-    private static void AppendDiagramStructureElement(StringBuilder sb, DiagramStructureElement diagramStructureElement)
+    private static void AppendDiagramStructureElement(StringBuilder sb, DiagramStructureElement diagramStructureElement, IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
     {
         foreach (var element in diagramStructureElement.Elements)
         {
             if (element is ContainerBoundary containerBoundary)
             {
-                AppendContainerBoundary(sb, containerBoundary);
+                AppendContainerBoundary(sb, containerBoundary, options);
             }
             else if (element is Component component)
             {
@@ -65,15 +68,15 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         }
     }
 
-    private static void AppendContainerBoundary(StringBuilder sb, ContainerBoundary containerBoundary)
+    private static void AppendContainerBoundary(StringBuilder sb, ContainerBoundary containerBoundary, IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
     {
         ///Container_Boundary(alias, label) {        }
-        var shouldWriteBoundry = containerBoundary.DontSuppress || containerBoundary.HasMultipleChildren;
+        var shouldWriteBoundry = options.BoundariesLevel == BoundariesLevel.All && (containerBoundary.DontSuppress || containerBoundary.HasMultipleChildren);
         if (shouldWriteBoundry)
         {
             sb.Append("Container_Boundary(\"").Append(containerBoundary.Alias).Append("\", \"").Append(containerBoundary.Label).AppendLine("\") {");
         }
-        AppendDiagramStructureElement(sb, containerBoundary);
+        AppendDiagramStructureElement(sb, containerBoundary, options);
         if (shouldWriteBoundry)
         {
             sb.AppendLine("}");

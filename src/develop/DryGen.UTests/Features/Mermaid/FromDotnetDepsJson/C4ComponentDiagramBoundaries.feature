@@ -2,7 +2,7 @@
 
 To understand the grouping of the dependencies for a .Net assembly
 As a dry-gen user
-I should be able to generate Mermaid C4 Component diagram from .Net deps.json file with 'Container_Boundary'v information
+I should be able to generate Mermaid C4 Component diagram from .Net deps.json file with 'Container_Boundary' information
 
 Scenario: Should create container boundary for dependencies by name split by '.'
 	Given this .Net depts json input file
@@ -42,7 +42,6 @@ Scenario: Should create container boundary for dependencies by name split by '.'
 	When I call the program with this command line arguments
 		| Arg                                               |
 		| mermaid-c4container-diagram-from-dotnet-deps-json |
-		| --include-exception-stacktrace                    |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
