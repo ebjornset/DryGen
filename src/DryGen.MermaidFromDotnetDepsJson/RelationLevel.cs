@@ -3,5 +3,6 @@
 public enum RelationLevel
 {
     All,
+    InterBoundary,
     None,
 }

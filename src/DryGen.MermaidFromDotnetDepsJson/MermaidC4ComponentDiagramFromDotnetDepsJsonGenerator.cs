@@ -61,10 +61,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
             sb.Append("title ").AppendLine(title);
         }
         AppendDiagramStructureElement(sb, diagramStructure);
-        if (relationsLevel == RelationLevel.All)
-        {
-            AppendRels(sb, target);
-        }
+        AppendRels(sb, diagramStructure, target);
         if (shapeInRow.HasValue || boundaryInRow.HasValue)
         {
             sb.Append("UpdateLayoutConfig($c4ShapeInRow = \"").Append(shapeInRow ?? 4).Append("\", $c4BoundaryInRow = \"").Append(boundaryInRow ?? 2).AppendLine("\")");
@@ -72,15 +69,86 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         return sb.ToString();
     }
 
-    private static void AppendRels(StringBuilder sb, Target target)
+    private void AppendRels(StringBuilder sb, DiagramStructure diagramStructure, Target target)
+    {
+        switch (relationsLevel)
+        {
+            case RelationLevel.All:
+                AppendAllRels(sb, target);
+                break;
+            case RelationLevel.InterBoundary:
+                AppendInterBoundaryRels(sb, diagramStructure);
+                break;
+            case RelationLevel.None:
+            default:
+                break;
+        }
+    }
+
+    private static void AppendAllRels(StringBuilder sb, Target target)
     {
         foreach (var fromDependency in target.RuntimeDependencies)
         {
             foreach (var toDependency in fromDependency.RuntimeDependencyRefs.Select(x => x.Dependency))
             {
-                //Rel(from, to, label, ?techn, ?descr, ?sprite, ?tags, ?link)
-                sb.Append("Rel(\"").Append(fromDependency.Id).Append("\", \"").Append(toDependency?.Id).AppendLine("\", \"\", \"\")");
+                AppendRel(sb, fromDependency, toDependency);
             }
+        }
+    }
+
+    private static void AppendInterBoundaryRels(StringBuilder sb, DiagramStructure diagramStructure)
+    {
+        var sameBoundaryDependencies = BuildBoundaryDependencyLists(diagramStructure);
+        foreach (var boundaryDependencies in sameBoundaryDependencies)
+        {
+            foreach (var fromDependency in boundaryDependencies)
+            {
+                foreach (var toDependency in fromDependency.RuntimeDependencyRefs.Where(x => boundaryDependencies.All(y => y != x.Dependency)).Select(x => x.Dependency))
+                {
+                    AppendRel(sb, fromDependency, toDependency);
+                }
+            }
+        }
+    }
+
+    private static void AppendRel(StringBuilder sb, Dependency fromDependency, Dependency? toDependency)
+    {
+        //Rel(from, to, label, ?techn, ?descr, ?sprite, ?tags, ?link)
+        sb.Append("Rel(\"").Append(fromDependency.Id).Append("\", \"").Append(toDependency?.Id).AppendLine("\", \"\", \"\")");
+    }
+
+    private static List<List<Dependency>> BuildBoundaryDependencyLists(DiagramStructure diagramStructure)
+    {
+        var result = new List<List<Dependency>>();
+        var unboundariedDependencies = new List<Dependency>();
+        foreach (var diagramElement in diagramStructure.Elements)
+        {
+            if (diagramElement is Component ungroupedComponent)
+            {
+                unboundariedDependencies.Add(ungroupedComponent.Dependency);
+                continue;
+            }
+            var boundaryDependencies = new List<Dependency>();
+            GetAllBoundaryDependencies(boundaryDependencies, (ContainerBoundary)diagramElement);
+            result.Add(boundaryDependencies);
+        }
+        if (unboundariedDependencies.Any())
+        {
+            result.Insert(0, unboundariedDependencies);
+        }
+        return result;
+    }
+
+    private static void GetAllBoundaryDependencies(List<Dependency> boundaryDependencies, ContainerBoundary containerBoundary)
+    {
+        foreach (var diagramElement in containerBoundary.Elements)
+        {
+            if (diagramElement is Component ungroupedComponent)
+            {
+                boundaryDependencies.Add(ungroupedComponent.Dependency);
+                continue;
+            }
+            GetAllBoundaryDependencies(boundaryDependencies, (ContainerBoundary)diagramElement);
         }
     }
 
@@ -154,7 +222,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         var mainAssemblyPrefixLength = mainAssembly.Name.IndexOf('.');
         if (mainAssemblyPrefixLength == -1)
         {
-            mainAssemblyNamePrefix  = mainAssembly.Name;
+            mainAssemblyNamePrefix = mainAssembly.Name;
         }
         else
         {
@@ -222,7 +290,6 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
             diagramStructureElement.Elements.Add(standaloneDependenciesBoundry);
         }
     }
-
 
     [ExcludeFromCodeCoverage] // Just a guard that we don't bother to test
     private static void CheckForNull(JObject depsJson)
