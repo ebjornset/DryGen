@@ -28,4 +28,12 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : BaseOptions, I
     [YamlMember(Alias = "title", ApplyNamingConventions = false)]
     [Option("title", HelpText = "Diagram title. (Default is composed from main assembly and .Net runtime information)")]
     public string? Title { get; set; }
+
+    [YamlMember(Alias = "shape-in-row", ApplyNamingConventions = false)]
+    [Option("shape-in-row", HelpText = "Value for the parameter $c4ShapeInRow in UpdateLayoutConfig, used to arrange the diagram layout. (Default: 4)")]
+    public int? ShapeInRow { get; set; }
+
+    [YamlMember(Alias = "boundary-in-row", ApplyNamingConventions = false)]
+    [Option("boundary-in-row", HelpText = "Value for the parameter $c4BoundaryInRow in UpdateLayoutConfig, used to arrange the diagram layout. (Default: 2)")]
+    public int? BoundaryInRow { get; set; }
 }

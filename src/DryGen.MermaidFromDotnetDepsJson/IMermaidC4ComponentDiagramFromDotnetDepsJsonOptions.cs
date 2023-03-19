@@ -8,4 +8,6 @@ public interface IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions : IInputFil
     bool? ExcludeVersion { get; }
     bool? ExcludeTechn { get; }
     string? Title { get; }
+    int? ShapeInRow { get; }
+    int? BoundaryInRow { get; }
 }

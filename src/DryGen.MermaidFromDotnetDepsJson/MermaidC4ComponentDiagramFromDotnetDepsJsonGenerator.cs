@@ -17,6 +17,8 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     private readonly bool excludeVersion;
     private readonly bool excludeTechn;
     private readonly string? title;
+    private readonly int? shapeInRow;
+    private readonly int? boundaryInRow;
 
     public MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
     {
@@ -25,6 +27,8 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         excludeVersion = options.ExcludeVersion ?? default;
         excludeTechn = options.ExcludeTechn ?? default;
         title = options.Title;
+        shapeInRow = options.ShapeInRow;
+        boundaryInRow = options.BoundaryInRow;
     }
 
     public async Task<string> Generate(string? inputFile)
@@ -59,6 +63,10 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         if (relationsLevel == RelationsLevel.All)
         {
             AppendRels(sb, target);
+        }
+        if (shapeInRow.HasValue || boundaryInRow.HasValue)
+        {
+            sb.Append("UpdateLayoutConfig($c4ShapeInRow = \"").Append(shapeInRow ?? 4).Append("\", $c4BoundaryInRow = \"").Append(boundaryInRow ?? 2).AppendLine("\")");
         }
         return sb.ToString();
     }

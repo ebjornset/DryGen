@@ -15,6 +15,7 @@ The verb 'mermaid-c4container-diagram-from-dotnet-deps-json' uses the following 
 |Option|Alias|Type|Description|
 |---|---|---|---|
 |--boundaries-level||all / none|What kind of 'container boundaries' should be included in the diagram based on the assembly names? (Default: all)|
+|--boundary-in-row||int32|Value for the parameter $c4BoundaryInRow in UpdateLayoutConfig, used to arrange the diagram layout. (Default: 2)|
 |--exclude-techn||true/false|Should techn (technonlogy information) be excluded from the diagram? (Default: false)|
 |--exclude-version||true/false|Should version information be excluded from the diagram? (Default: false)|
 |--input-file|-i|string|Full path to the input file to generate a new representation for.|
@@ -22,6 +23,7 @@ The verb 'mermaid-c4container-diagram-from-dotnet-deps-json' uses the following 
 |--output-file|-o|string|Write the generated representation to this file.|
 |--relations-level||all / none|What types of dependencies should be included as relations in the diagram? (Default: all)|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
+|--shape-in-row||int32|Value for the parameter $c4ShapeInRow in UpdateLayoutConfig, used to arrange the diagram layout. (Default: 4)|
 |--title||string|Diagram title. (Default is composed from main assembly and .Net runtime information)|
 
 {% include notification.html status="is-dark" 
@@ -36,12 +38,14 @@ Here is a template for an options file for 'mermaid-c4container-diagram-from-dot
 # dry-gen options for verb 'mermaid-c4container-diagram-from-dotnet-deps-json'
 #
 #boundaries-level: all | none
+#boundary-in-row: int32
 #exclude-techn: true|false
 #exclude-version: true|false
 #input-file: string
 #output-file: string
 #relations-level: all | none
 #replace-token-in-output-file: string
+#shape-in-row: int32
 #title: string
 ```
 {% include notification.html status="is-dark" 
