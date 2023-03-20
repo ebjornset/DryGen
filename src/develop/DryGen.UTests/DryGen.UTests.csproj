@@ -6,13 +6,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagram - Copy.feature.cs" />
-	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagramBoundaries - Copy.feature.cs" />
-	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\C4ComponentDiagramTechn - Copy.feature.cs" />
-	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Mermaid\FromDotnetDepsJson\ClassDiagram.feature.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="FluentAssertions" Version="6.10.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
 		<PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
