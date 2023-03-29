@@ -109,6 +109,7 @@ public partial class Build : NukeBuild
 
     internal Target UTests => _ => _
         .DependsOn(Compile)
+        .Produces("TestResults/**/*")
         .Executes(() =>
         {
             DotNetTest(c => c
@@ -116,8 +117,8 @@ public partial class Build : NukeBuild
                 .EnableNoBuild()
                 .SetDataCollector("XPlat Code Coverage")
                 .SetBlameHang(true)
-                .SetBlameHangTimeout("120sec")
-                .SetBlameHangDumpType("full")
+                .SetBlameHangTimeout("30sec")
+                .SetBlameHangDumpType("mini")
                 .CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
                     settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
         });
