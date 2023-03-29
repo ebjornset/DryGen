@@ -26,14 +26,9 @@ public class InputFileContext : IDisposable
     {
         if (string.IsNullOrWhiteSpace(extension))
         {
-            throw new ArgumentNullException(nameof(content));
+            throw new ArgumentNullException(nameof(extension));
         }
-        string tmpInputFileName;
-        do
-        {
-            tmpInputFileName = Path.Combine(Path.GetTempPath(), $"dry-gen-test-{Guid.NewGuid()}.{extension}");
-        }
-        while (File.Exists(tmpInputFileName));
+        var tmpInputFileName = Path.Combine(Path.GetTempPath(), $"dry-gen-test-{Guid.NewGuid()}.{extension}");
         if (!string.IsNullOrEmpty(content))
         {
             File.WriteAllText(tmpInputFileName, content);
