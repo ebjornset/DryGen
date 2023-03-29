@@ -14,7 +14,7 @@ public class GhPagesGitHubActionsAttribute : DotNetGitHubActionsAttribute
     protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
         var job = base.GetJobs(image, relevantTargets);
-        job = GhPagesGitHubActionsJobSetup.ConfigureJob(job, rubyStepOffset: 2,jekyllStepOffset: 0);
+        job = GhPagesGitHubActionsJobSetup.ConfigureJob(job, rubyStepOffset: 2,jekyllStepOffset: 0, prepareDocsForDeploymentStepOffset: 0);
         job = FailOnGitChangesGitHubActionsJobSetup.ConfigureJob(job, stepsOffset: 1);
         return job;
     }

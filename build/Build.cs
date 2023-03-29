@@ -109,7 +109,6 @@ public partial class Build : NukeBuild
 
     internal Target UTests => _ => _
         .DependsOn(Compile)
-        .Produces("TestResults/**/*")
         .Executes(() =>
         {
             DotNetTest(c => c

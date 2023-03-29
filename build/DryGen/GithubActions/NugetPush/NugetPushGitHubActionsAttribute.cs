@@ -14,9 +14,9 @@ public class NugetPushGitHubActionsAttribute : SonarCloudGitHubActionsAttribute
     protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
         var job = base.GetJobs(image, relevantTargets);
-        job = GhPagesGitHubActionsJobSetup.ConfigureJob(job, rubyStepOffset: 9, jekyllStepOffset: 6);
+        job = GhPagesGitHubActionsJobSetup.ConfigureJob(job, rubyStepOffset: 10, jekyllStepOffset: 7, prepareDocsForDeploymentStepOffset: 1);
         var newSteps = new List<GitHubActionsStep>(job.Steps);
-        newSteps.Insert(newSteps.Count - 1, new GitHubActionsNugetPushStep());
+        newSteps.Insert(newSteps.Count - 2, new GitHubActionsNugetPushStep());
         job.Steps = newSteps.ToArray();
         return job;
     }
