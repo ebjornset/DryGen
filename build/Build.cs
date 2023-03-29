@@ -115,6 +115,7 @@ public partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
                 .SetDataCollector("XPlat Code Coverage")
+                .SetBlameHang(true)
                 .SetBlameHangTimeout("120sec")
                 .SetBlameCrashDumpType("mini")
                 .CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
