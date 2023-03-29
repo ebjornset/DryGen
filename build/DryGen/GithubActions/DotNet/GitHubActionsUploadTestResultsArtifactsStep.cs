@@ -17,7 +17,7 @@ public class GitHubActionsUploadTestResultsArtifactsStep : GitHubActionsStep
             {
                 writer.WriteLine($"name: TestResults");
                 writer.WriteLine($"retention-days: 30");
-                writer.WriteLine($"path: TestResults/**/*");
+                writer.WriteLine($"path: **/TestResults/**/*");
             }
         }
     }

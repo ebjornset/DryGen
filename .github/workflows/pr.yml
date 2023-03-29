@@ -89,4 +89,4 @@ jobs:
         with:
           name: TestResults
           retention-days: 30
-          path: TestResults/**/*
+          path: **/TestResults/**/*
