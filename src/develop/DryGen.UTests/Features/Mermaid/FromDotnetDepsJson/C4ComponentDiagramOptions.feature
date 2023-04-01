@@ -41,7 +41,7 @@ Scenario: Should only include 'Rel' between dependencies in different 'Countaine
 				".NETCoreApp,Version=v7.0": {
 					"MainAssembly/1.0.0": {
 						"dependencies": {
-							"Dependency.One.SubOne": "1.0.0",
+							"Dependency.One.SubOne": "1.0.0"
 						},
 						"runtime": {
 							"MainAssembly.dll": {}
@@ -50,7 +50,7 @@ Scenario: Should only include 'Rel' between dependencies in different 'Countaine
 					"Dependency.One/1.0.0": {
 						"dependencies": {
 							"Dependency.One.SubOne": "1.0.0",
-							"Dependency.One.SubTwo": "1.0.0",
+							"Dependency.One.SubTwo": "1.0.0"
 						},
 						"runtime": {
 							"Dependency.One.dll": {}
@@ -59,7 +59,7 @@ Scenario: Should only include 'Rel' between dependencies in different 'Countaine
 					"Dependency.One.SubOne/1.0.0": {
 						"dependencies": {
 							"Dependency.One.SubOne.SubSubOne": "1.0.0",
-							"Dependency.One.SubOne.SubSubTwo": "1.0.0",
+							"Dependency.One.SubOne.SubSubTwo": "1.0.0"
 						},
 						"runtime": {
 							"Dependency.One.SubOne.dll": {}
@@ -119,7 +119,7 @@ Scenario: Should only include 'Rel' between dependencies in same 'Countainer Bou
 				".NETCoreApp,Version=v7.0": {
 					"MainAssembly/1.0.0": {
 						"dependencies": {
-							"Dependency.One.SubOne": "1.0.0",
+							"Dependency.One.SubOne": "1.0.0"
 						},
 						"runtime": {
 							"MainAssembly.dll": {}
@@ -127,7 +127,7 @@ Scenario: Should only include 'Rel' between dependencies in same 'Countainer Bou
 					},
 					"Dependency.One/1.0.0": {
 						"dependencies": {
-							"Dependency.One.SubOne": "1.0.0",
+							"Dependency.One.SubOne": "1.0.0"
 						},
 						"runtime": {
 							"Dependency.One.dll": {}
@@ -194,7 +194,7 @@ Scenario: Should not include any 'Rel' when '--relation-level' is 'none'
 					"MainAssembly/1.0.0": {
 						"dependencies": {
 							"DependencyOne": "1.1.0",
-							"DependencyTwo": "1.2.0",
+							"DependencyTwo": "1.2.0"
 						},
 						"runtime": {
 							"MainAssembly.dll": {}

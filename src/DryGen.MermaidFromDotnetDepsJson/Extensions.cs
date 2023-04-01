@@ -1,6 +1,7 @@
 ﻿using DryGen.Core;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text.Json.Nodes;
 
 namespace DryGen.MermaidFromDotnetDepsJson;
 
@@ -10,98 +11,51 @@ internal static class Extensions
 
     internal static InvalidContentException ToInvalidContentException(this string message) => new(message.ToInvalidDepsJsonMessage());
 
-    internal static JObject GetPropertyObject(this JProperty property)
+    internal static JsonObject GetPropertyObject(this JsonObject jsonObject, string propertyName)
     {
-        property.CheckForOneChild();
-        var objectFirst = property.GetValidFirstChild();
-        objectFirst.CheckTypeIsJObject();
-        var propertyObject = (JObject)objectFirst;
-        return propertyObject;
+        jsonObject.TryGetPropertyObject(propertyName, out var propertyObject);
+        return propertyObject.CheckForNull();
     }
 
-    internal static JObject GetPropertyObject(this JObject jObject, string propertyName)
+    internal static string GetFirstPropertyName(this JsonObject jsonObject)
     {
-        var property = jObject.Property(propertyName);
-        property?.CheckForOneChild();
-        var propertyFirst = property.GetValidFirstChild();
-        propertyFirst.CheckTypeIsJObject();
-        var propertyObject = (JObject)propertyFirst;
-        return propertyObject;
+        jsonObject.CheckForChildren();
+        string name = string.Empty;
+        var enumerator = jsonObject.GetEnumerator();
+        if (enumerator.MoveNext())
+        {
+            name = enumerator.Current.Key;
+        }
+        return name;
     }
 
-    internal static JProperty GetFirstProperty(this JObject jObject)
+    internal static bool TryGetPropertyObject(this JsonObject jsonObject, string propertyName, out JsonObject? value)
     {
-        jObject.CheckForChildren();
-        var propertyFirst = jObject.GetValidFirstChild();
-        propertyFirst.CheckTypeIs(JTokenType.Property);
-        var objectFirstPropert = (JProperty)propertyFirst;
-        return objectFirstPropert;
-    }
-
-    internal static JToken GetPropertyToken(this JProperty property, JTokenType tokenType)
-    {
-        property.CheckForOneChild();
-        var objectFirst = property.GetValidFirstChild();
-        objectFirst.CheckTypeIs(tokenType);
-        return objectFirst;
-    }
-
-    internal static bool TryGetPropertyObject(this JObject jObject, string propertyName, out JObject? value)
-    {
-        var property = jObject?.Property(propertyName);
-        if (property == null)
+        if (jsonObject?.TryGetPropertyValue(propertyName, out var jsonNode) != true || jsonNode == null)
         {
             value = null;
             return false;
         }
-        property.CheckForOneChild();
-        var propertyFirst = property.GetValidFirstChild();
-        propertyFirst.CheckTypeIsJObject();
-        value = (JObject)propertyFirst;
+        value = jsonNode.AsObject();
         return true;
     }
 
     [ExcludeFromCodeCoverage] // Sanity check for unexpected structure. Havent been able to make this fail, but still there might exist such cases...
-    internal static JToken GetValidFirstChild(this JToken? token)
+    internal static void CheckForChildren(this JsonObject jsonObject)
     {
-        var toeknFirst = token?.First;
-        if (toeknFirst == null)
+        if (!jsonObject.Any())
         {
-            throw $"Could not get the content in '{token?.Path}'.".ToInvalidContentException();
-        }
-        return toeknFirst;
-    }
-
-    [ExcludeFromCodeCoverage] // Sanity check for unexpected structure. Havent been able to make this fail, but still there might exist such cases...
-    internal static void CheckTypeIsJObject(this JToken token)
-    {
-        token?.CheckTypeIs(JTokenType.Object);
-    }
-
-    [ExcludeFromCodeCoverage] // Sanity check for unexpected structure. Havent been able to make this fail, but still there might exist such cases...
-    internal static void CheckTypeIs(this JToken? token, JTokenType tokenType)
-    {
-        if (token?.Type != tokenType)
-        {
-            throw $"'{token?.Path}' is of unexpected type '{token?.Type}', expected '{tokenType}'.".ToInvalidContentException();
+            throw $"'{jsonObject.GetPath()}' has unexpected Count '{jsonObject.Count}'.".ToInvalidContentException();
         }
     }
 
-    [ExcludeFromCodeCoverage] // Sanity check for unexpected structure. Havent been able to make this fail, but still there might exist such cases...
-    internal static void CheckForOneChild(this JContainer token)
+    [ExcludeFromCodeCoverage] // Just a guard that we don't bother to test
+    internal static JsonObject CheckForNull(this JsonObject? depsJson)
     {
-        if (token.Count != 1)
+        if (depsJson == null)
         {
-            throw $"'{token.Path}' has unexpected Count '{token.Count}'.".ToInvalidContentException();
+            throw $"Could not parse deps.json.".ToInvalidContentException();
         }
-    }
-
-    [ExcludeFromCodeCoverage] // Sanity check for unexpected structure. Havent been able to make this fail, but still there might exist such cases...
-    internal static void CheckForChildren(this JContainer token)
-    {
-        if (token.Count < 1)
-        {
-            throw $"'{token.Path}' has unexpected Count '{token.Count}'.".ToInvalidContentException();
-        }
+        return depsJson;
     }
 }

@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.Json.Nodes;
 
 namespace DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 
 internal class Target : BaseModelElement
 {
-    public Target(JObject targetObject, string id, bool findTechnology) : base(id, delimiter: ",Version=")
+    public Target(JsonObject targetObject, string id, bool findTechnology) : base(id, delimiter: ",Version=")
     {
         RuntimeDependencies = LoadDependencies(targetObject, findTechnology);
         BindDependencies();
@@ -15,29 +15,25 @@ internal class Target : BaseModelElement
 
     public IReadOnlyList<Dependency> RuntimeDependencies { get; private set; }
 
-    internal static Target Load(JObject depsObject, bool findTechnologies)
+    internal static Target Load(JsonObject depsObject, bool findTechnologies)
     {
         var (targetObject, id) = GetTargetsObjectPropertyObject(depsObject);
         return new Target(targetObject, id, findTechnologies);
     }
 
-    private IReadOnlyList<Dependency> LoadDependencies(JObject targetObject, bool findTechnology)
+    private IReadOnlyList<Dependency> LoadDependencies(JsonObject targetObject, bool findTechnology)
     {
-        var targetProperties = targetObject.Properties();
+        var enumerator = targetObject.GetEnumerator();
         var runtimeDependencies = new List<Dependency>();
         var isMainAssembly = true;
-        foreach (var targetProperty in targetProperties)
+        while (enumerator.MoveNext())
         {
-            var targetPropertyObject = targetProperty.GetPropertyObject();
-            if (!targetPropertyObject.TryGetPropertyObject("runtime", out var runtimeObject))
+            var targetPropertyObject = enumerator.Current.Value?.AsObject();
+            if (targetPropertyObject == null || !targetPropertyObject.TryGetPropertyObject("runtime", out var runtimeObject) || runtimeObject == null || runtimeObject.Count == 0)
             {
                 continue;
             }
-            if (runtimeObject?.Count == 0)
-            {
-                continue;
-            }
-            var dependency = new Dependency(targetProperty, isMainAssembly, findTechnology);
+            var dependency = new Dependency(enumerator.Current.Key, targetPropertyObject, isMainAssembly, findTechnology);
             runtimeDependencies.Add(dependency);
             isMainAssembly = false;
         }
@@ -56,27 +52,31 @@ internal class Target : BaseModelElement
         }
     }
 
-    private static (JObject targetObject, string targetName) GetTargetsObjectPropertyObject(JObject depsObject)
+    private static (JsonObject targetObject, string targetName) GetTargetsObjectPropertyObject(JsonObject depsObject)
     {
-        var targetsProperty = depsObject.Property("targets") ?? throw "'targets' is missing.".ToInvalidContentException();
-        var targetsObject = targetsProperty.GetPropertyObject();
-        var targetsObjectProperties = targetsObject.Properties();
-        if (targetsObjectProperties?.Any() != true)
+        if (!depsObject.TryGetPropertyValue("targets", out var targetsNode) || targetsNode == null)
+        {
+            throw "'targets' is missing.".ToInvalidContentException();
+        }
+        var targetsObject = targetsNode.AsObject();
+        var enumeartor = targetsObject.GetEnumerator();
+        var isEmpty = true;
+        JsonObject? targetObject = null;
+        string? targetName = null;
+        while (enumeartor.MoveNext())
+        {
+            isEmpty = false;
+            targetObject = enumeartor.Current.Value?.AsObject();
+            if ((targetObject?.Count ?? 0) > 0)
+            {
+                targetName = enumeartor.Current.Key;
+                break;
+            }
+            targetObject = null;
+        }
+        if (isEmpty)
         {
             throw "'targets' is empty.".ToInvalidContentException();
-        }
-        JObject? targetObject = null;
-        string? targetName = null;
-        foreach (var targetsObjectProperty in targetsObjectProperties)
-        {
-            targetObject = targetsObjectProperty.GetPropertyObject();
-            if (targetObject.Count == 0)
-            {
-                targetObject = null;
-                continue;
-            }
-            targetName = targetsObjectProperty.Name;
-            break;
         }
         if (targetObject == null)
         {

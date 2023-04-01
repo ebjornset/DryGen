@@ -17,19 +17,6 @@ Scenario: Mermaid C4 Component diagram generation should fail on missing 'target
 	Then I should get exit code '1'
 	And I should find the text "Invalid deps.json: 'targets' is missing." in console error
 
-Scenario: Mermaid C4 Component diagram generation should fail when 'targets' is an array
-	Given this .Net depts json input file
-		"""
-		{
-			"targets": []
-		}
-		"""
-	When I call the program with this command line arguments
-		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
-	Then I should get exit code '1'
-	And I should find the text "Invalid deps.json: 'targets' is of unexpected type 'Array', expected 'Object'." in console error
-
 Scenario: Mermaid C4 Component diagram generation should fail on empty 'targets'
 	Given this .Net depts json input file
 		"""

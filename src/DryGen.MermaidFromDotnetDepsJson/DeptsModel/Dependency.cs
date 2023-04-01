@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 
 namespace DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 
 internal class Dependency : BaseModelElement
 {
-    public Dependency(JProperty depdendencyProperty, bool isMainAssembly, bool findTechnology) : base(depdendencyProperty.Name)
+    public Dependency(string name, JsonObject depdendencyProperty, bool isMainAssembly, bool findTechnology) : base(name)
     {
         RuntimeDependencyRefs = LoadDependencyRefs(depdendencyProperty);
         Technology = findTechnology ? FindTechnology(depdendencyProperty) : string.Empty;
@@ -35,45 +35,34 @@ internal class Dependency : BaseModelElement
         RuntimeDependencyRefs = runtimeDependencyRefs;
     }
 
-    private IReadOnlyList<DependencyRef> LoadDependencyRefs(JProperty targetProperty)
+    private IReadOnlyList<DependencyRef> LoadDependencyRefs(JsonObject targetPropertyObject)
     {
-        var targetPropertyObject = targetProperty.GetPropertyObject();
-        if (targetPropertyObject?.TryGetPropertyObject("dependencies", out var dependenciesObject) != true)
-        {
-            return Array.Empty<DependencyRef>();
-        }
-        if (dependenciesObject?.Count == 0)
+        if (!targetPropertyObject.TryGetPropertyObject("dependencies", out var dependenciesObject) || dependenciesObject == null || dependenciesObject.Count == 0)
         {
             return Array.Empty<DependencyRef>();
         }
         var dependencyRefs = new List<DependencyRef>();
-        if (dependenciesObject != null)
+        var enumerator = dependenciesObject.GetEnumerator();
+        while (enumerator.MoveNext())
         {
-            foreach (var dependencyToken in dependenciesObject.Children())
-            {
-                dependencyToken.CheckTypeIs(JTokenType.Property);
-                var token = ((JProperty)dependencyToken).GetPropertyToken(JTokenType.String);
-                var dependencyTokenProperty = (JProperty)dependencyToken;
-                var dependencyRef = new DependencyRef($"{dependencyTokenProperty.Name}/{token}");
-                dependencyRefs.Add(dependencyRef);
-            }
+            var dependencyToken = enumerator.Current.Value?.AsValue();
+            var dependencyRef = new DependencyRef($"{enumerator.Current.Key}/{dependencyToken}");
+            dependencyRefs.Add(dependencyRef);
         }
         return dependencyRefs;
     }
 
-    private string FindTechnology(JProperty depdendencyProperty)
+    private string FindTechnology(JsonObject dependencyObject)
     {
-        var dependencyObject = depdendencyProperty.GetPropertyObject();
         if (dependencyObject.TryGetPropertyObject("native", out var nativeObject) && nativeObject?.Count > 0)
         {
             return "native";
         }
         // At this point we (assume we) know that we have a runtime property with at least one none null property,
-        // since we only create a Dependency when we fina a non null runtime properties
+        // since we only create a Dependency when we find a non null runtime properties
         var runtimeObject = dependencyObject.GetPropertyObject("runtime");
         runtimeObject.CheckForChildren();
-        var runtimeFirstProperty = runtimeObject.GetFirstProperty();
-        var runtimeFirstName = runtimeFirstProperty.Name;
+        var runtimeFirstName = runtimeObject.GetFirstPropertyName();
         if (runtimeFirstName.StartsWith("lib/"))
         {
             var nextSlashOffset = runtimeFirstName.IndexOf('/', 4);

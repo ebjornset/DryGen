@@ -1,12 +1,11 @@
 ﻿using DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 using DryGen.MermaidFromDotnetDepsJson.DiagramModel;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace DryGen.MermaidFromDotnetDepsJson;
@@ -42,8 +41,8 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     private async Task<Target> LoadValidTargetJson(string? inputFile)
     {
         var depsJsonText = await File.ReadAllTextAsync(inputFile);
-        var depsJson = JObject.Parse(depsJsonText);
-        CheckForNull(depsJson);
+        var depsJson = JsonNode.Parse(depsJsonText)?.AsObject();
+        depsJson = depsJson.CheckForNull();
         var target = Target.Load(depsJson, findTechnologies: !excludeTechn);
         return target;
     }
@@ -331,15 +330,6 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
                 groups.Add(groupName, groupList);
             }
             groupList.Add(dependency);
-        }
-    }
-
-    [ExcludeFromCodeCoverage] // Just a guard that we don't bother to test
-    private static void CheckForNull(JObject depsJson)
-    {
-        if (depsJson == null)
-        {
-            throw $"Could not parse deps.json.".ToInvalidContentException();
         }
     }
 }
