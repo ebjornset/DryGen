@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Generating Mermaid C4 Component diagram from .Net deps.json files with 'techn' information
+﻿Feature: Generating Mermaid C4 Component diagram from .Net deps.json files with 'techn' information
 
 To understand the .Net version of the dependencies for a .Net assembly
 As a dry-gen user
