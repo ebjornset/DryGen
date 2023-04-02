@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Generating Mermaid C4 Component diagram from .Net deps.json files with 'Container_Boundary' information
+﻿Feature: Generating Mermaid C4 Component diagram from .Net deps.json files with 'Container_Boundary' information
 
 To understand the grouping of the dependencies for a .Net assembly
 As a dry-gen user
