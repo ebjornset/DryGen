@@ -17,28 +17,25 @@ public sealed class ConsoleSteps
     [Then(@"I should find the text ""([^""]*)"" in console error")]
     public void ThenIShouldFindTheTextInConsoleError(string text)
     {
-        var consoleError = consoleContext.ErrorWriter.ToString();
-        consoleError.Should().Contain(text);
+        consoleContext.ErrorText.Should().Contain(text);
     }
 
     [Then(@"I should not find the text ""([^""]*)"" in console error")]
     public void ThenIShouldNotFindTheTextInConsoleError(string text)
     {
-        var consoleError = consoleContext.ErrorWriter.ToString();
-        consoleError.Should().NotContain(text);
+        consoleContext.ErrorText.Should().NotContain(text);
     }
 
     [Then(@"I should find the text ""([^""]*)"" in console out")]
     public void ThenIShouldFindTheTextInConsoleOut(string text)
     {
-        var consoleOut = consoleContext.OutWriter.ToString();
-        consoleOut.Should().Contain(text);
+        consoleContext.OutText.Should().Contain(text);
     }
 
     [Then(@"console out should contain the text")]
     public void ThenConsoleOutShouldContainTheText(string multilineText)
     {
-        var outputs = consoleContext.OutWriter.ToString()?.Replace("\r\n", "\n");
+        var outputs = consoleContext.OutText?.Replace("\r\n", "\n");
         multilineText = multilineText.Replace("\r\n", "\n");
         outputs.Should().Be(multilineText);
     }

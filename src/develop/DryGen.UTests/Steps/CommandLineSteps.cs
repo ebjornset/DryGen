@@ -68,6 +68,6 @@ public sealed class CommandLineSteps
     public void ThenIShouldGetExitCode(int expected)
     {
         var argsString = $"args '{string.Join(' ', args ?? throw new InvalidOperationException(nameof(args)))}'";
-        exitCode.Should().Be(expected, because: $"{argsString}. {consoleContext.ErrorWriter}");
+        exitCode.Should().Be(expected, because: $"{argsString}. {consoleContext.ErrorText}");
     }
 }

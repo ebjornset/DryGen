@@ -4,8 +4,10 @@ namespace DryGen.UTests.Helpers;
 
 public class ConsoleContext
 {
-    public TextWriter ErrorWriter { get; private set; }
-    public TextWriter OutWriter { get; private set; }
+    public TextWriter ErrorWriter { get; }
+    public TextWriter OutWriter { get; }
+    public string? ErrorText => ErrorWriter.ToString();
+    public string? OutText => OutWriter.ToString();
 
     public ConsoleContext()
     {
