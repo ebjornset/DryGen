@@ -1,8 +1,8 @@
 {
   "$schema": "https://specflow.org/specflow-config.json",
-  "allowDebugGeneratedFiles": true,
+  "allowDebugGeneratedFiles": false,
   "livingDocGenerator": {
-    "enabled": true,
+    "enabled": false,
     "filepath": ".specflow.livingdoc.data.json"
   },
   "stepAssemblies": [
