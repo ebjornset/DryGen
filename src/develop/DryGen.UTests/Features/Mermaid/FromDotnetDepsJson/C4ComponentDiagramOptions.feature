@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Controlling the generation of Mermaid C4 Component diagram from .Net deps.json files with options
+﻿Feature: Controlling the generation of Mermaid C4 Component diagram from .Net deps.json files with options
 
 To be able to control the content of the generated diagram
 As a dry-gen user
