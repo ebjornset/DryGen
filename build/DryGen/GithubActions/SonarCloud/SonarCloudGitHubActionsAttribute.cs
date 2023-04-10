@@ -22,6 +22,7 @@ public class SonarCloudGitHubActionsAttribute : DotNetGitHubActionsAttribute
         newSteps.Insert(newSteps.Count - 6, new GitHubActionsBeginSonarCloudScanStep());
         newSteps.Add(new GitHubActionsRunCoverletReportGeneratorStep());
         newSteps.Add(new GitHubActionsEndSonarCloudScanStep());
+        newSteps.Add(new GitHubActionsUploadTestResultsArtifactsStep());
         job.Steps = newSteps.ToArray();
         return job;
     }

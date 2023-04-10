@@ -22,6 +22,20 @@ public class InputFileContext : IDisposable
 
     public bool HasInputFileName => !string.IsNullOrEmpty(inputFileName);
 
+    public void CreateInputFile(string content, string extension)
+    {
+        if (string.IsNullOrWhiteSpace(extension))
+        {
+            throw new ArgumentNullException(nameof(extension));
+        }
+        var tmpInputFileName = Path.Combine(Path.GetTempPath(), $"dry-gen-test-{Guid.NewGuid()}.{extension}");
+        if (!string.IsNullOrEmpty(content))
+        {
+            File.WriteAllText(tmpInputFileName, content);
+        }
+        InputFileName = tmpInputFileName;
+    }
+
     public void Dispose()
     {
         DeleteExistingInputFile();

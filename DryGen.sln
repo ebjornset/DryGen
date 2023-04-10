@@ -69,6 +69,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Templates", "src\Dry
 		{BDA7420D-4FD3-48E9-A1FA-4BF4447892E1} = {BDA7420D-4FD3-48E9-A1FA-4BF4447892E1}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryGen.MermaidFromDotnetDepsJson", "src\DryGen.MermaidFromDotnetDepsJson\DryGen.MermaidFromDotnetDepsJson.csproj", "{A290A6FD-4C54-4A59-9515-FB257401C728}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{4007DCD3-A238-4438-A5A0-3E1A1333335D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4007DCD3-A238-4438-A5A0-3E1A1333335D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4007DCD3-A238-4438-A5A0-3E1A1333335D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A290A6FD-4C54-4A59-9515-FB257401C728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A290A6FD-4C54-4A59-9515-FB257401C728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A290A6FD-4C54-4A59-9515-FB257401C728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A290A6FD-4C54-4A59-9515-FB257401C728}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

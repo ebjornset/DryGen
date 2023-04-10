@@ -17,7 +17,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
-		<PackageReference Include="YamlDotNet" Version="13.0.1" />
+		<PackageReference Include="YamlDotNet" Version="13.0.2" />
 		<!-- 
 		NB! We need to reference Microsoft.Extensions.Primitives for each supported .Net version here.
 		Otherwise the loading of EF Core assemblies migth fail with an error that Microsoft.Extensions.Primitives v X.0.0.0 can't be loaded.
@@ -30,6 +30,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
+		<ProjectReference Include="..\DryGen.MermaidFromDotnetDepsJson\DryGen.MermaidFromDotnetDepsJson.csproj" />
 		<ProjectReference Include="..\DryGen.MermaidFromJsonSchema\DryGen.MermaidFromJsonSchema.csproj" />
 		<ProjectReference Include="..\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj" />
 		<ProjectReference Include="..\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />

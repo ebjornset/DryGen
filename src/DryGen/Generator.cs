@@ -19,6 +19,8 @@ using DryGen.Options;
 using DryGen.MermaidFromJsonSchema;
 using System.Runtime.Loader;
 using System.Text;
+using DryGen.MermaidFromDotnetDepsJson;
+using DryGen.Core;
 
 namespace DryGen;
 
@@ -43,6 +45,7 @@ public class Generator
     {
         var parserResult = parser.ParseArguments<
             CSharpFromJsonSchemaOptions,
+            MermaidC4ComponentDiagramFromDotnetDepsJsonOptions,
             MermaidClassDiagramFromCSharpOptions,
             MermaidClassDiagramFromJsonSchemaOptions,
             MermaidErDiagramFromCSharpOptions,
@@ -52,7 +55,8 @@ public class Generator
              >(args);
         return parserResult.MapResult(
           (CSharpFromJsonSchemaOptions options) => GenerateCSharpFromJsonSchema(options, args),
-          (MermaidClassDiagramFromCSharpOptions options) => GenerateMermaidClassDiagramFropmCSharp(options, args),
+          (MermaidC4ComponentDiagramFromDotnetDepsJsonOptions options) => GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(options, args),
+          (MermaidClassDiagramFromCSharpOptions options) => GenerateMermaidClassDiagramFromCSharp(options, args),
           (MermaidClassDiagramFromJsonSchemaOptions options) => GenerateMermaidClassDiagramFromJsonSchema(options, args),
           (MermaidErDiagramFromCSharpOptions options) => GenerateMermaidErDiagramFromCSharp(options, args),
           (MermaidErDiagramFromEfCoreOptions options) => GenerateMermaidErDiagramFromEfCore(options, args),
@@ -143,9 +147,10 @@ public class Generator
                 errorWriter.WriteLine($"VERB: {verbAttribute.Name} ({verbAttribute.HelpText})");
             }
             errorWriter.WriteLine();
+            ex = PopWellKnownInnAggregateException(ex);
             errorWriter.WriteLine($"ERROR:{BuildExceptionMessages(ex, options.IncludeExceptionStackTrace)}");
             errorWriter.WriteLine("Rerun the command with --help to get more help information");
-            if (ex is not OptionsException && !options.IncludeExceptionStackTrace)
+            if (!(ex is InvalidContentException || ex is OptionsException) && !options.IncludeExceptionStackTrace)
             {
                 errorWriter.WriteLine("NB! You can also add --include-exception-stacktrace to get the stack trace for the exception");
             }
@@ -183,12 +188,21 @@ public class Generator
 
     }
 
-    private int GenerateMermaidClassDiagramFropmCSharp(MermaidClassDiagramFromCSharpOptions options, string[] args)
+    private int GenerateMermaidClassDiagramFromCSharp(MermaidClassDiagramFromCSharpOptions options, string[] args)
     {
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
         {
             var diagramGenerator = new ClassDiagramGenerator(new TypeLoaderByReflection(), options);
             return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
+        });
+    }
+
+    private int GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(MermaidC4ComponentDiagramFromDotnetDepsJsonOptions options, string[] args)
+    {
+        return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid C4 component diagram", options =>
+        {
+            var generator = new MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(options);
+            return generator.Generate(options.InputFile).Result;
         });
     }
 
@@ -236,7 +250,7 @@ public class Generator
             var deserializer = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
             var yaml = File.ReadAllText(commandlineOptions.OptionsFile);
             var optionsFromFile = deserializer.Deserialize<TOptions>(yaml);
-            if (optionsFromFile != null) 
+            if (optionsFromFile != null)
             // The yaml deserialization returns null if the file is empty or all options are commented out
             {
                 // Must read the options from the file twice, since the command line parser clear the collection when the option is not specified on the command line
@@ -369,6 +383,15 @@ public class Generator
                 return null;
             };
         }
+    }
+
+    private static Exception PopWellKnownInnAggregateException(Exception ex)
+    {
+        if (ex is AggregateException aEx && aEx.InnerExceptions?.Count == 1)
+        {
+            ex = aEx.InnerExceptions[0];
+        }
+        return ex;
     }
 
     private static string BuildExceptionMessages(Exception ex, bool includeExceptionStackTrace)
