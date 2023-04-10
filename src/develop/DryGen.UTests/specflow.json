@@ -1,6 +1,5 @@
 {
   "$schema": "https://specflow.org/specflow-config.json",
-  "allowDebugGeneratedFiles": false,
   "livingDocGenerator": {
     "enabled": false,
     "filepath": ".specflow.livingdoc.data.json"
@@ -10,7 +9,10 @@
       "assembly": "DryGen.DevUtils"
     }
   ],
-  "addNonParallelizableMarkerForTags": [
-    "isolated"
-  ]
+  "generator": {
+    "allowDebugGeneratedFiles": false,
+    "addNonParallelizableMarkerForTags": [
+      "notParallel"
+    ]
+  }
 }

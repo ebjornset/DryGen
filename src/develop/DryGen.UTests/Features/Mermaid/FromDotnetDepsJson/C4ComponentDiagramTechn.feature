@@ -1,4 +1,4 @@
-﻿@isolated
+﻿@notParallel
 Feature: Generating Mermaid C4 Component diagram from .Net deps.json files with 'techn' information
 
 To understand the .Net version of the dependencies for a .Net assembly

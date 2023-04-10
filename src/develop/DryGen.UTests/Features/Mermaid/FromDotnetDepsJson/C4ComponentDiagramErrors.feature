@@ -1,4 +1,4 @@
-﻿@isolated
+﻿@notParallel
 Feature: Error handeling when generating Mermaid C4 Component diagram from .Net deps.json files
 
 To understand why generation of Mermaid C4 Component diagram from .Net deps.json files fails
