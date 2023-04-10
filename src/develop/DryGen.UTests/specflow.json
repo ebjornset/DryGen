@@ -9,5 +9,8 @@
     {
       "assembly": "DryGen.DevUtils"
     }
+  ],
+  "addNonParallelizableMarkerForTags": [
+    "isolated"
   ]
 }
