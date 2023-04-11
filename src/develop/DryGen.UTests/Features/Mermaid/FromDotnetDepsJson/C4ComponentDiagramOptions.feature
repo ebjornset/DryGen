@@ -22,7 +22,7 @@ Scenario: Should use '--title'
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --title                                           |
 		| Custom title                                      |
 	Then I should get exit code '0'
@@ -90,7 +90,7 @@ Scenario: Should only include 'Rel' between dependencies in different 'Countaine
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --relation-level                                  |
 		| interboundary                                     |
 	Then I should get exit code '0'
@@ -163,7 +163,7 @@ Scenario: Should only include 'Rel' between dependencies in same 'Countainer Bou
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --relation-level                                  |
 		| intraboundary                                     |
 	Then I should get exit code '0'
@@ -212,7 +212,7 @@ Scenario: Should not include any 'Rel' when '--relation-level' is 'none'
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --relation-level                                  |
 		| none                                              |
 	Then I should get exit code '0'
@@ -269,7 +269,7 @@ Scenario: Should include 'Internal assemblies' and 'External dependencies' as 'C
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --boundary-level                                  |
 		| internalexternal                                  |
 	Then I should get exit code '0'
@@ -327,7 +327,7 @@ Scenario: Should not include 'Internal assemblies' as 'Container_Boundary' when 
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --boundary-level                                  |
 		| internalexternal                                  |
 	Then I should get exit code '0'
@@ -372,7 +372,7 @@ Scenario: Should not include 'External dependencies' as 'Container_Boundary' whe
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --boundary-level                                  |
 		| internalexternal                                  |
 	Then I should get exit code '0'
@@ -420,7 +420,7 @@ Scenario: Should not include any 'Container_Boundary' when '--boundary-level' is
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --boundary-level                                  |
 		| none                                              |
 	Then I should get exit code '0'
@@ -457,7 +457,7 @@ Scenario: Should not include version numbers in description when '--exclude-vers
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --exclude-version                                 |
 		| true                                              |
 	Then I should get exit code '0'
@@ -494,7 +494,7 @@ Scenario: Should not include techn when '--exclude-techn' is 'true'
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --exclude-techn                                   |
 		| true                                              |
 	Then I should get exit code '0'
@@ -526,7 +526,7 @@ Scenario: Should use '--shape-in-row' as '$c4ShapeInRow' in 'UpdateLayoutConfig'
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --shape-in-row                                    |
 		| 7                                                 |
 	Then I should get exit code '0'
@@ -556,7 +556,7 @@ Scenario: Should use '--boundary-in-row' as '$c4ShapeInRow' in 'UpdateLayoutConf
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 		| --boundary-in-row                                 |
 		| 7                                                 |
 	Then I should get exit code '0'

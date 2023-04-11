@@ -14,7 +14,7 @@ Scenario: Mermaid C4 Component diagram generation should fail on missing 'target
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '1'
 	And I should find the text "Invalid deps.json: 'targets' is missing." in console error
 
@@ -27,7 +27,7 @@ Scenario: Mermaid C4 Component diagram generation should fail on empty 'targets'
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '1'
 	And I should find the text "Invalid deps.json: 'targets' is empty." in console error
 
@@ -45,7 +45,7 @@ Scenario: Mermaid C4 Component diagram generation should fail when targets only 
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '1'
 	And I should find the text "Invalid deps.json: Found no non empty 'target'." in console error
 
@@ -65,7 +65,7 @@ Scenario: Mermaid C4 Component diagram generation should fail when selected targ
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '1'
 	And I should find the text "Invalid deps.json: Found no non empty runtime dependencies in target '.NETCoreApp,Version=v7.0'." in console error
 
@@ -89,6 +89,6 @@ Scenario: Mermaid C4 Component diagram generation should fail when selected targ
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '1'
 	And I should find the text "Invalid deps.json: Found no non empty runtime dependencies in target '.NETCoreApp,Version=v7.0'." in console error

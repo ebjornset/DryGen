@@ -113,7 +113,7 @@ Given this .Net depts json input file
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '1'
 	And I should find the text "Invalid deps.json" in console error
 	And I should find the text "Rerun the command with --help to get more help information" in console error
