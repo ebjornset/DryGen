@@ -55,7 +55,7 @@ When you decide to generate other representations from one, it's important to ke
 dotnet new install dry-gen.templates
 ```
 
-The templates contains some example code, and some MSBuild targets in the .csproj file, that you can customixe to your needs. You can always get the list of installed dry-gen related templates by running `dotnet new list`, e.g.
+The templates contains some example code and some MSBuild targets in the .csproj file that you can customixe to your needs. You can always get the list of installed dry-gen related templates by running `dotnet new list`, e.g.
 
 ```
 dotnet new list --tag dry-gen
@@ -79,7 +79,7 @@ When you have generated a project you must build it to generate the other repres
 dotnet build
 ```
 
-Then you can open the readme file with your favorite editor/viewer to look at the generated representations and learn more about how you can customize the project to your need, e.g.
+Then you can open the readme file with your favorite editor/viewer to look at the generated representations and learn more about how you can customize the project to your needs, e.g.
 
 ```
 ./README.md
