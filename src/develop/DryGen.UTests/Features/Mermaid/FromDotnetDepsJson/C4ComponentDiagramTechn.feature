@@ -29,7 +29,7 @@ Scenario: Should select 'native' as 'techn' when it's present in depts.json file
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
@@ -60,7 +60,7 @@ Scenario: Should select runtime 'lib/' as 'techn' when 'native' has no content a
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
@@ -91,7 +91,7 @@ Scenario: Should select runtime extension as 'techn' when 'lib/' as no next slas
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
@@ -122,7 +122,7 @@ Scenario: Should select empty string  as 'techn' as a last resort
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""

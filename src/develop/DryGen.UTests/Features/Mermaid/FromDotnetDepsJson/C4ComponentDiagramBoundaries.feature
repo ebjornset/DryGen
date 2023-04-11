@@ -42,7 +42,7 @@ Scenario: Should create container boundary for dependencies by name split by '.'
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
@@ -89,7 +89,7 @@ Scenario: Should supress create container boundary when it only has one child
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
@@ -130,7 +130,7 @@ Scenario: Should supress container boundary when it only has container boundarie
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
@@ -176,7 +176,7 @@ Scenario: Should group standalone dependencies in a synthetic container boundary
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
@@ -213,7 +213,7 @@ Scenario: Should not supress synthetic container boundary 'Standalone dependenci
 		"""
 	When I call the program with this command line arguments
 		| Arg                                               |
-		| mermaid-c4container-diagram-from-dotnet-deps-json |
+		| mermaid-c4component-diagram-from-dotnet-deps-json |
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""

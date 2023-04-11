@@ -13,8 +13,8 @@ Scenario: Should generate menu with all verbs
 		  items:
 		  - name: csharp-from-json-schema
 		    link: /verbs/csharp-from-json-schema
-		  - name: mermaid-c4container-diagram-from-dotnet-deps-json
-		    link: /verbs/mermaid-c4container-diagram-from-dotnet-deps-json
+		  - name: mermaid-c4component-diagram-from-dotnet-deps-json
+		    link: /verbs/mermaid-c4component-diagram-from-dotnet-deps-json
 		  - name: mermaid-class-diagram-from-csharp
 		    link: /verbs/mermaid-class-diagram-from-csharp
 		  - name: mermaid-class-diagram-from-json-schema
