@@ -21,6 +21,7 @@ using System.Runtime.Loader;
 using System.Text;
 using DryGen.MermaidFromDotnetDepsJson;
 using DryGen.Core;
+using DryGen.MermaidFromDotnetDepsJson.Filters;
 
 namespace DryGen;
 
@@ -201,7 +202,19 @@ public class Generator
     {
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid C4 component diagram", options =>
         {
-            var generator = new MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(options);
+            var assemblyNameFilters = new List<IAssemblyNameFilter>();
+            if (options.IncludeAssemblyNames?.Any() == true)
+            {
+                var includeAssemblyNameFilters = options.IncludeAssemblyNames.Select(x => new IncludeAssemblyNameFilter(x)).ToArray();
+                assemblyNameFilters.Add(new AnyChildFiltersAssemblyNameFilter(includeAssemblyNameFilters));
+            }
+            if (options.ExcludeAssemblyNames?.Any() == true)
+            {
+                var excludeAssemblyNameFilters = options.ExcludeAssemblyNames.Select(x => new ExcludeAssemblyNameFilter(x)).ToArray();
+                assemblyNameFilters.Add(new AllChildFiltersAssemblyNameFilter(excludeAssemblyNameFilters));
+            }
+
+            var generator = new MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(options, assemblyNameFilters);
             return generator.Generate(options.InputFile).Result;
         });
     }
@@ -220,7 +233,7 @@ public class Generator
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
         {
             var generator = new MermaidClassDiagramFromJsonSchemaGenerator();
-            var treeShakingDiagramFilter = GetTreeShakingDiagramFilter(options.TreeShakingRoots);
+            var treeShakingDiagramFilter = GetMermaidDiagramTreeShakingFilter(options.TreeShakingRoots);
             return generator.Generate(options, treeShakingDiagramFilter).Result;
         });
     }
@@ -230,7 +243,7 @@ public class Generator
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
         {
             var generator = new MermaidErDiagramFromJsonSchemaGenerator();
-            var treeShakingDiagramFilter = GetTreeShakingDiagramFilter(options.TreeShakingRoots);
+            var treeShakingDiagramFilter = GetMermaidDiagramTreeShakingFilter(options.TreeShakingRoots);
             return generator.Generate(options, treeShakingDiagramFilter).Result;
         });
     }
@@ -322,22 +335,28 @@ public class Generator
     private static string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
     {
         var assembly = LoadAsseblyFromFile(options.InputFile);
-        var namespaceFilters = options.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
-        var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };
-        if (options.IncludeTypeNames?.Any() == true)
-        {
-            var typeNameFilters = options.IncludeTypeNames.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray();
-            typeFilters.Add(new AnyChildFiltersTypeFilter(typeNameFilters));
-        }
-        if (options.ExcludeTypeNames?.Any() == true)
-        {
-            var typeNameFilters = options.ExcludeTypeNames.Select(x => new ExcludeTypeNameTypeFilter(x)).ToArray();
-            typeFilters.Add(new AllChildFiltersTypeFilter(typeNameFilters));
-        }
+        var typeFilters = GetTypeFilters(options);
         var excludePropertyNamesFilters = options.ExcludePropertyNames?.Select(x => new ExcludePropertyNamePropertyFilter(x)).ToArray() ?? Array.Empty<IPropertyFilter>();
         var nameRewriter = new ReplaceNameRewriter(options.NameReplaceFrom ?? string.Empty, options.NameReplaceTo ?? string.Empty);
-        var treeShakingDiagramFilter = GetTreeShakingDiagramFilter(options.TreeShakingRoots);
+        var treeShakingDiagramFilter = GetMermaidDiagramTreeShakingFilter(options.TreeShakingRoots);
         return diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter, treeShakingDiagramFilter);
+
+        static List<ITypeFilter> GetTypeFilters(MermaidFromCSharpBaseOptions options)
+        {
+            var namespaceFilters = options.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
+            var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };
+            if (options.IncludeTypeNames?.Any() == true)
+            {
+                var typeNameFilters = options.IncludeTypeNames.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray();
+                typeFilters.Add(new AnyChildFiltersTypeFilter(typeNameFilters));
+            }
+            if (options.ExcludeTypeNames?.Any() == true)
+            {
+                var typeNameFilters = options.ExcludeTypeNames.Select(x => new ExcludeTypeNameTypeFilter(x)).ToArray();
+                typeFilters.Add(new AllChildFiltersTypeFilter(typeNameFilters));
+            }
+            return typeFilters;
+        }
     }
 
     private static Assembly LoadAsseblyFromFile(string? inputFile)
@@ -355,7 +374,7 @@ public class Generator
         return assembly;
     }
 
-    private static TreeShakingDiagramFilter GetTreeShakingDiagramFilter(IEnumerable<string>? treeShakingRoots)
+    private static TreeShakingDiagramFilter GetMermaidDiagramTreeShakingFilter(IEnumerable<string>? treeShakingRoots)
     {
         var treeShakingRootsFilters = treeShakingRoots?.Any() == true ? treeShakingRoots.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray() : null;
         var treeShakingDiagramFilter = new TreeShakingDiagramFilter(treeShakingRootsFilters);

@@ -14,6 +14,6 @@ public class MermaidClassDiagramFromJsonSchemaOptions : FromJsonSchemaBaseOption
     public ClassDiagramDirection? Direction { get; set; }
 
     [YamlMember(Alias = "tree-shaking-roots", ApplyNamingConventions = false)]
-    [Option("tree-shaking-roots", Separator = ';', HelpText = "A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.")]
+    [Option("tree-shaking-roots", Separator = ';', HelpText = "A '; separated' list of regular expressions for types to keep as roots when tree shaking the resulting diagram.")]
     public IEnumerable<string>? TreeShakingRoots { get; set; }
 }
