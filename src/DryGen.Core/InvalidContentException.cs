@@ -8,11 +8,7 @@ namespace DryGen.Core;
 [ExcludeFromCodeCoverage]
 public sealed class InvalidContentException : Exception
 {
-    public InvalidContentException(string? message) : base(message)
-    {
-    }
+    public InvalidContentException(string? message) : base(message) { }
 
-    private InvalidContentException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-    }
+    private InvalidContentException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 }

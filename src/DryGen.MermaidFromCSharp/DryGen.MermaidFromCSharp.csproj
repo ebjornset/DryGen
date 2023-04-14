@@ -9,4 +9,8 @@
 	  <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
+	</ItemGroup>
+
 </Project>
