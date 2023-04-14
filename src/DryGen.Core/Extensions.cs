@@ -71,6 +71,35 @@ public static class Extensions
         ThrowExceptionIfCompilationFailed(compilationResult);
     }
 
+    public static bool IsKeyAttribute(this CustomAttributeData attributeData)
+    {
+        return attributeData.AttributeType.FullName == "System.ComponentModel.DataAnnotations.KeyAttribute";
+    }
+
+    public static bool IsRequiredAttribute(this CustomAttributeData attributeData)
+    {
+        return attributeData.AttributeType.FullName == "System.ComponentModel.DataAnnotations.RequiredAttribute";
+    }
+
+    public static bool IsJsonPropertyRequiredAttribute(this CustomAttributeData attributeData)
+    {
+        if (attributeData.AttributeType.FullName != "Newtonsoft.Json.JsonPropertyAttribute")
+        {
+            return false;
+        }
+        var requiredArgumentValue = attributeData.NamedArguments.Any( x => x.MemberName == "Required") 
+            ? attributeData.NamedArguments.Single(x => x.MemberName == "Required").TypedValue.Value 
+            : null;
+        // 2 is the enum value of "Newtonsoft.Json.Required.Always"
+        // NB! This should maybe be made more fool proof?
+        return requiredArgumentValue is int requiredArgumentIntValue && requiredArgumentIntValue == 2; 
+    }
+
+    public static bool IsRequiredProperty(this PropertyInfo propertyInfo)
+    {
+        return propertyInfo.CustomAttributes.Any(x => x.IsRequiredAttribute() || x.IsJsonPropertyRequiredAttribute());
+    }
+
     [ExcludeFromCodeCoverage] //This should in theory never happen in a normal test run, only when we develop new tests that compiles C# code
     private static void ThrowExceptionIfCompilationFailed(EmitResult compilationResult)
     {
