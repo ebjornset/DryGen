@@ -1,16 +1,35 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace DryGen.Core;
 
-public static class AssemblyExtensions
+public static class Extensions
 {
+    public static Type LoadTypeByName(this string typeName)
+    {
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies().Reverse())
+        {
+            var type = assembly.GetType(typeName);
+            if (type != null)
+            {
+                return type;
+            }
+        }
+        throw new TypeLoadException($"Could not load type '{typeName}'");
+    }
+
+    public static Regex ToSingleLineCompiledRegexWithTimeout(this string regex)
+    {
+        return new Regex(regex, RegexOptions.Singleline | RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+    }
+
     public static Assembly CompileCodeToMemory(this string cSharpCode, params Assembly[] referencedAssemblies)
     {
         var assemblyName = Path.GetRandomFileName();

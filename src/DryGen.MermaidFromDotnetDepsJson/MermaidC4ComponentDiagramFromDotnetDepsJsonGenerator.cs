@@ -1,5 +1,6 @@
 ﻿using DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 using DryGen.MermaidFromDotnetDepsJson.DiagramModel;
+using DryGen.MermaidFromDotnetDepsJson.Filters;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,8 +20,9 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
     private readonly string? title;
     private readonly int? shapeInRow;
     private readonly int? boundaryInRow;
+    private readonly IReadOnlyList<IAssemblyNameFilter> assemblyNameFilters;
 
-    public MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options)
+    public MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions options, IReadOnlyList<IAssemblyNameFilter>? assemblyNameFilters)
     {
         relationsLevel = options.RelationLevel ?? default;
         boundariesLevel = options.BoundaryLevel ?? default;
@@ -29,6 +31,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         title = options.Title;
         shapeInRow = options.ShapeInRow;
         boundaryInRow = options.BoundaryInRow;
+        this.assemblyNameFilters = assemblyNameFilters?.Any() == true ? assemblyNameFilters : Array.Empty<IAssemblyNameFilter>();
     }
 
     public async Task<string> Generate(string? inputFile)
@@ -43,7 +46,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         var depsJsonText = await File.ReadAllTextAsync(inputFile);
         var depsJson = JsonNode.Parse(depsJsonText)?.AsObject();
         depsJson = depsJson.CheckForNull();
-        var target = Target.Load(depsJson, findTechnologies: !excludeTechn);
+        var target = Target.Load(depsJson, findTechnologies: !excludeTechn, assemblyNameFilters);
         return target;
     }
 

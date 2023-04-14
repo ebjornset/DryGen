@@ -17,12 +17,12 @@ The verb 'mermaid-class-diagram-from-csharp' uses the following options.
 |--attribute-level||all / public / internal / protected / none|What visibility must an attribute have to be included in the diagram?|
 |--direction||default / bt / tb / lr / rl|In what direction should the diagram be generated?|
 |--exclude-method-params||true/false|Should method params be excluded from the diagram? (Replaced by count)|
-|--exclude-propertynames||List of string|A list of regular expressions for property names to exclude from each type.|
+|--exclude-propertynames||List of string|A '; separated' list of regular expressions for property names to exclude from each type.|
 |--exclude-static-attributes||true/false|Should static attributes be excluded from the diagram?|
 |--exclude-static-methods||true/false|Should static methods be excluded from the diagram?|
-|--exclude-typenames||List of string|A list of regular expressions for type names to exclude.|
+|--exclude-typenames||List of string|A '; separated' list of regular expressions for type names to exclude.|
 |--include-namespaces||List of string|A list of regular expressions for namespaces to include.|
-|--include-typenames||List of string|A list of regular expressions for type names to include.|
+|--include-typenames||List of string|A '; separated' list of regular expressions for type names to include.|
 |--input-file|-i|string|Full path to the input file to generate a new representation for.|
 |--method-level||all / public / internal / protected / none|What visibility must a method have to be included in the diagram?|
 |--name-replace-from||string|A string to replace in all class/entity names.|
@@ -30,7 +30,7 @@ The verb 'mermaid-class-diagram-from-csharp' uses the following options.
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
-|--tree-shaking-roots||List of string|A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
+|--tree-shaking-roots||List of string|A '; separated' list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
 {% include notification.html status="is-dark" 
 message="You can always get information about this verb's options by running the command 

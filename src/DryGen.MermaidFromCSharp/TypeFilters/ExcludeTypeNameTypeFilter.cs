@@ -1,20 +1,14 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using DryGen.Core;
+using System;
 
 namespace DryGen.MermaidFromCSharp.TypeFilters;
 
-public class ExcludeTypeNameTypeFilter : ITypeFilter
+public class ExcludeTypeNameTypeFilter : AbstractStringRegexFilter, ITypeFilter
 {
-    private readonly Regex regex;
-
-    public ExcludeTypeNameTypeFilter(string regex)
-    {
-        this.regex = regex.ToSingleLineCompiledRegexWithTimeout();
-    }
+    public ExcludeTypeNameTypeFilter(string regex) : base(regex, shouldMatch: false) { }
 
     public bool Accepts(Type type)
     {
-        var match = regex.Match(type.Name);
-        return !match.Success;
+        return DoesAccept(type.Name);
     }
 }

@@ -7,7 +7,7 @@ namespace DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 
 internal class Dependency : BaseModelElement
 {
-    public Dependency(string name, JsonObject depdendencyProperty, bool isMainAssembly, bool findTechnology) : base(name)
+    public Dependency(string id, JsonObject depdendencyProperty, bool isMainAssembly, bool findTechnology) : base(id)
     {
         RuntimeDependencyRefs = LoadDependencyRefs(depdendencyProperty);
         Technology = findTechnology ? FindTechnology(depdendencyProperty) : string.Empty;
@@ -68,7 +68,7 @@ internal class Dependency : BaseModelElement
             var nextSlashOffset = runtimeFirstName.IndexOf('/', 4);
             if (nextSlashOffset > -1)
             {
-                return runtimeFirstName.Substring(4, nextSlashOffset - 4);
+                return runtimeFirstName[4..nextSlashOffset];
             }
         }
         var lastDotIndex = runtimeFirstName.LastIndexOf('.');
