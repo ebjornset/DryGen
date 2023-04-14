@@ -1,0 +1,14 @@
+---
+layout: post
+title: Version 1.3.0 is released
+subtitle: Generate Mermaid C4 Component diagrams from .Net deps.json files
+summary: |-
+  Generate Mermaid C4 Component diagrams from .Net deps.json files
+hero_height: is-fullwidth
+---
+
+### In this version
+
+- Generate [Mermaid C4 Component diagrams](https://mermaid.js.org/syntax/c4c.html#c4-component-diagram-c4component){:target="\_blank"} from [.Net deps.json files](https://github.com/dotnet/cli/blob/master/Documentation/specs/runtime-configuration-file.md#appnamedepsjson){:target="\_blank"}. Pleses see the [mermaid-c4component-diagram-from-dotnet-deps-json verb page](/verbs/mermaid-c4component-diagram-from-dotnet-deps-json/) for usage details.
+
+Have fun!
