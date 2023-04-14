@@ -4,7 +4,6 @@ using DryGen.MermaidFromCSharp.ErDiagram;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -99,7 +98,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         ErDiagramRelationshipCardinality toCardianlity;
         if (isBidirectional)
         {
-            var isPrincipalToDependentRequired = foreignKey.PrincipalToDependent?.PropertyInfo?.GetCustomAttribute(typeof(RequiredAttribute)) != null;
+            var isPrincipalToDependentRequired = foreignKey.PrincipalToDependent?.PropertyInfo?.IsRequiredProperty() == true;
             toCardianlity = isPrincipalToDependentRequired ? ErDiagramRelationshipCardinality.ExactlyOne : ErDiagramRelationshipCardinality.ZeroOrOne;
         }
         else
