@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
@@ -11,6 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\DryGen.CodeCompiler\DryGen.CodeCompiler.csproj" />
 		<ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
 		<ProjectReference Include="..\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj" />
 		<ProjectReference Include="..\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />

@@ -1,4 +1,4 @@
-﻿using DryGen.Core;
+﻿using DryGen.CodeCompiler;
 using DryGen.CSharpFromJsonSchema;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
