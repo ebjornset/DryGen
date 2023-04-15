@@ -188,6 +188,12 @@
       <td>What kind of ‘Container Boundary’ should be included in the diagram based on the assembly names? (Default: all)</td>
     </tr>
     <tr>
+      <td>–exclude-assemblynames</td>
+      <td> </td>
+      <td>List of string</td>
+      <td>A ‘; separated’ list of regular expressions for names of assemblies to exclude. (Default: none)</td>
+    </tr>
+    <tr>
       <td>–exclude-techn</td>
       <td> </td>
       <td>true/false</td>
@@ -198,6 +204,12 @@
       <td> </td>
       <td>true/false</td>
       <td>Should version information be excluded from the diagram? (Default: false)</td>
+    </tr>
+    <tr>
+      <td>–include-assemblynames</td>
+      <td> </td>
+      <td>List of string</td>
+      <td>A ‘; separated’ list of regular expressions for name of assemblies to include as components. (Default: all)</td>
     </tr>
     <tr>
       <td>–input-file</td>
@@ -269,8 +281,12 @@
 #
 #boundary-in-row: int32
 #boundary-level: all | internalexternal | none
+#exclude-assemblynames: # List of string
+#- 
 #exclude-techn: true|false
 #exclude-version: true|false
+#include-assemblynames: # List of string
+#- 
 #input-file: string
 #output-file: string
 #relation-level: all | interboundary | intraboundary | none

@@ -178,6 +178,9 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 
 <pre><code class="language-mermaid">classDiagram
 	direction RL
+	class AbstractStringRegexFilter {
+		&lt;&lt;abstract&gt;&gt;
+	}
 	class AllChildFiltersTypeFilter {
 	}
 	class AnyChildFiltersTypeFilter {
@@ -336,11 +339,13 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter ..|&gt; ITypeFilter
 	ExcludeNonPublicClassTypeFilter ..|&gt; ITypeFilter
 	ExcludePropertyNamePropertyFilter ..|&gt; IPropertyFilter
+	ExcludePropertyNamePropertyFilter --|&gt; AbstractStringRegexFilter
 	ExcludeSystemEnumTypeFilter ..|&gt; ITypeFilter
 	ExcludeSystemObjectAndSystemEnumTypeFilter --|&gt; AllChildFiltersTypeFilter
 	ExcludeSystemObjectTypeFilter ..|&gt; ITypeFilter
 	ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter ..|&gt; ITypeFilter
 	ExcludeTypeNameTypeFilter ..|&gt; ITypeFilter
+	ExcludeTypeNameTypeFilter --|&gt; AbstractStringRegexFilter
 	IClassDiagramGenerator --|&gt; IDiagramGenerator
 	IErDiagramGenerator --|&gt; IDiagramGenerator
 	IMermaidClassDiagramFromCSharpOptions --&gt; "0..1" ClassDiagramAttributeLevel : attribute level
@@ -353,7 +358,9 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" IErDiagramStructureBuilder : structure builder
 	IMermaidErDiagramFromCSharpOptions --|&gt; IMermaidDiagramOptions
 	IncludeNamespaceTypeFilter ..|&gt; ITypeFilter
+	IncludeNamespaceTypeFilter --|&gt; AbstractStringRegexFilter
 	IncludeTypeNameTypeFilter ..|&gt; ITypeFilter
+	IncludeTypeNameTypeFilter --|&gt; AbstractStringRegexFilter
 	NamedType ..|&gt; IDiagramType
 	ReplaceNameRewriter ..|&gt; INameRewriter
 	TreeShakingDiagramFilter ..&gt; ITypeFilter
@@ -393,6 +400,9 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 
 <pre><code class="language-mermaid">classDiagram
 	direction RL
+	class AbstractStringRegexFilter {
+		&lt;&lt;abstract&gt;&gt;
+	}
 	class AllChildFiltersTypeFilter {
 	}
 	class AnyChildFiltersTypeFilter {
@@ -406,6 +416,8 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter {
 	}
 	class ExcludeNonPublicClassTypeFilter {
+	}
+	class ExcludePropertyNamePropertyFilter {
 	}
 	class ExcludeSystemEnumTypeFilter {
 	}
@@ -424,6 +436,9 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	}
 	class IncludeTypeNameTypeFilter {
 	}
+	class IPropertyFilter {
+		&lt;&lt;interface&gt;&gt;
+	}
 	class ITypeFilter {
 		&lt;&lt;interface&gt;&gt;
 	}
@@ -436,13 +451,18 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	ExcludeEnumTypeFilter ..|&gt; ITypeFilter
 	ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter ..|&gt; ITypeFilter
 	ExcludeNonPublicClassTypeFilter ..|&gt; ITypeFilter
+	ExcludePropertyNamePropertyFilter ..|&gt; IPropertyFilter
+	ExcludePropertyNamePropertyFilter --|&gt; AbstractStringRegexFilter
 	ExcludeSystemEnumTypeFilter ..|&gt; ITypeFilter
 	ExcludeSystemObjectAndSystemEnumTypeFilter --|&gt; AllChildFiltersTypeFilter
 	ExcludeSystemObjectTypeFilter ..|&gt; ITypeFilter
 	ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter ..|&gt; ITypeFilter
 	ExcludeTypeNameTypeFilter ..|&gt; ITypeFilter
+	ExcludeTypeNameTypeFilter --|&gt; AbstractStringRegexFilter
 	IncludeNamespaceTypeFilter ..|&gt; ITypeFilter
+	IncludeNamespaceTypeFilter --|&gt; AbstractStringRegexFilter
 	IncludeTypeNameTypeFilter ..|&gt; ITypeFilter
+	IncludeTypeNameTypeFilter --|&gt; AbstractStringRegexFilter
 	TreeShakingDiagramFilter ..&gt; ITypeFilter
 	TreeShakingDiagramFilter ..|&gt; IDiagramFilter
 
@@ -633,6 +653,9 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 
 <pre><code class="language-mermaid">classDiagram
 	direction RL
+	class AbstractStringRegexFilter {
+		&lt;&lt;abstract&gt;&gt;
+	}
 	class ErDiagramAttribute {
 	}
 	class ErDiagramAttributeDetailExclusions {
@@ -709,6 +732,7 @@ They also uses the same <code class="language-plaintext highlighter-rouge">--out
 	ErDiagramStructureBuilderByReflection ..|&gt; IErDiagramStructureBuilder
 	ErDiagramStructureBuilderByReflection --|&gt; TypeLoaderByReflection
 	ExcludePropertyNamePropertyFilter ..|&gt; IPropertyFilter
+	ExcludePropertyNamePropertyFilter --|&gt; AbstractStringRegexFilter
 	IErDiagramGenerator --|&gt; IDiagramGenerator
 	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" ErDiagramAttributeTypeExclusion : attribute type exclusion
 	IMermaidErDiagramFromCSharpOptions --&gt; "0..1" ErDiagramAttributeDetailExclusions : attribute detail exclusions
