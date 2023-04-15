@@ -9,7 +9,7 @@ public class NamedType : IDiagramType
 {
     public NamedType(string name, Type type)
     {
-        Name = name;
+        Name = name.Replace('`', '-');
         Type = type;
     }
 
