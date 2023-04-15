@@ -2,7 +2,7 @@
 A .Net tool to generate other representations of a piece of knowledge from one representation. 
 
 [![Build Status](https://github.com/ebjornset/DryGen/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ebjornset/DryGen/actions/workflows/build.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ebjornset_DryGen&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ebjornset_DryGen)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ebjornset_DryGen&metric=alert_status)](https://sonarcloud.io/summary/overall?id=ebjornset_DryGen)
 [![Nuget](https://img.shields.io/nuget/v/dry-gen.svg)](https://www.nuget.org/packages/dry-gen)
 
 
