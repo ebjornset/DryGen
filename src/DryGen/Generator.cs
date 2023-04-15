@@ -284,7 +284,7 @@ public class Generator
         return commandlineOptions;
     }
 
-    [ExcludeFromCodeCoverage] // This should in theory never happend, and cannot be tested
+    [ExcludeFromCodeCoverage(Justification = "This should in theory never happend, and cannot be tested")]
     private void CheckForReparseProblem<TOptions>(ParserResult<TOptions> parserResult) where TOptions : BaseOptions
     {
         if (parserResult.Tag == ParserResultType.NotParsed)

@@ -7,18 +7,6 @@ public class ExceptionContext
 {
     public Exception? Exception { get; private set; }
 
-    public void HarvestExceptionFrom(Action action)
-    {
-        try
-        {
-            action();
-        }
-        catch (Exception ex)
-        {
-            Exception = ex;
-        }
-    }
-
     public TResult? HarvestExceptionFrom<TResult>(Func<TResult> func)
     {
         try

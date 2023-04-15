@@ -90,10 +90,6 @@ public sealed class ErDiagramGeneratorSteps
         {
             WhenIGenerateAnERDiagramUsingEfCore();
         }
-        else
-        {
-            throw new ArgumentException($"Unsupported structure builder type '{structureBuilderType}'");
-        }
     }
 
     private enum ErStructureBuilderType
