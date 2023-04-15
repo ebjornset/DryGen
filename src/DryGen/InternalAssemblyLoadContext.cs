@@ -4,7 +4,7 @@ using System.Runtime.Loader;
 
 namespace DryGen;
 
-internal class InternalAssemblyLoadContext: AssemblyLoadContext
+internal class InternalAssemblyLoadContext : AssemblyLoadContext
 {
     private readonly string inputFile;
     private readonly bool useAssemblyLoadContextDefault;
@@ -20,10 +20,9 @@ internal class InternalAssemblyLoadContext: AssemblyLoadContext
 
     internal Assembly Load()
     {
-        if (!useAssemblyLoadContextDefault)
-        {
-            using var _ = EnterContextualReflection();
-        }
+        // Seems like we cant put a using on the ContextualReflectionScope returned from EnterContextualReflection(),
+        // since the protected Load never gets called if we do and then we can't load any dependencies.
+        AssemblyLoadContext.EnterContextualReflection();
         return LoadFromFile(inputFile);
     }
 
@@ -37,13 +36,13 @@ internal class InternalAssemblyLoadContext: AssemblyLoadContext
                 return LoadFromFile(assemblyFileName);
             }
         }
-        // We cant find the assembly file, let the runtime try to handle it
+        // We can't find the assembly file, let the runtime try to handle it
         return null;
     }
 
     private Assembly LoadFromFile(string assemblyFileName)
     {
-        // It seems like LoadFromAssemblyPath lockes the file, and that makes our teste fail, so we load read the fine manually to a stream
+        // It seems like LoadFromAssemblyPath lockes the file, and that makes our teste fail, so we read the file manually to a stream
         var assemblyBytes = File.ReadAllBytes(assemblyFileName);
         return AssemblyLoadContext.LoadFromStream(new MemoryStream(assemblyBytes));
     }
