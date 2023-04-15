@@ -231,8 +231,7 @@ public partial class Build : NukeBuild
 
     internal Target Docs => _ => _
         .DependsOn(Init)
-        //.DependsOn(Compile)
-        //.DependsOn(Specs)
+        .DependsOn(Compile)
         .Executes(() =>
         {
             DotNetRun(c => c
@@ -240,7 +239,7 @@ public partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .SetFramework("net6.0")
                 .SetApplicationArguments($"--root-directory {RootDirectory}")
-                //.EnableNoBuild()
+                .EnableNoBuild()
                 .SetNoLaunchProfile(true)
                 );
         });

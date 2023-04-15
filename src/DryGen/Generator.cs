@@ -17,7 +17,6 @@ using YamlDotNet.Serialization.NamingConventions;
 using DryGen.CSharpFromJsonSchema;
 using DryGen.Options;
 using DryGen.MermaidFromJsonSchema;
-using System.Runtime.Loader;
 using System.Text;
 using DryGen.MermaidFromDotnetDepsJson;
 using DryGen.Core;
@@ -30,8 +29,11 @@ public class Generator
     private readonly Parser parser;
     private readonly TextWriter outWriter;
     private readonly TextWriter errorWriter;
+    private readonly bool useAssemblyLoadContextDefault;
 
-    public Generator(TextWriter outWriter, TextWriter errorWriter)
+    public Generator(TextWriter outWriter, TextWriter errorWriter) : this(outWriter, errorWriter, useAssemblyLoadContextDefault: false) { }
+
+    public Generator(TextWriter outWriter, TextWriter errorWriter, bool useAssemblyLoadContextDefault)
     {
         parser = new Parser(with =>
         {
@@ -40,6 +42,11 @@ public class Generator
         });
         this.outWriter = outWriter;
         this.errorWriter = errorWriter;
+        // useAssemblyLoadContextDefault: It seems like there is an issue when loading the same assembly several times in new AssemblyLoadContexts,
+        // like we do when we generate the docs. Since this is not the normal usage, we just make it possible to use AssemblyLoadContext.Default when generating the docs,
+        // instead of trying to make loading the same assembly several times in new AssemblyLoadContexts work.
+        // "No problem is so big or so complicated that it can't be run away from!" - Charles M. Schulz
+        this.useAssemblyLoadContextDefault = useAssemblyLoadContextDefault;
     }
 
     public int Run(string[] args)
@@ -332,7 +339,7 @@ public class Generator
         }
     }
 
-    private static string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
+    private string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
     {
         var assembly = LoadAsseblyFromFile(options.InputFile);
         var typeFilters = GetTypeFilters(options);
@@ -359,7 +366,7 @@ public class Generator
         }
     }
 
-    private static Assembly LoadAsseblyFromFile(string? inputFile)
+    private Assembly LoadAsseblyFromFile(string? inputFile)
     {
         /// It seems like Assembly.Load from a file name will hold the file open, 
         /// and thus our tests cannot clean up by deleting the tmp files they uses, so we read the file to memory our self...
@@ -367,11 +374,7 @@ public class Generator
         {
             throw new OptionsException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file.");
         }
-        var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new OptionsException($"Could not determine directory from inputFile '{inputFile}'");
-        AssemblyResolvingHelper.SetupAssemblyResolving(inputDirectory);
-        var assemblyBytes = File.ReadAllBytes(inputFile);
-        var assembly = AssemblyLoadContext.Default.LoadFromStream(new MemoryStream(assemblyBytes));
-        return assembly;
+        return new InternalAssemblyLoadContext(inputFile, useAssemblyLoadContextDefault).Load();
     }
 
     private static TreeShakingDiagramFilter GetMermaidDiagramTreeShakingFilter(IEnumerable<string>? treeShakingRoots)
@@ -379,29 +382,6 @@ public class Generator
         var treeShakingRootsFilters = treeShakingRoots?.Any() == true ? treeShakingRoots.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray() : null;
         var treeShakingDiagramFilter = new TreeShakingDiagramFilter(treeShakingRootsFilters);
         return treeShakingDiagramFilter;
-    }
-
-    [ExcludeFromCodeCoverage]
-    // The loading of assembly dependencies is so difficult to trigger in an automated test, since we need two asseblies in the same directory with dependencies, so this is tested manually (once).
-    private static class AssemblyResolvingHelper
-    {
-        internal static void SetupAssemblyResolving(string inputDirectory)
-        {
-            AssemblyLoadContext.Default.Resolving += (assemblyContext, assemblyName) =>
-            {
-                foreach (var extension in new[] { ".dll", ".exe" })
-                {
-                    var assemblyFileName = $"{inputDirectory}{Path.DirectorySeparatorChar}{assemblyName.Name}{extension}";
-                    if (File.Exists(assemblyFileName))
-                    {
-                        var assemblyBytes = File.ReadAllBytes(assemblyFileName);
-                        return assemblyContext.LoadFromStream(new MemoryStream(assemblyBytes));
-                    }
-                }
-                // We cant find the assembly file, let the runtime try to handle it
-                return null;
-            };
-        }
     }
 
     private static Exception PopWellKnownInnAggregateException(Exception ex)
@@ -427,6 +407,7 @@ public class Generator
         return sb.ToString();
     }
 
+    [ExcludeFromCodeCoverage(Justification = "Just a helper when debugging unexpected exceptions in the wild. Have not found a way to trigger this during testing.")]
     private static StringBuilder BuildExceptionMessages(Exception ex, StringBuilder sb, string indent)
     {
         sb.Append(indent).AppendLine(ex.Message);
@@ -441,6 +422,7 @@ public class Generator
         return sb;
     }
 
+    [ExcludeFromCodeCoverage(Justification = "Just a helper when debugging unexpected exceptions in the wild. Have not found a way to trigger this during testing.")]
     private static StringBuilder BuildAggregateExceptionMessages(AggregateException ex, StringBuilder sb, string indent)
     {
         foreach (var exception in ex.InnerExceptions)

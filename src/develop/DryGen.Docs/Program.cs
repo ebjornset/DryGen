@@ -33,7 +33,7 @@ public static class Program
         GenerateExamplesFilesFromTemplates(rootDirectory);
         var result = 0;
         string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        var generator = new Generator(Console.Out, Console.Error);
+        var generator = new Generator(Console.Out, Console.Error, useAssemblyLoadContextDefault: true);
         foreach (var generatorData in BuildExamplesGeneratorData())
         {
             result = ReplaceRepresentationInExample(rootDirectory, assemblyDirectory, generator, generatorData);
