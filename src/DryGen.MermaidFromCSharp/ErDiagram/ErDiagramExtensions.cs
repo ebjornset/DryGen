@@ -88,11 +88,6 @@ public static class ErDiagramExtensions
         return relationship.IsIdenifying ? "--" : "..";
     }
 
-    public static bool IsMany(this ErDiagramRelationshipCardinality cardinality)
-    {
-        return cardinality == ErDiagramRelationshipCardinality.ZeroOrMore || cardinality == ErDiagramRelationshipCardinality.OneOrMore;
-    }
-
     public static bool IsNotMany(this ErDiagramRelationshipCardinality cardinality)
     {
         return cardinality == ErDiagramRelationshipCardinality.ZeroOrOne || cardinality == ErDiagramRelationshipCardinality.ExactlyOne;

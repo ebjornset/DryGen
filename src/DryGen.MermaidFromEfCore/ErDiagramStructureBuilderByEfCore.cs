@@ -174,10 +174,6 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         var result = new List<ModelEntityType>();
         foreach (var entityType in entityTypes)
         {
-            if (entityType == null)
-            {
-                continue;
-            }
             var candidate = new ModelEntityType(entityType);
             if (typeFilters.All(filter => filter.Accepts(candidate.ClrType)))
             {
