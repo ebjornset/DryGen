@@ -96,3 +96,32 @@ Scenario: Generates ER entities for an IEntity from inherited DBContext only onc
 			Customer
 		
 		"""
+
+Scenario: Generates ER entities for generic types with - in the name in stead of ~
+	#NB! We should probably generate a more meaningful name based on the type of the bound generic parameter instead of the internal class number (1 in this example)
+	Given this C# source code
+		"""
+		using Microsoft.EntityFrameworkCore;
+		namespace Test
+		{
+			public class PrimitiveDto<T> {
+				public T Value { get; set; }
+			}
+			public class TestDbContext: DbContext {
+				public TestDbContext(DbContextOptions options) : base(options) {}
+				protected override void OnModelCreating(ModelBuilder modelBuilder)
+				{
+					modelBuilder.Entity<PrimitiveDto<int>>().HasNoKey();
+				}
+			}
+		}
+		"""
+	When I generate an ER diagram using EF Core
+	Then I should get this generated representation
+		"""
+		erDiagram
+			PrimitiveDto-1 {
+				int Value
+			}
+		
+		"""
