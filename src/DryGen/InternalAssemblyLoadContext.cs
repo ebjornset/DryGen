@@ -7,17 +7,23 @@ namespace DryGen;
 internal class InternalAssemblyLoadContext: AssemblyLoadContext
 {
     private readonly string inputFile;
+    private readonly bool useAssemblyLoadContextDefault;
     private readonly string inputDirectory;
+    private AssemblyLoadContext AssemblyLoadContext => useAssemblyLoadContextDefault ? Default : this;
 
-    internal InternalAssemblyLoadContext(string inputFile)
+    internal InternalAssemblyLoadContext(string inputFile, bool useAssemblyLoadContextDefault)
     {
         this.inputFile = inputFile;
+        this.useAssemblyLoadContextDefault = useAssemblyLoadContextDefault;
         inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new OptionsException($"Could not determine directory from inputFile '{inputFile}'");
     }
 
     internal Assembly Load()
     {
-        EnterContextualReflection();
+        if (!useAssemblyLoadContextDefault)
+        {
+            using var _ = EnterContextualReflection();
+        }
         return LoadFromFile(inputFile);
     }
 
@@ -39,6 +45,6 @@ internal class InternalAssemblyLoadContext: AssemblyLoadContext
     {
         // It seems like LoadFromAssemblyPath lockes the file, and that makes our teste fail, so we load read the fine manually to a stream
         var assemblyBytes = File.ReadAllBytes(assemblyFileName);
-        return LoadFromStream(new MemoryStream(assemblyBytes));
+        return AssemblyLoadContext.LoadFromStream(new MemoryStream(assemblyBytes));
     }
 }

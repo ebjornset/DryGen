@@ -29,8 +29,11 @@ public class Generator
     private readonly Parser parser;
     private readonly TextWriter outWriter;
     private readonly TextWriter errorWriter;
+    private readonly bool useAssemblyLoadContextDefault;
 
-    public Generator(TextWriter outWriter, TextWriter errorWriter)
+    public Generator(TextWriter outWriter, TextWriter errorWriter) : this(outWriter, errorWriter, useAssemblyLoadContextDefault: false) { }
+
+    public Generator(TextWriter outWriter, TextWriter errorWriter, bool useAssemblyLoadContextDefault)
     {
         parser = new Parser(with =>
         {
@@ -39,6 +42,11 @@ public class Generator
         });
         this.outWriter = outWriter;
         this.errorWriter = errorWriter;
+        // useAssemblyLoadContextDefault: It seems like there is an issue when loading the same assembly several times in new AssemblyLoadContexts,
+        // like we do when we generate the docs. Since this is not the normal usage, we just make it possible to use AssemblyLoadContext.Default when generating the docs,
+        // instead of trying to make loading the same assembly several times in new AssemblyLoadContexts work.
+        // "No problem is so big or so complicated that it can't be run away from!" - Charles M. Schulz
+        this.useAssemblyLoadContextDefault = useAssemblyLoadContextDefault;
     }
 
     public int Run(string[] args)
@@ -331,7 +339,7 @@ public class Generator
         }
     }
 
-    private static string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
+    private string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
     {
         var assembly = LoadAsseblyFromFile(options.InputFile);
         var typeFilters = GetTypeFilters(options);
@@ -358,7 +366,7 @@ public class Generator
         }
     }
 
-    private static Assembly LoadAsseblyFromFile(string? inputFile)
+    private Assembly LoadAsseblyFromFile(string? inputFile)
     {
         /// It seems like Assembly.Load from a file name will hold the file open, 
         /// and thus our tests cannot clean up by deleting the tmp files they uses, so we read the file to memory our self...
@@ -366,7 +374,7 @@ public class Generator
         {
             throw new OptionsException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file.");
         }
-        return new InternalAssemblyLoadContext(inputFile).Load();
+        return new InternalAssemblyLoadContext(inputFile, useAssemblyLoadContextDefault).Load();
     }
 
     private static TreeShakingDiagramFilter GetMermaidDiagramTreeShakingFilter(IEnumerable<string>? treeShakingRoots)
@@ -399,6 +407,7 @@ public class Generator
         return sb.ToString();
     }
 
+    [ExcludeFromCodeCoverage(Justification = "Just a helper when debugging unexpected exceptions in the wild. Have not found a way to trigger this during testing.")]
     private static StringBuilder BuildExceptionMessages(Exception ex, StringBuilder sb, string indent)
     {
         sb.Append(indent).AppendLine(ex.Message);
@@ -413,6 +422,7 @@ public class Generator
         return sb;
     }
 
+    [ExcludeFromCodeCoverage(Justification = "Just a helper when debugging unexpected exceptions in the wild. Have not found a way to trigger this during testing.")]
     private static StringBuilder BuildAggregateExceptionMessages(AggregateException ex, StringBuilder sb, string indent)
     {
         foreach (var exception in ex.InnerExceptions)
