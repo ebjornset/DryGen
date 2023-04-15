@@ -1,14 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\DryGen.CodeCompiler\DryGen.CodeCompiler.csproj" />
 		<ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
 		<ProjectReference Include="..\DryGen.CSharpFromJsonSchema\DryGen.CSharpFromJsonSchema.csproj" />
 		<ProjectReference Include="..\DryGen.MermaidFromCSharp\DryGen.MermaidFromCSharp.csproj" />

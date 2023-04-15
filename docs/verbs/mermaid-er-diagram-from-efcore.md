@@ -17,10 +17,10 @@ The verb 'mermaid-er-diagram-from-efcore' uses the following options.
 |--attribute-type-exclusion||none / foreignkeys / all|What kind of attributes should be excluded from the diagram?|
 |--exclude-attribute-comments||true/false|Should attributes comments be excluded from the diagram?|
 |--exclude-attribute-keytypes||true/false|Should attributes key types be excluded from the diagram?|
-|--exclude-propertynames||List of string|A list of regular expressions for property names to exclude from each type.|
-|--exclude-typenames||List of string|A list of regular expressions for type names to exclude.|
+|--exclude-propertynames||List of string|A '; separated' list of regular expressions for property names to exclude from each type.|
+|--exclude-typenames||List of string|A '; separated' list of regular expressions for type names to exclude.|
 |--include-namespaces||List of string|A list of regular expressions for namespaces to include.|
-|--include-typenames||List of string|A list of regular expressions for type names to include.|
+|--include-typenames||List of string|A '; separated' list of regular expressions for type names to include.|
 |--input-file|-i|string|Full path to the input file to generate a new representation for.|
 |--name-replace-from||string|A string to replace in all class/entity names.|
 |--name-replace-to||string|The string to replace with in all class/entity names.|
@@ -28,7 +28,7 @@ The verb 'mermaid-er-diagram-from-efcore' uses the following options.
 |--output-file|-o|string|Write the generated representation to this file.|
 |--relationship-type-exclusion||none / all|What kind of relationships should be excluded from the diagram?|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
-|--tree-shaking-roots||List of string|A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
+|--tree-shaking-roots||List of string|A '; separated' list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
 {% include notification.html status="is-dark" 
 message="You can always get information about this verb's options by running the command 

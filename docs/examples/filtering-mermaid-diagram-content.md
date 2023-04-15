@@ -35,6 +35,9 @@ Most C# codebases will soon contain a lot of types, so a class diagram without a
 ```mermaid
 classDiagram
 	direction RL
+	class AbstractStringRegexFilter {
+		<<abstract>>
+	}
 	class AllChildFiltersTypeFilter {
 	}
 	class AnyChildFiltersTypeFilter {
@@ -193,11 +196,13 @@ classDiagram
 	ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter ..|> ITypeFilter
 	ExcludeNonPublicClassTypeFilter ..|> ITypeFilter
 	ExcludePropertyNamePropertyFilter ..|> IPropertyFilter
+	ExcludePropertyNamePropertyFilter --|> AbstractStringRegexFilter
 	ExcludeSystemEnumTypeFilter ..|> ITypeFilter
 	ExcludeSystemObjectAndSystemEnumTypeFilter --|> AllChildFiltersTypeFilter
 	ExcludeSystemObjectTypeFilter ..|> ITypeFilter
 	ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter ..|> ITypeFilter
 	ExcludeTypeNameTypeFilter ..|> ITypeFilter
+	ExcludeTypeNameTypeFilter --|> AbstractStringRegexFilter
 	IClassDiagramGenerator --|> IDiagramGenerator
 	IErDiagramGenerator --|> IDiagramGenerator
 	IMermaidClassDiagramFromCSharpOptions --> "0..1" ClassDiagramAttributeLevel : attribute level
@@ -210,7 +215,9 @@ classDiagram
 	IMermaidErDiagramFromCSharpOptions --> "0..1" IErDiagramStructureBuilder : structure builder
 	IMermaidErDiagramFromCSharpOptions --|> IMermaidDiagramOptions
 	IncludeNamespaceTypeFilter ..|> ITypeFilter
+	IncludeNamespaceTypeFilter --|> AbstractStringRegexFilter
 	IncludeTypeNameTypeFilter ..|> ITypeFilter
+	IncludeTypeNameTypeFilter --|> AbstractStringRegexFilter
 	NamedType ..|> IDiagramType
 	ReplaceNameRewriter ..|> INameRewriter
 	TreeShakingDiagramFilter ..> ITypeFilter
@@ -237,6 +244,9 @@ message="This diagram contains more or less all the C# types implementing the fi
 ```mermaid
 classDiagram
 	direction RL
+	class AbstractStringRegexFilter {
+		<<abstract>>
+	}
 	class AllChildFiltersTypeFilter {
 	}
 	class AnyChildFiltersTypeFilter {
@@ -250,6 +260,8 @@ classDiagram
 	class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter {
 	}
 	class ExcludeNonPublicClassTypeFilter {
+	}
+	class ExcludePropertyNamePropertyFilter {
 	}
 	class ExcludeSystemEnumTypeFilter {
 	}
@@ -268,6 +280,9 @@ classDiagram
 	}
 	class IncludeTypeNameTypeFilter {
 	}
+	class IPropertyFilter {
+		<<interface>>
+	}
 	class ITypeFilter {
 		<<interface>>
 	}
@@ -280,13 +295,18 @@ classDiagram
 	ExcludeEnumTypeFilter ..|> ITypeFilter
 	ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter ..|> ITypeFilter
 	ExcludeNonPublicClassTypeFilter ..|> ITypeFilter
+	ExcludePropertyNamePropertyFilter ..|> IPropertyFilter
+	ExcludePropertyNamePropertyFilter --|> AbstractStringRegexFilter
 	ExcludeSystemEnumTypeFilter ..|> ITypeFilter
 	ExcludeSystemObjectAndSystemEnumTypeFilter --|> AllChildFiltersTypeFilter
 	ExcludeSystemObjectTypeFilter ..|> ITypeFilter
 	ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter ..|> ITypeFilter
 	ExcludeTypeNameTypeFilter ..|> ITypeFilter
+	ExcludeTypeNameTypeFilter --|> AbstractStringRegexFilter
 	IncludeNamespaceTypeFilter ..|> ITypeFilter
+	IncludeNamespaceTypeFilter --|> AbstractStringRegexFilter
 	IncludeTypeNameTypeFilter ..|> ITypeFilter
+	IncludeTypeNameTypeFilter --|> AbstractStringRegexFilter
 	TreeShakingDiagramFilter ..> ITypeFilter
 	TreeShakingDiagramFilter ..|> IDiagramFilter
 
@@ -438,6 +458,9 @@ message="This diagram contains most of the dry-gen C# types except those in the 
 ```mermaid
 classDiagram
 	direction RL
+	class AbstractStringRegexFilter {
+		<<abstract>>
+	}
 	class ErDiagramAttribute {
 	}
 	class ErDiagramAttributeDetailExclusions {
@@ -514,6 +537,7 @@ classDiagram
 	ErDiagramStructureBuilderByReflection ..|> IErDiagramStructureBuilder
 	ErDiagramStructureBuilderByReflection --|> TypeLoaderByReflection
 	ExcludePropertyNamePropertyFilter ..|> IPropertyFilter
+	ExcludePropertyNamePropertyFilter --|> AbstractStringRegexFilter
 	IErDiagramGenerator --|> IDiagramGenerator
 	IMermaidErDiagramFromCSharpOptions --> "0..1" ErDiagramAttributeTypeExclusion : attribute type exclusion
 	IMermaidErDiagramFromCSharpOptions --> "0..1" ErDiagramAttributeDetailExclusions : attribute detail exclusions

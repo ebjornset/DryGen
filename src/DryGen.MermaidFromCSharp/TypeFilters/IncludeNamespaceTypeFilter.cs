@@ -1,20 +1,14 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using DryGen.Core;
+using System;
 
 namespace DryGen.MermaidFromCSharp.TypeFilters;
 
-public class IncludeNamespaceTypeFilter : ITypeFilter
+public class IncludeNamespaceTypeFilter : AbstractStringRegexFilter, ITypeFilter
 {
-    private readonly Regex regex;
-
-    public IncludeNamespaceTypeFilter(string regex)
-    {
-        this.regex = regex.ToSingleLineCompiledRegexWithTimeout();
-    }
+    public IncludeNamespaceTypeFilter(string regex) : base(regex, shouldMatch: true) { }
 
     public bool Accepts(Type type)
     {
-        var match = regex.Match(type.Namespace);
-        return match.Success;
+        return DoesAccept(type.Namespace);
     }
 }

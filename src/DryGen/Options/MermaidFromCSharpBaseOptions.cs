@@ -12,15 +12,15 @@ public abstract class MermaidFromCSharpBaseOptions : BaseOptions, IMermaidDiagra
     public IEnumerable<string>? IncludeNamespaces { get; set; }
 
     [YamlMember(Alias = "include-typenames", ApplyNamingConventions = false)]
-    [Option("include-typenames", Separator = ';', HelpText = "A list of regular expressions for type names to include.")]
+    [Option("include-typenames", Separator = ';', HelpText = "A '; separated' list of regular expressions for type names to include.")]
     public IEnumerable<string>? IncludeTypeNames { get; set; }
 
     [YamlMember(Alias = "exclude-typenames", ApplyNamingConventions = false)]
-    [Option("exclude-typenames", Separator = ';', HelpText = "A list of regular expressions for type names to exclude.")]
+    [Option("exclude-typenames", Separator = ';', HelpText = "A '; separated' list of regular expressions for type names to exclude.")]
     public IEnumerable<string>? ExcludeTypeNames { get; set; }
 
     [YamlMember(Alias = "exclude-propertynames", ApplyNamingConventions = false)]
-    [Option("exclude-propertynames", Separator = ';', HelpText = "A list of regular expressions for property names to exclude from each type.")]
+    [Option("exclude-propertynames", Separator = ';', HelpText = "A '; separated' list of regular expressions for property names to exclude from each type.")]
     public IEnumerable<string>? ExcludePropertyNames { get; set; }
 
     [YamlMember(Alias = "name-replace-from", ApplyNamingConventions = false)]
@@ -32,6 +32,6 @@ public abstract class MermaidFromCSharpBaseOptions : BaseOptions, IMermaidDiagra
     public string? NameReplaceTo { get; set; }
 
     [YamlMember(Alias = "tree-shaking-roots", ApplyNamingConventions = false)]
-    [Option("tree-shaking-roots", Separator = ';', HelpText = "A list of regular expressions for types to keep as roots when tree shaking the resulting diagram.")]
+    [Option("tree-shaking-roots", Separator = ';', HelpText = "A '; separated' list of regular expressions for types to keep as roots when tree shaking the resulting diagram.")]
     public IEnumerable<string>? TreeShakingRoots { get; set; }
 }

@@ -1,20 +1,14 @@
-﻿using System.Reflection;
-using System.Text.RegularExpressions;
+﻿using DryGen.Core;
+using System.Reflection;
 
 namespace DryGen.MermaidFromCSharp.PropertyFilters;
 
-public class ExcludePropertyNamePropertyFilter : IPropertyFilter
+public class ExcludePropertyNamePropertyFilter : AbstractStringRegexFilter, IPropertyFilter
 {
-    private readonly Regex regex;
-
-    public ExcludePropertyNamePropertyFilter(string regex)
-    {
-        this.regex = regex.ToSingleLineCompiledRegexWithTimeout();
-    }
+    public ExcludePropertyNamePropertyFilter(string regex) : base(regex, shouldMatch: false) { }
 
     public bool Accepts(PropertyInfo property)
     {
-        var match = regex.Match(property.Name);
-        return !match.Success;
+        return DoesAccept(property.Name);
     }
 }

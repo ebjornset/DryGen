@@ -8,11 +8,7 @@ namespace DryGen.Core;
 [ExcludeFromCodeCoverage]
 public sealed class AssemblyLoadException : Exception
 {
-    public AssemblyLoadException(string? message) : base(message)
-    {
-    }
+    public AssemblyLoadException(string? message) : base(message) { }
 
-    private AssemblyLoadException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-    }
+    private AssemblyLoadException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 }

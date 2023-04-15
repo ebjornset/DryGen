@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DryGen.MermaidFromDotnetDepsJson.Filters;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json.Nodes;
@@ -7,21 +8,21 @@ namespace DryGen.MermaidFromDotnetDepsJson.DeptsModel;
 
 internal class Target : BaseModelElement
 {
-    public Target(JsonObject targetObject, string id, bool findTechnology) : base(id, delimiter: ",Version=")
+    public Target(JsonObject targetObject, string id, bool findTechnology, IReadOnlyList<IAssemblyNameFilter> assemblyNameFilters) : base(id, delimiter: ",Version=")
     {
-        RuntimeDependencies = LoadDependencies(targetObject, findTechnology);
+        RuntimeDependencies = LoadDependencies(targetObject, findTechnology, assemblyNameFilters);
         BindDependencies();
     }
 
     public IReadOnlyList<Dependency> RuntimeDependencies { get; private set; }
 
-    internal static Target Load(JsonObject depsObject, bool findTechnologies)
+    internal static Target Load(JsonObject depsObject, bool findTechnologies, IReadOnlyList<IAssemblyNameFilter> assemblyNameFilters)
     {
         var (targetObject, id) = GetTargetsObjectPropertyObject(depsObject);
-        return new Target(targetObject, id, findTechnologies);
+        return new Target(targetObject, id, findTechnologies, assemblyNameFilters);
     }
 
-    private IReadOnlyList<Dependency> LoadDependencies(JsonObject targetObject, bool findTechnology)
+    private IReadOnlyList<Dependency> LoadDependencies(JsonObject targetObject, bool findTechnology, IReadOnlyList<IAssemblyNameFilter> assemblyNameFilters)
     {
         var enumerator = targetObject.GetEnumerator();
         var runtimeDependencies = new List<Dependency>();
@@ -34,6 +35,10 @@ internal class Target : BaseModelElement
                 continue;
             }
             var dependency = new Dependency(enumerator.Current.Key, targetPropertyObject, isMainAssembly, findTechnology);
+            if (assemblyNameFilters.Any(x => !x.Accepts(dependency.Name)))
+            {
+                continue;
+            }
             runtimeDependencies.Add(dependency);
             isMainAssembly = false;
         }

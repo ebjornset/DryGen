@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using DryGen.Core;
 
 namespace DryGen.MermaidFromCSharp.ClassDiagram;
 
@@ -97,8 +96,7 @@ public static class ClassDiagramExtensions
 
     public static ClassDiagramRelationshipCardinality GetAssociationToCardinality(this PropertyInfo property, bool isNullable)
     {
-        if (!isNullable && (property.GetCustomAttribute<RequiredAttribute>() != null ||
-                            property.GetCustomAttribute<JsonPropertyAttribute>()?.Required == Required.Always))
+        if (!isNullable && property.IsRequiredProperty())
         {
             return ClassDiagramRelationshipCardinality.ExactlyOne;
         }

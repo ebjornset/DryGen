@@ -16,8 +16,10 @@ The verb 'mermaid-c4component-diagram-from-dotnet-deps-json' uses the following 
 |---|---|---|---|
 |--boundary-in-row||int32|Value for the parameter $c4BoundaryInRow in UpdateLayoutConfig, used to arrange the diagram layout. (Default: 2)|
 |--boundary-level||all / internalexternal / none|What kind of 'Container Boundary' should be included in the diagram based on the assembly names? (Default: all)|
+|--exclude-assemblynames||List of string|A '; separated' list of regular expressions for names of assemblies to exclude. (Default: none)|
 |--exclude-techn||true/false|Should techn (technonlogy information) be excluded from the diagram? (Default: false)|
 |--exclude-version||true/false|Should version information be excluded from the diagram? (Default: false)|
+|--include-assemblynames||List of string|A '; separated' list of regular expressions for name of assemblies to include as components. (Default: all)|
 |--input-file|-i|string|Full path to the input file to generate a new representation for.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
@@ -39,8 +41,12 @@ Here is a template for an options file for 'mermaid-c4component-diagram-from-dot
 #
 #boundary-in-row: int32
 #boundary-level: all | internalexternal | none
+#exclude-assemblynames: # List of string
+#- 
 #exclude-techn: true|false
 #exclude-version: true|false
+#include-assemblynames: # List of string
+#- 
 #input-file: string
 #output-file: string
 #relation-level: all | interboundary | intraboundary | none

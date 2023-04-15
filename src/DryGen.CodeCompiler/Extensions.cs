@@ -1,21 +1,21 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace DryGen.Core;
+namespace DryGen.CodeCompiler;
 
-public static class AssemblyExtensions
+public static class Extensions
 {
     public static Assembly CompileCodeToMemory(this string cSharpCode, params Assembly[] referencedAssemblies)
     {
         var assemblyName = Path.GetRandomFileName();
         using var ms = new MemoryStream();
-        CompileCodeToStream(cSharpCode, assemblyName, ms, referencedAssemblies);
+        cSharpCode.CompileCodeToStream(assemblyName, ms, referencedAssemblies);
         ms.Seek(0, SeekOrigin.Begin);
         Assembly assembly = Assembly.Load(ms.ToArray());
         return assembly;

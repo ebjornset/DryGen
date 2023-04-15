@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using DryGen.Core;
 
 namespace DryGen.MermaidFromCSharp.ErDiagram;
 
@@ -45,7 +45,7 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
                     var attributeType = property.GetErDiagramAttributeTypeName();
                     var attributeName = property.Name;
                     var isNullable = Nullable.GetUnderlyingType(property.PropertyType) != null;
-                    var isPrimaryKey = property.CustomAttributes.Any(x => x.AttributeType == typeof(KeyAttribute));
+                    var isPrimaryKey = property.CustomAttributes.Any(x => x.IsKeyAttribute());
                     entity.AddAttribute(new ErDiagramAttribute(attributeType, attributeName, isNullable, isPrimaryKey));
                 }
             }

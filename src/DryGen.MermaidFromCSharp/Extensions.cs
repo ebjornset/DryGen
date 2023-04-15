@@ -52,9 +52,4 @@ public static class Extensions
             .Trim();
         return result.ToLower();
     }
-
-    public static Regex ToSingleLineCompiledRegexWithTimeout(this string regex)
-    {
-        return new Regex(regex, RegexOptions.Singleline | RegexOptions.Compiled, TimeSpan.FromSeconds(1));
-    }
 }

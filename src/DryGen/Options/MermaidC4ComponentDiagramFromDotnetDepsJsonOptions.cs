@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using DryGen.MermaidFromDotnetDepsJson;
+using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
 namespace DryGen.Options;
@@ -36,4 +37,13 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : BaseOptions, I
     [YamlMember(Alias = "boundary-in-row", ApplyNamingConventions = false)]
     [Option("boundary-in-row", HelpText = "Value for the parameter $c4BoundaryInRow in UpdateLayoutConfig, used to arrange the diagram layout. (Default: 2)")]
     public int? BoundaryInRow { get; set; }
+
+    [YamlMember(Alias = "include-assemblynames", ApplyNamingConventions = false)]
+    [Option("include-assemblynames", Separator = ';', HelpText = "A '; separated' list of regular expressions for name of assemblies to include as components. (Default: all)")]
+    public IEnumerable<string>? IncludeAssemblyNames { get; set; }
+
+    [YamlMember(Alias = "exclude-assemblynames", ApplyNamingConventions = false)]
+    [Option("exclude-assemblynames", Separator = ';', HelpText = "A '; separated' list of regular expressions for names of assemblies to exclude. (Default: none)")]
+    public IEnumerable<string>? ExcludeAssemblyNames { get; set; }
+
 }
