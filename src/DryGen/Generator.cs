@@ -17,7 +17,6 @@ using YamlDotNet.Serialization.NamingConventions;
 using DryGen.CSharpFromJsonSchema;
 using DryGen.Options;
 using DryGen.MermaidFromJsonSchema;
-using System.Runtime.Loader;
 using System.Text;
 using DryGen.MermaidFromDotnetDepsJson;
 using DryGen.Core;
@@ -367,11 +366,7 @@ public class Generator
         {
             throw new OptionsException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file.");
         }
-        var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new OptionsException($"Could not determine directory from inputFile '{inputFile}'");
-        AssemblyResolvingHelper.SetupAssemblyResolving(inputDirectory);
-        var assemblyBytes = File.ReadAllBytes(inputFile);
-        var assembly = AssemblyLoadContext.Default.LoadFromStream(new MemoryStream(assemblyBytes));
-        return assembly;
+        return new InternalAssemblyLoadContext(inputFile).Load();
     }
 
     private static TreeShakingDiagramFilter GetMermaidDiagramTreeShakingFilter(IEnumerable<string>? treeShakingRoots)
@@ -379,29 +374,6 @@ public class Generator
         var treeShakingRootsFilters = treeShakingRoots?.Any() == true ? treeShakingRoots.Select(x => new IncludeTypeNameTypeFilter(x)).ToArray() : null;
         var treeShakingDiagramFilter = new TreeShakingDiagramFilter(treeShakingRootsFilters);
         return treeShakingDiagramFilter;
-    }
-
-    [ExcludeFromCodeCoverage]
-    // The loading of assembly dependencies is so difficult to trigger in an automated test, since we need two asseblies in the same directory with dependencies, so this is tested manually (once).
-    private static class AssemblyResolvingHelper
-    {
-        internal static void SetupAssemblyResolving(string inputDirectory)
-        {
-            AssemblyLoadContext.Default.Resolving += (assemblyContext, assemblyName) =>
-            {
-                foreach (var extension in new[] { ".dll", ".exe" })
-                {
-                    var assemblyFileName = $"{inputDirectory}{Path.DirectorySeparatorChar}{assemblyName.Name}{extension}";
-                    if (File.Exists(assemblyFileName))
-                    {
-                        var assemblyBytes = File.ReadAllBytes(assemblyFileName);
-                        return assemblyContext.LoadFromStream(new MemoryStream(assemblyBytes));
-                    }
-                }
-                // We cant find the assembly file, let the runtime try to handle it
-                return null;
-            };
-        }
     }
 
     private static Exception PopWellKnownInnAggregateException(Exception ex)
