@@ -12,8 +12,7 @@ using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
+using Serilog;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 namespace DryGen.Build;
@@ -61,9 +60,9 @@ public partial class Build : NukeBuild
         .Before(Restore)
         .Executes(() =>
         {
-            SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(DeleteDirectory);
-            EnsureCleanDirectory(ArtifactsDirectory);
-            EnsureCleanDirectory(SonarQubeCoverageDirectory);
+            SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(x => x.DeleteDirectory());
+            ArtifactsDirectory.CreateOrCleanDirectory();
+            SonarQubeCoverageDirectory.CreateOrCleanDirectory();
         });
 
     internal Target Init => _ => _
@@ -74,14 +73,14 @@ public partial class Build : NukeBuild
             Authors = "Eirik Bjornset";
             Copyright = $"Copyright 2022-{DateTime.Today.Year} {Authors}";
             IsVersionTag = GitRepository != null && (GitRepository.Branch?.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase) ?? false);
-            Serilog.Log.Information("ToolsDescription = '{ToolsDescription}'", ToolsDescription);
-            Serilog.Log.Information("TemplatesDescription = '{TemplatesDescription}'", TemplatesDescription);
-            Serilog.Log.Information("Copyright = '{Copyright}'", Copyright);
-            Serilog.Log.Information("GitRepository = '{GitRepository}'", GitRepository);
-            Serilog.Log.Information("GitRepository.Branch = '{GitRepositoryBranch}'", GitRepository?.Branch);
-            Serilog.Log.Information("GitRepository.Tags = '{GitRepositoryTags}'", GitRepository?.Tags);
-            Serilog.Log.Information("IsVersionTag = '{IsVersionTag}'", IsVersionTag);
-            Serilog.Log.Information("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'", GitVersion.NuGetVersionV2);
+            Log.Information("ToolsDescription = '{ToolsDescription}'", ToolsDescription);
+            Log.Information("TemplatesDescription = '{TemplatesDescription}'", TemplatesDescription);
+            Log.Information("Copyright = '{Copyright}'", Copyright);
+            Log.Information("GitRepository = '{GitRepository}'", GitRepository);
+            Log.Information("GitRepository.Branch = '{GitRepositoryBranch}'", GitRepository?.Branch);
+            Log.Information("GitRepository.Tags = '{GitRepositoryTags}'", GitRepository?.Tags);
+            Log.Information("IsVersionTag = '{IsVersionTag}'", IsVersionTag);
+            Log.Information("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'", GitVersion.NuGetVersionV2);
         });
 
     internal Target Restore => _ => _
@@ -184,7 +183,7 @@ public partial class Build : NukeBuild
             .Executes(() =>
             {
                 // Install the artifact as a local dotnet tool in the ITests project
-                var workingDirectory = Solution.GetProject("DryGen.ITests").Directory;
+                var workingDirectory = GetProject("develop", "DryGen.ITests").Directory;
                 DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
                 DotNetToolUpdate(c => c
                     .SetPackageName("dry-gen")
@@ -235,7 +234,7 @@ public partial class Build : NukeBuild
         .Executes(() =>
         {
             DotNetRun(c => c
-                .SetProjectFile(Solution.GetProject("DryGen.Docs"))
+                .SetProjectFile(GetProject("develop", "DryGen.Docs"))
                 .SetConfiguration(Configuration)
                 .SetFramework("net6.0")
                 .SetApplicationArguments($"--root-directory {RootDirectory}")
@@ -256,7 +255,7 @@ public partial class Build : NukeBuild
        .Requires(() => Configuration.Equals(Configuration.Release))
        .Executes(() =>
        {
-           var packages = GlobFiles(ArtifactsDirectory, "*.nupkg");
+           var packages = ArtifactsDirectory.GlobFiles("*.nupkg");
            Assert.NotEmpty(packages.ToList());
            DotNetNuGetPush(s => s
             .SetApiKey(NuGetApiKey)
@@ -280,7 +279,7 @@ public partial class Build : NukeBuild
             {
                 // Noop, to prevent the build from stopping when dry-gen is not installed as a global tool (yet)
             }
-            var workingDirectory = Solution.GetProject("DryGen.ITests").Directory;
+            var workingDirectory = GetProject("develop", "DryGen.ITests").Directory;
             DotNetToolInstall(c => c
                 .SetGlobal(true)
                 .SetPackageName("dry-gen")
@@ -307,6 +306,12 @@ public partial class Build : NukeBuild
             var toolsPackageName = Path.Combine(ArtifactsDirectory, $"dry-gen.templates.{GitVersion.NuGetVersionV2}.nupkg");
             DotNet($"new install \"{toolsPackageName}\"", logOutput: true, logInvocation: true);
         });
+
+    private Project GetProject(string solutionFolderName, string projectName)
+    {
+        var solutionFolder = Solution.GetSolutionFolder(solutionFolderName) ?? throw new ArgumentException($"Solution folder '{solutionFolderName}' not found", nameof(solutionFolderName));
+        return solutionFolder.GetProject(projectName) ?? throw new ArgumentException($"Project '{projectName}' noot found in solution folder '{solutionFolderName}'", nameof(projectName));
+    }
 
     private static string DocsDirectory => Path.Combine(RootDirectory, "docs").Replace("\\", "/");
 }

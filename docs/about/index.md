@@ -17,7 +17,7 @@ Beside the ["don't repeat yourself" (DRY) prinsiple](https://en.wikipedia.org/wi
 As an open source tool **"we're standing on the shoulder of giants"**, and we heavily rely on the hard work of others volunteers. Drygen would probably never have seen the light of day without these other execellent tools:
 
 - The main developement tool is [.Net](https://dotnet.microsoft.com/){:target="\_blank"}, a free, cross-platform, and open source developer platform.
-- Github is used for our [code repository](https://github.com/ebjornset/DryGen){:target="\_blank"}, [issue tracker](https://github.com/ebjornset/DryGen/issues){:target="\_blank"}, [deployment tool](https://github.com/ebjornset/DryGen/actions){:target="\_blank"} and [documetation site](https://docs.drygen.dev/){:target="\_blank"}
+- Github is used for our [code repository](https://github.com/ebjornset/DryGen){:target="\_blank"}, [issue tracker](https://github.com/ebjornset/DryGen/issues){:target="\_blank"}, [deployment tool](https://github.com/ebjornset/DryGen/actions){:target="\_blank"} and [documentation site](https://docs.drygen.dev/){:target="\_blank"}
 - We use [SonarQube](https://www.sonarqube.org/){:target="\_blank"} and their SAAS offering [SonarCloud](https://sonarcloud.io/project/overview?id=ebjornset_DryGen){:target="\_blank"} (free for open source projects) as our static code analysis tool.
 - We use [Mend bolt](https://www.mend.io/free-developer-tools/bolt/){:target="\_blank"} (free for open source projects) as our security alerts and compliance tool.
 - The [documentation site](https://docs.drygen.dev/){:target="\_blank"} is generated at deploy time using the [Jekyll](https://jekyllrb.com/){:target="\_blank"} engine.
