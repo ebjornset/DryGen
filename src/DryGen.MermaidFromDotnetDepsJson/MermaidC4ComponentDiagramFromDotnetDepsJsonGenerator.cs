@@ -138,12 +138,12 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
 
     private static bool IsInterBoundary(DependencyRef dependencyRef, List<Dependency> boundaryDependencies)
     {
-        return boundaryDependencies.All(y => y != dependencyRef.Dependency);
+        return boundaryDependencies.TrueForAll(y => y != dependencyRef.Dependency);
     }
 
     private static bool IsIntraBoundary(DependencyRef dependencyRef, List<Dependency> boundaryDependencies)
     {
-        return boundaryDependencies.Any(y => y == dependencyRef.Dependency);
+        return boundaryDependencies.Exists(y => y == dependencyRef.Dependency);
     }
 
     private static void AppendRel(StringBuilder sb, Dependency fromDependency, Dependency? toDependency)

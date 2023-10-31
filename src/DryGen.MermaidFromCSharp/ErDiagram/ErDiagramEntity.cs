@@ -49,7 +49,7 @@ public class ErDiagramEntity : NamedType
 
     protected override bool IsRelatedTo(IDiagramType type)
     {
-        var result = relationships.Any(x => x.To.Type == type.Type);
+        var result = relationships.Exists(x => x.To.Type == type.Type);
         if (!result && type is ErDiagramEntity to)
         {
             result = to.Relationships.Any(x => x.To.Type == Type);

@@ -30,7 +30,7 @@ public class ClassDiagramMethod
 
     internal void ConvertToExtensionMethod()
     {
-        parameters.Remove(parameters.First());
+        parameters.Remove(parameters[0]);
         IsStatic = false;
     }
 }
