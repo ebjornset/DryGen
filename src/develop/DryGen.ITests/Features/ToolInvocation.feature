@@ -29,8 +29,7 @@ Scenario: Should be able to run the dotnet tool
 	And I should get this output from the tool
 		"""
 		classDiagram
-			class A {
-			}
+			class A
 		
 		"""
 	And I should get exit code '0' from the tool
