@@ -32,7 +32,7 @@ public static class Extensions
         {
             endCandidates.Add($"{entityName[..^1]}ies");
         }
-        if (endCandidates.Any(X => X == propertyName))
+        if (endCandidates.Contains(propertyName))
         {
             return string.Empty;
         }

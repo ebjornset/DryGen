@@ -49,11 +49,11 @@ public abstract class MermaidErDiagramFromCSharpBaseOptions : MermaidFromCSharpB
         get
         {
             var result = ErDiagramAttributeDetailExclusions.None;
-            if (ExcludeAttributeKeytypes ?? default)
+            if (ExcludeAttributeKeytypes == true)
             {
                 result |= ErDiagramAttributeDetailExclusions.KeyTypes;
             }
-            if (ExcludeAttributeComments ?? default)
+            if (ExcludeAttributeComments == true)
             {
                 result |= ErDiagramAttributeDetailExclusions.Comments;
             }

@@ -145,7 +145,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         var inMemoryOptionsBuilder = useInMemoryDatabaseMethod?.Invoke(null, new object?[] { optionsBuilder, Guid.NewGuid().ToString(), null });
         var optionsProperty = optionsBuilderType.GetProperty("Options");
         var options = optionsProperty?.GetValue(inMemoryOptionsBuilder);
-        var contextCtor = dbContextType.GetConstructors().FirstOrDefault(x => x.GetParameters().Any(y => dbContextOptionsType.IsAssignableFrom(y.ParameterType))) 
+        var contextCtor = Array.Find(dbContextType.GetConstructors(), x => Array.Exists(x.GetParameters(), y => dbContextOptionsType.IsAssignableFrom(y.ParameterType))) 
             ?? throw new ArgumentException($"{dbContextType.Name} has no public constructor with DbContextOptions as a parameter");
         var ctorParameters = new object?[contextCtor.GetParameters().Length];
         var offset = 0;
