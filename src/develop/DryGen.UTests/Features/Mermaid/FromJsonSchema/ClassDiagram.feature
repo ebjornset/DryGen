@@ -93,10 +93,8 @@ Scenario: Should generate Mermaid class diagram with tree shaking from 'tree-sha
 	And I should get this generated representation file
 		"""
 		classDiagram
-			class Order {
-			}
-			class TestSchema {
-			}
+			class Order
+			class TestSchema
 			TestSchema --> "0..1" Order
 		
 		"""

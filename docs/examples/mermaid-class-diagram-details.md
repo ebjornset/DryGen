@@ -160,27 +160,21 @@ message="Here we only also exclude all attibutes and methods with `attribute-lev
 ```mermaid
 classDiagram
 	direction TB
-	class Attribute {
-	}
+	class Attribute
 	class AttributeLevel {
 		<<enumeration>>
 	}
-	class Class {
-	}
+	class Class
 	class Direction {
 		<<enumeration>>
 	}
-	class Generator {
-	}
-	class Method {
-	}
+	class Generator
+	class Method
 	class MethodLevel {
 		<<enumeration>>
 	}
-	class MethodParameter {
-	}
-	class Relationship {
-	}
+	class MethodParameter
+	class Relationship
 	class RelationshipCardinality {
 		<<enumeration>>
 	}
