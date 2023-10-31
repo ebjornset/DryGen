@@ -38,81 +38,57 @@ classDiagram
 	class AbstractStringRegexFilter {
 		<<abstract>>
 	}
-	class AllChildFiltersTypeFilter {
-	}
-	class AnyChildFiltersTypeFilter {
-	}
-	class ClassDiagramAttribute {
-	}
+	class AllChildFiltersTypeFilter
+	class AnyChildFiltersTypeFilter
+	class ClassDiagramAttribute
 	class ClassDiagramAttributeLevel {
 		<<enumeration>>
 	}
-	class ClassDiagramClass {
-	}
+	class ClassDiagramClass
 	class ClassDiagramDirection {
 		<<enumeration>>
 	}
-	class ClassDiagramGenerator {
-	}
-	class ClassDiagramMethod {
-	}
+	class ClassDiagramGenerator
+	class ClassDiagramMethod
 	class ClassDiagramMethodLevel {
 		<<enumeration>>
 	}
-	class ClassDiagramMethodParameter {
-	}
-	class ClassDiagramRelationship {
-	}
+	class ClassDiagramMethodParameter
+	class ClassDiagramRelationship
 	class ClassDiagramRelationshipCardinality {
 		<<enumeration>>
 	}
 	class ClassDiagramRelationshipType {
 		<<enumeration>>
 	}
-	class ErDiagramAttribute {
-	}
+	class ErDiagramAttribute
 	class ErDiagramAttributeDetailExclusions {
 		<<enumeration>>
 	}
 	class ErDiagramAttributeTypeExclusion {
 		<<enumeration>>
 	}
-	class ErDiagramEntity {
-	}
-	class ErDiagramGenerator {
-	}
-	class ErDiagramRelationship {
-	}
+	class ErDiagramEntity
+	class ErDiagramGenerator
+	class ErDiagramRelationship
 	class ErDiagramRelationshipCardinality {
 		<<enumeration>>
 	}
 	class ErDiagramRelationshipTypeExclusion {
 		<<enumeration>>
 	}
-	class ErDiagramStructureBuilderByReflection {
-	}
-	class ExcludeAbstractClassTypeFilter {
-	}
-	class ExcludeClosedGenericTypeTypeFilter {
-	}
-	class ExcludeEnumTypeFilter {
-	}
-	class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter {
-	}
-	class ExcludeNonPublicClassTypeFilter {
-	}
-	class ExcludePropertyNamePropertyFilter {
-	}
-	class ExcludeSystemEnumTypeFilter {
-	}
-	class ExcludeSystemObjectAndSystemEnumTypeFilter {
-	}
-	class ExcludeSystemObjectTypeFilter {
-	}
-	class ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter {
-	}
-	class ExcludeTypeNameTypeFilter {
-	}
+	class ErDiagramStructureBuilderByReflection
+	class ExcludeAbstractClassTypeFilter
+	class ExcludeClosedGenericTypeTypeFilter
+	class ExcludeEnumTypeFilter
+	class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter
+	class ExcludeNonPublicClassTypeFilter
+	class ExcludePropertyNamePropertyFilter
+	class ExcludeSystemEnumTypeFilter
+	class ExcludeSystemObjectAndSystemEnumTypeFilter
+	class ExcludeSystemObjectTypeFilter
+	class ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter
+	class ExcludeTypeNameTypeFilter
 	class IClassDiagramGenerator {
 		<<interface>>
 	}
@@ -143,10 +119,8 @@ classDiagram
 	class INameRewriter {
 		<<interface>>
 	}
-	class IncludeNamespaceTypeFilter {
-	}
-	class IncludeTypeNameTypeFilter {
-	}
+	class IncludeNamespaceTypeFilter
+	class IncludeTypeNameTypeFilter
 	class IPropertyFilter {
 		<<interface>>
 	}
@@ -156,14 +130,10 @@ classDiagram
 	class ITypeLoader {
 		<<interface>>
 	}
-	class NamedType {
-	}
-	class ReplaceNameRewriter {
-	}
-	class TreeShakingDiagramFilter {
-	}
-	class TypeLoaderByReflection {
-	}
+	class NamedType
+	class ReplaceNameRewriter
+	class TreeShakingDiagramFilter
+	class TypeLoaderByReflection
 	AllChildFiltersTypeFilter ..|> ITypeFilter
 	AnyChildFiltersTypeFilter ..|> ITypeFilter
 	ClassDiagramClass --|> NamedType
@@ -247,47 +217,31 @@ classDiagram
 	class AbstractStringRegexFilter {
 		<<abstract>>
 	}
-	class AllChildFiltersTypeFilter {
-	}
-	class AnyChildFiltersTypeFilter {
-	}
-	class ExcludeAbstractClassTypeFilter {
-	}
-	class ExcludeClosedGenericTypeTypeFilter {
-	}
-	class ExcludeEnumTypeFilter {
-	}
-	class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter {
-	}
-	class ExcludeNonPublicClassTypeFilter {
-	}
-	class ExcludePropertyNamePropertyFilter {
-	}
-	class ExcludeSystemEnumTypeFilter {
-	}
-	class ExcludeSystemObjectAndSystemEnumTypeFilter {
-	}
-	class ExcludeSystemObjectTypeFilter {
-	}
-	class ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter {
-	}
-	class ExcludeTypeNameTypeFilter {
-	}
+	class AllChildFiltersTypeFilter
+	class AnyChildFiltersTypeFilter
+	class ExcludeAbstractClassTypeFilter
+	class ExcludeClosedGenericTypeTypeFilter
+	class ExcludeEnumTypeFilter
+	class ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter
+	class ExcludeNonPublicClassTypeFilter
+	class ExcludePropertyNamePropertyFilter
+	class ExcludeSystemEnumTypeFilter
+	class ExcludeSystemObjectAndSystemEnumTypeFilter
+	class ExcludeSystemObjectTypeFilter
+	class ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter
+	class ExcludeTypeNameTypeFilter
 	class IDiagramFilter {
 		<<interface>>
 	}
-	class IncludeNamespaceTypeFilter {
-	}
-	class IncludeTypeNameTypeFilter {
-	}
+	class IncludeNamespaceTypeFilter
+	class IncludeTypeNameTypeFilter
 	class IPropertyFilter {
 		<<interface>>
 	}
 	class ITypeFilter {
 		<<interface>>
 	}
-	class TreeShakingDiagramFilter {
-	}
+	class TreeShakingDiagramFilter
 	AllChildFiltersTypeFilter ..|> ITypeFilter
 	AnyChildFiltersTypeFilter ..|> ITypeFilter
 	ExcludeAbstractClassTypeFilter ..|> ITypeFilter
@@ -330,27 +284,21 @@ message="This diagram contains more or less all the C# types implementing the ca
 ```mermaid
 classDiagram
 	direction TB
-	class ClassDiagramAttribute {
-	}
+	class ClassDiagramAttribute
 	class ClassDiagramAttributeLevel {
 		<<enumeration>>
 	}
-	class ClassDiagramClass {
-	}
+	class ClassDiagramClass
 	class ClassDiagramDirection {
 		<<enumeration>>
 	}
-	class ClassDiagramGenerator {
-	}
-	class ClassDiagramMethod {
-	}
+	class ClassDiagramGenerator
+	class ClassDiagramMethod
 	class ClassDiagramMethodLevel {
 		<<enumeration>>
 	}
-	class ClassDiagramMethodParameter {
-	}
-	class ClassDiagramRelationship {
-	}
+	class ClassDiagramMethodParameter
+	class ClassDiagramRelationship
 	class ClassDiagramRelationshipCardinality {
 		<<enumeration>>
 	}
@@ -392,27 +340,21 @@ message="This diagram contains more or less the same C# types as in the previous
 ```mermaid
 classDiagram
 	direction TB
-	class ClassDiagramAttribute {
-	}
+	class ClassDiagramAttribute
 	class ClassDiagramAttributeLevel {
 		<<enumeration>>
 	}
-	class ClassDiagramClass {
-	}
+	class ClassDiagramClass
 	class ClassDiagramDirection {
 		<<enumeration>>
 	}
-	class ClassDiagramGenerator {
-	}
-	class ClassDiagramMethod {
-	}
+	class ClassDiagramGenerator
+	class ClassDiagramMethod
 	class ClassDiagramMethodLevel {
 		<<enumeration>>
 	}
-	class ClassDiagramMethodParameter {
-	}
-	class ClassDiagramRelationship {
-	}
+	class ClassDiagramMethodParameter
+	class ClassDiagramRelationship
 	class ClassDiagramRelationshipCardinality {
 		<<enumeration>>
 	}
@@ -461,30 +403,24 @@ classDiagram
 	class AbstractStringRegexFilter {
 		<<abstract>>
 	}
-	class ErDiagramAttribute {
-	}
+	class ErDiagramAttribute
 	class ErDiagramAttributeDetailExclusions {
 		<<enumeration>>
 	}
 	class ErDiagramAttributeTypeExclusion {
 		<<enumeration>>
 	}
-	class ErDiagramEntity {
-	}
-	class ErDiagramGenerator {
-	}
-	class ErDiagramRelationship {
-	}
+	class ErDiagramEntity
+	class ErDiagramGenerator
+	class ErDiagramRelationship
 	class ErDiagramRelationshipCardinality {
 		<<enumeration>>
 	}
 	class ErDiagramRelationshipTypeExclusion {
 		<<enumeration>>
 	}
-	class ErDiagramStructureBuilderByReflection {
-	}
-	class ExcludePropertyNamePropertyFilter {
-	}
+	class ErDiagramStructureBuilderByReflection
+	class ExcludePropertyNamePropertyFilter
 	class IDiagramFilter {
 		<<interface>>
 	}
@@ -515,14 +451,10 @@ classDiagram
 	class ITypeLoader {
 		<<interface>>
 	}
-	class NamedType {
-	}
-	class ReplaceNameRewriter {
-	}
-	class TreeShakingDiagramFilter {
-	}
-	class TypeLoaderByReflection {
-	}
+	class NamedType
+	class ReplaceNameRewriter
+	class TreeShakingDiagramFilter
+	class TypeLoaderByReflection
 	ErDiagramEntity --|> NamedType
 	ErDiagramEntity *-- "*" ErDiagramAttribute : attributes
 	ErDiagramEntity "0..1" o-- "*" ErDiagramRelationship : relationships

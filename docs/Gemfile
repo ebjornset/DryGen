@@ -11,8 +11,3 @@ gem "bulma-clean-theme"
 # You have deleted from the Gemfile:
 # * wdm (>= 0.1.0)
 # Error: Gemfile.lock probably needs updating. Run "bundle install" locally and commit changes. Exiting action
-
-# This is needed as a work around when Ruby 3.X throws LoadError
-# `require': cannot load such file -- webrick
-# Ref https://github.com/jekyll/jekyll/issues/8523
-gem "webrick"

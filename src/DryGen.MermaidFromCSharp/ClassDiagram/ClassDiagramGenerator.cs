@@ -350,27 +350,34 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         foreach (var classDiagramClass in classDiagramClasses)
         {
+            var classContentBuilder = new StringBuilder();
             // Append class with any attributes
             var dataType = GetDataType(classDiagramClass.Type, nameRewriter);
-            sb.Append("\tclass ").Append(dataType).AppendLine(" {");
+            sb.Append("\tclass ").Append(dataType);
             if (classDiagramClass.Type.IsInterface)
             {
-                sb.AppendLine("\t\t<<interface>>");
+                classContentBuilder.AppendLine("\t\t<<interface>>");
             }
             else if (classDiagramClass.Type.IsAbstract)
             {
-                sb.AppendLine("\t\t<<abstract>>");
+                classContentBuilder.AppendLine("\t\t<<abstract>>");
             }
             if (classDiagramClass.Type.IsEnum)
             {
-                AppendEnumerationToClass(sb, classDiagramClass);
+                AppendEnumerationToClass(classContentBuilder, classDiagramClass);
             }
             else
             {
-                AppendAttributesToClass(sb, classDiagramClass);
-                AppendMethodsToClass(sb, classDiagramClass);
+                AppendAttributesToClass(classContentBuilder, classDiagramClass);
+                AppendMethodsToClass(classContentBuilder, classDiagramClass);
             }
-            sb.Append("\t").AppendLine("}");
+            if (classContentBuilder.Length > 0)
+            {
+                sb.AppendLine(" {");
+                sb.Append(classContentBuilder.ToString());
+                sb.Append("\t").Append("}");
+            }
+            sb.AppendLine();
         }
     }
 

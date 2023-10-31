@@ -46,8 +46,7 @@ Scenario: Read options from file
 	And console out should contain the text
 		"""
 		classDiagram
-			class AReplaced {
-			}
+			class AReplaced
 		
 		"""
 

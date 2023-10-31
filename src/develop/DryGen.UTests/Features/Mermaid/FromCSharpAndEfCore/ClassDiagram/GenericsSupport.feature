@@ -24,14 +24,10 @@ Scenario: Generates class for generic type
 	# Mermaid only support one level of generics, so the <> in any nested generic types are replaced with "Of" as a workaround
 		"""
 		classDiagram
-			class Shape {
-			}
-			class ShapeAndSquare~TShape,TSquare~ {
-			}
-			class Square~TShape~ {
-			}
-			class Squares~IEnumerableOfIEnumerableOfShape~ {
-			}
+			class Shape
+			class ShapeAndSquare~TShape,TSquare~
+			class Square~TShape~
+			class Squares~IEnumerableOfIEnumerableOfShape~
 		
 		"""
 
@@ -53,14 +49,10 @@ Scenario: Generates dependency for all generic constructor arguments with known 
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
-			class C {
-			}
-			class D {
-			}
+			class A
+			class B
+			class C
+			class D
 			A ..> B
 			A ..> C
 			A ..> D
@@ -125,8 +117,7 @@ Scenario: Generates inheritance for generic types
 	# Mermaid only support one level of generics, so the <> in any nested generic types are replaced with "Of" as a workaround
 		"""
 		classDiagram
-			class ObjectShapeAndSquare {
-			}
+			class ObjectShapeAndSquare
 			class ShapeAndSquare~TShape,TSquare~ {
 				<<abstract>>
 			}

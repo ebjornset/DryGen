@@ -20,8 +20,7 @@ Scenario: Generates classes for all public classes
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class Customer {
-			}
+			class Customer
 		
 		"""
 
@@ -40,8 +39,7 @@ Scenario: Excludes inner classes from Class diagram
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class Customer {
-			}
+			class Customer
 		
 		"""
 
@@ -116,8 +114,7 @@ Scenario: Exclude object and enum automatic
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class Customer {
-			}
+			class Customer
 			class CustomerType {
 				<<enumeration>>
 			}

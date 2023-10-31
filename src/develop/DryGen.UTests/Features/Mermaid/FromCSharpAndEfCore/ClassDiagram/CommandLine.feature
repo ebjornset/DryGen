@@ -124,10 +124,8 @@ Scenario: Should generate Class diagram with all attributes and methods excluded
 			class Color {
 				<<enumeration>>
 			}
-			class Customer {
-			}
-			class Order {
-			}
+			class Customer
+			class Order
 			Order --> "0..1" Customer
 		
 		"""
@@ -246,10 +244,8 @@ Scenario: Should generate Class diagram with attributes excluded by property nam
 				BLUE
 				GREEN
 			}
-			class Customer {
-			}
-			class Order {
-			}
+			class Customer
+			class Order
 			Order --> "0..1" Customer
 		
 		"""
@@ -269,8 +265,7 @@ Scenario: Should generate Class diagram with private, protected and internal met
 			class Color {
 				<<enumeration>>
 			}
-			class Customer {
-			}
+			class Customer
 			class Order {
 				+PublicInstanceMethod()
 				+PublicStaticMethod()$
@@ -294,8 +289,7 @@ Scenario: Should generate Class diagram with private and protected methods exclu
 			class Color {
 				<<enumeration>>
 			}
-			class Customer {
-			}
+			class Customer
 			class Order {
 				+PublicInstanceMethod()
 				+PublicStaticMethod()$
@@ -321,8 +315,7 @@ Scenario: Should generate Class diagram with private methods excluded from argum
 			class Color {
 				<<enumeration>>
 			}
-			class Customer {
-			}
+			class Customer
 			class Order {
 				+PublicInstanceMethod()
 				+PublicStaticMethod()$
@@ -353,10 +346,8 @@ Scenario: Should generate Class diagram with direction from argument
 			class Color {
 				<<enumeration>>
 			}
-			class Customer {
-			}
-			class Order {
-			}
+			class Customer
+			class Order
 			Order --> "0..1" Customer
 		
 		"""
@@ -416,8 +407,7 @@ Scenario: Should exclude static methods from Class diagram from argument
 			class Color {
 				<<enumeration>>
 			}
-			class Customer {
-			}
+			class Customer
 			class Order {
 				+PublicInstanceMethod()
 				~InternalInstanceMethod()
@@ -481,7 +471,6 @@ Scenario: Should tree shake Class diagram from argument
 	And I should get this generated representation file
 		"""
 		classDiagram
-			class Order {
-			}
+			class Order
 		
 		"""

@@ -22,16 +22,14 @@ Scenario: Generates realization for classes implementing interfaces
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class BaseOrder {
-			}
+			class BaseOrder
 			class IDeliverable {
 				<<interface>>
 			}
 			class IOrder {
 				<<interface>>
 			}
-			class Order {
-			}
+			class Order
 			BaseOrder ..|> IOrder
 			BaseOrder ..|> IDeliverable
 			Order --|> BaseOrder
@@ -80,12 +78,9 @@ Scenario: Generates inheritance for subclasses
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
-			class C {
-			}
+			class A
+			class B
+			class C
 			A --|> B
 			B --|> C
 		
@@ -113,10 +108,8 @@ Scenario: Generates associations for scalar instance properties with a getter re
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
+			class A
+			class B
 			class C {
 				+object O
 			}
@@ -149,8 +142,7 @@ Scenario: Generates composition for instance collection properties with a getter
 			class Customer {
 				+<collection type>~object~ Objects
 			}
-			class Order {
-			}
+			class Order
 			Customer *-- "*" Order : get
 			Customer *-- "*" Order : get set
 		
@@ -188,12 +180,9 @@ Scenario: Generates aggregation for instance collection properties with bidirect
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class Customer {
-			}
-			class Order {
-			}
-			class Product {
-			}
+			class Customer
+			class Order
+			class Product
 			Customer "0..1" o-- "*" Order
 			Product "0..1" o-- "*" Order
 		
@@ -239,21 +228,15 @@ Scenario: Generates dependency for scalar constructor parameters that are not an
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
-			class C {
-			}
+			class A
+			class B
+			class C
 			class D {
 				<<interface>>
 			}
-			class E {
-			}
-			class F {
-			}
-			class G {
-			}
+			class E
+			class F
+			class G
 			A ..> G
 			A --> "0..1" B
 			A ..|> D
@@ -280,10 +263,8 @@ Scenario: Generates relationships for nullable scalar properties to other diagra
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
+			class A
+			class B
 			B --> "0..1" A
 		
 		"""
@@ -314,14 +295,10 @@ Scenario: Generates one relationship for bidirectional scalar properties between
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
-			class C {
-			}
-			class D {
-			}
+			class A
+			class B
+			class C
+			class D
 			A "0..1" <--> "0..1" B
 			A "0..1" <--> "0..1" C
 			A "0..1" <--> "0..1" D
@@ -346,10 +323,8 @@ Scenario: Generates relationships for nullable collection properties to other di
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
+			class A
+			class B
 			B *-- "*" A : aaa
 		
 		"""
@@ -381,8 +356,7 @@ Scenario: Generates relationships to enums
 				BLUE
 				GREEN
 			}
-			class Shape {
-			}
+			class Shape
 			Shape --> "0..1" Color : foreground
 			Shape --> "0..1" Color : background
 		
@@ -405,10 +379,8 @@ Scenario: Generates undefined to one or zero for optional scalar unidirectional 
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
+			class A
+			class B
 			A --> "0..1" B
 		
 		"""
@@ -431,10 +403,8 @@ Scenario: Generates one or zero to one or zero for non required scalar bidirecti
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
+			class A
+			class B
 			A "0..1" <--> "0..1" B
 		
 		"""
@@ -458,10 +428,8 @@ Scenario: Generates undefined to exactly one for scalar non required scalar unid
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
+			class A
+			class B
 			A --> "1" B
 		
 		"""
@@ -487,10 +455,8 @@ Scenario: Generates exactly one to exactly one for scalar non required scalar bi
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
+			class A
+			class B
 			A "1" <--> "1" B
 		
 		"""
@@ -513,10 +479,8 @@ Scenario: Generates undefined to zero or more composition for collection unidire
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
+			class A
+			class B
 			A *-- "*" B : bbb
 		
 		"""
@@ -543,12 +507,9 @@ Scenario: Generates zero or one to zero or more aggregation for collection to op
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
-			class C {
-			}
+			class A
+			class B
+			class C
 			A "0..1" o-- "*" B : bbb
 			C "0..1" o-- "*" A : aaa
 		
@@ -579,12 +540,9 @@ Scenario: Generates exactly one to zero or more aggregation for collection to ma
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
-			class C {
-			}
+			class A
+			class B
+			class C
 			A "1" o-- "*" B : bbb
 			C "1" o-- "*" A : aaa
 		
@@ -616,12 +574,9 @@ Scenario: Generates scalar relationship with JsonProperty attribute, with Requir
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class A {
-			}
-			class B {
-			}
-			class C {
-			}
+			class A
+			class B
+			class C
 			A "0..1" o-- "*" B : bbb
 			C "1" o-- "*" A : aaa
 		
@@ -661,14 +616,10 @@ Scenario: Generates ER relations with labels when the property name and type nam
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class Address {
-			}
-			class Customer {
-			}
-			class Order {
-			}
-			class Product {
-			}
+			class Address
+			class Customer
+			class Order
+			class Product
 			Address "0..1" <--> "0..1" Customer : owning
 			Customer *-- "*" Order
 			Customer *-- "*" Order

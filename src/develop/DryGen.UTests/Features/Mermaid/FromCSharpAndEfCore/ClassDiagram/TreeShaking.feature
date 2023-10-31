@@ -44,16 +44,14 @@ Scenario: Tree shakeing should keep classes implementing interfaces and vice ver
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class Customer {
-			}
+			class Customer
 			class ICustomer {
 				<<interface>>
 			}
 			class IOrder {
 				<<interface>>
 			}
-			class Order {
-			}
+			class Order
 			Customer ..|> ICustomer
 			Order ..|> IOrder
 		
@@ -76,10 +74,8 @@ Scenario: Tree shakeing should keep classes for scalar instance properties with 
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class Customer {
-			}
-			class Order {
-			}
+			class Customer
+			class Order
 			Order --> "0..1" Customer
 		
 		"""
@@ -103,10 +99,8 @@ Scenario: Tree shakeing should keep classes for instance collection properties w
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class Customer {
-			}
-			class Order {
-			}
+			class Customer
+			class Order
 			Customer *-- "*" Order : get
 			Customer *-- "*" Order : get set
 		
@@ -130,10 +124,8 @@ Scenario: Tree shakeing should keep classes with dependency for scalar construct
 	Then I should get this generated representation
 		"""
 		classDiagram
-			class Customer {
-			}
-			class Order {
-			}
+			class Customer
+			class Order
 			Order ..> Customer
 		
 		"""

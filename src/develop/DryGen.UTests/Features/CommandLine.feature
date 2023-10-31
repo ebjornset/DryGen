@@ -38,8 +38,7 @@ Scenario: Print result to console output when output is not specified
 	And console out should contain the text
 		"""
 		classDiagram
-			class A {
-			}
+			class A
 		
 		"""
 
