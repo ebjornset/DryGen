@@ -22,7 +22,7 @@ public static class ErDiagramExtensions
 
     public static bool IsErDiagramAttributePropertyType(this Type propertyType)
     {
-        if (propertyType.IsPrimitive || nonPrivitiveAttributeTypes.Any(x => x == propertyType))
+        if (propertyType.IsPrimitive || Array.Exists(nonPrivitiveAttributeTypes, x => x == propertyType))
         {
             return true;
         }
