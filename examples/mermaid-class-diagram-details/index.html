@@ -131,6 +131,7 @@
                 <div class="column is-8">
                     
                     
+
                     
                     
                     
@@ -172,11 +173,17 @@
         </article>
     </div>
 </div>
+
 <h3 id="example-one-no-filtering">Example one: No filtering</h3>
+
 <p>Sometimes a C# type can contain quite a few methods and or properties, and thus can look quite complex in a Mermaid class diagram.</p>
+
 <h4 id="the-commandline">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering.!.!. --include-typenames ^ClassDiagramGenerator$</code></p>
+
 <h4 id="the-resulting-mermaid-diagram">The resulting Mermaid diagram</h4>
+
 <pre><code class="language-mermaid">classDiagram
 	class ClassDiagramGenerator {
 		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
@@ -214,7 +221,9 @@
 	}
 
 </code></pre>
+
 <h3 id="example-two-make-more-high-level-diagrams-with---method-level-and---attribute-level">Example two: Make more high level diagrams with <code class="language-plaintext highlighter-rouge">--method-level</code> and <code class="language-plaintext highlighter-rouge">--attribute-level</code></h3>
+
 <p>If you want a more high level diagram, you can suppress methods by their visibility with <code class="language-plaintext highlighter-rouge">--method-level</code>.</p>
 
 <div x-data="{visible: true}">
@@ -238,15 +247,20 @@
 <p>In this example we only show the public methods.</p>
 
 <h4 id="the-commandline-1">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-method-level.!.!. --include-typenames ^ClassDiagramGenerator$ --method-level public</code></p>
+
 <h4 id="the-resulting-mermaid-diagram-1">The resulting Mermaid diagram</h4>
+
 <pre><code class="language-mermaid">classDiagram
 	class ClassDiagramGenerator {
 		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
 	}
 
 </code></pre>
+
 <h3 id="example-three-focus-on-the-domains-structure-with---exclude-static-methods-and---exclude-static-attributes">Example three: Focus on the domain’s structure with <code class="language-plaintext highlighter-rouge">--exclude-static-methods</code> and <code class="language-plaintext highlighter-rouge">--exclude-static-attributes</code></h3>
+
 <p>Sometimes your class diagram are all about the structure of a domain. Since static methods often tends to be “helper methods”, they might not give any extra information about the structure. In these situations it might be useful to supress them with <code class="language-plaintext highlighter-rouge">--exclude-static-methods</code>.</p>
 
 <div x-data="{visible: true}">
@@ -266,9 +280,13 @@
     </div>
 </div>
 <p> </p>
+
 <h4 id="the-commandline-2">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods.!.!. --include-typenames ^ClassDiagramGenerator$ --exclude-static-methods true</code></p>
+
 <h4 id="the-resulting-mermaid-diagram-2">The resulting Mermaid diagram</h4>
+
 <pre><code class="language-mermaid">classDiagram
 	class ClassDiagramGenerator {
 		+Generate(Assembly assembly, IReadOnlyList~ITypeFilter~ typeFilters, IReadOnlyList~IPropertyFilter~ attributeFilters, INameRewriter nameRewriter, IDiagramFilter diagramFilter) string
@@ -286,12 +304,17 @@
 	}
 
 </code></pre>
+
 <h3 id="example-four-simplify-method-signatures-with---exclude-method-params">Example four: Simplify method signatures with <code class="language-plaintext highlighter-rouge">--exclude-method-params</code></h3>
+
 <p>Use <code class="language-plaintext highlighter-rouge">--exclude-method-params</code> if you want a simpler diagram without details about all the methods parameters.</p>
 
 <h4 id="the-commandline-3">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params.!.!. --include-typenames ^ClassDiagramGenerator$ --exclude-method-params true</code></p>
+
 <h4 id="the-resulting-mermaid-diagram-3">The resulting Mermaid diagram</h4>
+
 <pre><code class="language-mermaid">classDiagram
 	class ClassDiagramGenerator {
 		+Generate(5 params) string
@@ -329,10 +352,12 @@
 	}
 
 </code></pre>
-<h3 id="example-five-hiding-naming-conventions-with---name-replace-from-and---name-replace-to">Example five: Hiding naming conventions with <code class="language-plaintext highlighter-rouge">--name-replace-from</code> and <code class="language-plaintext highlighter-rouge">--name-replace-to</code></h3>
-<p>Sometimes your C# code follow some naming convention where a lot of your types ends up with the same prefix or post fix, e.g. <code class="language-plaintext highlighter-rouge">.*Entity$</code> for all your types stored in the database by Entity Framework, or like in dry.gen where all types related to generation of Mermaid class diagrams has the convention <code class="language-plaintext highlighter-rouge">^ClassDiagram.*</code>. You might want to hide this convention from your resulting diagram, to focus on the pure domain concepts.</p>
 
-<p>In this example we hides the  <code class="language-plaintext highlighter-rouge">^ClassDiagram.*</code> convention for all the  <code class="language-plaintext highlighter-rouge">^ClassDiagram.*</code> C# types in dry.gen.</p>
+<h3 id="example-five-hiding-naming-conventions-with---name-replace-from-and---name-replace-to">Example five: Hiding naming conventions with <code class="language-plaintext highlighter-rouge">--name-replace-from</code> and <code class="language-plaintext highlighter-rouge">--name-replace-to</code></h3>
+
+<p>Sometimes your C# code follow some naming convention where a lot of your types ends up with the same prefix or post fix, e.g. <code class="language-plaintext highlighter-rouge">.*Entity$</code> for all your types stored in the database by Entity Framework, or like in dry-gen where all types related to generation of Mermaid class diagrams has the convention <code class="language-plaintext highlighter-rouge">^ClassDiagram.*</code>. You might want to hide this convention from your resulting diagram, to focus on the pure domain concepts.</p>
+
+<p>In this example we hides the <code class="language-plaintext highlighter-rouge">^ClassDiagram.*</code> convention for all the <code class="language-plaintext highlighter-rouge">^ClassDiagram.*</code> C# types in dry-gen.</p>
 
 <div x-data="{visible: true}">
     <div class="notification is-dark" x-show.transition.duration.300ms="visible">
@@ -351,32 +376,30 @@
     </div>
 </div>
 <p> </p>
+
 <h4 id="the-commandline-4">The commandline</h4>
+
 <p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-class-diagram-from-csharp --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.MermaidFromCSharp.dll --output-file docs/examples/mermaid-class-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace.!.!. --name-replace-from ClassDiagram --name-replace-to  --include-typenames ^ClassDiagram.* --attribute-level none --method-level none --direction TB</code></p>
+
 <h4 id="the-resulting-mermaid-diagram-4">The resulting Mermaid diagram</h4>
+
 <pre><code class="language-mermaid">classDiagram
 	direction TB
-	class Attribute {
-	}
+	class Attribute
 	class AttributeLevel {
 		&lt;&lt;enumeration&gt;&gt;
 	}
-	class Class {
-	}
+	class Class
 	class Direction {
 		&lt;&lt;enumeration&gt;&gt;
 	}
-	class Generator {
-	}
-	class Method {
-	}
+	class Generator
+	class Method
 	class MethodLevel {
 		&lt;&lt;enumeration&gt;&gt;
 	}
-	class MethodParameter {
-	}
-	class Relationship {
-	}
+	class MethodParameter
+	class Relationship
 	class RelationshipCardinality {
 		&lt;&lt;enumeration&gt;&gt;
 	}
@@ -392,7 +415,8 @@
 	Relationship --&gt; "0..1" RelationshipCardinality : to cardinality
 
 </code></pre>
-<script src="https://unpkg.com/mermaid@9.1.6/dist/mermaid.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.min.js"></script>
 
 <script>
   // select <pre class="mermaid"> _and_ <pre><code class="language-mermaid">
