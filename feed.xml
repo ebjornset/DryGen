@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2023-10-31T22:44:30+00:00</updated><id>/feed.xml</id><title type="html">DryGen</title><subtitle>A .Net tool to generate other representations of a piece of knowledge from one representation.</subtitle><entry><title type="html">Version 1.3.1 is released</title><link href="/2023/10/31/release-1.3.1/" rel="alternate" type="text/html" title="Version 1.3.1 is released" /><published>2023-10-31T00:00:00+00:00</published><updated>2023-10-31T00:00:00+00:00</updated><id>/2023/10/31/release-1.3.1</id><content type="html" xml:base="/2023/10/31/release-1.3.1/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2023-11-16T22:43:23+00:00</updated><id>/feed.xml</id><title type="html">DryGen</title><subtitle>A .Net tool to generate other representations of a piece of knowledge from one representation.</subtitle><entry><title type="html">Version 1.4.0 is released</title><link href="/2023/11/16/release-1.4.0/" rel="alternate" type="text/html" title="Version 1.4.0 is released" /><published>2023-11-16T00:00:00+00:00</published><updated>2023-11-16T00:00:00+00:00</updated><id>/2023/11/16/release-1.4.0</id><content type="html" xml:base="/2023/11/16/release-1.4.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<ul>
+  <li>Added support for .Net 8, so drygen now supports .Net8, .Net 7 and .Net 6.<br />
+<strong>NB!</strong> Please note that support for .Net 7 will be removed when .Net 7 goes out of support from Microsoft.</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.3.1 is released</title><link href="/2023/10/31/release-1.3.1/" rel="alternate" type="text/html" title="Version 1.3.1 is released" /><published>2023-10-31T00:00:00+00:00</published><updated>2023-10-31T00:00:00+00:00</updated><id>/2023/10/31/release-1.3.1</id><content type="html" xml:base="/2023/10/31/release-1.3.1/"><![CDATA[<h3 id="in-this-version">In this version</h3>
 
 <h4 id="mermaid-class-diagrams">Mermaid class diagrams</h4>
 
@@ -81,10 +88,4 @@
 
 <p>The relase also includes some examples of the usage of the different Mermaid diagram options.</p>
 
-<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version Deprected the options --exclude-all-attributes and --exclude-foreignkey-attributes in favor of --attribute-type-exclusion. Deprected the option --exclude-all-relationships in favor of --relationship-type-exclusion.]]></summary></entry><entry><title type="html">Version 0.6.0 is released</title><link href="/2022/06/06/release-0.6.0/" rel="alternate" type="text/html" title="Version 0.6.0 is released" /><published>2022-06-06T00:00:00+00:00</published><updated>2022-06-06T00:00:00+00:00</updated><id>/2022/06/06/release-0.6.0</id><content type="html" xml:base="/2022/06/06/release-0.6.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
-<ol>
-  <li>Enhanchement: <a href="https://github.com/ebjornset/DryGen/issues/25">Tree shaking in Mermaid diagrams</a></li>
-  <li>Enhanchement: <a href="https://github.com/ebjornset/DryGen/issues/29">Replacing of token in the output file with the generated representation</a></li>
-</ol>
-
-<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version Enhanchement: Tree shaking in Mermaid diagrams Enhanchement: Replacing of token in the output file with the generated representation]]></summary></entry></feed>
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version Deprected the options --exclude-all-attributes and --exclude-foreignkey-attributes in favor of --attribute-type-exclusion. Deprected the option --exclude-all-relationships in favor of --relationship-type-exclusion.]]></summary></entry></feed>
