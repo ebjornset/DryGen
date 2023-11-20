@@ -126,8 +126,8 @@ public class Generator
 
     public string ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(string resultRepresentation, string outputFile, string replaceTokenInOutputFile, bool verbose = true)
     {
-        var existingRepresentation = File.ReadAllText(outputFile) ?? string.Empty;
-        if (!existingRepresentation?.Contains(replaceTokenInOutputFile) == true)
+        string existingRepresentation = File.ReadAllText(outputFile) ?? string.Empty;
+        if (!existingRepresentation.Contains(replaceTokenInOutputFile))
         {
             throw new OptionsException($"'replace-token-in-output-file' '{replaceTokenInOutputFile}' was not found in output file '{outputFile}'");
         }
@@ -135,10 +135,7 @@ public class Generator
         {
             outWriter.WriteLine($"Replacing the 'magic token' '{replaceTokenInOutputFile}' with {resultRepresentation} in file '{outputFile}'");
         }
-#pragma warning disable CS8603 // Possible null reference return.
-        // No, we can't get null reference return here, since we use ?? string.Empty.
         return existingRepresentation;
-#pragma warning restore CS8603 // Possible null reference return.
     }
 
     private int ExecuteWithExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions, new()
