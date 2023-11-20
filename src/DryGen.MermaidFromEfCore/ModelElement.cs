@@ -36,7 +36,7 @@ public abstract class ModelElement
 
     protected PropertyInfo GetElementPropertyInfo(string propertyName)
     {
-        var propertyInfo = GetPropertyInfoFromType(ElementType, propertyName);
+        var propertyInfo = ModelElement.GetPropertyInfoFromType(ElementType, propertyName);
         return propertyInfo ?? throw new TypeMemberException($"'{ElementType.FullName}' does not have a property named '{propertyName}'");
     }
 
@@ -60,11 +60,11 @@ public abstract class ModelElement
 
     protected MethodInfo GetElementMethodInfo(string methodName)
     {
-        var methodInfo = GetMethodInfoFromType(ElementType, methodName);
+        var methodInfo = ModelElement.GetMethodInfoFromType(ElementType, methodName);
         return methodInfo ?? throw new TypeMemberException($"'{ElementType.FullName}' does not have a method named '{methodName}'");
     }
 
-    private PropertyInfo? GetPropertyInfoFromType(Type? type, string propertyName)
+    private static PropertyInfo? GetPropertyInfoFromType(Type? type, string propertyName)
     {
         if (type == null)
         {
@@ -74,16 +74,16 @@ public abstract class ModelElement
         if (propertyInfo != null) { return propertyInfo; }
         foreach (var allInterface in type.GetInterfaces())
         {
-            propertyInfo = GetPropertyInfoFromType(allInterface, propertyName);
+            propertyInfo = ModelElement.GetPropertyInfoFromType(allInterface, propertyName);
             if (propertyInfo != null)
             {
                 return propertyInfo;
             }
         }
-        return GetPropertyInfoFromType(type.BaseType, propertyName);
+        return ModelElement.GetPropertyInfoFromType(type.BaseType, propertyName);
     }
 
-    private MethodInfo? GetMethodInfoFromType(Type? type, string methodName)
+    private static MethodInfo? GetMethodInfoFromType(Type? type, string methodName)
     {
         if (type == null)
         {
@@ -93,13 +93,13 @@ public abstract class ModelElement
         if (methodInfo != null) { return methodInfo; }
         foreach (var allInterface in type.GetInterfaces())
         {
-            methodInfo = GetMethodInfoFromType(allInterface, methodName);
+            methodInfo = ModelElement.GetMethodInfoFromType(allInterface, methodName);
             if (methodInfo != null)
             {
                 return methodInfo;
             }
         }
-        return GetMethodInfoFromType(type.BaseType, methodName);
+        return ModelElement.GetMethodInfoFromType(type.BaseType, methodName);
     }
 
     [ExcludeFromCodeCoverage] // Just a guard rail for unexpected structures

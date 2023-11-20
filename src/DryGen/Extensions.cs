@@ -10,7 +10,7 @@ public static class Extensions
 {
     public static bool HasVerbAttribute(this Type type)
     {
-        return type.GetCustomAttributes(typeof(VerbAttribute), inherit: true)?.Any() == true;
+        return type.GetCustomAttributes(typeof(VerbAttribute), inherit: true)?.Length > 0;
     }
 
     public static string GetVerb(this Type type)
@@ -107,7 +107,7 @@ public static class Extensions
 
     private static bool VerbAttributeMatches(Type type, string verb)
     {
-        if (type.GetCustomAttributes(typeof(VerbAttribute), inherit: true)?.Any() == true)
+        if (type.GetCustomAttributes(typeof(VerbAttribute), inherit: true)?.Length > 0)
         {
             var verbAttribute = type.CustomAttributes.Single(x => x.AttributeType == typeof(VerbAttribute));
             var optionsVerb = verbAttribute.ConstructorArguments[0].ToString()?.Replace("\"", string.Empty);
