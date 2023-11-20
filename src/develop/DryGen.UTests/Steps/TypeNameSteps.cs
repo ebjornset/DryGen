@@ -13,7 +13,7 @@ public sealed class TypeNameSteps
 {
     private IReadOnlyList<string>? rewrittenNames;
     private string? rewrittenName;
-    private INameRewriter? nameRewriter;
+    private ReplaceNameRewriter? nameRewriter;
 
     [Given(@"this name replase string '([^']*)' and replacement '([^']*)'")]
     public void GivenThisNameReplaseStringAndReplacement(string replace, string replacement)
