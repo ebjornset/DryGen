@@ -9,6 +9,6 @@ hero_height: is-fullwidth
 
 ### In this version
 
-- Added support for executing several verbs in one run with the new verb `several-verbs`
+- Added support for executing several verbs in one run with the new verb `verbs-from-options-file`
 
 Have fun!

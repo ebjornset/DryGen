@@ -49,4 +49,9 @@ public static class Constants
     {
         public const string Verb = "options-from-commandline";
     }
+
+    public static class VerbsFromOptionsFile
+    {
+        public const string Verb = "verbs-from-options-file";
+    }
 }

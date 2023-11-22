@@ -8,7 +8,7 @@ namespace DryGen.Options;
 [Verb(
     Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb,
     HelpText = "Generate a Mermaid C4 Component diagram from a .Net deps.json file.")]
-public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : BaseOptions, IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions
+public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : CommonInputFileOptions, IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions
 {
     [YamlMember(Alias = "relation-level", ApplyNamingConventions = false)]
     [Option("relation-level", HelpText = "What types of dependencies should be included as relations in the diagram? (Default: all)")]

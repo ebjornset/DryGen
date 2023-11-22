@@ -3,7 +3,7 @@ using System.IO;
 
 namespace DryGen.DevUtils.Helpers;
 
-public class InputFileContext : IDisposable
+public sealed class InputFileContext : IDisposable
 {
     private string? inputFileName;
 
@@ -11,7 +11,7 @@ public class InputFileContext : IDisposable
     {
         get
         {
-            return inputFileName ?? throw new ArgumentNullException(nameof(inputFileName));
+            return inputFileName ?? throw new PropertyNotSetException(nameof(inputFileName));
         }
         set
         {

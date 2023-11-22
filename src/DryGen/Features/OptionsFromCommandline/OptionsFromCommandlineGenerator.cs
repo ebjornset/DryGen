@@ -1,11 +1,10 @@
-﻿using DryGen.Options;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using YamlDotNet.Serialization;
 
-namespace DryGen
+namespace DryGen.Features.OptionsFromCommandline
 {
     public static class OptionsFromCommandlineGenerator
     {

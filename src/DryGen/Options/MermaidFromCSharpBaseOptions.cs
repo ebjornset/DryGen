@@ -5,7 +5,7 @@ using YamlDotNet.Serialization;
 
 namespace DryGen.Options;
 
-public abstract class MermaidFromCSharpBaseOptions : BaseOptions, IMermaidDiagramOptions
+public abstract class MermaidFromCSharpBaseOptions : CommonInputFileOptions, IMermaidDiagramOptions
 {
     [YamlMember(Alias = "include-namespaces", ApplyNamingConventions = false)]
     [Option("include-namespaces", Separator = ';', HelpText = "A list of regular expressions for namespaces to include.")]

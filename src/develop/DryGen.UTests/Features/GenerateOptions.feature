@@ -198,7 +198,6 @@ Scenario: Should generate options for verb options-from-commandline
 		#
 		# dry-gen options for verb 'options-from-commandline'
 		#
-		#input-file: string
 		#output-file: string
 		#replace-token-in-output-file: string
 		#verb: string

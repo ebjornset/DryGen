@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using DryGen.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,6 +105,10 @@ public static class Extensions
         return propertyType.Name.ToLowerInvariant();
     }
 
+    public static TOptions AsNonNullOptions<TOptions>(this CommonOptions? options) where TOptions: BaseOptions
+    {
+        return options as TOptions ?? throw new ArgumentException($"Cannot cast options '{options}' as '{typeof(TOptions)}'", nameof(options));
+    }
 
     private static bool VerbAttributeMatches(Type type, string verb)
     {

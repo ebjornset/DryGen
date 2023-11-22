@@ -17,3 +17,5 @@
     link: /verbs/mermaid-er-diagram-from-json-schema
   - name: options-from-commandline
     link: /verbs/options-from-commandline
+  - name: verbs-from-options-file
+    link: /verbs/verbs-from-options-file

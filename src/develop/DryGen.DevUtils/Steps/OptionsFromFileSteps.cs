@@ -13,8 +13,8 @@ public sealed class OptionsFromFileSteps
         this.optionsFileContext = optionsFileContext;
     }
 
-    [Given(@"this input file as a command line option")]
-    public void GivenThisInputFileAsACommandLineOption(string yaml)
+    [Given(@"this content as an options file")]
+    public void GivenThisContentAsACommandLineOptionsFile(string yaml)
     {
         optionsFileContext.WriteOptionsFile(yaml);
     }

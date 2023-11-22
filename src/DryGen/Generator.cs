@@ -21,12 +21,16 @@ using System.Text;
 using DryGen.MermaidFromDotnetDepsJson;
 using DryGen.Core;
 using DryGen.MermaidFromDotnetDepsJson.Filters;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
+using DryGen.Features.VerbsFromOptionsFile;
+using DryGen.Features.OptionsFromCommandline;
 
 namespace DryGen;
 
 public class Generator
 {
-    private readonly Parser parser;
+    private readonly CommandLine.Parser parser;
     private readonly TextWriter outWriter;
     private readonly TextWriter errorWriter;
     private readonly bool useAssemblyLoadContextDefault;
@@ -35,7 +39,7 @@ public class Generator
 
     public Generator(TextWriter outWriter, TextWriter errorWriter, bool useAssemblyLoadContextDefault)
     {
-        parser = new Parser(with =>
+        parser = new CommandLine.Parser(with =>
         {
             with.CaseInsensitiveEnumValues = true;
             with.HelpWriter = null;
@@ -59,7 +63,8 @@ public class Generator
             MermaidErDiagramFromCSharpOptions,
             MermaidErDiagramFromEfCoreOptions,
             MermaidErDiagramFromJsonSchemaOptions,
-            OptionsFromCommandlineOptions
+            OptionsFromCommandlineOptions,
+            VerbsFromOptionsFileOptions
              >(args);
         return parserResult.MapResult(
           (CSharpFromJsonSchemaOptions options) => GenerateCSharpFromJsonSchema(options, args),
@@ -70,6 +75,7 @@ public class Generator
           (MermaidErDiagramFromEfCoreOptions options) => GenerateMermaidErDiagramFromEfCore(options, args),
           (MermaidErDiagramFromJsonSchemaOptions options) => GenerateMermaidErDiagramFromJsonSchema(options, args),
           (OptionsFromCommandlineOptions options) => GenerateOptionsFromCommandline(options, args),
+          (VerbsFromOptionsFileOptions options) => GenerateVerbsFromOptionsFile(options),
           errors => DisplayHelp(parserResult));
     }
 
@@ -97,7 +103,7 @@ public class Generator
         return 1;
     }
 
-    private int ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, string[] args, string resultRepresentation, Func<TOptions, string> resultFunc) where TOptions : BaseOptions, new()
+    private int ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, string[] args, string resultRepresentation, Func<TOptions, string> resultFunc) where TOptions : CommonOptions, new()
     {
         return ExecuteWithExceptionHandlingAndHelpDisplay(options, options =>
         {
@@ -138,7 +144,7 @@ public class Generator
         return existingRepresentation;
     }
 
-    private int ExecuteWithExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions, new()
+    private int ExecuteWithExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions
     {
         try
         {
@@ -260,7 +266,61 @@ public class Generator
         });
     }
 
-    private TOptions GetOptionsFromFileWithCommandlineOptionsAsOverrides<TOptions>(TOptions commandlineOptions, string[] args) where TOptions : BaseOptions
+    private int GenerateVerbsFromOptionsFile(VerbsFromOptionsFileOptions options)
+    {
+        return ExecuteWithExceptionHandlingAndHelpDisplay(options, options =>
+        {
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(PascalCaseNamingConvention.Instance)
+                .WithTypeDiscriminatingNodeDeserializer((o) =>
+                {
+                    IDictionary<string, Type> valueMappings = new Dictionary<string, Type>
+                    {
+                        { Constants.OptionsFromCommandline.Verb, typeof(OptionsFromCommandlineConfiguration) },
+                    };
+                    o.AddKeyValueTypeDiscriminator<IVerbsFromOptionsFileConfiguration>("verb", valueMappings);
+                })
+                .Build();
+            if (string.IsNullOrWhiteSpace(options.OptionsFile))
+            {
+                throw new ArgumentException("--options-file is mandatory");
+            }
+            var yaml = File.ReadAllText(options.OptionsFile);
+            var yamlParser = new YamlDotNet.Core.Parser(new StringReader(yaml));
+            yamlParser.Consume<StreamStart>();
+            var documentNumber = 0;
+            while (yamlParser.TryConsume<DocumentStart>(out _))
+            {
+                documentNumber++;
+                VerbsFromOptionsFileOptionsDocument optionsDocument;
+                try
+                {
+                    optionsDocument = deserializer.Deserialize<VerbsFromOptionsFileOptionsDocument>(yamlParser);
+                }
+                catch (YamlException e)
+                when (e.InnerException?.InnerException?.Message?.Contains("Cannot dynamically create an instance of type 'DryGen.Features.VerbsFromOptionsFile.IVerbsFromOptionsFileConfiguration'") == true)
+                {
+                    throw new OptionsException($"Unknown 'verb' in document #{documentNumber}");
+                }
+                if (optionsDocument.Configuration?.GetOptions() == null)
+                {
+                    throw new OptionsException($"'configuration.options' is mandatory in document #{documentNumber}");
+                }
+                switch (optionsDocument.Configuration.Verb)
+                {
+                    case Constants.OptionsFromCommandline.Verb:
+                        GenerateOptionsFromCommandline(optionsDocument.Configuration.GetOptions().AsNonNullOptions<OptionsFromCommandlineOptions>(), Array.Empty<string>());
+                        break;
+                    default:
+                        throw new OptionsException($"Unsupported verb '{optionsDocument.Configuration.Verb}' in document #{documentNumber}");
+                }
+                yamlParser.TryConsume<DocumentEnd>(out _);
+            }
+            return 0;
+        });
+    }
+
+    private TOptions GetOptionsFromFileWithCommandlineOptionsAsOverrides<TOptions>(TOptions commandlineOptions, string[] args) where TOptions : CommonOptions
     {
         if (!string.IsNullOrEmpty(commandlineOptions.OptionsFile))
         {
@@ -282,7 +342,7 @@ public class Generator
     }
 
     [ExcludeFromCodeCoverage(Justification = "This should in theory never happend, and cannot be tested")]
-    private void CheckForReparseProblem<TOptions>(ParserResult<TOptions> parserResult) where TOptions : BaseOptions
+    private void CheckForReparseProblem<TOptions>(ParserResult<TOptions> parserResult) where TOptions : CommonOptions
     {
         if (parserResult.Tag == ParserResultType.NotParsed)
         {
@@ -291,7 +351,7 @@ public class Generator
         }
     }
 
-    private static void ReplaceEmptyIEnumerabeStrings<TOptions>(TOptions target, TOptions source) where TOptions : BaseOptions
+    private static void ReplaceEmptyIEnumerabeStrings<TOptions>(TOptions target, TOptions source) where TOptions : CommonOptions
     {
         foreach (var property in typeof(TOptions).GetProperties())
         {
@@ -308,7 +368,7 @@ public class Generator
         }
     }
 
-    private void WriteGeneratedRepresentationToConsoleOrFile(BaseOptions options, string generatedRepresentation, string? existingRepresentation)
+    private void WriteGeneratedRepresentationToConsoleOrFile(CommonOptions options, string generatedRepresentation, string? existingRepresentation)
     {
         if (string.IsNullOrEmpty(options.OutputFile))
         {
