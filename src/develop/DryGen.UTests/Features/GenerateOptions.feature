@@ -202,3 +202,18 @@ Scenario: Should generate options for verb options-from-commandline
 		#replace-token-in-output-file: string
 		#verb: string
 		"""
+
+Scenario: Should generate options for verb verbs-from-options-file
+	When I call the program with this command line arguments
+		| Arg                      |
+		| options-from-commandline |
+		| --verb                   |
+		| verbs-from-options-file  |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		#
+		# dry-gen options for verb 'verbs-from-options-file'
+		#
+
+		"""
