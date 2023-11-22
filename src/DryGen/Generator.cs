@@ -178,7 +178,7 @@ public class Generator
         });
     }
 
-    [ExcludeFromCodeCoverage] // At the moment we have do deprecated option, but we migth get some again in the future...
+    [ExcludeFromCodeCoverage] // At the moment we have no deprecated option, but we migth get some again in the future...
 #pragma warning disable IDE0051 // Remove unused private members
     private void WarnIfDeprecatedIsUsed(bool isDeprecatedOptionUsed, string deprecatedOption, string replacedByOption)
 #pragma warning restore IDE0051 // Remove unused private members
@@ -196,7 +196,6 @@ public class Generator
             var diagramGenerator = new ErDiagramGenerator(options);
             return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
         });
-
     }
 
     private int GenerateMermaidClassDiagramFromCSharp(MermaidClassDiagramFromCSharpOptions options, string[] args)
@@ -283,7 +282,7 @@ public class Generator
                 .Build();
             if (string.IsNullOrWhiteSpace(options.OptionsFile))
             {
-                throw new ArgumentException("--options-file is mandatory");
+                throw new OptionsException("--options-file is mandatory");
             }
             var yaml = File.ReadAllText(options.OptionsFile);
             var yamlParser = new YamlDotNet.Core.Parser(new StringReader(yaml));

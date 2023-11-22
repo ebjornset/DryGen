@@ -62,6 +62,13 @@ Scenario: Should generate output from two yaml documents in the options file
 		#verb: string
 		"""
 
+Scenario: Should fail when '--options--file' argument is missing
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '1'
+	And I should find the text "--options-file is mandatory" in console error
+
 Scenario: Should fail when 'options' is missing in a yaml document
 	Given this content as an options file
 	# The commandline arguments -f <this filename> will be appended to the command line
