@@ -26,6 +26,7 @@ using YamlDotNet.Core.Events;
 using DryGen.Features.VerbsFromOptionsFile;
 using DryGen.Features.OptionsFromCommandline;
 using DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
+using DryGen.Features.Mermaid.FromJsonSchema.ClassDiagram;
 
 namespace DryGen;
 
@@ -278,6 +279,7 @@ public class Generator
                     {
                         { Constants.OptionsFromCommandline.Verb, typeof(OptionsFromCommandlineConfiguration) },
                         { Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb, typeof(MermaidC4ComponentDiagramFromDotnetDepsJsonConfiguration) },
+                        { Constants.MermaidClassDiagramFromJsonSchema.Verb, typeof(MermaidClassDiagramFromJsonSchemaConfiguration) },
                     };
                     o.AddKeyValueTypeDiscriminator<IVerbsFromOptionsFileConfiguration>("verb", valueMappings);
                 })
@@ -314,6 +316,9 @@ public class Generator
                         break;
                     case Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb:
                         GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidC4ComponentDiagramFromDotnetDepsJsonOptions>(), Array.Empty<string>());
+                        break;
+                    case Constants.MermaidClassDiagramFromJsonSchema.Verb:
+                        GenerateMermaidClassDiagramFromJsonSchema(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidClassDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
                         break;
                     default:
                         throw new OptionsException($"Unsupported verb '{optionsDocument.Configuration.Verb}' in document #{documentNumber}");
