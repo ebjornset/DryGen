@@ -1,9 +1,10 @@
 ﻿using CommandLine;
 using DryGen.MermaidFromJsonSchema;
+using DryGen.Options;
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
-namespace DryGen.Options;
+namespace DryGen.Features.Mermaid.FromJsonSchema.ErDiagram;
 
 [Verb(Constants.MermaidErDiagramFromJsonSchema.Verb, HelpText = "Generate a Mermaid Entity Relationship diagram from a Json shcema.")]
 public class MermaidErDiagramFromJsonSchemaOptions : FromJsonSchemaBaseOptions, IMermaidErDiagramFromJsonSchemaOptions

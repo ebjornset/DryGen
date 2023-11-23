@@ -1,7 +1,6 @@
-﻿using DryGen.Features.Mermaid.FromJsonSchema.ClassDiagram;
-using DryGen.Features.VerbsFromOptionsFile;
+﻿using DryGen.Features.VerbsFromOptionsFile;
 
-namespace DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
+namespace DryGen.Features.Mermaid.FromJsonSchema.ClassDiagram;
 
 public class MermaidClassDiagramFromJsonSchemaConfiguration : VerbsFromOptionsFileConfiguration<MermaidClassDiagramFromJsonSchemaOptions>
 {

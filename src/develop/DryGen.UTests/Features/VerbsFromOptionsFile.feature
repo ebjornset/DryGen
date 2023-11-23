@@ -177,3 +177,49 @@ Scenario: Should generate output with the verb 'mermaid-class-diagram-from-json-
 			}
 		
 		"""
+
+Scenario: Should generate output with the verb 'mermaid-er-diagram-from-json-schema' in the options file
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: mermaid-er-diagram-from-json-schema
+		  options:
+		    input-file: $(input_file)
+		    schema-file-format: yaml
+		"""
+	And this file is referenced as the environment variable "input_file"
+		"""
+		$schema: https://json-schema.org/draft/2020-12/schema
+		id: https://drygen.dev/test-json-schemas/some.json
+		type: object
+		properties:
+		  prop1:
+		    type: string
+		  test:
+		    $ref: "#/definitions/test"
+		additionalProperties: false
+		definitions:
+		  test:
+		    properties:
+		      prop2:
+		        type: integer
+		    required:
+		      - prop2
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		erDiagram
+			ClassFromJsonSchema {
+				string Prop1
+			}
+			Test {
+				int Prop2
+			}
+			Test ||..|| ClassFromJsonSchema : ""
+		
+		"""
