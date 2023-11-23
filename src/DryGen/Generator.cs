@@ -284,7 +284,7 @@ public class Generator
             {
                 throw new OptionsException("--options-file is mandatory");
             }
-            var yaml = File.ReadAllText(options.OptionsFile);
+            var yaml = ReadOptionsFileWithEnvriomentVariableReplacement(options.OptionsFile);
             var yamlParser = new YamlDotNet.Core.Parser(new StringReader(yaml));
             yamlParser.Consume<StreamStart>();
             var documentNumber = 0;
@@ -324,7 +324,7 @@ public class Generator
         if (!string.IsNullOrEmpty(commandlineOptions.OptionsFile))
         {
             var deserializer = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
-            var yaml = File.ReadAllText(commandlineOptions.OptionsFile);
+            var yaml = ReadOptionsFileWithEnvriomentVariableReplacement(commandlineOptions.OptionsFile);
             var optionsFromFile = deserializer.Deserialize<TOptions>(yaml);
             if (optionsFromFile != null)
             // The yaml deserialization returns null if the file is empty or all options are commented out
@@ -447,6 +447,31 @@ public class Generator
             ex = aEx.InnerExceptions[0];
         }
         return ex;
+    }
+
+    private static string ReadOptionsFileWithEnvriomentVariableReplacement(string optionsFile)
+    {
+        var startIndex = 0;
+        var yaml = File.ReadAllText(optionsFile);
+        do
+        {
+            startIndex = yaml.IndexOf("$(", startIndex);
+            if (startIndex == -1)
+            {
+                break;
+            }
+            var endIndex = yaml.IndexOf(')', startIndex);
+            if (endIndex <= startIndex)
+            {
+                break;
+            }
+            var variable = yaml[startIndex..(endIndex+1)];
+            var environmentVariable = variable.Replace("$(", string.Empty).Replace(")", string.Empty).Trim();
+            var value = Environment.GetEnvironmentVariable(environmentVariable) ?? string.Empty;
+            yaml = yaml.Replace(variable, value);
+        } 
+        while (true);
+        return yaml;
     }
 
     private static string BuildExceptionMessages(Exception ex, bool includeExceptionStackTrace)
