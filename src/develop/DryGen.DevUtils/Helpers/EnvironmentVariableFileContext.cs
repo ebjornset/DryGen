@@ -4,12 +4,12 @@ using System.IO;
 
 namespace DryGen.DevUtils.Helpers;
 
-public sealed class EnvironmentVariableFilesContext : IDisposable
+public sealed class EnvironmentVariableFileContext : IDisposable
 {
     private readonly IList<string> files = new List<string>();
     private readonly EnvironmentVariableContext environmentVariableContext;
 
-    public EnvironmentVariableFilesContext(EnvironmentVariableContext environmentVariableContext)
+    public EnvironmentVariableFileContext(EnvironmentVariableContext environmentVariableContext)
     {
         this.environmentVariableContext = environmentVariableContext;
     }
