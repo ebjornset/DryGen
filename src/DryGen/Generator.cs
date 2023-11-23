@@ -28,6 +28,7 @@ using DryGen.Features.OptionsFromCommandline;
 using DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
 using DryGen.Features.Mermaid.FromJsonSchema.ClassDiagram;
 using DryGen.Features.Mermaid.FromJsonSchema.ErDiagram;
+using DryGen.Features.CSharpFromJsonSchema;
 
 namespace DryGen;
 
@@ -278,10 +279,11 @@ public class Generator
                 {
                     IDictionary<string, Type> valueMappings = new Dictionary<string, Type>
                     {
-                        { Constants.OptionsFromCommandline.Verb, typeof(OptionsFromCommandlineConfiguration) },
+                        { Constants.CSharpFromJsonSchema.Verb, typeof(CSharpFromJsonSchemaConfiguration) },
                         { Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb, typeof(MermaidC4ComponentDiagramFromDotnetDepsJsonConfiguration) },
                         { Constants.MermaidClassDiagramFromJsonSchema.Verb, typeof(MermaidClassDiagramFromJsonSchemaConfiguration) },
                         { Constants.MermaidErDiagramFromJsonSchema.Verb, typeof(MermaidErDiagramFromJsonSchemaConfiguration) },
+                        { Constants.OptionsFromCommandline.Verb, typeof(OptionsFromCommandlineConfiguration) },
                     };
                     o.AddKeyValueTypeDiscriminator<IVerbsFromOptionsFileConfiguration>("verb", valueMappings);
                 })
@@ -313,8 +315,8 @@ public class Generator
                 }
                 switch (optionsDocument.Configuration.Verb)
                 {
-                    case Constants.OptionsFromCommandline.Verb:
-                        GenerateOptionsFromCommandline(optionsDocument.Configuration.GetOptions().AsNonNullOptions<OptionsFromCommandlineOptions>(), Array.Empty<string>());
+                    case Constants.CSharpFromJsonSchema.Verb:
+                        GenerateCSharpFromJsonSchema(optionsDocument.Configuration.GetOptions().AsNonNullOptions<CSharpFromJsonSchemaOptions>(), Array.Empty<string>());
                         break;
                     case Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb:
                         GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidC4ComponentDiagramFromDotnetDepsJsonOptions>(), Array.Empty<string>());
@@ -324,6 +326,9 @@ public class Generator
                         break;
                     case Constants.MermaidErDiagramFromJsonSchema.Verb:
                         GenerateMermaidErDiagramFromJsonSchema(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidErDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
+                        break;
+                    case Constants.OptionsFromCommandline.Verb:
+                        GenerateOptionsFromCommandline(optionsDocument.Configuration.GetOptions().AsNonNullOptions<OptionsFromCommandlineOptions>(), Array.Empty<string>());
                         break;
                     default:
                         throw new OptionsException($"Unsupported verb '{optionsDocument.Configuration.Verb}' in document #{documentNumber}");
