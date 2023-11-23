@@ -5,7 +5,7 @@
 	Setup the DryGenToolCommandName of the templates to run DryGen.dll directly from dotnet during the standard DryGen build
 	The DryGenTemplatesBuild property is used as a guard in the template projects to make sure its not overridden.
 	DryGenTemplatesRunAsTool is turned on from Nuke when the final version is build from the Pack target, 
-	to make sure we run dry-gen as a local tool once before wecreate the package
+	to make sure we run dry-gen as a local tool once before we create the package
 	-->
 	<Target Name="SetupDryGenTemplatesBuild" BeforeTargets="CoreBuild">
 		<PropertyGroup Condition="'$(TargetFramework)' == ''">

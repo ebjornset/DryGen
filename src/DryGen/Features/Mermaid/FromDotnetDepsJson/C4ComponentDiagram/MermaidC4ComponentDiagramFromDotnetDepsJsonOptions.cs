@@ -1,9 +1,10 @@
 ﻿using CommandLine;
 using DryGen.MermaidFromDotnetDepsJson;
+using DryGen.Options;
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
-namespace DryGen.Options;
+namespace DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
 
 [Verb(
     Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb,
@@ -16,7 +17,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : CommonInputFil
 
     [YamlMember(Alias = "boundary-level", ApplyNamingConventions = false)]
     [Option("boundary-level", HelpText = "What kind of 'Container Boundary' should be included in the diagram based on the assembly names? (Default: all)")]
-    public BoundaryLevel? BoundaryLevel { get; set ; }
+    public BoundaryLevel? BoundaryLevel { get; set; }
 
     [YamlMember(Alias = "exclude-version", ApplyNamingConventions = false)]
     [Option("exclude-version", HelpText = "Should version information be excluded from the diagram? (Default: false)")]

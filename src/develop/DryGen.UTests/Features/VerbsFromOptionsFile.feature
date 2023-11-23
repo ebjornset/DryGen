@@ -109,3 +109,38 @@ Scenario: Should fail for unknown 'verb' in a yaml document with 'options'
 		| verbs-from-options-file |
 	Then I should get exit code '1'
 	And I should find the text "Unknown 'verb' in document #1" in console error
+
+Scenario: Should generate output with the verb 'mermaid-c4component-diagram-from-dotnet-deps-json' in the options file
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: mermaid-c4component-diagram-from-dotnet-deps-json
+		  options:
+		    input-file: $(input_file)
+		"""
+	And this file is referenced as the environment variable "input_file"
+		"""
+		{
+			"targets": {
+				".NETCoreApp,Version=v7.0": {
+					"MainAssembly/1.0.0": {
+						"runtime": {
+							"MainAssembly.dll": {}
+						}
+					}
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		C4Component
+		title Component diagram for MainAssembly v1.0.0 running on .NETCoreApp v7.0
+		Component("MainAssembly/1.0.0", "MainAssembly", "dll", "v1.0.0")
+
+		"""

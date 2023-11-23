@@ -22,7 +22,7 @@ public sealed class EnvironmentVariableContext : IDisposable
     }
 
     [ExcludeFromCodeCoverage(Justification = "Just a sanity helper when writing test")]
-    private static void ValidateEnvironmentVariableForSet(string environmentVariable)
+    public void ValidateEnvironmentVariableForSet(string environmentVariable)
     {
         if (string.IsNullOrWhiteSpace(environmentVariable))
         {

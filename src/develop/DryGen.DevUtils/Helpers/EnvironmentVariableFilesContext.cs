@@ -1,71 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 
 namespace DryGen.DevUtils.Helpers;
 
 public sealed class EnvironmentVariableFilesContext : IDisposable
 {
-    private readonly IDictionary<string, string> environmentVariableFiles = new Dictionary<string, string>();
+    private readonly IList<string> files = new List<string>();
+    private readonly EnvironmentVariableContext environmentVariableContext;
 
-    public bool HasEnvironmentVariableFile(string environmentVariable) => environmentVariableFiles.ContainsKey(environmentVariable);
-
-    public string GetEnvironmentVariableFile(string environmentVariable)
+    public EnvironmentVariableFilesContext(EnvironmentVariableContext environmentVariableContext)
     {
-        ValidateEnvironmentVariableForGet(environmentVariable);
-        return environmentVariableFiles[environmentVariable];
+        this.environmentVariableContext = environmentVariableContext;
     }
 
     public void WriteFileAsEnvironmentVariable(string content, string environmentVariable)
     {
-        ValidateEnvironmentVariableForSet(environmentVariable);
+        environmentVariableContext.ValidateEnvironmentVariableForSet(environmentVariable);
         var newOptionsFileName = Path.GetTempFileName();
         File.WriteAllText(newOptionsFileName, content);
-        environmentVariableFiles[environmentVariable] = newOptionsFileName;
+        files.Add(newOptionsFileName);
+        environmentVariableContext.SetEnvironmentVariable(environmentVariable, newOptionsFileName);
     }
 
     public void Dispose()
     {
-        DeleteEnvironmentVariableFiles();
+        DeleteFiles();
         GC.SuppressFinalize(this);
     }
 
-    [ExcludeFromCodeCoverage(Justification = "Just a sanity helper when writing test")]
-    private void ValidateEnvironmentVariableForGet(string environmentVariable)
+    private void DeleteFiles()
     {
-        if (!HasEnvironmentVariableFile(environmentVariable))
+        if (files.Count > 0)
         {
-            throw new ArgumentException($"No file found for '{environmentVariable}'", nameof(environmentVariable));
-        }
-    }
-
-    [ExcludeFromCodeCoverage(Justification = "Just a sanity helper when writing test")]
-    private void ValidateEnvironmentVariableForSet(string environmentVariable)
-    {
-        if (string.IsNullOrWhiteSpace(environmentVariable))
-        {
-            throw new ArgumentNullException(nameof(environmentVariable));
-        }
-        if (environmentVariableFiles.ContainsKey(environmentVariable))
-        {
-            throw new PropertyAlreadySetException($"File already set for environment variable '{environmentVariable}'");
-        }
-    }
-
-    private void DeleteEnvironmentVariableFiles()
-    {
-        if (environmentVariableFiles.Any())
-        {
-            foreach (var file in environmentVariableFiles.Values)
+            foreach (var file in files)
             {
                 if (File.Exists(file))
                 {
                     File.Delete(file);
                 }
             }
-            environmentVariableFiles.Clear();
+            files.Clear();
         }
     }
 }
