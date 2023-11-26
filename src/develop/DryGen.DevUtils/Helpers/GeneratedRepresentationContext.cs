@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DryGen.Core;
+using System;
 using System.IO;
 
 namespace DryGen.DevUtils.Helpers;
@@ -18,7 +19,7 @@ public sealed class GeneratedRepresentationContext : IDisposable
     {
         get
         {
-            generatedRepresentationFileName ??= Path.GetTempFileName();
+            generatedRepresentationFileName ??= Path.GetTempPath().GetRandomFileName();
             return generatedRepresentationFileName;
         }
     }

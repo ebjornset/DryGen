@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DryGen.Core;
+using System;
 using System.IO;
 
 namespace DryGen.DevUtils.Helpers;
@@ -13,7 +14,7 @@ public sealed class OptionsFileContext : IDisposable
     public void WriteOptionsFile(string yaml)
     {
         DeleteOptionsFile();
-        var newOptionsFileName = Path.GetTempFileName();
+        var newOptionsFileName = Path.GetTempPath().GetRandomFileName();
         File.WriteAllText(newOptionsFileName, yaml);
         optionsFileName = newOptionsFileName;
     }

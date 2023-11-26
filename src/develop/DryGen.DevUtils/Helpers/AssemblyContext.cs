@@ -1,4 +1,5 @@
 ﻿using DryGen.CodeCompiler;
+using DryGen.Core;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
@@ -31,14 +32,14 @@ public class AssemblyContext
 
     public void CompileCodeToFileAsInputFile(string cSharpCode)
     {
-        var assemblyFileName = Path.GetRandomFileName();
+        var assemblyFileName = Path.GetTempPath().GetRandomFileName(stripExtesion: true);
         cSharpCode.CompileCodeToFile(assemblyFileName, GetReferencedAssemblies());
         inputFileContext.InputFileName = assemblyFileName;
     }
 
     public void CompileCodeToFileAsEnvironmentVariable(string cSharpCode, string environmentVariable)
     {
-        var assemblyFileName = Path.GetRandomFileName();
+        var assemblyFileName = Path.GetTempPath().GetRandomFileName(stripExtesion: true);
         cSharpCode.CompileCodeToFile(assemblyFileName, GetReferencedAssemblies());
         environmentVariableFileContext.AddFileAsEnvironmentVariable(assemblyFileName, environmentVariable);
     }

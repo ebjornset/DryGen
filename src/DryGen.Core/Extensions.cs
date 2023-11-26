@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -52,5 +53,23 @@ public static class Extensions
     public static bool IsRequiredProperty(this PropertyInfo propertyInfo)
     {
         return propertyInfo.CustomAttributes.Any(x => x.IsRequiredAttribute() || x.IsJsonPropertyRequiredAttribute());
+    }
+
+    public static string GetRandomFileName(this string folder, bool stripExtesion = false)
+    {
+        while(true)
+        {
+            var fileName = Path.GetRandomFileName();
+            if (stripExtesion)
+            {
+                fileName = Path.GetFileNameWithoutExtension(fileName);
+            }
+            var result = Path.Combine(folder, fileName);
+            if (File.Exists(result))
+            {
+                continue;
+            }
+            return result;
+        }
     }
 }

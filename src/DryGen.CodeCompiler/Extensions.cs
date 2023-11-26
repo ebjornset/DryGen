@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using DryGen.Core;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis;
 using System;

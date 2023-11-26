@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DryGen.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -17,7 +18,7 @@ public sealed class EnvironmentVariableFileContext : IDisposable
     public void WriteFileAsEnvironmentVariable(string content, string environmentVariable)
     {
         environmentVariableContext.ValidateEnvironmentVariableForSet(environmentVariable);
-        var newOptionsFileName = Path.GetRandomFileName();
+        var newOptionsFileName = Path.GetTempPath().GetRandomFileName();
         File.WriteAllText(newOptionsFileName, content);
         files.Add(newOptionsFileName);
         environmentVariableContext.SetEnvironmentVariable(environmentVariable, newOptionsFileName);
