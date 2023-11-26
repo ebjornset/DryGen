@@ -11,6 +11,7 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
+using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Utilities.Collections;
 using Serilog;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -305,6 +306,16 @@ public partial class Build : NukeBuild
             }
             var toolsPackageName = Path.Combine(ArtifactsDirectory, $"dry-gen.templates.{GitVersion.NuGetVersionV2}.nupkg");
             DotNet($"new install \"{toolsPackageName}\"", logOutput: true, logInvocation: true);
+        });
+
+    internal Target Dev_Docs => _ => _
+        .DependsOn(Init)
+        .Executes(() =>
+        {
+            PowerShellTasks.PowerShell(
+                arguments: "Start-Process -FilePath \"bundle\" -ArgumentList \"exec jekyll serve --drafts --incremental\"",
+                workingDirectory: DocsDirectory 
+            );
         });
 
     private Project GetProject(string solutionFolderName, string projectName)
