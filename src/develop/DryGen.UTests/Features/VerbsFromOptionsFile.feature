@@ -279,9 +279,26 @@ Scenario: Should generate output with the verb 'mermaid-class-diagram-from-cshar
 		configuration:
 		  verb: mermaid-class-diagram-from-csharp
 		  options:
-		    input-file: $(input_file)
+		    input-file: $(input_file_one)
+		---
+		configuration:
+		  verb: mermaid-class-diagram-from-csharp
+		  options:
+		    input-file: $(input_file_one)
+		---
+		configuration:
+		  verb: mermaid-class-diagram-from-csharp
+		  options:
+		    input-file: $(input_file_two)
 		"""
-	And this C# source code compiled to a file that is referenced as the environment variable "input_file"
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file_one"
+		"""
+		namespace Test
+		{
+			public class Customer {}
+		}
+		"""
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file_two"
 		"""
 		namespace Test
 		{
@@ -296,6 +313,10 @@ Scenario: Should generate output with the verb 'mermaid-class-diagram-from-cshar
 		"""
 		classDiagram
 			class Customer
+		classDiagram
+			class Customer
+		classDiagram
+			class Customer
 		
 		"""
 
@@ -306,9 +327,26 @@ Scenario: Should generate output with the verb 'mermaid-er-diagram-from-csharp' 
 		configuration:
 		  verb: mermaid-er-diagram-from-csharp
 		  options:
-		    input-file: $(input_file)
+		    input-file: $(input_file_one)
+		---
+		configuration:
+		  verb: mermaid-er-diagram-from-csharp
+		  options:
+		    input-file: $(input_file_one)
+		---
+		configuration:
+		  verb: mermaid-er-diagram-from-csharp
+		  options:
+		    input-file: $(input_file_two)
 		"""
-	And this C# source code compiled to a file that is referenced as the environment variable "input_file"
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file_one"
+		"""
+		namespace Test
+		{
+			public class Customer {}
+		}
+		"""
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file_two"
 		"""
 		namespace Test
 		{
@@ -323,6 +361,10 @@ Scenario: Should generate output with the verb 'mermaid-er-diagram-from-csharp' 
 		"""
 		erDiagram
 			Customer
+		erDiagram
+			Customer
+		erDiagram
+			Customer
 		
 		"""
 
@@ -333,9 +375,35 @@ Scenario: Should generate output with the verb 'mermaid-er-diagram-from-efcore' 
 		configuration:
 		  verb: mermaid-er-diagram-from-efcore
 		  options:
-		    input-file: $(input_file)
+		    input-file: $(input_file_one)
+		---
+		configuration:
+		  verb: mermaid-er-diagram-from-efcore
+		  options:
+		    input-file: $(input_file_one)
+		---
+		configuration:
+		  verb: mermaid-er-diagram-from-efcore
+		  options:
+		    input-file: $(input_file_two)
 		"""
-	And this C# source code compiled to a file that is referenced as the environment variable "input_file"
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file_one"
+		"""
+		using Microsoft.EntityFrameworkCore;
+		namespace Test
+		{
+			public class Customer {}
+			public class TestDbContext: DbContext {
+				public DbSet<Customer> Customers { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+				protected override void OnModelCreating(ModelBuilder modelBuilder)
+		        {
+		            modelBuilder.Entity<Customer>().HasNoKey();
+				}
+			}
+		}
+		"""
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file_two"
 		"""
 		using Microsoft.EntityFrameworkCore;
 		namespace Test
@@ -357,6 +425,10 @@ Scenario: Should generate output with the verb 'mermaid-er-diagram-from-efcore' 
 	Then I should get exit code '0'
 	And console out should contain the text
 		"""
+		erDiagram
+			Customer
+		erDiagram
+			Customer
 		erDiagram
 			Customer
 		

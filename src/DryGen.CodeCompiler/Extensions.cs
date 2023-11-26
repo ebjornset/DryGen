@@ -11,31 +11,31 @@ namespace DryGen.CodeCompiler;
 
 public static class Extensions
 {
-    public static Assembly CompileCodeToMemory(this string cSharpCode, params Assembly[] referencedAssemblies)
+    public static Assembly CompileCodeToMemory(this string csharpCode, params Assembly[] referencedAssemblies)
     {
         var assemblyName = Path.GetRandomFileName();
         using var ms = new MemoryStream();
-        cSharpCode.CompileCodeToStream(assemblyName, ms, referencedAssemblies);
+        csharpCode.CompileCodeToStream(assemblyName, ms, referencedAssemblies);
         ms.Seek(0, SeekOrigin.Begin);
         Assembly assembly = Assembly.Load(ms.ToArray());
         return assembly;
     }
 
-    public static void CompileCodeToFile(this string cSharpCode, string assemblyFileName, params Assembly[] referencedAssemblies)
+    public static void CompileCodeToFile(this string csharpCode, string assemblyFileName, params Assembly[] referencedAssemblies)
     {
         var assemblyName = Path.GetFileName(assemblyFileName);
         using var fs = new FileStream(assemblyFileName, FileMode.OpenOrCreate, FileAccess.Write);
-        cSharpCode.CompileCodeToStream(assemblyName, fs, referencedAssemblies);
+        csharpCode.CompileCodeToStream(assemblyName, fs, referencedAssemblies);
     }
 
-    public static void CompileCodeToStream(this string cSharpCode, string assemblyName, Stream stream, params Assembly[] referencedAssemblies)
+    public static void CompileCodeToStream(this string csharpCode, string assemblyName, Stream stream, params Assembly[] referencedAssemblies)
     {
         var dotNetCoreDir = Path.GetDirectoryName(typeof(object).Assembly.Location);
         if (string.IsNullOrEmpty(dotNetCoreDir))
         {
             throw new ArgumentException($"Could not get directory of 'System.Runtime.dll' from typeof(object)");
         }
-        var syntaxTree = CSharpSyntaxTree.ParseText(cSharpCode);
+        var syntaxTree = CSharpSyntaxTree.ParseText(csharpCode);
         var references = new MetadataReference[]
         {
             MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
