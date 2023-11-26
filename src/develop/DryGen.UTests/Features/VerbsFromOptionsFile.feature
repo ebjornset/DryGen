@@ -271,3 +271,93 @@ Scenario: Should generate output with the verb 'csharp-from-json-schema' in the 
 		    }
 		}
 		"""
+
+Scenario: Should generate output with the verb 'mermaid-class-diagram-from-csharp' in the options file
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: mermaid-class-diagram-from-csharp
+		  options:
+		    input-file: $(input_file)
+		"""
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file"
+		"""
+		namespace Test
+		{
+			public class Customer {}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		classDiagram
+			class Customer
+		
+		"""
+
+Scenario: Should generate output with the verb 'mermaid-er-diagram-from-csharp' in the options file
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: mermaid-er-diagram-from-csharp
+		  options:
+		    input-file: $(input_file)
+		"""
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file"
+		"""
+		namespace Test
+		{
+			public class Customer {}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		erDiagram
+			Customer
+		
+		"""
+
+Scenario: Should generate output with the verb 'mermaid-er-diagram-from-efcore' in the options file
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: mermaid-er-diagram-from-efcore
+		  options:
+		    input-file: $(input_file)
+		"""
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file"
+		"""
+		using Microsoft.EntityFrameworkCore;
+		namespace Test
+		{
+			public class Customer {}
+			public class TestDbContext: DbContext {
+				public DbSet<Customer> Customers { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+				protected override void OnModelCreating(ModelBuilder modelBuilder)
+		        {
+		            modelBuilder.Entity<Customer>().HasNoKey();
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		erDiagram
+			Customer
+		
+		"""

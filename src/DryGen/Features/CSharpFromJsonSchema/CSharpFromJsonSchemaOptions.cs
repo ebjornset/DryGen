@@ -5,7 +5,7 @@ using YamlDotNet.Serialization;
 
 namespace DryGen.Features.CSharpFromJsonSchema;
 
-[Verb(Constants.CSharpFromJsonSchema.Verb, HelpText = "Generate C# classes from a json schema, using [NJsonSchema](https://github.com/RicoSuter/NJsonSchema).")]
+[Verb(Constants.CsharpFromJsonSchema.Verb, HelpText = "Generate C# classes from a json schema, using [NJsonSchema](https://github.com/RicoSuter/NJsonSchema).")]
 public class CSharpFromJsonSchemaOptions : FromJsonSchemaBaseOptions, ICSharpFromJsonSchemaOptions
 {
     [YamlMember(Alias = "namespace", ApplyNamingConventions = false)]

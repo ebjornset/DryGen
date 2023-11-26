@@ -29,6 +29,9 @@ using DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
 using DryGen.Features.Mermaid.FromJsonSchema.ClassDiagram;
 using DryGen.Features.Mermaid.FromJsonSchema.ErDiagram;
 using DryGen.Features.CSharpFromJsonSchema;
+using DryGen.Features.Mermaid.FromCsharp.ErDiagram;
+using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
+using DryGen.Features.Mermaid.FromEfCore.ErDiagram;
 
 namespace DryGen;
 
@@ -62,9 +65,9 @@ public class Generator
         var parserResult = parser.ParseArguments<
             CSharpFromJsonSchemaOptions,
             MermaidC4ComponentDiagramFromDotnetDepsJsonOptions,
-            MermaidClassDiagramFromCSharpOptions,
+            MermaidClassDiagramFromCsharpOptions,
             MermaidClassDiagramFromJsonSchemaOptions,
-            MermaidErDiagramFromCSharpOptions,
+            MermaidErDiagramFromCsharpOptions,
             MermaidErDiagramFromEfCoreOptions,
             MermaidErDiagramFromJsonSchemaOptions,
             OptionsFromCommandlineOptions,
@@ -73,9 +76,9 @@ public class Generator
         return parserResult.MapResult(
           (CSharpFromJsonSchemaOptions options) => GenerateCSharpFromJsonSchema(options, args),
           (MermaidC4ComponentDiagramFromDotnetDepsJsonOptions options) => GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(options, args),
-          (MermaidClassDiagramFromCSharpOptions options) => GenerateMermaidClassDiagramFromCSharp(options, args),
+          (MermaidClassDiagramFromCsharpOptions options) => GenerateMermaidClassDiagramFromCsharp(options, args),
           (MermaidClassDiagramFromJsonSchemaOptions options) => GenerateMermaidClassDiagramFromJsonSchema(options, args),
-          (MermaidErDiagramFromCSharpOptions options) => GenerateMermaidErDiagramFromCSharp(options, args),
+          (MermaidErDiagramFromCsharpOptions options) => GenerateMermaidErDiagramFromCsharp(options, args),
           (MermaidErDiagramFromEfCoreOptions options) => GenerateMermaidErDiagramFromEfCore(options, args),
           (MermaidErDiagramFromJsonSchemaOptions options) => GenerateMermaidErDiagramFromJsonSchema(options, args),
           (OptionsFromCommandlineOptions options) => GenerateOptionsFromCommandline(options, args),
@@ -173,12 +176,12 @@ public class Generator
         }
     }
 
-    private int GenerateMermaidErDiagramFromCSharp(MermaidErDiagramFromCSharpOptions options, string[] args)
+    private int GenerateMermaidErDiagramFromCsharp(MermaidErDiagramFromCsharpOptions options, string[] args)
     {
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
         {
             var diagramGenerator = new ErDiagramGenerator(options);
-            return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
+            return GenerateMermaidDiagramFromCsharp(options, diagramGenerator);
         });
     }
 
@@ -198,16 +201,16 @@ public class Generator
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
         {
             var diagramGenerator = new ErDiagramGenerator(options);
-            return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
+            return GenerateMermaidDiagramFromCsharp(options, diagramGenerator);
         });
     }
 
-    private int GenerateMermaidClassDiagramFromCSharp(MermaidClassDiagramFromCSharpOptions options, string[] args)
+    private int GenerateMermaidClassDiagramFromCsharp(MermaidClassDiagramFromCsharpOptions options, string[] args)
     {
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
         {
             var diagramGenerator = new ClassDiagramGenerator(new TypeLoaderByReflection(), options);
-            return GenerateMermaidDiagramFromCSharp(options, diagramGenerator);
+            return GenerateMermaidDiagramFromCsharp(options, diagramGenerator);
         });
     }
 
@@ -279,9 +282,12 @@ public class Generator
                 {
                     IDictionary<string, Type> valueMappings = new Dictionary<string, Type>
                     {
-                        { Constants.CSharpFromJsonSchema.Verb, typeof(CSharpFromJsonSchemaConfiguration) },
+                        { Constants.CsharpFromJsonSchema.Verb, typeof(CSharpFromJsonSchemaConfiguration) },
                         { Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb, typeof(MermaidC4ComponentDiagramFromDotnetDepsJsonConfiguration) },
+                        { Constants.MermaidClassDiagramFromCsharp.Verb, typeof(MermaidClassDiagramFromCsharpConfiguration) },
                         { Constants.MermaidClassDiagramFromJsonSchema.Verb, typeof(MermaidClassDiagramFromJsonSchemaConfiguration) },
+                        { Constants.MermaidErDiagramFromCsharp.Verb, typeof(MermaidErDiagramFromCsharpConfiguration) },
+                        { Constants.MermaidErDiagramFromEfCore.Verb, typeof(MermaidErDiagramFromEfCoreConfiguration) },
                         { Constants.MermaidErDiagramFromJsonSchema.Verb, typeof(MermaidErDiagramFromJsonSchemaConfiguration) },
                         { Constants.OptionsFromCommandline.Verb, typeof(OptionsFromCommandlineConfiguration) },
                     };
@@ -315,14 +321,23 @@ public class Generator
                 }
                 switch (optionsDocument.Configuration.Verb)
                 {
-                    case Constants.CSharpFromJsonSchema.Verb:
+                    case Constants.CsharpFromJsonSchema.Verb:
                         GenerateCSharpFromJsonSchema(optionsDocument.Configuration.GetOptions().AsNonNullOptions<CSharpFromJsonSchemaOptions>(), Array.Empty<string>());
                         break;
                     case Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb:
                         GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidC4ComponentDiagramFromDotnetDepsJsonOptions>(), Array.Empty<string>());
                         break;
+                    case Constants.MermaidClassDiagramFromCsharp.Verb:
+                        GenerateMermaidClassDiagramFromCsharp(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidClassDiagramFromCsharpOptions>(), Array.Empty<string>());
+                        break;
                     case Constants.MermaidClassDiagramFromJsonSchema.Verb:
                         GenerateMermaidClassDiagramFromJsonSchema(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidClassDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
+                        break;
+                    case Constants.MermaidErDiagramFromCsharp.Verb:
+                        GenerateMermaidErDiagramFromCsharp(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidErDiagramFromCsharpOptions>(), Array.Empty<string>());
+                        break;
+                    case Constants.MermaidErDiagramFromEfCore.Verb:
+                        GenerateMermaidErDiagramFromEfCore(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidErDiagramFromEfCoreOptions>(), Array.Empty<string>());
                         break;
                     case Constants.MermaidErDiagramFromJsonSchema.Verb:
                         GenerateMermaidErDiagramFromJsonSchema(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidErDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
@@ -415,7 +430,7 @@ public class Generator
         }
     }
 
-    private string GenerateMermaidDiagramFromCSharp(MermaidFromCSharpBaseOptions options, IDiagramGenerator diagramGenerator)
+    private string GenerateMermaidDiagramFromCsharp(MermaidFromCsharpBaseOptions options, IDiagramGenerator diagramGenerator)
     {
         var assembly = LoadAsseblyFromFile(options.InputFile);
         var typeFilters = GetTypeFilters(options);
@@ -424,7 +439,7 @@ public class Generator
         var treeShakingDiagramFilter = GetMermaidDiagramTreeShakingFilter(options.TreeShakingRoots);
         return diagramGenerator.Generate(assembly, typeFilters, excludePropertyNamesFilters, nameRewriter, treeShakingDiagramFilter);
 
-        static List<ITypeFilter> GetTypeFilters(MermaidFromCSharpBaseOptions options)
+        static List<ITypeFilter> GetTypeFilters(MermaidFromCsharpBaseOptions options)
         {
             var namespaceFilters = options.IncludeNamespaces?.Select(x => new IncludeNamespaceTypeFilter(x)).ToArray() ?? Array.Empty<IncludeNamespaceTypeFilter>();
             var typeFilters = new List<ITypeFilter> { new AnyChildFiltersTypeFilter(namespaceFilters) };

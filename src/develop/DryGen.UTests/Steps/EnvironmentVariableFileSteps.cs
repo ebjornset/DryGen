@@ -14,9 +14,9 @@ namespace DryGen.UTests.Steps
         }
 
         [Given(@"this file is referenced as the environment variable ""([^""]*)""")]
-        public void GivenThisFileIsReferencedAsTheEnvironmentVariable(string enviromentvariable, string content)
+        public void GivenThisFileIsReferencedAsTheEnvironmentVariable(string enviromentVariable, string content)
         {
-            environmentVariableFileContext.WriteFileAsEnvironmentVariable(content, enviromentvariable);
+            environmentVariableFileContext.WriteFileAsEnvironmentVariable(content, enviromentVariable);
         }
     }
 }

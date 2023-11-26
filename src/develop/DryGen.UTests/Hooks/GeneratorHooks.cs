@@ -4,7 +4,7 @@ using DryGen.MermaidFromCSharp.ClassDiagram;
 using DryGen.MermaidFromEfCore;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using TechTalk.SpecFlow;
-using DryGen.Options;
+using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
 
 namespace DryGen.UTests.Hooks;
 
@@ -39,7 +39,7 @@ public class GeneratorHooks
                                                 "ErDiagramGeneratorByEfCore");
         objectContainer.RegisterFactoryAs(oc => new ClassDiagramGenerator(
                                                         oc.Resolve<ITypeLoader>(),
-                                                        new MermaidClassDiagramFromCSharpOptions {
+                                                        new MermaidClassDiagramFromCsharpOptions {
                                                             Direction = ClassDiagramDirection.Default,
                                                             AttributeLevel = ClassDiagramAttributeLevel.All,
                                                             MethodLevel=  ClassDiagramMethodLevel.All,

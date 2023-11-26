@@ -22,6 +22,12 @@ public sealed class CompileCSharpCodeSteps
     [Given(@"this C\# source code compiled to a file")]
     public void GivenThisCSourceCodeCompiledToAFile(string code)
     {
-        assemblyContext.CompileCodeToFile(code);
+        assemblyContext.CompileCodeToFileAsInputFile(code);
+    }
+
+    [Given(@"this C\# source code compiled to a file that is referenced as the environment variable ""([^""]*)""")]
+    public void GivenThisCSourceCodeCompiledToAFileThatIsReferencedAsTheEnvironmentVariable(string enviromentVariable, string code)
+    {
+        assemblyContext.CompileCodeToFileAsEnvironmentVariable(code, enviromentVariable);
     }
 }

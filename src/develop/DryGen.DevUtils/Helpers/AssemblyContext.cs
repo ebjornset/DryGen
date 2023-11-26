@@ -1,7 +1,6 @@
 ﻿using DryGen.CodeCompiler;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -15,29 +14,36 @@ public class AssemblyContext
 {
     private Assembly? assembly;
     private readonly InputFileContext inputFileContext;
+    private readonly EnvironmentVariableFileContext environmentVariableFileContext;
 
-    public AssemblyContext(InputFileContext inputFileContext)
+    public AssemblyContext(InputFileContext inputFileContext, EnvironmentVariableFileContext environmentVariableFileContext)
     {
         this.inputFileContext = inputFileContext;
+        this.environmentVariableFileContext = environmentVariableFileContext;
     }
 
-    public Assembly Assembly => assembly ?? throw new ArgumentNullException(nameof(assembly));
+    public Assembly Assembly => assembly ?? throw new PropertyNotSetException(nameof(assembly));
 
     public void CompileCodeToMemory(string cSharpCode)
     {
         assembly = cSharpCode.CompileCodeToMemory(GetReferencedAssemblies());
     }
 
-    public void CompileCodeToFile(string cSharpCode)
+    public void CompileCodeToFileAsInputFile(string cSharpCode)
     {
-        var assemblyFileName = Path.GetTempFileName();
-        var assemblyName = Path.GetFileName(assemblyFileName);
-        using var fs = new FileStream(assemblyFileName, FileMode.OpenOrCreate, FileAccess.Write);
-        cSharpCode.CompileCodeToStream(assemblyName, fs, GetReferencedAssemblies());
+        var assemblyFileName = Path.GetRandomFileName();
+        cSharpCode.CompileCodeToFile(assemblyFileName, GetReferencedAssemblies());
         inputFileContext.InputFileName = assemblyFileName;
     }
 
-    private static Assembly[] GetReferencedAssemblies() => new[] { 
+    public void CompileCodeToFileAsEnvironmentVariable(string cSharpCode, string environmentVariable)
+    {
+        var assemblyFileName = Path.GetRandomFileName();
+        cSharpCode.CompileCodeToFile(assemblyFileName, GetReferencedAssemblies());
+        environmentVariableFileContext.AddFileAsEnvironmentVariable(assemblyFileName, environmentVariable);
+    }
+
+    private static Assembly[] GetReferencedAssemblies() => new[] {
         typeof(Enumerable).Assembly, typeof(Collection<>).Assembly, typeof(KeyAttribute).Assembly, typeof(Expression<>).Assembly, typeof(DbContext).Assembly, typeof(JsonPropertyAttribute).Assembly
     };
 }

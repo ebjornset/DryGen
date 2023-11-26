@@ -17,10 +17,17 @@ public sealed class EnvironmentVariableFileContext : IDisposable
     public void WriteFileAsEnvironmentVariable(string content, string environmentVariable)
     {
         environmentVariableContext.ValidateEnvironmentVariableForSet(environmentVariable);
-        var newOptionsFileName = Path.GetTempFileName();
+        var newOptionsFileName = Path.GetRandomFileName();
         File.WriteAllText(newOptionsFileName, content);
         files.Add(newOptionsFileName);
         environmentVariableContext.SetEnvironmentVariable(environmentVariable, newOptionsFileName);
+    }
+
+    public void AddFileAsEnvironmentVariable(string fileName, string environmentVariable)
+    {
+        environmentVariableContext.ValidateEnvironmentVariableForSet(environmentVariable);
+        files.Add(fileName);
+        environmentVariableContext.SetEnvironmentVariable(environmentVariable, fileName);
     }
 
     public void Dispose()

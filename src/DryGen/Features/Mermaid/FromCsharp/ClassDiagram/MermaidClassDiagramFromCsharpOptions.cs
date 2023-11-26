@@ -1,11 +1,12 @@
 ﻿using CommandLine;
 using DryGen.MermaidFromCSharp.ClassDiagram;
+using DryGen.Options;
 using YamlDotNet.Serialization;
 
-namespace DryGen.Options;
+namespace DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
 
 [Verb(Constants.MermaidClassDiagramFromCsharp.Verb, HelpText = "Generate a Mermaid Class diagram from a C# assembly using reflection.")]
-public class MermaidClassDiagramFromCSharpOptions : MermaidFromCSharpBaseOptions, IMermaidClassDiagramFromCSharpOptions
+public class MermaidClassDiagramFromCsharpOptions : MermaidFromCsharpBaseOptions, IMermaidClassDiagramFromCSharpOptions
 {
     [YamlMember(Alias = "attribute-level", ApplyNamingConventions = false)]
     [Option("attribute-level", HelpText = "What visibility must an attribute have to be included in the diagram?")]

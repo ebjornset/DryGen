@@ -21,6 +21,13 @@ public static class Extensions
         return assembly;
     }
 
+    public static void CompileCodeToFile(this string cSharpCode, string assemblyFileName, params Assembly[] referencedAssemblies)
+    {
+        var assemblyName = Path.GetFileName(assemblyFileName);
+        using var fs = new FileStream(assemblyFileName, FileMode.OpenOrCreate, FileAccess.Write);
+        cSharpCode.CompileCodeToStream(assemblyName, fs, referencedAssemblies);
+    }
+
     public static void CompileCodeToStream(this string cSharpCode, string assemblyName, Stream stream, params Assembly[] referencedAssemblies)
     {
         var dotNetCoreDir = Path.GetDirectoryName(typeof(object).Assembly.Location);

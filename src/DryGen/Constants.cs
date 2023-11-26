@@ -40,7 +40,7 @@ public static class Constants
         public const string Verb = "mermaid-c4component-diagram-from-dotnet-deps-json";
     }
 
-    public static class CSharpFromJsonSchema
+    public static class CsharpFromJsonSchema
     {
         public const string Verb = "csharp-from-json-schema";
     }
