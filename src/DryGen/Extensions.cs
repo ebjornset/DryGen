@@ -81,18 +81,18 @@ public static class Extensions
         return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Replace('|', '/').Trim();
     }
 
-    public static string GeneratePropertyTypeInfo(this Type propertyType, bool asYamlComment)
+    public static string GeneratePropertyTypeInfo(this Type propertyType, bool asYamlComment, string listValueIndention = "")
     {
         var nullableUnderlyingType = Nullable.GetUnderlyingType(propertyType);
         if (nullableUnderlyingType != null)
         {
-            return GeneratePropertyTypeInfo(nullableUnderlyingType, asYamlComment);
+            return nullableUnderlyingType.GeneratePropertyTypeInfo(asYamlComment, listValueIndention);
         }
         var collectionType = GetCollectionType(propertyType);
         if (collectionType != null)
         {
-            var typeInfo = GeneratePropertyTypeInfo(collectionType, asYamlComment);
-            return asYamlComment ? $"# List of {typeInfo}\n#- " : $"List of {typeInfo}";
+            var typeInfo = collectionType.GeneratePropertyTypeInfo(asYamlComment, listValueIndention);
+            return asYamlComment ? $"# List of {typeInfo}\n{listValueIndention}#- " : $"List of {typeInfo}";
         }
         if (propertyType.IsEnum)
         {

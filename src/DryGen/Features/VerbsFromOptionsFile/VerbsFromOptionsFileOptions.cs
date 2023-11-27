@@ -1,6 +1,5 @@
 ﻿using CommandLine;
 using DryGen.Options;
-using YamlDotNet.Serialization;
 
 namespace DryGen.Features.VerbsFromOptionsFile;
 
