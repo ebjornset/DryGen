@@ -219,7 +219,8 @@ Scenario: Should generate options for verb verbs-from-options-file
 		#
 		#configuration:
 		  #verb: csharp-from-json-schema
-		  #name: string
+		  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.
+		  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.
 		  #options:
 		    #array-instance-type: string
 		    #array-type: string
@@ -232,7 +233,8 @@ Scenario: Should generate options for verb verbs-from-options-file
 		#---
 		#configuration:
 		  #verb: mermaid-class-diagram-from-csharp
-		  #name: string
+		  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.
+		  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.
 		  #options:
 		    #attribute-level: all | public | internal | protected | none
 		    #direction: default | bt | tb | lr | rl
@@ -258,7 +260,8 @@ Scenario: Should generate options for verb verbs-from-options-file
 		#---
 		#configuration:
 		  #verb: mermaid-class-diagram-from-json-schema
-		  #name: string
+		  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.
+		  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.
 		  #options:
 		    #direction: default | bt | tb | lr | rl
 		    #input-file: string
@@ -271,7 +274,8 @@ Scenario: Should generate options for verb verbs-from-options-file
 		#---
 		#configuration:
 		  #verb: mermaid-er-diagram-from-csharp
-		  #name: string
+		  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.
+		  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.
 		  #options:
 		    #attribute-type-exclusion: none | foreignkeys | all
 		    #exclude-attribute-comments: true|false
@@ -295,7 +299,8 @@ Scenario: Should generate options for verb verbs-from-options-file
 		#---
 		#configuration:
 		  #verb: mermaid-er-diagram-from-efcore
-		  #name: string
+		  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.
+		  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.
 		  #options:
 		    #attribute-type-exclusion: none | foreignkeys | all
 		    #exclude-attribute-comments: true|false
@@ -319,7 +324,8 @@ Scenario: Should generate options for verb verbs-from-options-file
 		#---
 		#configuration:
 		  #verb: mermaid-er-diagram-from-json-schema
-		  #name: string
+		  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.
+		  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.
 		  #options:
 		    #exclude-all-attributes: true|false
 		    #exclude-all-relationships: true|false
@@ -333,7 +339,8 @@ Scenario: Should generate options for verb verbs-from-options-file
 		#---
 		#configuration:
 		  #verb: options-from-commandline
-		  #name: string
+		  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.
+		  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.
 		  #options:
 		    #output-file: string
 		    #replace-token-in-output-file: string
