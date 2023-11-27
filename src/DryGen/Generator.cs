@@ -302,6 +302,7 @@ public class Generator
             var yamlParser = new YamlDotNet.Core.Parser(new StringReader(yaml));
             yamlParser.Consume<StreamStart>();
             var documentNumber = 0;
+            var optionDocuments = new List<VerbsFromOptionsFileOptionsDocument>();
             while (yamlParser.TryConsume<DocumentStart>(out _))
             {
                 documentNumber++;
@@ -315,40 +316,53 @@ public class Generator
                 {
                     throw new OptionsException($"Unknown 'verb' in document #{documentNumber}");
                 }
-                if (optionsDocument.Configuration?.GetOptions() == null)
+                optionDocuments.Add(optionsDocument);
+                yamlParser.TryConsume<DocumentEnd>(out _);
+            }
+            documentNumber = 0;
+            var duplicates = optionDocuments.Where(x => !string.IsNullOrWhiteSpace(x.Configuration?.Name)).GroupBy(x => x.Configuration?.Name, x => x).Where(x => x.Count() > 1).ToList();
+            if (duplicates.Any())
+            {
+                var names = string.Join(", ", duplicates.Select(x => $"'{x.Key}'"));
+                var message = $"duplicate name(s): {names}";
+                throw new OptionsException(message);
+            }
+            foreach (var optionsConfiguration in optionDocuments.Select(x => x.Configuration))
+            {
+                documentNumber++;
+                if (optionsConfiguration?.GetOptions() == null)
                 {
                     throw new OptionsException($"'configuration.options' is mandatory in document #{documentNumber}");
                 }
-                switch (optionsDocument.Configuration.Verb)
+                switch (optionsConfiguration.Verb)
                 {
                     case Constants.CsharpFromJsonSchema.Verb:
-                        GenerateCSharpFromJsonSchema(optionsDocument.Configuration.GetOptions().AsNonNullOptions<CSharpFromJsonSchemaOptions>(), Array.Empty<string>());
+                        GenerateCSharpFromJsonSchema(optionsConfiguration.GetOptions().AsNonNullOptions<CSharpFromJsonSchemaOptions>(), Array.Empty<string>());
                         break;
                     case Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb:
-                        GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidC4ComponentDiagramFromDotnetDepsJsonOptions>(), Array.Empty<string>());
+                        GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(optionsConfiguration.GetOptions().AsNonNullOptions<MermaidC4ComponentDiagramFromDotnetDepsJsonOptions>(), Array.Empty<string>());
                         break;
                     case Constants.MermaidClassDiagramFromCsharp.Verb:
-                        GenerateMermaidClassDiagramFromCsharp(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidClassDiagramFromCsharpOptions>(), Array.Empty<string>());
+                        GenerateMermaidClassDiagramFromCsharp(optionsConfiguration.GetOptions().AsNonNullOptions<MermaidClassDiagramFromCsharpOptions>(), Array.Empty<string>());
                         break;
                     case Constants.MermaidClassDiagramFromJsonSchema.Verb:
-                        GenerateMermaidClassDiagramFromJsonSchema(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidClassDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
+                        GenerateMermaidClassDiagramFromJsonSchema(optionsConfiguration.GetOptions().AsNonNullOptions<MermaidClassDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
                         break;
                     case Constants.MermaidErDiagramFromCsharp.Verb:
-                        GenerateMermaidErDiagramFromCsharp(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidErDiagramFromCsharpOptions>(), Array.Empty<string>());
+                        GenerateMermaidErDiagramFromCsharp(optionsConfiguration.GetOptions().AsNonNullOptions<MermaidErDiagramFromCsharpOptions>(), Array.Empty<string>());
                         break;
                     case Constants.MermaidErDiagramFromEfCore.Verb:
-                        GenerateMermaidErDiagramFromEfCore(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidErDiagramFromEfCoreOptions>(), Array.Empty<string>());
+                        GenerateMermaidErDiagramFromEfCore(optionsConfiguration.GetOptions().AsNonNullOptions<MermaidErDiagramFromEfCoreOptions>(), Array.Empty<string>());
                         break;
                     case Constants.MermaidErDiagramFromJsonSchema.Verb:
-                        GenerateMermaidErDiagramFromJsonSchema(optionsDocument.Configuration.GetOptions().AsNonNullOptions<MermaidErDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
+                        GenerateMermaidErDiagramFromJsonSchema(optionsConfiguration.GetOptions().AsNonNullOptions<MermaidErDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
                         break;
                     case Constants.OptionsFromCommandline.Verb:
-                        GenerateOptionsFromCommandline(optionsDocument.Configuration.GetOptions().AsNonNullOptions<OptionsFromCommandlineOptions>(), Array.Empty<string>());
+                        GenerateOptionsFromCommandline(optionsConfiguration.GetOptions().AsNonNullOptions<OptionsFromCommandlineOptions>(), Array.Empty<string>());
                         break;
                     default:
-                        throw new OptionsException($"Unsupported verb '{optionsDocument.Configuration.Verb}' in document #{documentNumber}");
+                        throw new OptionsException($"Unsupported verb '{optionsConfiguration.Verb}' in document #{documentNumber}");
                 }
-                yamlParser.TryConsume<DocumentEnd>(out _);
             }
             return 0;
         });
@@ -500,11 +514,11 @@ public class Generator
             {
                 break;
             }
-            var variable = yaml[startIndex..(endIndex+1)];
+            var variable = yaml[startIndex..(endIndex + 1)];
             var environmentVariable = variable.Replace("$(", string.Empty).Replace(")", string.Empty).Trim();
             var value = Environment.GetEnvironmentVariable(environmentVariable) ?? string.Empty;
             yaml = yaml.Replace(variable, value);
-        } 
+        }
         while (true);
         return yaml;
     }

@@ -433,3 +433,43 @@ Scenario: Should generate output with the verb 'mermaid-er-diagram-from-efcore' 
 			Customer
 		
 		"""
+
+Scenario: Should fail on duplicate name
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: options-from-commandline
+		  name: duplicate one
+		  options:
+		    verb: options-from-commandline
+		---
+		configuration:
+		  verb: options-from-commandline
+		  name: duplicate two
+		  options:
+		    verb: options-from-commandline
+		---
+		configuration:
+		  verb: options-from-commandline
+		  name: unique
+		  options:
+		    verb: options-from-commandline
+		---
+		configuration:
+		  verb: options-from-commandline
+		  name: duplicate one
+		  options:
+		    verb: options-from-commandline
+		---
+		configuration:
+		  verb: options-from-commandline
+		  name: duplicate two
+		  options:
+		    verb: options-from-commandline
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '1'
+	And I should find the text "duplicate name(s): 'duplicate one', 'duplicate two'" in console error
