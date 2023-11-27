@@ -217,118 +217,125 @@ Scenario: Should generate options for verb verbs-from-options-file
 		#
 		# There is one yaml document for each supported verb below. Uncomment the ones you need and delete the rest.
 		#
-		#verb: csharp-from-json-schema
-		#name: string
-		#options:
-		  #array-instance-type: string
-		  #array-type: string
-		  #input-file: string
-		  #namespace: string
-		  #output-file: string
-		  #replace-token-in-output-file: string
-		  #root-classname: string
-		  #schema-file-format: byextension | json | yaml
+		#configuration:
+		  #verb: csharp-from-json-schema
+		  #name: string
+		  #options:
+		    #array-instance-type: string
+		    #array-type: string
+		    #input-file: string
+		    #namespace: string
+		    #output-file: string
+		    #replace-token-in-output-file: string
+		    #root-classname: string
+		    #schema-file-format: byextension | json | yaml
 		#---
-		#verb: mermaid-class-diagram-from-csharp
-		#name: string
-		#options:
-		  #attribute-level: all | public | internal | protected | none
-		  #direction: default | bt | tb | lr | rl
-		  #exclude-method-params: true|false
-		  #exclude-propertynames: # List of string
-		  #- 
-		  #exclude-static-attributes: true|false
-		  #exclude-static-methods: true|false
-		  #exclude-typenames: # List of string
-		  #- 
-		  #include-namespaces: # List of string
-		  #- 
-		  #include-typenames: # List of string
-		  #- 
-		  #input-file: string
-		  #method-level: all | public | internal | protected | none
-		  #name-replace-from: string
-		  #name-replace-to: string
-		  #output-file: string
-		  #replace-token-in-output-file: string
-		  #tree-shaking-roots: # List of string
-		  #- 
+		#configuration:
+		  #verb: mermaid-class-diagram-from-csharp
+		  #name: string
+		  #options:
+		    #attribute-level: all | public | internal | protected | none
+		    #direction: default | bt | tb | lr | rl
+		    #exclude-method-params: true|false
+		    #exclude-propertynames: # List of string
+		    #- 
+		    #exclude-static-attributes: true|false
+		    #exclude-static-methods: true|false
+		    #exclude-typenames: # List of string
+		    #- 
+		    #include-namespaces: # List of string
+		    #- 
+		    #include-typenames: # List of string
+		    #- 
+		    #input-file: string
+		    #method-level: all | public | internal | protected | none
+		    #name-replace-from: string
+		    #name-replace-to: string
+		    #output-file: string
+		    #replace-token-in-output-file: string
+		    #tree-shaking-roots: # List of string
+		    #- 
 		#---
-		#verb: mermaid-class-diagram-from-json-schema
-		#name: string
-		#options:
-		  #direction: default | bt | tb | lr | rl
-		  #input-file: string
-		  #output-file: string
-		  #replace-token-in-output-file: string
-		  #root-classname: string
-		  #schema-file-format: byextension | json | yaml
-		  #tree-shaking-roots: # List of string
-		  #- 
+		#configuration:
+		  #verb: mermaid-class-diagram-from-json-schema
+		  #name: string
+		  #options:
+		    #direction: default | bt | tb | lr | rl
+		    #input-file: string
+		    #output-file: string
+		    #replace-token-in-output-file: string
+		    #root-classname: string
+		    #schema-file-format: byextension | json | yaml
+		    #tree-shaking-roots: # List of string
+		    #- 
 		#---
-		#verb: mermaid-er-diagram-from-csharp
-		#name: string
-		#options:
-		  #attribute-type-exclusion: none | foreignkeys | all
-		  #exclude-attribute-comments: true|false
-		  #exclude-attribute-keytypes: true|false
-		  #exclude-propertynames: # List of string
-		  #- 
-		  #exclude-typenames: # List of string
-		  #- 
-		  #include-namespaces: # List of string
-		  #- 
-		  #include-typenames: # List of string
-		  #- 
-		  #input-file: string
-		  #name-replace-from: string
-		  #name-replace-to: string
-		  #output-file: string
-		  #relationship-type-exclusion: none | all
-		  #replace-token-in-output-file: string
-		  #tree-shaking-roots: # List of string
-		  #- 
+		#configuration:
+		  #verb: mermaid-er-diagram-from-csharp
+		  #name: string
+		  #options:
+		    #attribute-type-exclusion: none | foreignkeys | all
+		    #exclude-attribute-comments: true|false
+		    #exclude-attribute-keytypes: true|false
+		    #exclude-propertynames: # List of string
+		    #- 
+		    #exclude-typenames: # List of string
+		    #- 
+		    #include-namespaces: # List of string
+		    #- 
+		    #include-typenames: # List of string
+		    #- 
+		    #input-file: string
+		    #name-replace-from: string
+		    #name-replace-to: string
+		    #output-file: string
+		    #relationship-type-exclusion: none | all
+		    #replace-token-in-output-file: string
+		    #tree-shaking-roots: # List of string
+		    #- 
 		#---
-		#verb: mermaid-er-diagram-from-efcore
-		#name: string
-		#options:
-		  #attribute-type-exclusion: none | foreignkeys | all
-		  #exclude-attribute-comments: true|false
-		  #exclude-attribute-keytypes: true|false
-		  #exclude-propertynames: # List of string
-		  #- 
-		  #exclude-typenames: # List of string
-		  #- 
-		  #include-namespaces: # List of string
-		  #- 
-		  #include-typenames: # List of string
-		  #- 
-		  #input-file: string
-		  #name-replace-from: string
-		  #name-replace-to: string
-		  #output-file: string
-		  #relationship-type-exclusion: none | all
-		  #replace-token-in-output-file: string
-		  #tree-shaking-roots: # List of string
-		  #- 
+		#configuration:
+		  #verb: mermaid-er-diagram-from-efcore
+		  #name: string
+		  #options:
+		    #attribute-type-exclusion: none | foreignkeys | all
+		    #exclude-attribute-comments: true|false
+		    #exclude-attribute-keytypes: true|false
+		    #exclude-propertynames: # List of string
+		    #- 
+		    #exclude-typenames: # List of string
+		    #- 
+		    #include-namespaces: # List of string
+		    #- 
+		    #include-typenames: # List of string
+		    #- 
+		    #input-file: string
+		    #name-replace-from: string
+		    #name-replace-to: string
+		    #output-file: string
+		    #relationship-type-exclusion: none | all
+		    #replace-token-in-output-file: string
+		    #tree-shaking-roots: # List of string
+		    #- 
 		#---
-		#verb: mermaid-er-diagram-from-json-schema
-		#name: string
-		#options:
-		  #exclude-all-attributes: true|false
-		  #exclude-all-relationships: true|false
-		  #input-file: string
-		  #output-file: string
-		  #replace-token-in-output-file: string
-		  #root-classname: string
-		  #schema-file-format: byextension | json | yaml
-		  #tree-shaking-roots: # List of string
-		  #- 
+		#configuration:
+		  #verb: mermaid-er-diagram-from-json-schema
+		  #name: string
+		  #options:
+		    #exclude-all-attributes: true|false
+		    #exclude-all-relationships: true|false
+		    #input-file: string
+		    #output-file: string
+		    #replace-token-in-output-file: string
+		    #root-classname: string
+		    #schema-file-format: byextension | json | yaml
+		    #tree-shaking-roots: # List of string
+		    #- 
 		#---
-		#verb: options-from-commandline
-		#name: string
-		#options:
-		  #output-file: string
-		  #replace-token-in-output-file: string
-		  #verb: string
+		#configuration:
+		  #verb: options-from-commandline
+		  #name: string
+		  #options:
+		    #output-file: string
+		    #replace-token-in-output-file: string
+		    #verb: string
 		"""

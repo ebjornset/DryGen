@@ -28,7 +28,7 @@ namespace DryGen.Features.OptionsFromCommandline
                     Constants.MermaidErDiagramFromJsonSchema.Verb,
                     Constants.OptionsFromCommandline.Verb,
                 }.OrderBy(x => x);
-                sb = AppendOptionsYamlFromVerbs(sb, verbs, "  ");
+                sb = AppendOptionsYamlFromVerbs(sb, verbs, "    ");
             }
             else
             {
@@ -50,7 +50,7 @@ namespace DryGen.Features.OptionsFromCommandline
                 {
                     sb.AppendLine().AppendLine("#---");
                 }
-                sb.Append("#verb: ").AppendLine(verb).AppendLine("#name: string").AppendLine("#options:");
+                sb.AppendLine("#configuration:").Append("  #verb: ").AppendLine(verb).AppendLine("  #name: string").AppendLine("  #options:");
                 sb = AppendOptionsYamlFromVerb(sb, verb, indention);
             }
             return sb;
