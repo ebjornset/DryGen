@@ -7,22 +7,27 @@ show_sidebar: false
 menubar: verbs_menu
 hero_height: is-fullwidth
 ---
-Execute several verbs in one run. You specify each verb in a separate yaml document in the --options-file. The yaml documents should be separated by --- (three hyphes) on its own line in the file. 
+
+Execute several verbs in one run. You specify each verb in a separate yaml document in the --options-file. The yaml documents should be separated by --- (three hyphens) on its own line in the file.
 
 ## Options
+
 The verb 'verbs-from-options-file' uses the following options.
 
-|Option|Alias|Type|Description|
-|---|---|---|---|
-|--options-file|-f|string|Read options from this file.|
+| Option         | Alias | Type   | Description                  |
+| -------------- | ----- | ------ | ---------------------------- |
+| --options-file | -f    | string | Read options from this file. |
 
-{% include notification.html status="is-dark" 
-message="You can always get information about this verb's options by running the command 
+{% include notification.html status="is-dark"
+message="You can always get information about this verb's options by running the command
 
 `dry-gen verbs-from-options-file --help`."
 %}
+
 ## Options file template
-Here is a template for an options file for 'verbs-from-options-file'. 
+
+Here is a template for an options file for 'verbs-from-options-file'.
+
 ```
 #
 # dry-gen options for verb 'verbs-from-options-file'
@@ -50,15 +55,15 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #direction: default | bt | tb | lr | rl
     #exclude-method-params: true|false
     #exclude-propertynames: # List of string
-    #- 
+    #-
     #exclude-static-attributes: true|false
     #exclude-static-methods: true|false
     #exclude-typenames: # List of string
-    #- 
+    #-
     #include-namespaces: # List of string
-    #- 
+    #-
     #include-typenames: # List of string
-    #- 
+    #-
     #input-file: string
     #method-level: all | public | internal | protected | none
     #name-replace-from: string
@@ -66,7 +71,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #output-file: string
     #replace-token-in-output-file: string
     #tree-shaking-roots: # List of string
-    #- 
+    #-
 #---
 #configuration:
   #verb: mermaid-class-diagram-from-json-schema
@@ -79,7 +84,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #root-classname: string
     #schema-file-format: byextension | json | yaml
     #tree-shaking-roots: # List of string
-    #- 
+    #-
 #---
 #configuration:
   #verb: mermaid-er-diagram-from-csharp
@@ -89,13 +94,13 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #exclude-attribute-comments: true|false
     #exclude-attribute-keytypes: true|false
     #exclude-propertynames: # List of string
-    #- 
+    #-
     #exclude-typenames: # List of string
-    #- 
+    #-
     #include-namespaces: # List of string
-    #- 
+    #-
     #include-typenames: # List of string
-    #- 
+    #-
     #input-file: string
     #name-replace-from: string
     #name-replace-to: string
@@ -103,7 +108,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #relationship-type-exclusion: none | all
     #replace-token-in-output-file: string
     #tree-shaking-roots: # List of string
-    #- 
+    #-
 #---
 #configuration:
   #verb: mermaid-er-diagram-from-efcore
@@ -113,13 +118,13 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #exclude-attribute-comments: true|false
     #exclude-attribute-keytypes: true|false
     #exclude-propertynames: # List of string
-    #- 
+    #-
     #exclude-typenames: # List of string
-    #- 
+    #-
     #include-namespaces: # List of string
-    #- 
+    #-
     #include-typenames: # List of string
-    #- 
+    #-
     #input-file: string
     #name-replace-from: string
     #name-replace-to: string
@@ -127,7 +132,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #relationship-type-exclusion: none | all
     #replace-token-in-output-file: string
     #tree-shaking-roots: # List of string
-    #- 
+    #-
 #---
 #configuration:
   #verb: mermaid-er-diagram-from-json-schema
@@ -141,7 +146,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #root-classname: string
     #schema-file-format: byextension | json | yaml
     #tree-shaking-roots: # List of string
-    #- 
+    #-
 #---
 #configuration:
   #verb: options-from-commandline
@@ -151,8 +156,9 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #replace-token-in-output-file: string
     #verb: string
 ```
-{% include notification.html status="is-dark" 
-message="You can generate the same template your self with the command 
+
+{% include notification.html status="is-dark"
+message="You can generate the same template your self with the command
 
 `dry-gen options-from-commandline --verb verbs-from-options-file`"
 %}
