@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using DryGen.Options;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,6 +110,16 @@ public static class Extensions
     {
         return options as TOptions ?? throw new ArgumentException($"Cannot cast options '{options}' as '{typeof(TOptions)}'", nameof(options));
     }
+
+    public static T AsNonNull<T>(this T? value)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+        return value;
+    }
+
 
     private static bool VerbAttributeMatches(Type type, string verb)
     {

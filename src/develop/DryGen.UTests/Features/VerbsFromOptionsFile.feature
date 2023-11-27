@@ -69,6 +69,18 @@ Scenario: Should fail when '--options--file' argument is missing
 	Then I should get exit code '1'
 	And I should find the text "--options-file is mandatory" in console error
 
+Scenario: Should fail when 'configuration' is missing in a yaml document
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		---
+		"""
+	When I call the program with this command line arguments
+		| Arg                            |
+		| verbs-from-options-file        |
+	Then I should get exit code '1'
+	And I should find the text "'configuration' is mandatory in document #1" in console error
+
 Scenario: Should fail when 'options' is missing in a yaml document
 	Given this content as an options file
 	# The commandline arguments -f <this filename> will be appended to the command line
@@ -452,6 +464,12 @@ Scenario: Should fail on duplicate name
 		---
 		configuration:
 		  verb: options-from-commandline
+		  name: duplicate two
+		  options:
+		    verb: options-from-commandline
+		---
+		configuration:
+		  verb: options-from-commandline
 		  name: unique
 		  options:
 		    verb: options-from-commandline
@@ -473,3 +491,73 @@ Scenario: Should fail on duplicate name
 		| verbs-from-options-file |
 	Then I should get exit code '1'
 	And I should find the text "duplicate name(s): 'duplicate one', 'duplicate two'" in console error
+
+Scenario: Should fail when inherits-options-from references unknown name
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: options-from-commandline
+		  name: known
+		  options:
+		    verb: options-from-commandline
+		---
+		configuration:
+		  verb: options-from-commandline
+		  inherit-options-from: unknown
+		  options:
+		    verb: options-from-commandline
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '1'
+	And I should find the text "name 'unknown' refrenced in 'inherits-options-from' in document #2 not found" in console error
+
+Scenario: Should fail when inherits-options-from references it self
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: options-from-commandline
+		  name: self
+		  inherit-options-from: self
+		  options:
+		    verb: options-from-commandline
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '1'
+	And I should find the text "document #1 'inherit-options-from' it self" in console error
+
+Scenario: Should fail when there is a ring in the inherits-options-from references
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: options-from-commandline
+		  name: one
+		  inherit-options-from: two
+		  options:
+		    verb: options-from-commandline
+		---
+		configuration:
+		  verb: options-from-commandline
+		  name: two
+		  inherit-options-from: three
+		  options:
+		    verb: options-from-commandline
+		---
+		configuration:
+		  verb: options-from-commandline
+		  name: three
+		  inherit-options-from: one
+		  options:
+		    verb: options-from-commandline
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '1'
+	And I should find the text "ring found in 'inherit-options-from' in document #3: 'three' -> 'one' -> 'two' -> 'three'" in console error

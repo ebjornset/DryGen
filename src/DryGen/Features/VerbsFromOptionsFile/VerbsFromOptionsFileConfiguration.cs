@@ -9,6 +9,8 @@ public abstract class VerbsFromOptionsFileConfiguration<TOptions> : IVerbsFromOp
     public string? Name { get; set; }
     [YamlMember(Alias = "verb", ApplyNamingConventions = false)]
     public string? Verb { get; set; }
+    [YamlMember(Alias = "inherit-options-from", ApplyNamingConventions = false)]
+    public string? InheritOptionsFrom { get; set; }
     [YamlMember(Alias = "options", ApplyNamingConventions = false)]
     public TOptions? Options { get; set; }
 

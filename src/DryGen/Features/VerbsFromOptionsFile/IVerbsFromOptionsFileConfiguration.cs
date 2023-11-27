@@ -6,6 +6,6 @@ public interface IVerbsFromOptionsFileConfiguration
 {
     public string? Name { get; }
     public string? Verb { get; }
+    public string? InheritOptionsFrom { get; }
     public CommonOptions? GetOptions();
 }
-
