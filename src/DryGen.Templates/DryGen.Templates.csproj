@@ -29,9 +29,17 @@
 	This is setup in Directory.Build.targets
 	-->
 	<Target Name="BuildTemplates" BeforeTargets="Build">
-		<Message Text="Building template DryGen.Templates.Mermaid" Importance="High" />
+		<Message Text="Building template DryGen.Templates.JsonSchema" Importance="High" />
 		<Exec Command="dotnet build ./templates/DryGen.Templates.JsonSchema/  --configuration $(Configuration)" />
+		<Message Text="Building template DryGen.Templates.Mermaid" Importance="High" />
 		<Exec Command="dotnet build ./templates/DryGen.Templates.Mermaid/  --configuration $(Configuration)" />
+	</Target>
+
+	<Target Name="CleanTemplates" AfterTargets="Clean">
+		<Message Text="Cleaning template DryGen.Templates.JsonSchema" Importance="High" />
+		<Exec Command="dotnet clean ./templates/DryGen.Templates.JsonSchema/  --configuration $(Configuration)" />
+		<Message Text="Cleaning template DryGen.Templates.Mermaid" Importance="High" />
+		<Exec Command="dotnet clean ./templates/DryGen.Templates.Mermaid/  --configuration $(Configuration)" />
 	</Target>
 
 </Project>
