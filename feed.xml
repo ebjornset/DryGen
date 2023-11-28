@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2023-11-16T22:43:23+00:00</updated><id>/feed.xml</id><title type="html">DryGen</title><subtitle>A .Net tool to generate other representations of a piece of knowledge from one representation.</subtitle><entry><title type="html">Version 1.4.0 is released</title><link href="/2023/11/16/release-1.4.0/" rel="alternate" type="text/html" title="Version 1.4.0 is released" /><published>2023-11-16T00:00:00+00:00</published><updated>2023-11-16T00:00:00+00:00</updated><id>/2023/11/16/release-1.4.0</id><content type="html" xml:base="/2023/11/16/release-1.4.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2023-11-28T20:48:05+00:00</updated><id>/feed.xml</id><title type="html">DryGen</title><subtitle>A .Net tool to generate other representations of a piece of knowledge from one representation.</subtitle><entry><title type="html">Version 1.5.0 is released</title><link href="/2023/11/28/release-1.5.0/" rel="alternate" type="text/html" title="Version 1.5.0 is released" /><published>2023-11-28T00:00:00+00:00</published><updated>2023-11-28T00:00:00+00:00</updated><id>/2023/11/28/release-1.5.0</id><content type="html" xml:base="/2023/11/28/release-1.5.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<ul>
+  <li>Added support for executing several verbs in one run with the new verb <code class="language-plaintext highlighter-rouge">verbs-from-options-file</code>. Please see the <a href="/verbs/verbs-from-options-file/">verbs-from-options-file verb page</a> for usage details.</li>
+  <li>Added support for referencing environment variables in the options files. Please see the <a href="/verbs/">verbs page</a> for usage details.</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.4.0 is released</title><link href="/2023/11/16/release-1.4.0/" rel="alternate" type="text/html" title="Version 1.4.0 is released" /><published>2023-11-16T00:00:00+00:00</published><updated>2023-11-16T00:00:00+00:00</updated><id>/2023/11/16/release-1.4.0</id><content type="html" xml:base="/2023/11/16/release-1.4.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
 
 <ul>
   <li>Added support for .Net 8, so drygen now supports .Net8, .Net 7 and .Net 6.<br />
@@ -36,7 +43,7 @@
 <p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.2.0 is released</title><link href="/2023/04/11/release-1.2.0/" rel="alternate" type="text/html" title="Version 1.2.0 is released" /><published>2023-04-11T00:00:00+00:00</published><updated>2023-04-11T00:00:00+00:00</updated><id>/2023/04/11/release-1.2.0</id><content type="html" xml:base="/2023/04/11/release-1.2.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
 
 <ul>
-  <li>Generate <a href="https://mermaid.js.org/syntax/c4c.html#c4-component-diagram-c4component" target="\_blank">Mermaid C4 Component diagrams</a> from <a href="https://github.com/dotnet/cli/blob/master/Documentation/specs/runtime-configuration-file.md#appnamedepsjson" target="\_blank">.Net deps.json files</a>. Pleses see the <a href="/verbs/mermaid-c4component-diagram-from-dotnet-deps-json/">mermaid-c4component-diagram-from-dotnet-deps-json verb page</a> for usage details.</li>
+  <li>Generate <a href="https://mermaid.js.org/syntax/c4c.html#c4-component-diagram-c4component" target="\_blank">Mermaid C4 Component diagrams</a> from <a href="https://github.com/dotnet/cli/blob/master/Documentation/specs/runtime-configuration-file.md#appnamedepsjson" target="\_blank">.Net deps.json files</a>. Please see the <a href="/verbs/mermaid-c4component-diagram-from-dotnet-deps-json/">mermaid-c4component-diagram-from-dotnet-deps-json verb page</a> for usage details.</li>
 </ul>
 
 <p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.1.0 is released</title><link href="/2023/03/05/release-1.1.0/" rel="alternate" type="text/html" title="Version 1.1.0 is released" /><published>2023-03-05T00:00:00+00:00</published><updated>2023-03-05T00:00:00+00:00</updated><id>/2023/03/05/release-1.1.0</id><content type="html" xml:base="/2023/03/05/release-1.1.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
@@ -78,14 +85,4 @@
   <li>Fix for an issue with generating Mermaid diagrams from an assembly with dependencies, where the dependency caused dry-gen to fail with “The system cannot find the file specified”.</li>
 </ul>
 
-<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 0.7.0 is released</title><link href="/2022/06/21/release-0.7.0/" rel="alternate" type="text/html" title="Version 0.7.0 is released" /><published>2022-06-21T00:00:00+00:00</published><updated>2022-06-21T00:00:00+00:00</updated><id>/2022/06/21/release-0.7.0</id><content type="html" xml:base="/2022/06/21/release-0.7.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
-<ol>
-  <li>Deprected the options <code class="language-plaintext highlighter-rouge">--exclude-all-attributes</code> and <code class="language-plaintext highlighter-rouge">--exclude-foreignkey-attributes</code> in favor of <code class="language-plaintext highlighter-rouge">--attribute-type-exclusion</code>.</li>
-  <li>Deprected the option <code class="language-plaintext highlighter-rouge">--exclude-all-relationships</code> in favor of <code class="language-plaintext highlighter-rouge">--relationship-type-exclusion</code>.</li>
-</ol>
-
-<p><strong>NB! These deprected options will be removed in the next major release (1.0)</strong></p>
-
-<p>The relase also includes some examples of the usage of the different Mermaid diagram options.</p>
-
-<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version Deprected the options --exclude-all-attributes and --exclude-foreignkey-attributes in favor of --attribute-type-exclusion. Deprected the option --exclude-all-relationships in favor of --relationship-type-exclusion.]]></summary></entry></feed>
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry></feed>

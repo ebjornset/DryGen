@@ -147,6 +147,11 @@
             <a href="/verbs/options-from-commandline" class="">options-from-commandline</a>
             
         </li>
+        
+        <li>
+            <a href="/verbs/verbs-from-options-file" class="">verbs-from-options-file</a>
+            
+        </li>
             
     </ul>
 
@@ -201,6 +206,29 @@
     </div>
 </div>
 <p> </p>
+
+<div x-data="{visible: true}">
+    <div class="notification is-dark" x-show.transition.duration.300ms="visible">
+        
+        <article class="media">
+            
+                <div class="media-left">
+                    <span class="icon"><i class="fas fa-exclamation-circle fa-lg"></i></span>
+                </div>
+            
+            <div class="media-content">
+                <div class="content"><p>You can reference environment variables in the options files, using the MSBuild syntax
+<code class="language-plaintext highlighter-rouge">$(&lt;environment variable name&gt;)</code></p>
+
+<p>The environment variable names are not case sesitive.<br />
+If the environment variable doesn’t exists, it’s replaced with an empty string instead.</p>
+</div>
+            </div>
+        </article>
+    </div>
+</div>
+<p> </p>
+
 <div x-data="{visible: true}">
     <div class="notification is-dark" x-show.transition.duration.300ms="visible">
         
