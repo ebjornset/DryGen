@@ -312,6 +312,7 @@ public partial class Build : NukeBuild
         .DependsOn(Init)
         .Executes(() =>
         {
+            DocsSiteDirectory.CreateOrCleanDirectory();
             PowerShellTasks.PowerShell(
                 arguments: "Start-Process -FilePath \"bundle\" -ArgumentList \"exec jekyll serve --drafts --incremental\"",
                 workingDirectory: DocsDirectory
@@ -324,5 +325,6 @@ public partial class Build : NukeBuild
         return solutionFolder.GetProject(projectName) ?? throw new ArgumentException($"Project '{projectName}' noot found in solution folder '{solutionFolderName}'", nameof(projectName));
     }
 
-    private static string DocsDirectory => Path.Combine(RootDirectory, "docs").Replace("\\", "/");
+    private static AbsolutePath DocsDirectory => RootDirectory / "docs";
+    private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
 }
