@@ -418,6 +418,10 @@ public class Generator
                     var path = string.Join("' -> '", optionsDocumentsPath.Select(x => x.Configuration.AsNonNull().Name));
                     throw new OptionsException($"ring found in 'inherit-options-from' in document #{optionsDocument.DocumentNumber}: '{path}'");
                 }
+                if (optionsDocument.Configuration?.Verb != referencedDocument.Configuration?.Verb)
+                {
+                    throw new OptionsException($"document #{optionsDocument.DocumentNumber} 'inherits-options-from' references wrong verb, expected '{optionsDocument.Configuration?.Verb}', but found '{referencedDocument.Configuration?.Verb}'");
+                }
                 optionsDocument.ParentOptionsDocument = referencedDocument;
             }
         }

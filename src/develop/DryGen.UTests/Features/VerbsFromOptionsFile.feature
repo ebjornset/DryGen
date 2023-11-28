@@ -561,3 +561,25 @@ Scenario: Should fail when there is a ring in the inherits-options-from referenc
 		| verbs-from-options-file |
 	Then I should get exit code '1'
 	And I should find the text "ring found in 'inherit-options-from' in document #3: 'three' -> 'one' -> 'two' -> 'three'" in console error
+
+Scenario: Should fail when inherits-options-from references different verb
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: mermaid-c4component-diagram-from-dotnet-deps-json
+		  name: known
+		  options:
+		    boundary-in-row: 42
+		---
+		configuration:
+		  verb: options-from-commandline
+		  inherit-options-from: known
+		  options:
+		    verb: options-from-commandline
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '1'
+	And I should find the text "document #2 'inherits-options-from' references wrong verb, expected 'options-from-commandline', but found 'mermaid-c4component-diagram-from-dotnet-deps-json'" in console error
