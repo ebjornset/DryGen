@@ -599,14 +599,22 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         string visibility = "";
         if (methodInfo.IsPublic)
+        {
             return "+";
+        }
         else if (methodInfo.IsPrivate)
+        {
             return "-";
-        else
-            if (methodInfo.IsFamily)
+        }
+        else if (methodInfo.IsFamily)
+        {
             visibility = "#";
+        }
         else if (methodInfo.IsAssembly)
+        {
             visibility += "~";
+        }
+
         return visibility;
     }
 

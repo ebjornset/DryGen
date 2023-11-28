@@ -186,6 +186,7 @@ public class Generator
     }
 
     [ExcludeFromCodeCoverage] // At the moment we have no deprecated option, but we migth get some again in the future...
+#pragma warning disable IDE0051 // Remove unused private members
     private void WarnIfDeprecatedIsUsed(bool isDeprecatedOptionUsed, string deprecatedOption, string replacedByOption)
 #pragma warning restore IDE0051 // Remove unused private members
     {

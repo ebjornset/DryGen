@@ -15,7 +15,9 @@ public static class Extensions
         {
             allInterfaces.Add(allInterface);
             foreach (var inheritedInterface in allInterface.GetInterfaces())
+            {
                 inheritedInterfaces.Add(inheritedInterface);
+            }
         }
         var directInterfaces = allInterfaces.Except(inheritedInterfaces);
         if (type.BaseType != null)
