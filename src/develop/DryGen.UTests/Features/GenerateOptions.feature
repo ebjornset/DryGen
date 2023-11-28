@@ -232,6 +232,26 @@ Scenario: Should generate options for verb verbs-from-options-file
 		    #schema-file-format: byextension | json | yaml
 		#---
 		#configuration:
+		  #verb: mermaid-c4component-diagram-from-dotnet-deps-json
+		  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.
+		  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.
+		  #options:
+		    #boundary-in-row: int32
+		    #boundary-level: all | internalexternal | none
+		    #exclude-assemblynames: # List of string
+		    #- 
+		    #exclude-techn: true|false
+		    #exclude-version: true|false
+		    #include-assemblynames: # List of string
+		    #- 
+		    #input-file: string
+		    #output-file: string
+		    #relation-level: all | interboundary | intraboundary | none
+		    #replace-token-in-output-file: string
+		    #shape-in-row: int32
+		    #title: string
+		#---
+		#configuration:
 		  #verb: mermaid-class-diagram-from-csharp
 		  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.
 		  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.

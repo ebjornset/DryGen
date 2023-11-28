@@ -21,6 +21,7 @@ namespace DryGen.Features.OptionsFromCommandline
                 var verbs = new[]
                 {
                     Constants.CsharpFromJsonSchema.Verb,
+                    Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb,
                     Constants.MermaidClassDiagramFromCsharp.Verb,
                     Constants.MermaidClassDiagramFromJsonSchema.Verb,
                     Constants.MermaidErDiagramFromCsharp.Verb,
