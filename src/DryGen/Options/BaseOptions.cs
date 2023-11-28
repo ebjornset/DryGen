@@ -1,6 +1,4 @@
 ﻿using CommandLine;
-using DryGen.Core;
-using YamlDotNet.Serialization;
 
 namespace DryGen.Options;
 

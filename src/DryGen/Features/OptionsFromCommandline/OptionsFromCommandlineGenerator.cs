@@ -71,7 +71,6 @@ namespace DryGen.Features.OptionsFromCommandline
             return sb;
         }
 
-
         private static StringBuilder AppendOptionsYamlFromType(this StringBuilder sb, Type optionsTypeFromVerb, string indention)
         {
             List<string> optionList = GenerateOptionsList(optionsTypeFromVerb, indention);
@@ -81,26 +80,10 @@ namespace DryGen.Features.OptionsFromCommandline
         private static List<string> GenerateOptionsList(Type optionsTypeFromVerb, string indention)
         {
             var optionList = new List<string>();
-            foreach (var property in optionsTypeFromVerb.GetProperties())
+            var yamleMemberProperties = optionsTypeFromVerb.GetYamlMemberProperties(excludeDeprecated: true);
+            foreach (var property in yamleMemberProperties)
             {
-                var yamlMemberAttribute = property.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(YamlMemberAttribute));
-                var alias = yamlMemberAttribute?.NamedArguments.Any(x => x.MemberName == nameof(YamlMemberAttribute.Alias)) == true
-                    ? yamlMemberAttribute.NamedArguments.Single(x => x.MemberName == nameof(YamlMemberAttribute.Alias)).TypedValue.ToString().Replace("\"", string.Empty)
-                    : null;
-                if (string.IsNullOrEmpty(alias))
-                {
-                    continue;
-                }
-                var optionAttribute = property.GetVisibleOptionAttribute();
-                if (optionAttribute == null)
-                {
-                    continue;
-                }
-                var optionMetadata = new OptionMetadata(optionAttribute);
-                if (optionMetadata.Description?.StartsWith(Constants.DeprecatedNotice) == true)
-                {
-                    continue;
-                }
+                var alias = property.GetYamlMemberAttributeAlias().AsNonNull();
                 var propertyTypeInfo = property.PropertyType.GeneratePropertyTypeInfo(asYamlComment: true, indention);
                 optionList.Add($"{indention}#{alias}: {propertyTypeInfo}");
             }

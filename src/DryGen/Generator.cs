@@ -21,8 +21,6 @@ using System.Text;
 using DryGen.MermaidFromDotnetDepsJson;
 using DryGen.Core;
 using DryGen.MermaidFromDotnetDepsJson.Filters;
-using YamlDotNet.Core;
-using YamlDotNet.Core.Events;
 using DryGen.Features.VerbsFromOptionsFile;
 using DryGen.Features.OptionsFromCommandline;
 using DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
@@ -276,38 +274,13 @@ public class Generator
     {
         return ExecuteWithExceptionHandlingAndHelpDisplay(options, options =>
         {
-            var deserializer = CreateYamlDeserializer();
-            var optionsDocuments = ReadOptionsDocumentsFromYaml(options, deserializer);
-            CheckForDuplicates(optionsDocuments);
-            BuildInheritsFromPaths(optionsDocuments);
+            var optionsDocuments = VerbsFromOptionsFileOptionsDocumentsBuilder.BuildOptionsDocuments(options);
             GenerateFromOptionsDocuments(optionsDocuments);
             return 0;
         });
     }
 
-    private static IDeserializer CreateYamlDeserializer()
-    {
-        return new DeserializerBuilder()
-            .WithNamingConvention(PascalCaseNamingConvention.Instance)
-            .WithTypeDiscriminatingNodeDeserializer((o) =>
-            {
-                IDictionary<string, Type> valueMappings = new Dictionary<string, Type>
-                {
-                        { Constants.CsharpFromJsonSchema.Verb, typeof(CSharpFromJsonSchemaConfiguration) },
-                        { Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb, typeof(MermaidC4ComponentDiagramFromDotnetDepsJsonConfiguration) },
-                        { Constants.MermaidClassDiagramFromCsharp.Verb, typeof(MermaidClassDiagramFromCsharpConfiguration) },
-                        { Constants.MermaidClassDiagramFromJsonSchema.Verb, typeof(MermaidClassDiagramFromJsonSchemaConfiguration) },
-                        { Constants.MermaidErDiagramFromCsharp.Verb, typeof(MermaidErDiagramFromCsharpConfiguration) },
-                        { Constants.MermaidErDiagramFromEfCore.Verb, typeof(MermaidErDiagramFromEfCoreConfiguration) },
-                        { Constants.MermaidErDiagramFromJsonSchema.Verb, typeof(MermaidErDiagramFromJsonSchemaConfiguration) },
-                        { Constants.OptionsFromCommandline.Verb, typeof(OptionsFromCommandlineConfiguration) },
-                };
-                o.AddKeyValueTypeDiscriminator<IVerbsFromOptionsFileConfiguration>("verb", valueMappings);
-            })
-            .Build();
-    }
-
-    private void GenerateFromOptionsDocuments(List<VerbsFromOptionsFileOptionsDocument> optionsDocuments)
+    private void GenerateFromOptionsDocuments(IEnumerable<VerbsFromOptionsFileOptionsDocument> optionsDocuments)
     {
         foreach (var optionsDocument in optionsDocuments)
         {
@@ -343,96 +316,12 @@ public class Generator
         }
     }
 
-    private static List<VerbsFromOptionsFileOptionsDocument> ReadOptionsDocumentsFromYaml(VerbsFromOptionsFileOptions options, IDeserializer deserializer)
-    {
-        if (string.IsNullOrWhiteSpace(options.OptionsFile))
-        {
-            throw new OptionsException("--options-file is mandatory");
-        }
-        var yaml = ReadOptionsFileWithEnvriomentVariableReplacement(options.OptionsFile);
-        var yamlParser = new YamlDotNet.Core.Parser(new StringReader(yaml));
-        yamlParser.Consume<StreamStart>();
-        var optionsDocuments = new List<VerbsFromOptionsFileOptionsDocument>();
-        var documentNumber = 0;
-        while (yamlParser.TryConsume<DocumentStart>(out _))
-        {
-            documentNumber++;
-            VerbsFromOptionsFileOptionsDocument optionsDocument;
-            try
-            {
-                optionsDocument = deserializer.Deserialize<VerbsFromOptionsFileOptionsDocument>(yamlParser);
-            }
-            catch (YamlException e)
-            when (e.InnerException?.InnerException?.Message?.Contains("Cannot dynamically create an instance of type 'DryGen.Features.VerbsFromOptionsFile.IVerbsFromOptionsFileConfiguration'") == true)
-            {
-                throw new OptionsException($"Unknown 'verb' in document #{documentNumber}");
-            }
-            if (optionsDocument?.Configuration == null)
-            {
-                throw new OptionsException($"'configuration' is mandatory in document #{documentNumber}");
-            }
-            if (optionsDocument.Configuration?.GetOptions() == null)
-            {
-                throw new OptionsException($"'configuration.options' is mandatory in document #{documentNumber}");
-            }
-            optionsDocument.DocumentNumber = documentNumber;
-            optionsDocuments.Add(optionsDocument);
-            yamlParser.TryConsume<DocumentEnd>(out _);
-        }
-        return optionsDocuments;
-    }
-
-    private static void CheckForDuplicates(List<VerbsFromOptionsFileOptionsDocument> optionsDocuments)
-    {
-        var duplicates = optionsDocuments.Where(x => !string.IsNullOrWhiteSpace(x.Configuration?.Name)).GroupBy(x => x.Configuration?.Name, x => x).Where(x => x.Count() > 1).ToList();
-        if (duplicates.Any())
-        {
-            var names = string.Join(", ", duplicates.Select(x => $"'{x.Key}'"));
-            var message = $"duplicate name(s): {names}";
-            throw new OptionsException(message);
-        }
-    }
-
-    private static void BuildInheritsFromPaths(IEnumerable<VerbsFromOptionsFileOptionsDocument> optionsDocuments)
-    {
-        optionsDocuments = optionsDocuments.Where(x => x.Configuration != null).ToList();
-        var lookup = optionsDocuments.Where(x => !string.IsNullOrWhiteSpace(x.Configuration.AsNonNull().Name)).ToDictionary(x => x.Configuration.AsNonNull().Name.AsNonNull());
-        foreach (var optionsDocument in optionsDocuments)
-        {
-            var inheritOptionsFrom = optionsDocument.Configuration?.InheritOptionsFrom;
-            if (!string.IsNullOrWhiteSpace(inheritOptionsFrom))
-            {
-                if (!lookup.ContainsKey(inheritOptionsFrom))
-                {
-                    throw new OptionsException($"name '{inheritOptionsFrom}' refrenced in 'inherits-options-from' in document #{optionsDocument.DocumentNumber} not found");
-                }
-                var referencedDocument = lookup[inheritOptionsFrom];
-                if (referencedDocument == optionsDocument)
-                {
-                    throw new OptionsException($"document #{optionsDocument.DocumentNumber} 'inherit-options-from' it self");
-                }
-                var optionsDocumentsPath = referencedDocument.GetOptionsDocumentsPath();
-                if (optionsDocumentsPath.Contains(optionsDocument))
-                {
-                    optionsDocumentsPath.Insert(0, optionsDocument);
-                    var path = string.Join("' -> '", optionsDocumentsPath.Select(x => x.Configuration.AsNonNull().Name));
-                    throw new OptionsException($"ring found in 'inherit-options-from' in document #{optionsDocument.DocumentNumber}: '{path}'");
-                }
-                if (optionsDocument.Configuration?.Verb != referencedDocument.Configuration?.Verb)
-                {
-                    throw new OptionsException($"document #{optionsDocument.DocumentNumber} 'inherits-options-from' references wrong verb, expected '{optionsDocument.Configuration?.Verb}', but found '{referencedDocument.Configuration?.Verb}'");
-                }
-                optionsDocument.ParentOptionsDocument = referencedDocument;
-            }
-        }
-    }
-
     private TOptions GetOptionsFromFileWithCommandlineOptionsAsOverrides<TOptions>(TOptions commandlineOptions, string[] args) where TOptions : CommonOptions
     {
         if (!string.IsNullOrEmpty(commandlineOptions.OptionsFile))
         {
             var deserializer = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
-            var yaml = ReadOptionsFileWithEnvriomentVariableReplacement(commandlineOptions.OptionsFile);
+            var yaml = commandlineOptions.OptionsFile.ReadOptionsFileWithEnviromentVariableReplacement();
             var optionsFromFile = deserializer.Deserialize<TOptions>(yaml);
             if (optionsFromFile != null)
             // The yaml deserialization returns null if the file is empty or all options are commented out
@@ -555,31 +444,6 @@ public class Generator
             ex = aEx.InnerExceptions[0];
         }
         return ex;
-    }
-
-    private static string ReadOptionsFileWithEnvriomentVariableReplacement(string optionsFile)
-    {
-        var startIndex = 0;
-        var yaml = File.ReadAllText(optionsFile);
-        do
-        {
-            startIndex = yaml.IndexOf("$(", startIndex);
-            if (startIndex == -1)
-            {
-                break;
-            }
-            var endIndex = yaml.IndexOf(')', startIndex);
-            if (endIndex <= startIndex)
-            {
-                break;
-            }
-            var variable = yaml[startIndex..(endIndex + 1)];
-            var environmentVariable = variable.Replace("$(", string.Empty).Replace(")", string.Empty).Trim();
-            var value = Environment.GetEnvironmentVariable(environmentVariable) ?? string.Empty;
-            yaml = yaml.Replace(variable, value);
-        }
-        while (true);
-        return yaml;
     }
 
     private static string BuildExceptionMessages(Exception ex, bool includeExceptionStackTrace)

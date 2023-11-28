@@ -10,7 +10,7 @@ public class CSharpFromJsonSchemaGenerator
 {
     public async Task<string> Generate(ICSharpFromJsonSchemaOptions options)
     {
-        var jsonSchema = await LoadJsonSchemaFromFile(options.InputFile, options.SchemaFileFormat);
+        var jsonSchema = await LoadJsonSchemaFromFile(options.InputFile, options.GetSchemaFileFormat());
         RemoveSynteticSchemaProperty(jsonSchema);
         string cSharpCode = GenerateCSharpCode(jsonSchema, options.Namespace, options.RootClassname, options.ArrayType, options.ArrayInstanceType);
         return cSharpCode;

@@ -18,5 +18,10 @@ public abstract class VerbsFromOptionsFileConfiguration<TOptions> : IVerbsFromOp
     {
         return Options;
     }
+
+    public void PerformInheritOptionsFrom(IVerbsFromOptionsFileConfiguration other)
+    {
+        GetOptions().AsNonNull().InheritFrom(other.GetOptions().AsNonNull());
+    }
 }
 

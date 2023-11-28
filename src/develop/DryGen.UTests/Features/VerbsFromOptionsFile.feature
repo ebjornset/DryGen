@@ -583,3 +583,135 @@ Scenario: Should fail when inherits-options-from references different verb
 		| verbs-from-options-file |
 	Then I should get exit code '1'
 	And I should find the text "document #2 'inherits-options-from' references wrong verb, expected 'options-from-commandline', but found 'mermaid-c4component-diagram-from-dotnet-deps-json'" in console error
+
+Scenario: Should inherit-options-from when not set
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: mermaid-c4component-diagram-from-dotnet-deps-json
+		  name: known
+		  options:
+		    input-file: $(input_file)
+		    title: inherited title
+		---
+		configuration:
+		  verb: mermaid-c4component-diagram-from-dotnet-deps-json
+		  inherit-options-from: known
+		  options:
+		    input-file: $(input_file)
+		"""
+	And this file is referenced as the environment variable "input_file"
+		"""
+		{
+			"targets": {
+				".NETCoreApp,Version=v7.0": {
+					"MainAssembly/1.0.0": {
+						"runtime": {
+							"MainAssembly.dll": {}
+						}
+					}
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		C4Component
+		title inherited title
+		Component("MainAssembly/1.0.0", "MainAssembly", "dll", "v1.0.0")
+		C4Component
+		title inherited title
+		Component("MainAssembly/1.0.0", "MainAssembly", "dll", "v1.0.0")
+
+		"""
+
+Scenario: Should not inherit-options-from when set
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: mermaid-c4component-diagram-from-dotnet-deps-json
+		  name: known
+		  options:
+		    input-file: $(input_file)
+		    title: inherited title
+		---
+		configuration:
+		  verb: mermaid-c4component-diagram-from-dotnet-deps-json
+		  inherit-options-from: known
+		  options:
+		    input-file: $(input_file)
+		    title: explisit title
+		"""
+	And this file is referenced as the environment variable "input_file"
+		"""
+		{
+			"targets": {
+				".NETCoreApp,Version=v7.0": {
+					"MainAssembly/1.0.0": {
+						"runtime": {
+							"MainAssembly.dll": {}
+						}
+					}
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		C4Component
+		title inherited title
+		Component("MainAssembly/1.0.0", "MainAssembly", "dll", "v1.0.0")
+		C4Component
+		title explisit title
+		Component("MainAssembly/1.0.0", "MainAssembly", "dll", "v1.0.0")
+
+		"""
+
+Scenario: Should inherit-options-from for base option types
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: mermaid-class-diagram-from-csharp
+		  name: known
+		  options:
+		    input-file: $(input_file)
+		    exclude-typenames: 
+		    - ExcludedType
+		---
+		configuration:
+		  verb: mermaid-class-diagram-from-csharp
+		  inherit-options-from: known
+		  options:
+		    input-file: $(input_file)
+		"""
+	And this C# source code compiled to a file that is referenced as the environment variable "input_file"
+		"""
+		namespace Test
+		{
+			public class Customer {}
+			public class ExcludedType {}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		classDiagram
+			class Customer
+		classDiagram
+			class Customer
+		
+		"""

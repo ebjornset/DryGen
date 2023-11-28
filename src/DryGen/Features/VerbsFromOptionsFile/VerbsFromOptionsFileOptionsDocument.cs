@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
 namespace DryGen.Features.VerbsFromOptionsFile;
@@ -22,6 +21,19 @@ public class VerbsFromOptionsFileOptionsDocument
         AddToOptionsDocumentsPath(parentOptionsDocuments, this);
         return parentOptionsDocuments;
     }
+
+    public void PerformInheritOptionsFrom()
+    {
+        if (ParentOptionsDocument == null || inheritOptionsFromPerformed)
+        {
+            return;
+        }
+        ParentOptionsDocument.PerformInheritOptionsFrom();
+        GetConfiguration().PerformInheritOptionsFrom(ParentOptionsDocument.GetConfiguration());
+        inheritOptionsFromPerformed = true;
+    }
+
+    private bool inheritOptionsFromPerformed;
 
     private static void AddToOptionsDocumentsPath(List<VerbsFromOptionsFileOptionsDocument> parentOptionsDocuments, VerbsFromOptionsFileOptionsDocument? optionsDocument)
     {
