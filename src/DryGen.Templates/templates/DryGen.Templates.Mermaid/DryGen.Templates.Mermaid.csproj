@@ -43,11 +43,12 @@
 		</PropertyGroup>
 	</Target>
 
-	<Target Name="ExecDryGenAfterBuild" AfterTargets="SetupDryGen,Build" Condition="Exists('$(DryGenInputFile)')">
+<Target Name="ExecDryGenAfterBuild" AfterTargets="SetupDryGen" Condition="Exists('$(DryGenInputFile)')">
 		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''" />
 		<!-- Prepare the template for inline generation of diagrams in the docs markdown file. -->
 		<Copy SourceFiles="./docs/templates/docs.md" DestinationFolder="./docs/generated" />
 		<!-- Generate a standalone Mermaid class diagram from the example C# code. -->
+		<Message Text="Docs generate started at $([System.DateTime]::Now)" Importance="High" />
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/mermaid-class-diagram-from-csharp.mmd -f ./options/mermaid-class-diagram-from-csharp.yaml -i $(DryGenInputFile)" />
 		<!-- Generate the same Mermaid class diagram inside a markdown file -->
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/docs.md -f ./options/mermaid-class-diagram-from-csharp.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-from-csharp.!.!. -i $(DryGenInputFile)" />
@@ -59,5 +60,6 @@
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/mermaid-class-diagram-from-dbcontext.mmd -f ./options/mermaid-class-diagram-from-dbcontext.yaml -i $(DryGenInputFile)" />
 		<!-- Generate the same Mermaid class diagram inside a markdown file. -->
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/docs.md -f ./options/mermaid-class-diagram-from-dbcontext.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-from-dbcontext.!.!. -i $(DryGenInputFile)" />
+		<Message Text="Docs generate completed at $([System.DateTime]::Now)" Importance="High" />
 	</Target>
 </Project>
