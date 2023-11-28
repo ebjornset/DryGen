@@ -6,7 +6,7 @@
 .!.!.replace-token-for-mermaid-class-diagram-from-csharp.!.!.
 ```
 
-## Mermaid ER diagram from the example code
+## Mermaid ER diagram from the example code, generated using an Ef Core DbContext
 
 ```mermaid
 .!.!.replace-token-for-mermaid-er-diagram-from-efcore.!.!.
