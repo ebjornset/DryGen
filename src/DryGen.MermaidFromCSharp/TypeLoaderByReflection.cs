@@ -43,8 +43,9 @@ public class TypeLoaderByReflection : ITypeLoader
 
     private IReadOnlyList<ITypeFilter> WrapWithGlobalFilters(IReadOnlyList<ITypeFilter>? filters)
     {
-        var result = new List<ITypeFilter> { 
-            new ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter(), 
+        var result = new List<ITypeFilter>
+        {
+            new ExcludeMicrosoftCodeAnalysisEmbeddedAttributeTypeFilter(),
             new ExcludeSystemRuntimeCompilerServicesRefSafetyRulesAttributeTypeFilter()
         };
         if (filters?.Any() == true)
@@ -53,5 +54,4 @@ public class TypeLoaderByReflection : ITypeLoader
         }
         return result;
     }
-
 }

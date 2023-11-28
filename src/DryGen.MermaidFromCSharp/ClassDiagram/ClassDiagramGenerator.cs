@@ -147,7 +147,6 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             if (nullableResult.isRelation)
             {
                 return (isRelation: true, nullableResult.isCollection, isNullable: true, nullableUnderlyingType);
-
             }
         }
         return (false, false, false, typeof(object));
@@ -187,7 +186,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             return;
         }
         classDiagramClass.AddRelationship(
-                ClassDiagramRelationshipCardinality.Unspecified,
+            ClassDiagramRelationshipCardinality.Unspecified,
                 ClassDiagramRelationshipType.Inheritance,
                 ClassDiagramRelationshipCardinality.Unspecified,
                 classLookup[baseType], string.Empty, string.Empty);
@@ -470,6 +469,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             }
         }
     }
+
     private static bool IsNotGetterOrSetterOrLocalFunction(MethodInfo method)
     {
         var methodName = method.Name;
@@ -539,7 +539,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         return result;
     }
 
-    static string GetTypeName(string typeName)
+    private static string GetTypeName(string typeName)
     {
         return typeName switch
         {
@@ -599,14 +599,22 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         string visibility = "";
         if (methodInfo.IsPublic)
+        {
             return "+";
+        }
         else if (methodInfo.IsPrivate)
+        {
             return "-";
-        else
-           if (methodInfo.IsFamily)
+        }
+        else if (methodInfo.IsFamily)
+        {
             visibility = "#";
+        }
         else if (methodInfo.IsAssembly)
+        {
             visibility += "~";
+        }
+
         return visibility;
     }
 

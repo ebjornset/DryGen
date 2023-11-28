@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.Git;
@@ -11,8 +6,14 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
+using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Utilities.Collections;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 namespace DryGen.Build;
@@ -26,7 +27,6 @@ public partial class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-
     public static int Main() => Execute<Build>(x => x.Clean, x => x.UTests, x => x.ITests, x => x.Docs, x => x.Specs);
 
     [Parameter("Configuration to build - Default is 'Release'")]
@@ -45,8 +45,8 @@ public partial class Build : NukeBuild
 
     internal string Copyright;
     internal string Authors;
-    string ToolsDescription;
-    string TemplatesDescription;
+    private string ToolsDescription;
+    private string TemplatesDescription;
     internal bool IsVersionTag;
 #pragma warning disable S1075 // URIs should not be hardcoded
     private readonly string ProjectUrlInNugetPackage = "https://docs.drygen.dev/";
@@ -84,11 +84,11 @@ public partial class Build : NukeBuild
         });
 
     internal Target Restore => _ => _
-       .After(Clean)
-       .Executes(() =>
-       {
-           DotNetRestore(s => s.SetProjectFile(Solution));
-       });
+        .After(Clean)
+        .Executes(() =>
+        {
+            DotNetRestore(s => s.SetProjectFile(Solution));
+        });
 
     internal Target Compile => _ => _
         .DependsOn(Restore)
@@ -121,112 +121,113 @@ public partial class Build : NukeBuild
         });
 
     internal Target Pack => _ => _
-            .DependsOn(Init)
-            .DependsOn(Compile)
-            .Executes(() =>
-            {
-                DotNetPack(s => s
-                    .SetProject(Solution.GetProject("DryGen"))
-                    .SetOutputDirectory(ArtifactsDirectory)
-                    .SetConfiguration(Configuration)
-                    .EnableNoBuild()
-                    .EnableContinuousIntegrationBuild() // Necessary for deterministic builds
-                    .SetAuthors(Authors)
-                    .SetCopyright(Copyright)
-                    .SetDescription(ToolsDescription)
-                    .SetRepositoryUrl(GitRepository?.ToString())
-                    .SetPackageProjectUrl(ProjectUrlInNugetPackage)
-                    .SetVersion(GitVersion.NuGetVersionV2));
-                // Regenerate the .config/dotnet-tools.json in the templates with the latest version of dry-gen
-                var templateProjectDirectory = Solution.GetProject("DryGen.Templates").Directory;
-                foreach (var templateProject in Directory.GetDirectories(Path.Combine(templateProjectDirectory, "templates")))
-                {
-                    var workingDirectory = Path.Combine(templateProjectDirectory, "templates", templateProject);
-                    DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
-                    DotNetToolUpdate(c => c
-                        .SetPackageName("dry-gen")
-                        .AddSources(ArtifactsDirectory)
-                        .SetProcessWorkingDirectory(workingDirectory)
-                        .SetVersion(GitVersion.NuGetVersionV2)
-                        .SetConfigFile(Path.Combine(templateProjectDirectory, "Properties", "NuGet.Config"))
-                        );
-                }
-                // Rebuild the templates before we create the package, to use the newly generated .config/dotnet-tools.json in the templates
-                DotNetBuild(s => s
-                    .SetProjectFile(Solution.GetProject("DryGen.Templates"))
-                    .SetOutputDirectory(ArtifactsDirectory)
-                    .SetConfiguration(Configuration)
-                    .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                    .SetFileVersion(GitVersion.AssemblySemFileVer)
-                    .SetInformationalVersion(GitVersion.InformationalVersion)
-                    .SetCopyright(Copyright)
-                    .SetDescription(ToolsDescription)
-                    .SetProcessEnvironmentVariable("DryGenTemplatesRunAsTool", "some value")
-                    .EnableNoRestore());
-                DotNetPack(s => s
-                    .SetProject(Solution.GetProject("DryGen.Templates"))
-                    .SetOutputDirectory(ArtifactsDirectory)
-                    .SetConfiguration(Configuration)
-                    .EnableNoBuild()
-                    .EnableContinuousIntegrationBuild() // Necessary for deterministic builds
-                    .SetAuthors(Authors)
-                    .SetCopyright(Copyright)
-                    .SetDescription(TemplatesDescription)
-                    .SetRepositoryUrl(GitRepository?.ToString())
-                    .SetPackageProjectUrl(ProjectUrlInNugetPackage)
-                    .SetVersion(GitVersion.NuGetVersionV2));
-            });
+             .DependsOn(Init)
+             .DependsOn(Compile)
+             .Executes(() =>
+             {
+                 DotNetPack(s => s
+                     .SetProject(Solution.GetProject("DryGen"))
+                     .SetOutputDirectory(ArtifactsDirectory)
+                     .SetConfiguration(Configuration)
+                     .EnableNoBuild()
+                     .EnableContinuousIntegrationBuild() // Necessary for deterministic builds
+                     .SetAuthors(Authors)
+                     .SetCopyright(Copyright)
+                     .SetDescription(ToolsDescription)
+                     .SetRepositoryUrl(GitRepository?.ToString())
+                     .SetPackageProjectUrl(ProjectUrlInNugetPackage)
+                     .SetVersion(GitVersion.NuGetVersionV2));
+                 // Regenerate the .config/dotnet-tools.json in the templates with the latest version of dry-gen
+                 var templateProjectDirectory = Solution.GetProject("DryGen.Templates").Directory;
+                 foreach (var templateProject in Directory.GetDirectories(Path.Combine(templateProjectDirectory, "templates")))
+                 {
+                     var workingDirectory = Path.Combine(templateProjectDirectory, "templates", templateProject);
+                     DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
+                     DotNetToolUpdate(c => c
+                         .SetPackageName("dry-gen")
+                         .AddSources(ArtifactsDirectory)
+                         .SetProcessWorkingDirectory(workingDirectory)
+                         .SetVersion(GitVersion.NuGetVersionV2)
+                         .SetConfigFile(Path.Combine(templateProjectDirectory, "Properties", "NuGet.Config"))
+                                     );
+                 }
+                 // Rebuild the templates before we create the package, to use the newly generated .config/dotnet-tools.json in the templates
+                 DotNetBuild(s => s
+                     .SetProjectFile(Solution.GetProject("DryGen.Templates"))
+                     .SetOutputDirectory(ArtifactsDirectory)
+                     .SetConfiguration(Configuration)
+                     .SetAssemblyVersion(GitVersion.AssemblySemVer)
+                     .SetFileVersion(GitVersion.AssemblySemFileVer)
+                     .SetInformationalVersion(GitVersion.InformationalVersion)
+                     .SetCopyright(Copyright)
+                     .SetDescription(ToolsDescription)
+                     .SetProcessEnvironmentVariable("DryGenTemplatesRunAsTool", "some value")
+                     .EnableNoRestore());
+                 DotNetPack(s => s
+                     .SetProject(Solution.GetProject("DryGen.Templates"))
+                     .SetOutputDirectory(ArtifactsDirectory)
+                     .SetConfiguration(Configuration)
+                     .EnableNoBuild()
+                     .EnableContinuousIntegrationBuild() // Necessary for deterministic builds
+                     .SetAuthors(Authors)
+                     .SetCopyright(Copyright)
+                     .SetDescription(TemplatesDescription)
+                     .SetRepositoryUrl(GitRepository?.ToString())
+                     .SetPackageProjectUrl(ProjectUrlInNugetPackage)
+                     .SetVersion(GitVersion.NuGetVersionV2));
+             });
 
     internal Target ITests => _ => _
-            .DependsOn(Pack)
-            .DependsOn(Init)
-            .Executes(() =>
-            {
-                // Install the artifact as a local dotnet tool in the ITests project
-                var workingDirectory = GetProject("develop", "DryGen.ITests").Directory;
-                DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
-                DotNetToolUpdate(c => c
-                    .SetPackageName("dry-gen")
-                    .AddSources(ArtifactsDirectory)
-                    .SetProcessWorkingDirectory(workingDirectory)
-                    .SetVersion(GitVersion.NuGetVersionV2)
-                    .SetConfigFile(Path.Combine(Path.Combine(workingDirectory, "Properties"), "NuGet.Config"))
-                    );
-                // Run the ITests in "dotnet tool" mode
-                DotNetTest(c => c
-                    .SetConfiguration(Configuration)
-                    .EnableNoBuild()
-                    .SetDataCollector("XPlat Code Coverage")
-                    .CombineWith(SourceDirectory.GlobFiles("**/*.ITests.csproj"), (settings, path) =>
-                            settings
-                                .SetProjectFile(path)
-                                .SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.RunAsTool", "some value")
-                                .SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.WorkingDirectory", workingDirectory))
-                    , degreeOfParallelism: 4, completeOnFailure: true);
-            });
+             .DependsOn(Pack)
+             .DependsOn(Init)
+             .Executes(() =>
+             {
+                 // Install the artifact as a local dotnet tool in the ITests project
+                 var workingDirectory = GetProject("develop", "DryGen.ITests").Directory;
+                 DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
+                 DotNetToolUpdate(c => c
+                     .SetPackageName("dry-gen")
+                     .AddSources(ArtifactsDirectory)
+                     .SetProcessWorkingDirectory(workingDirectory)
+                     .SetVersion(GitVersion.NuGetVersionV2)
+                     .SetConfigFile(Path.Combine(Path.Combine(workingDirectory, "Properties"), "NuGet.Config"))
+                                 );
+                 // Run the ITests in "dotnet tool" mode
+                 DotNetTest(c => c
+                     .SetConfiguration(Configuration)
+                     .EnableNoBuild()
+                     .SetDataCollector("XPlat Code Coverage")
+                     .CombineWith(SourceDirectory.GlobFiles("**/*.ITests.csproj"), (settings, path) =>
+                         settings
+                             .SetProjectFile(path)
+                                 .SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.RunAsTool", "some value")
+                                 .SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.WorkingDirectory", workingDirectory))
+                     , degreeOfParallelism: 4, completeOnFailure: true);
+             });
 
     internal Target Specs => _ => _
-            .DependsOn(UTests)
-            .DependsOn(ITests)
-            .Executes(() =>
-            {
-                DotNetToolUpdate(c => c.SetGlobal(true).SetPackageName("SpecFlow.Plus.LivingDoc.CLI"));
-                var subprojectNames = new Dictionary<string, string> { { "UTests", "Unit tests" }, { "ITests", "Integration tests" } };
-                foreach (var testProject in new[] { "UTests", "ITests" })
-                {
-                    var arguments = new[] {
-                        "test-assembly",
-                        "--title",
-                        $"\"DryGen {subprojectNames[testProject]}\"",
-                        $"./**/*.{testProject}/bin/{Configuration}/net6.0/*.{testProject}.dll",
-                        "-t",
-                        $"./**/*.{testProject}/bin/{Configuration}/net6.0/.specflow.livingdoc.data.json",
-                        "--output",
-                        $"{DocsDirectory}/about/specs/drygen-{testProject.ToLowerInvariant()}.html",
-                    };
-                    ProcessTasks.StartProcess("livingdoc", arguments: string.Join(' ', arguments), logOutput: true, logInvocation: true).AssertZeroExitCode();
-                }
-            });
+             .DependsOn(UTests)
+             .DependsOn(ITests)
+             .Executes(() =>
+             {
+                 DotNetToolUpdate(c => c.SetGlobal(true).SetPackageName("SpecFlow.Plus.LivingDoc.CLI"));
+                 var subprojectNames = new Dictionary<string, string> { { "UTests", "Unit tests" }, { "ITests", "Integration tests" } };
+                 foreach (var testProject in new[] { "UTests", "ITests" })
+                 {
+                     var arguments = new[]
+                     {
+                         "test-assembly",
+                         "--title",
+                         $"\"DryGen {subprojectNames[testProject]}\"",
+                         $"./**/*.{testProject}/bin/{Configuration}/net6.0/*.{testProject}.dll",
+                         "-t",
+                         $"./**/*.{testProject}/bin/{Configuration}/net6.0/.specflow.livingdoc.data.json",
+                         "--output",
+                         $"{DocsDirectory}/about/specs/drygen-{testProject.ToLowerInvariant()}.html",
+                     };
+                     ProcessTasks.StartProcess("livingdoc", arguments: string.Join(' ', arguments), logOutput: true, logInvocation: true).AssertZeroExitCode();
+                 }
+             });
 
     internal Target Docs => _ => _
         .DependsOn(Init)
@@ -240,31 +241,31 @@ public partial class Build : NukeBuild
                 .SetApplicationArguments($"--root-directory {RootDirectory}")
                 .EnableNoBuild()
                 .SetNoLaunchProfile(true)
-                );
+                     );
         });
 
     internal Target Push => _ => _
-       .DependsOn(UTests)
-       .DependsOn(ITests)
-       .DependsOn(Docs)
-       .DependsOn(Specs)
-       .DependsOn(Pack)
-       .OnlyWhenDynamic(() => IsVersionTag)
-       .Requires(() => NuGetSource)
-       .Requires(() => NuGetApiKey)
-       .Requires(() => Configuration.Equals(Configuration.Release))
-       .Executes(() =>
-       {
-           var packages = ArtifactsDirectory.GlobFiles("*.nupkg");
-           Assert.NotEmpty(packages.ToList());
-           DotNetNuGetPush(s => s
+        .DependsOn(UTests)
+        .DependsOn(ITests)
+        .DependsOn(Docs)
+        .DependsOn(Specs)
+        .DependsOn(Pack)
+        .OnlyWhenDynamic(() => IsVersionTag)
+        .Requires(() => NuGetSource)
+        .Requires(() => NuGetApiKey)
+        .Requires(() => Configuration.Equals(Configuration.Release))
+        .Executes(() =>
+        {
+            var packages = ArtifactsDirectory.GlobFiles("*.nupkg");
+            Assert.NotEmpty(packages.ToList());
+            DotNetNuGetPush(s => s
             .SetApiKey(NuGetApiKey)
             .EnableSkipDuplicate()
             .SetSource(NuGetSource)
             .EnableNoSymbols()
             .CombineWith(packages,
                 (v, path) => v.SetTargetPath(path)));
-       });
+        });
 
     internal Target Dev_GlobalTool => _ => _
         .DependsOn(Init)
@@ -287,7 +288,7 @@ public partial class Build : NukeBuild
                 .SetProcessWorkingDirectory(workingDirectory)
                 .SetVersion(GitVersion.NuGetVersionV2)
                 .SetConfigFile(Path.Combine(Path.Combine(workingDirectory, "Properties"), "NuGet.Config"))
-                );
+                             );
         });
 
     internal Target Dev_InstallTemplates => _ => _
@@ -305,6 +306,16 @@ public partial class Build : NukeBuild
             }
             var toolsPackageName = Path.Combine(ArtifactsDirectory, $"dry-gen.templates.{GitVersion.NuGetVersionV2}.nupkg");
             DotNet($"new install \"{toolsPackageName}\"", logOutput: true, logInvocation: true);
+        });
+
+    internal Target Dev_Docs => _ => _
+        .DependsOn(Init)
+        .Executes(() =>
+        {
+            PowerShellTasks.PowerShell(
+                arguments: "Start-Process -FilePath \"bundle\" -ArgumentList \"exec jekyll serve --drafts --incremental\"",
+                workingDirectory: DocsDirectory
+                                      );
         });
 
     private Project GetProject(string solutionFolderName, string projectName)

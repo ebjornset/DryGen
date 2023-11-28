@@ -1,6 +1,6 @@
 using DryGen.CSharpFromJsonSchema;
 using DryGen.DevUtils.Helpers;
-using DryGen.Options;
+using DryGen.Features.CSharpFromJsonSchema;
 using System;
 using TechTalk.SpecFlow;
 

@@ -19,7 +19,7 @@ Background:
 			}
 		}
 		"""
-	And this input file as a command line option
+	And this content as an options file
 	# The commandline arguments -f <this filename> will be appended to the command line
 		"""
 		input-file: Should be overridden by command line
@@ -71,7 +71,7 @@ Scenario: Command line options overrides options from file
 		"""
 
 Scenario: Command line should not fail if options file is empty
-	And this input file as a command line option
+	And this content as an options file
 	# The commandline arguments -f <this filename> will be appended to the command line
 		"""
 		#
@@ -86,7 +86,7 @@ Scenario: Command line should not fail if options file is empty
 	Then I should get exit code '0'
 
 Scenario: All class diagram options can be specified in a file
-	Given this input file as a command line option
+	Given this content as an options file
 	# The commandline arguments -f <this filename> will be appended to the command line
 		"""
 		attribute-level: internal
@@ -102,7 +102,7 @@ Scenario: All class diagram options can be specified in a file
 	Then I should get exit code '0'
 
 Scenario: All Er diagram options can be specified in a file
-	Given this input file as a command line option
+	Given this content as an options file
 	# The commandline arguments -f <this filename> will be appended to the command line
 		"""
 		exclude-attribute-keytypes: false

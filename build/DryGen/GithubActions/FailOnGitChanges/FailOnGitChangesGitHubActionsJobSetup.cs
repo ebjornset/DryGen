@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Nuke.Common.CI.GitHubActions.Configuration;
+﻿using Nuke.Common.CI.GitHubActions.Configuration;
+using System.Collections.Generic;
 
 namespace DryGen.GithubActions.FailOnGitChanges;
 

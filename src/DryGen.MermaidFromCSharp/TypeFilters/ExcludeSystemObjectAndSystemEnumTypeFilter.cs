@@ -5,7 +5,8 @@ namespace DryGen.MermaidFromCSharp.TypeFilters;
 public class ExcludeSystemObjectAndSystemEnumTypeFilter : AllChildFiltersTypeFilter
 {
     public ExcludeSystemObjectAndSystemEnumTypeFilter() : base(
-        new List<ITypeFilter> {
+        new List<ITypeFilter>
+        {
             new ExcludeSystemObjectTypeFilter(),
             new ExcludeSystemEnumTypeFilter()
         })

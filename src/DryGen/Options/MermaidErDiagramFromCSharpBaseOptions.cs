@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace DryGen.Options;
 
-public abstract class MermaidErDiagramFromCSharpBaseOptions : MermaidFromCSharpBaseOptions, IMermaidErDiagramFromCSharpOptions
+public abstract class MermaidErDiagramFromCsharpBaseOptions : MermaidFromCsharpBaseOptions, IMermaidErDiagramFromCSharpOptions
 {
     [YamlMember(Alias = "exclude-attribute-keytypes", ApplyNamingConventions = false)]
     [Option("exclude-attribute-keytypes", HelpText = "Should attributes key types be excluded from the diagram?")]
@@ -63,7 +63,7 @@ public abstract class MermaidErDiagramFromCSharpBaseOptions : MermaidFromCSharpB
 
     public IErDiagramStructureBuilder StructureBuilder { get; private set; }
 
-    protected MermaidErDiagramFromCSharpBaseOptions(IErDiagramStructureBuilder structureBuilder)
+    protected MermaidErDiagramFromCsharpBaseOptions(IErDiagramStructureBuilder structureBuilder)
     {
         StructureBuilder = structureBuilder;
     }

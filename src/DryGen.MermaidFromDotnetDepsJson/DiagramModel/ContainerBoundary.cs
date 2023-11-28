@@ -8,6 +8,7 @@ internal class ContainerBoundary : DiagramStructureElement
         DontSuppress = dontSuppress;
         Label = name;
     }
+
     public string Alias { get; }
     public bool DontSuppress { get; }
     public string Label { get; }

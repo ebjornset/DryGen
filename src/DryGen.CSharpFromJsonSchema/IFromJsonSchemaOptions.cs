@@ -4,6 +4,8 @@ namespace DryGen.CSharpFromJsonSchema;
 
 public interface IFromJsonSchemaOptions : IInputFileOptions
 {
-    JsonSchemaFileFormat SchemaFileFormat { get; }
+    JsonSchemaFileFormat? SchemaFileFormat { get; }
     string? RootClassname { get; }
+
+    JsonSchemaFileFormat GetSchemaFileFormat();
 }

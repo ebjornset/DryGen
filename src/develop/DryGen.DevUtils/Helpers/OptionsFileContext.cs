@@ -1,19 +1,20 @@
-﻿using System;
+﻿using DryGen.Core;
+using System;
 using System.IO;
 
 namespace DryGen.DevUtils.Helpers;
 
-public class OptionsFileContext : IDisposable
+public sealed class OptionsFileContext : IDisposable
 {
     private string? optionsFileName;
 
-    public string OptionsFileName => optionsFileName ?? throw new ArgumentNullException(nameof(optionsFileName));
+    public string OptionsFileName => optionsFileName ?? throw new PropertyNotSetException(nameof(optionsFileName));
     public bool HasOptionsFile => optionsFileName != null;
 
     public void WriteOptionsFile(string yaml)
     {
         DeleteOptionsFile();
-        var newOptionsFileName = Path.GetTempFileName();
+        var newOptionsFileName = Path.GetTempPath().GetRandomFileName();
         File.WriteAllText(newOptionsFileName, yaml);
         optionsFileName = newOptionsFileName;
     }

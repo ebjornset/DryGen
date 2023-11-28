@@ -9,9 +9,14 @@
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 	</ItemGroup>
-	
-	<!-- 
-	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template. 
+
+	<ItemGroup>
+		<!-- If you want quick access to the dotnet tools configuration -->
+		<Content Include=".config\dotnet-tools.json" />
+	</ItemGroup>
+
+	<!--
+	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template.
 	You can safely remove the two DryGenTemplatesBuild conditions below from a .csproj file generated with the template.
 	-->
 
@@ -26,15 +31,16 @@
 	</Target>
 
 	<Target Name="ExecDryGenBeforeBuild" AfterTargets="SetupDryGen" BeforeTargets="Build" Condition="Exists('$(DryGenInputFile)')">
-		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''"/>
+		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''" />
 		<!-- Prepare the template for inline generation of diagrams in the docs markdown file. -->
 		<Copy SourceFiles="./docs/templates/docs.md" DestinationFolder="./docs/generated" />
+		<Message Text="Docs generate started at $([System.DateTime]::Now)" Importance="High" />
 		<!-- Generate C# code from the example json schema. -->
 		<Exec Command="$(DryGenToolCommandName) csharp-from-json-schema -o ./Example.generated.cs -f ./options/csharp-from-json-schema.yaml -i $(DryGenInputFile)" />
 		<!-- Generate a standalone Mermaid class diagram from the example json schema. -->
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-json-schema -o ./docs/generated/mermaid-class-diagram-from-json-schema.mmd -f ./options/mermaid-class-diagram-from-json-schema.yaml -i $(DryGenInputFile)" />
 		<!-- Generate the same Mermaid class diagram inside a markdown file -->
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-json-schema -o ./docs/generated/docs.md -f ./options/mermaid-class-diagram-from-json-schema.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-from-json-schema.!.!. -i $(DryGenInputFile)" />
+		<Message Text="Docs generate completed at $([System.DateTime]::Now)" Importance="High" />
 	</Target>
-
 </Project>

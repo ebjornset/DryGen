@@ -14,7 +14,7 @@
 	<ItemGroup>
 		<None Include="Properties\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="YamlDotNet" Version="13.7.1" />
@@ -28,5 +28,5 @@
 		<ProjectReference Include="..\DryGen.MermaidFromEfCore\DryGen.MermaidFromEfCore.csproj" />
 		<ProjectReference Include="..\DryGen.MermaidFromJsonSchema\DryGen.MermaidFromJsonSchema.csproj" />
 	</ItemGroup>
-
+	
 </Project>

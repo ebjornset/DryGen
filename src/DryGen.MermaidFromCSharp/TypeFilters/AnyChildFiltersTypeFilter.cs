@@ -6,5 +6,7 @@ namespace DryGen.MermaidFromCSharp.TypeFilters;
 
 public class AnyChildFiltersTypeFilter : AnyChildFiltersFilter<Type>, ITypeFilter
 {
-    public AnyChildFiltersTypeFilter(IReadOnlyList<ITypeFilter> children) : base(children) { }
+    public AnyChildFiltersTypeFilter(IReadOnlyList<ITypeFilter> children) : base(children)
+    {
+    }
 }

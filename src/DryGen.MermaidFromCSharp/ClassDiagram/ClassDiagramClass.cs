@@ -50,7 +50,7 @@ public class ClassDiagramClass : NamedType
             if (relationshipType == ClassDiagramRelationshipType.Association)
             {
                 SwitchFromComposisionToAggregationForAllBidirectionalCollectionReferences(toCardinality, to, label);
-                // Skip the relation if we already has a bidirectional collection reference 
+                // Skip the relation if we already has a bidirectional collection reference
                 if (HasBidirectionalRelationship(to))
                 {
                     return;
@@ -75,7 +75,7 @@ public class ClassDiagramClass : NamedType
     public void RemoveBidirectionalRelationshipDuplicates()
     {
         relationships.RemoveAll(r =>
-                r.RelationsshipType == ClassDiagramRelationshipType.Association &&
+            r.RelationsshipType == ClassDiagramRelationshipType.Association &&
                 !r.IsBidirectional &&
                 r.To.Relationships.Any(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Aggregation));
     }

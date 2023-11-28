@@ -27,6 +27,8 @@ Scenario: Should generate menu with all verbs
 		    link: /verbs/mermaid-er-diagram-from-json-schema
 		  - name: options-from-commandline
 		    link: /verbs/options-from-commandline
+		  - name: verbs-from-options-file
+		    link: /verbs/verbs-from-options-file
 		
 		"""
 
@@ -50,7 +52,6 @@ Scenario: Should generate verb markdown for options-from-commandline
 		
 		|Option|Alias|Type|Description|
 		|---|---|---|---|
-		|--input-file|-i|string|Full path to the input file to generate a new representation for.|
 		|--options-file|-f|string|Read options from this file.|
 		|--output-file|-o|string|Write the generated representation to this file.|
 		|--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
@@ -67,7 +68,6 @@ Scenario: Should generate verb markdown for options-from-commandline
 		#
 		# dry-gen options for verb 'options-from-commandline'
 		#
-		#input-file: string
 		#output-file: string
 		#replace-token-in-output-file: string
 		#verb: string

@@ -14,7 +14,6 @@ The verb 'options-from-commandline' uses the following options.
 
 |Option|Alias|Type|Description|
 |---|---|---|---|
-|--input-file|-i|string|Full path to the input file to generate a new representation for.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
@@ -31,7 +30,6 @@ Here is a template for an options file for 'options-from-commandline'.
 #
 # dry-gen options for verb 'options-from-commandline'
 #
-#input-file: string
 #output-file: string
 #replace-token-in-output-file: string
 #verb: string

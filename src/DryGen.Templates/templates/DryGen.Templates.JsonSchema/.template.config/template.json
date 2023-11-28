@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Eirik Bjornset",
-  "classifications": ["dry-gen", "json schema"],
+  "classifications": [ "dry-gen", "json schema" ],
   "identity": "DryGen.JsonSchema",
   "name": "dry-gen: Generate C# code from json schema before build",
   "shortName": "dry-gen.jsonschema",

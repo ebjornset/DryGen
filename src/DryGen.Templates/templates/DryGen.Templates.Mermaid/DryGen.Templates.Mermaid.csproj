@@ -4,14 +4,14 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<!-- 
+		<!--
 		If you are generating Mermaid diagrams from Ef Core in a library assembly the Ef Core assemblies might not be accessible to dry-gen,
-		and you'll get the error "Could not load file or assembly 'Microsoft.EntityFrameworkCore, Version=X.X.X.X ..." 
+		and you'll get the error "Could not load file or assembly 'Microsoft.EntityFrameworkCore, Version=X.X.X.X ..."
 		This can be fixed by setting the CopyLocalLockFileAssemblies to true, so .Net will copy the Ef Core assemblies to the output folder during build.
 
 		If you decide to make a separate csproj for diagram generation instead of mixing it with your actual production code,
-		you just add normal project references here to the project code projects. 
-		
+		you just add normal project references here to the project code projects.
+
 		You might still want to use CopyLocalLockFileAssemblies, so you can reference the production code assemblies from the local output folder.
 		-->
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -20,7 +20,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="[6.*,7.0)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="[6.*,7.0)">
-			<!-- 
+			<!--
 			dry-gen needs the InMemory database to be able to introspect the datamodel in the DbContexts.
 			The InMemory database is normally not used at runtime, so it can be referenced as private assets.
 			-->
@@ -28,8 +28,13 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<!-- 
-	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template. 
+	<ItemGroup>
+		<!-- If you want quick access to the dotnet tools configuration -->
+		<Content Include=".config\dotnet-tools.json" />
+	</ItemGroup>
+
+	<!--
+	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template.
 	You can safely remove the two DryGenTemplatesBuild conditions below from a .csproj file generated with the template.
 	-->
 
@@ -43,11 +48,12 @@
 		</PropertyGroup>
 	</Target>
 
-	<Target Name="ExecDryGenAfterBuild" AfterTargets="SetupDryGen,Build" Condition="Exists('$(DryGenInputFile)')">
-		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''"/>
+<Target Name="ExecDryGenAfterBuild" AfterTargets="SetupDryGen" Condition="Exists('$(DryGenInputFile)')">
+		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''" />
 		<!-- Prepare the template for inline generation of diagrams in the docs markdown file. -->
 		<Copy SourceFiles="./docs/templates/docs.md" DestinationFolder="./docs/generated" />
 		<!-- Generate a standalone Mermaid class diagram from the example C# code. -->
+		<Message Text="Docs generate started at $([System.DateTime]::Now)" Importance="High" />
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/mermaid-class-diagram-from-csharp.mmd -f ./options/mermaid-class-diagram-from-csharp.yaml -i $(DryGenInputFile)" />
 		<!-- Generate the same Mermaid class diagram inside a markdown file -->
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/docs.md -f ./options/mermaid-class-diagram-from-csharp.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-from-csharp.!.!. -i $(DryGenInputFile)" />
@@ -59,6 +65,6 @@
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/mermaid-class-diagram-from-dbcontext.mmd -f ./options/mermaid-class-diagram-from-dbcontext.yaml -i $(DryGenInputFile)" />
 		<!-- Generate the same Mermaid class diagram inside a markdown file. -->
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-csharp -o ./docs/generated/docs.md -f ./options/mermaid-class-diagram-from-dbcontext.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-from-dbcontext.!.!. -i $(DryGenInputFile)" />
+		<Message Text="Docs generate completed at $([System.DateTime]::Now)" Importance="High" />
 	</Target>
-
 </Project>

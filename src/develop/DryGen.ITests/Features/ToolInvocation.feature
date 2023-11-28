@@ -14,7 +14,7 @@ Scenario: Should be able to run the dotnet tool
 			}
 		}
 		"""
-	And this input file as a command line option
+	And this content as an options file
 	# The commandline arguments -f <this filename> will be appended to the command line
 		"""
 		include-namespaces:

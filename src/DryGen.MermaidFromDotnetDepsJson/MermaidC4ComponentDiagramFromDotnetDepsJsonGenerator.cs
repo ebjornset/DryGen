@@ -88,12 +88,15 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
             case RelationLevel.All:
                 AppendAllRels(sb, target);
                 break;
+
             case RelationLevel.InterBoundary:
                 AppendInterBoundaryRels(sb, diagramStructure);
                 break;
+
             case RelationLevel.IntraBoundary:
                 AppendIntraBoundaryRels(sb, diagramStructure);
                 break;
+
             case RelationLevel.None:
             default:
                 break;

@@ -1,14 +1,15 @@
 ﻿using CommandLine;
 using DryGen.MermaidFromDotnetDepsJson;
+using DryGen.Options;
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
-namespace DryGen.Options;
+namespace DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
 
 [Verb(
     Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb,
     HelpText = "Generate a Mermaid C4 Component diagram from a .Net deps.json file.")]
-public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : BaseOptions, IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions
+public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : CommonInputFileOptions, IMermaidC4ComponentDiagramFromDotnetDepsJsonOptions
 {
     [YamlMember(Alias = "relation-level", ApplyNamingConventions = false)]
     [Option("relation-level", HelpText = "What types of dependencies should be included as relations in the diagram? (Default: all)")]
@@ -16,7 +17,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : BaseOptions, I
 
     [YamlMember(Alias = "boundary-level", ApplyNamingConventions = false)]
     [Option("boundary-level", HelpText = "What kind of 'Container Boundary' should be included in the diagram based on the assembly names? (Default: all)")]
-    public BoundaryLevel? BoundaryLevel { get; set ; }
+    public BoundaryLevel? BoundaryLevel { get; set; }
 
     [YamlMember(Alias = "exclude-version", ApplyNamingConventions = false)]
     [Option("exclude-version", HelpText = "Should version information be excluded from the diagram? (Default: false)")]
@@ -45,5 +46,4 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : BaseOptions, I
     [YamlMember(Alias = "exclude-assemblynames", ApplyNamingConventions = false)]
     [Option("exclude-assemblynames", Separator = ';', HelpText = "A '; separated' list of regular expressions for names of assemblies to exclude. (Default: none)")]
     public IEnumerable<string>? ExcludeAssemblyNames { get; set; }
-
 }

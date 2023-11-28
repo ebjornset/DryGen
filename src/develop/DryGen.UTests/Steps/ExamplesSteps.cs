@@ -25,7 +25,7 @@ public sealed class ExamplesSteps : IDisposable
     public void GivenTheExamplesTemplateFolderContainsTheseFiles(Table table)
     {
         Directory.CreateDirectory(examplesTemplatesDirectory);
-        foreach ( var row in table.Rows)
+        foreach (var row in table.Rows)
         {
             using var stream = File.Create(Path.Combine(examplesTemplatesDirectory, row[0]));
         }

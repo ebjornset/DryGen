@@ -19,7 +19,11 @@ public class TreeShakingDiagramFilter : IDiagramFilter
 
     public IEnumerable<TDiagramType> Filter<TDiagramType>(IEnumerable<TDiagramType> types) where TDiagramType : IDiagramType
     {
-        if (treeShakingRootsFilter == null) return types;
+        if (treeShakingRootsFilter == null)
+        {
+            return types;
+        }
+
         var result = types.Where(x => treeShakingRootsFilter.Accepts(x.Type)).ToList();
         if (!result.Any())
         {

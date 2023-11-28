@@ -1,0 +1,7 @@
+﻿using DryGen.Features.VerbsFromOptionsFile;
+
+namespace DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
+
+public class MermaidC4ComponentDiagramFromDotnetDepsJsonConfiguration : VerbsFromOptionsFileConfiguration<MermaidC4ComponentDiagramFromDotnetDepsJsonOptions>
+{
+}

@@ -8,4 +8,8 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\DryGen.Core\DryGen.Core.csproj" />
+	</ItemGroup>
+
 </Project>

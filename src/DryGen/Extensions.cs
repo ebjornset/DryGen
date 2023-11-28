@@ -1,8 +1,13 @@
 ﻿using CommandLine;
+using DryGen.Options;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using YamlDotNet.Serialization;
 
 namespace DryGen;
 
@@ -49,10 +54,10 @@ public static class Extensions
         var optionAttribute = property.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(OptionAttribute));
         // Remove Hidden Option
         if (optionAttribute == null ||
-            (optionAttribute.NamedArguments.Any(x => x.MemberName == nameof(OptionAttribute.Hidden)) && 
+            (optionAttribute.NamedArguments.Any(x => x.MemberName == nameof(OptionAttribute.Hidden)) &&
                 string.Equals(
-                    bool.TrueString, 
-                    optionAttribute.NamedArguments.Single(x => x.MemberName == nameof(OptionAttribute.Hidden)).TypedValue.Value?.ToString(), 
+                    bool.TrueString,
+                    optionAttribute.NamedArguments.Single(x => x.MemberName == nameof(OptionAttribute.Hidden)).TypedValue.Value?.ToString(),
                     StringComparison.InvariantCultureIgnoreCase)))
         {
             return null;
@@ -80,18 +85,18 @@ public static class Extensions
         return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Replace('|', '/').Trim();
     }
 
-    public static string GeneratePropertyTypeInfo(this Type propertyType, bool asYamlComment)
+    public static string GeneratePropertyTypeInfo(this Type propertyType, bool asYamlComment, string listValueIndention = "")
     {
         var nullableUnderlyingType = Nullable.GetUnderlyingType(propertyType);
         if (nullableUnderlyingType != null)
         {
-            return GeneratePropertyTypeInfo(nullableUnderlyingType, asYamlComment);
+            return nullableUnderlyingType.GeneratePropertyTypeInfo(asYamlComment, listValueIndention);
         }
         var collectionType = GetCollectionType(propertyType);
         if (collectionType != null)
         {
-            var typeInfo = GeneratePropertyTypeInfo(collectionType, asYamlComment);
-            return asYamlComment ? $"# List of {typeInfo}\n#- " : $"List of {typeInfo}";
+            var typeInfo = collectionType.GeneratePropertyTypeInfo(asYamlComment, listValueIndention);
+            return asYamlComment ? $"# List of {typeInfo}\n{listValueIndention}#- " : $"List of {typeInfo}";
         }
         if (propertyType.IsEnum)
         {
@@ -104,6 +109,91 @@ public static class Extensions
         return propertyType.Name.ToLowerInvariant();
     }
 
+    public static TOptions AsNonNullOptions<TOptions>(this CommonOptions? options) where TOptions : BaseOptions
+    {
+        return options as TOptions ?? throw new ArgumentException($"Cannot cast options '{options}' as '{typeof(TOptions)}'", nameof(options));
+    }
+
+    public static T AsNonNull<T>(this T? value)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+        return value;
+    }
+
+    public static string ReadOptionsFileWithEnviromentVariableReplacement(this string optionsFile)
+    {
+        var startIndex = 0;
+        var yaml = File.ReadAllText(optionsFile);
+        do
+        {
+            startIndex = yaml.IndexOf("$(", startIndex);
+            if (startIndex == -1)
+            {
+                break;
+            }
+            var endIndex = yaml.IndexOf(')', startIndex);
+            if (endIndex <= startIndex)
+            {
+                break;
+            }
+            var variable = yaml[startIndex..(endIndex + 1)];
+            var environmentVariable = variable.Replace("$(", string.Empty).Replace(")", string.Empty).Trim();
+            var value = Environment.GetEnvironmentVariable(environmentVariable) ?? string.Empty;
+            yaml = yaml.Replace(variable, value);
+        }
+        while (true);
+        return yaml;
+    }
+
+    public static IEnumerable<PropertyInfo> GetYamlMemberProperties(this Type type, bool excludeDeprecated)
+    {
+        var properties = new List<PropertyInfo>();
+        foreach (var property in type.GetProperties())
+        {
+            var alias = property.GetYamlMemberAttributeAlias();
+            if (string.IsNullOrEmpty(alias))
+            {
+                continue;
+            }
+            var optionAttribute = property.GetVisibleOptionAttribute();
+            if (optionAttribute == null)
+            {
+                continue;
+            }
+            if (excludeDeprecated)
+            {
+                var optionMetadata = new OptionMetadata(optionAttribute);
+                if (optionMetadata.Description?.StartsWith(Constants.DeprecatedNotice) == true)
+                {
+                    continue;
+                }
+            }
+            property.ValidateNullable(type);
+            properties.Add(property);
+        }
+        return properties;
+    }
+
+    [ExcludeFromCodeCoverage(Justification = "Sanity check that we dont start using non nullable types as yaml members")]
+    public static void ValidateNullable(this PropertyInfo property, Type type)
+    {
+        if (property.PropertyType.IsValueType && Nullable.GetUnderlyingType(property.PropertyType) == null)
+        {
+            throw new OptionsException($"Non nullable yaml member property '{property.Name}' found in type '{type.FullName}");
+        }
+    }
+
+    public static string? GetYamlMemberAttributeAlias(this PropertyInfo property)
+    {
+        var yamlMemberAttribute = property.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(YamlMemberAttribute));
+        var alias = yamlMemberAttribute?.NamedArguments.Any(x => x.MemberName == nameof(YamlMemberAttribute.Alias)) == true
+            ? yamlMemberAttribute.NamedArguments.Single(x => x.MemberName == nameof(YamlMemberAttribute.Alias)).TypedValue.ToString().Replace("\"", string.Empty)
+            : null;
+        return alias;
+    }
 
     private static bool VerbAttributeMatches(Type type, string verb)
     {

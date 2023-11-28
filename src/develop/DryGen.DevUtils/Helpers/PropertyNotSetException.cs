@@ -2,7 +2,9 @@
 
 namespace DryGen.DevUtils.Helpers;
 
-public class PropertyNotSetException : Exception
+public sealed class PropertyNotSetException : Exception
 {
-    public PropertyNotSetException(string message) : base(message) { }
+    public PropertyNotSetException(string message) : base(message)
+    {
+    }
 }

@@ -6,7 +6,7 @@ show_sidebar: false
 hero_height: is-fullwidth
 ---
 
-The dry-gen tool is developed as an open source software project hosted on [Github](https://github.com/ebjornset/DryGen){:target="\_blank"} under the [MIT licence](https://github.com/ebjornset/DryGen/blob/main/LICENSE.md){:target="\_blank"}
+The dry-gen tool is developed as an open source software project hosted on [Github](https://github.com/ebjornset/DryGen){:target="\_blank"} under the [MIT licence](https://github.com/ebjornset/DryGen/blob/main/LICENSE.md){:target="\_blank"}.
 
 ### Inspiration
 

@@ -8,5 +8,6 @@ internal class DiagramStructure : DiagramStructureElement
     {
         MainAssembly = mainAssembly;
     }
+
     public Dependency MainAssembly { get; }
 }

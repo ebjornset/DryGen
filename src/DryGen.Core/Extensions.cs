@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -41,16 +42,34 @@ public static class Extensions
         {
             return false;
         }
-        var requiredArgumentValue = attributeData.NamedArguments.Any( x => x.MemberName == "Required") 
-            ? attributeData.NamedArguments.Single(x => x.MemberName == "Required").TypedValue.Value 
+        var requiredArgumentValue = attributeData.NamedArguments.Any(x => x.MemberName == "Required")
+            ? attributeData.NamedArguments.Single(x => x.MemberName == "Required").TypedValue.Value
             : null;
         // 2 is the enum value of "Newtonsoft.Json.Required.Always"
         // NB! This should maybe be made more fool proof?
-        return requiredArgumentValue is int requiredArgumentIntValue && requiredArgumentIntValue == 2; 
+        return requiredArgumentValue is int requiredArgumentIntValue && requiredArgumentIntValue == 2;
     }
 
     public static bool IsRequiredProperty(this PropertyInfo propertyInfo)
     {
         return propertyInfo.CustomAttributes.Any(x => x.IsRequiredAttribute() || x.IsJsonPropertyRequiredAttribute());
+    }
+
+    public static string GetRandomFileName(this string folder, bool stripExtesion = false)
+    {
+        while (true)
+        {
+            var fileName = Path.GetRandomFileName();
+            if (stripExtesion)
+            {
+                fileName = Path.GetFileNameWithoutExtension(fileName);
+            }
+            var result = Path.Combine(folder, fileName);
+            if (File.Exists(result))
+            {
+                continue;
+            }
+            return result;
+        }
     }
 }

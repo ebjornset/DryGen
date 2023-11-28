@@ -1,5 +1,4 @@
-﻿using DryGen.MermaidFromCSharp;
-using DryGen.MermaidFromCSharp.NameRewriters;
+﻿using DryGen.MermaidFromCSharp.NameRewriters;
 using FluentAssertions;
 using System.Collections.Generic;
 using System.Linq;

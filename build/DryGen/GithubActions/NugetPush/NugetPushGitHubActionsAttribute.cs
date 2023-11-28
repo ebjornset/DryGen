@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
-using DryGen.GithubActions.GhPages;
+﻿using DryGen.GithubActions.GhPages;
 using DryGen.GithubActions.SonarCloud;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.CI.GitHubActions.Configuration;
 using Nuke.Common.Execution;
+using System.Collections.Generic;
 
 namespace DryGen.GithubActions.NugetPush;
 
 public class NugetPushGitHubActionsAttribute : SonarCloudGitHubActionsAttribute
 {
-    public NugetPushGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
+    public NugetPushGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images)
+    {
+    }
 
     protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
