@@ -53,7 +53,7 @@ namespace DryGen.Features.OptionsFromCommandline
                 }
                 sb.AppendLine("#configuration:").Append("  #verb: ").AppendLine(verb)
                     .AppendLine("  #name: string #optional, must be unique among the named yaml documents in this file if it's provided.")
-                    .AppendLine("  #inhert-options-from: string #optional, name of another yaml document with the same verb in this file.")
+                    .AppendLine("  #inherit-options-from: string #optional, name of another yaml document with the same verb in this file.")
                     .AppendLine("  #options:");
                 sb = AppendOptionsYamlFromVerb(sb, verb, indention);
             }
