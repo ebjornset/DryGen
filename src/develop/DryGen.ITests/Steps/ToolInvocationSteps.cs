@@ -21,7 +21,7 @@ public sealed class ToolInvocationSteps
     public ToolInvocationSteps(
         InputFileContext inputFileContext,
         OptionsFileContext optionsFileContext
-        )
+                              )
     {
         this.inputFileContext = inputFileContext;
         this.optionsFileContext = optionsFileContext;

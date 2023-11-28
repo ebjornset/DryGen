@@ -2,4 +2,5 @@
 
 namespace DryGen.MermaidFromDotnetDepsJson.Filters;
 
-public interface IAssemblyNameFilter : IFilter<string> { }
+public interface IAssemblyNameFilter : IFilter<string>
+{ }

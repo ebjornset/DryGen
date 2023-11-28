@@ -56,7 +56,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
             var principalType = foreignKey.PrincipalEntityType.ClrType;
             var isBidirectional = foreignKey.PrincipalToDependent != null;
             var navigation = (isBidirectional ? foreignKey.PrincipalToDependent : foreignKey.DependentToPrincipal)
-                                ?? throw new ArgumentException($"Cant find navigation for foreignKey '{foreignKey}', when isBidirectional is '{isBidirectional}'");
+                              ?? throw new ArgumentException($"Cant find navigation for foreignKey '{foreignKey}', when isBidirectional is '{isBidirectional}'");
             var propertyType = navigation.ClrType;
             var propertyName = navigation.Name;
             if (entityLookup.TryGetValue(principalType, out var principalEntity))
@@ -145,7 +145,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         var inMemoryOptionsBuilder = useInMemoryDatabaseMethod?.Invoke(null, new object?[] { optionsBuilder, Guid.NewGuid().ToString(), null });
         var optionsProperty = optionsBuilderType.GetProperty("Options");
         var options = optionsProperty?.GetValue(inMemoryOptionsBuilder);
-        var contextCtor = Array.Find(dbContextType.GetConstructors(), x => Array.Exists(x.GetParameters(), y => dbContextOptionsType.IsAssignableFrom(y.ParameterType))) 
+        var contextCtor = Array.Find(dbContextType.GetConstructors(), x => Array.Exists(x.GetParameters(), y => dbContextOptionsType.IsAssignableFrom(y.ParameterType)))
             ?? throw new ArgumentException($"{dbContextType.Name} has no public constructor with DbContextOptions as a parameter");
         var ctorParameters = new object?[contextCtor.GetParameters().Length];
         var offset = 0;
@@ -262,7 +262,6 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         }
     }
 
-
     private const string DBContextTypeName = "Microsoft.EntityFrameworkCore.DbContext";
     private const string DBContextOptionsTypeName = "Microsoft.EntityFrameworkCore.DbContextOptions";
     private const string DbContextOptionsBuilderOpenTypeName = "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder`1";
@@ -271,13 +270,17 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
     private const string InMemoryDbContextOptionsBuilderTypeName = "Microsoft.EntityFrameworkCore.Infrastructure.InMemoryDbContextOptionsBuilder";
     private const string IModelTypeName = "Microsoft.EntityFrameworkCore.Metadata.IModel";
 
-    private static readonly string[] EfCoreRequiredAssemblyNames = 
-        new[] { "Microsoft.EntityFrameworkCore", 
+    private static readonly string[] EfCoreRequiredAssemblyNames =
+        new[]
+        {
+"Microsoft.EntityFrameworkCore",
             "Microsoft.EntityFrameworkCore.InMemory" };
+
     private static readonly string[] EfCoreRequiredAssemblyErrorFixSuggestions =
-        new[] {
+        new[]
+        {
 @"
-You can either copy it manually to the target folder or force .Net to copy it to the build output folder 
+You can either copy it manually to the target folder or force .Net to copy it to the build output folder
 with the 'CopyLocalLockFileAssemblies' property in your .csproj file, e.g.
 
   <PropertyGroup>
@@ -299,8 +302,8 @@ It's sufficent to include it as a private asset, (with the same version as the r
     </PackageReference>
   </ItemGroup>
 
-If its already included as a package reference you can try to force .Net to copy 
-it to the build output folder with the 'CopyLocalLockFileAssemblies' 
+If its already included as a package reference you can try to force .Net to copy
+it to the build output folder with the 'CopyLocalLockFileAssemblies'
 propert in your .csproj file, e.g.
 
   <PropertyGroup>

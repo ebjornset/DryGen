@@ -1,10 +1,10 @@
 ﻿using BoDi;
+using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
-using DryGen.MermaidFromEfCore;
 using DryGen.MermaidFromCSharp.ErDiagram;
+using DryGen.MermaidFromEfCore;
 using TechTalk.SpecFlow;
-using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
 
 namespace DryGen.UTests.Hooks;
 
@@ -39,14 +39,15 @@ public class GeneratorHooks
                                                 "ErDiagramGeneratorByEfCore");
         objectContainer.RegisterFactoryAs(oc => new ClassDiagramGenerator(
                                                         oc.Resolve<ITypeLoader>(),
-                                                        new MermaidClassDiagramFromCsharpOptions {
+                                                        new MermaidClassDiagramFromCsharpOptions
+                                                        {
                                                             Direction = ClassDiagramDirection.Default,
                                                             AttributeLevel = ClassDiagramAttributeLevel.All,
-                                                            MethodLevel=  ClassDiagramMethodLevel.All,
-                                                            ExcludeStaticAttributes =  false,
+                                                            MethodLevel = ClassDiagramMethodLevel.All,
+                                                            ExcludeStaticAttributes = false,
                                                             ExcludeStaticMethods = false,
-                                                            ExcludeMethodParams = false 
+                                                            ExcludeMethodParams = false
                                                         }
-                                                        ));
+                                                                         ));
     }
 }

@@ -8,7 +8,11 @@ namespace DryGen.Core;
 [ExcludeFromCodeCoverage]
 public sealed class TypeLoadException : Exception
 {
-    public TypeLoadException(string? message) : base(message) { }
+    public TypeLoadException(string? message) : base(message)
+    {
+    }
 
-    private TypeLoadException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+    private TypeLoadException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

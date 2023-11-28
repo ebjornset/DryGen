@@ -1,8 +1,8 @@
-﻿using System;
+﻿using DryGen.Core;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using DryGen.Core;
 
 namespace DryGen.MermaidFromCSharp.ClassDiagram;
 
@@ -110,7 +110,6 @@ public static class ClassDiagramExtensions
 
     public static bool IsExtensionType(this Type type)
     {
-
         return type.IsAbstract && type.IsSealed && !type.IsNested && type.CustomAttributes.Any(x => x.AttributeType == typeof(ExtensionAttribute));
     }
 

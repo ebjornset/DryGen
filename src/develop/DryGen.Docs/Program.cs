@@ -14,12 +14,12 @@ public static class Program
     public static int Main(string[] args)
     {
         return Parser.Default.ParseArguments<Options>(args)
-          .MapResult(
+            .MapResult(
             options => RunAndReturnExitCode(options),
             _ => 1);
     }
 
-    static int RunAndReturnExitCode(Options options)
+    private static int RunAndReturnExitCode(Options options)
     {
         var rootDirectory = Path.GetFullPath(options.RootDirectory);
         if (!Directory.Exists(rootDirectory))
@@ -111,7 +111,8 @@ public static class Program
 
     private static IEnumerable<ExamplesGeneratorData> BuildExamplesGeneratorData()
     {
-        return new[] {
+        return new[]
+        {
             GetExamplesGeneratorDataForFilteringMermaidDiagramContent("no-filtering", new[] {"--attribute-level", "none", "--method-level", "none", "--direction", "RL" }),
             GetExamplesGeneratorDataForFilteringMermaidDiagramContent("tree-shaking-roots", new[] {"--tree-shaking-roots", "^ITypeFilter$", "--attribute-level", "none", "--method-level", "none", "--direction", "RL" }),
             GetExamplesGeneratorDataForFilteringMermaidDiagramContent("include-namespaces", new[] { "--include-namespaces", "^DryGen.MermaidFromCSharp.ClassDiagram$", "--attribute-level", "none", "--method-level", "none", "--direction", "TB" }),
@@ -137,7 +138,8 @@ public static class Program
     {
         var inputFile = Path.GetRelativePath(rootDirectory, Path.Combine(assemblyDirectory, generatorData.InputFile)).Replace("\\", "/");
         var outputFile = Path.GetRelativePath(rootDirectory, GetOutputFile(rootDirectory, generatorData)).Replace("\\", "/");
-        var result = new List<string> {
+        var result = new List<string>
+        {
             generatorData.Verb,
             $"--{Constants.InputFileOption}",
             inputFile,

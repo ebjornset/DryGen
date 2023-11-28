@@ -3,4 +3,5 @@ using System.Reflection;
 
 namespace DryGen.MermaidFromCSharp;
 
-public interface IPropertyFilter : IFilter<PropertyInfo> { }
+public interface IPropertyFilter : IFilter<PropertyInfo>
+{ }

@@ -24,7 +24,7 @@ public sealed class GeneratedRepresentationContext : IDisposable
         }
     }
 
-    public bool HasGeneratedRepresentationFileName => ! string.IsNullOrEmpty(generatedRepresentationFileName);
+    public bool HasGeneratedRepresentationFileName => !string.IsNullOrEmpty(generatedRepresentationFileName);
 
     public string? GeneratedRepresentation
     {

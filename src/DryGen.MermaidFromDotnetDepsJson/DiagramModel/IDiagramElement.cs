@@ -1,3 +1,4 @@
 ﻿namespace DryGen.MermaidFromDotnetDepsJson.DiagramModel;
 
-internal interface IDiagramElement { }
+internal interface IDiagramElement
+{ }

@@ -1,7 +1,6 @@
 ﻿using CommandLine;
 using DryGen.Options;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -55,10 +54,10 @@ public static class Extensions
         var optionAttribute = property.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(OptionAttribute));
         // Remove Hidden Option
         if (optionAttribute == null ||
-            (optionAttribute.NamedArguments.Any(x => x.MemberName == nameof(OptionAttribute.Hidden)) && 
+            (optionAttribute.NamedArguments.Any(x => x.MemberName == nameof(OptionAttribute.Hidden)) &&
                 string.Equals(
-                    bool.TrueString, 
-                    optionAttribute.NamedArguments.Single(x => x.MemberName == nameof(OptionAttribute.Hidden)).TypedValue.Value?.ToString(), 
+                    bool.TrueString,
+                    optionAttribute.NamedArguments.Single(x => x.MemberName == nameof(OptionAttribute.Hidden)).TypedValue.Value?.ToString(),
                     StringComparison.InvariantCultureIgnoreCase)))
         {
             return null;
@@ -110,7 +109,7 @@ public static class Extensions
         return propertyType.Name.ToLowerInvariant();
     }
 
-    public static TOptions AsNonNullOptions<TOptions>(this CommonOptions? options) where TOptions: BaseOptions
+    public static TOptions AsNonNullOptions<TOptions>(this CommonOptions? options) where TOptions : BaseOptions
     {
         return options as TOptions ?? throw new ArgumentException($"Cannot cast options '{options}' as '{typeof(TOptions)}'", nameof(options));
     }

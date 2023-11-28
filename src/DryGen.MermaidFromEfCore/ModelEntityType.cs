@@ -18,7 +18,10 @@ public class ModelEntityType : ModelElement
     }
 
     public Type ClrType { get; }
+
     public IEnumerable<ModelProperty> GetProperties() => properties ??= GetElementMandatoryMethodValue<IEnumerable<object>>(nameof(GetProperties)).Select(x => new ModelProperty(x));
+
     public IEnumerable<ModelForeignKey> GetForeignKeys() => foreignKeys ??= GetElementMandatoryMethodValue<IEnumerable<object>>(nameof(GetForeignKeys)).Select(x => new ModelForeignKey(x));
+
     protected override Type ElementType => elementType ??= IEntityTypeTypeName.LoadTypeByName();
 }

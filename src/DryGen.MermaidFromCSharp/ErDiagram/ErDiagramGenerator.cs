@@ -18,7 +18,7 @@ public class ErDiagramGenerator : IErDiagramGenerator
         options.AttributeTypeExclusion ?? ErDiagramAttributeTypeExclusion.None,
         options.AttributeDetailExclusions,
         options.RelationshipTypeExclusion ?? ErDiagramRelationshipTypeExclusion.None
-        )
+                                                                                )
     { }
 
     public ErDiagramGenerator(
@@ -26,7 +26,7 @@ public class ErDiagramGenerator : IErDiagramGenerator
         ErDiagramAttributeTypeExclusion attributeTypeExclusion,
         ErDiagramAttributeDetailExclusions attributeDetailExclusions,
         ErDiagramRelationshipTypeExclusion relationshipTypeExclusion
-        )
+                             )
     {
         this.structureBuilder = structureBuilder;
         this.attributeTypeExclusion = attributeTypeExclusion;

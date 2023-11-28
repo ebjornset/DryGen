@@ -7,6 +7,7 @@ public class VerbsFromOptionsFileOptionsDocument
 {
     [YamlMember(Alias = "configuration", ApplyNamingConventions = false)]
     public IVerbsFromOptionsFileConfiguration? Configuration { get; set; }
+
     public int? DocumentNumber { get; set; }
     public VerbsFromOptionsFileOptionsDocument? ParentOptionsDocument { get; set; }
 

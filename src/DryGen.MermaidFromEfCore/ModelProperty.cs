@@ -21,8 +21,12 @@ public class ModelProperty : ModelElement
     public Type ClrType { get; }
     public string Name { get; }
     public PropertyInfo? PropertyInfo { get; }
+
     public bool IsKey() => isKey ??= GetElementMandatoryMethodValue<bool>("IsKey");
+
     public bool IsForeignKey() => isForeignKey ??= GetElementMandatoryMethodValue<bool>("IsForeignKey");
+
     public bool IsPrimaryKey() => isPrimaryKey ??= GetElementMandatoryMethodValue<bool>("IsPrimaryKey");
+
     protected override Type ElementType => elementType ??= IPropertyTypeName.LoadTypeByName();
 }

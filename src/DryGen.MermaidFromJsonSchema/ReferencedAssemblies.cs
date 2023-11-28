@@ -10,7 +10,8 @@ internal static class ReferencedAssemblies
 {
     internal static Assembly[] Get()
     {
-        return new[] {
+        return new[]
+        {
             typeof(JsonPropertyAttribute).Assembly,
             typeof(GeneratedCodeAttribute).Assembly,
             typeof(EnumMemberAttribute).Assembly,

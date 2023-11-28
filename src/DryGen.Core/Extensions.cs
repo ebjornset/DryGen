@@ -42,12 +42,12 @@ public static class Extensions
         {
             return false;
         }
-        var requiredArgumentValue = attributeData.NamedArguments.Any( x => x.MemberName == "Required") 
-            ? attributeData.NamedArguments.Single(x => x.MemberName == "Required").TypedValue.Value 
+        var requiredArgumentValue = attributeData.NamedArguments.Any(x => x.MemberName == "Required")
+            ? attributeData.NamedArguments.Single(x => x.MemberName == "Required").TypedValue.Value
             : null;
         // 2 is the enum value of "Newtonsoft.Json.Required.Always"
         // NB! This should maybe be made more fool proof?
-        return requiredArgumentValue is int requiredArgumentIntValue && requiredArgumentIntValue == 2; 
+        return requiredArgumentValue is int requiredArgumentIntValue && requiredArgumentIntValue == 2;
     }
 
     public static bool IsRequiredProperty(this PropertyInfo propertyInfo)
@@ -57,7 +57,7 @@ public static class Extensions
 
     public static string GetRandomFileName(this string folder, bool stripExtesion = false)
     {
-        while(true)
+        while (true)
         {
             var fileName = Path.GetRandomFileName();
             if (stripExtesion)

@@ -7,14 +7,17 @@ public abstract class VerbsFromOptionsFileConfiguration<TOptions> : IVerbsFromOp
 {
     [YamlMember(Alias = "name", ApplyNamingConventions = false)]
     public string? Name { get; set; }
+
     [YamlMember(Alias = "verb", ApplyNamingConventions = false)]
     public string? Verb { get; set; }
+
     [YamlMember(Alias = "inherit-options-from", ApplyNamingConventions = false)]
     public string? InheritOptionsFrom { get; set; }
+
     [YamlMember(Alias = "options", ApplyNamingConventions = false)]
     public TOptions? Options { get; set; }
 
-    public CommonOptions? GetOptions() 
+    public CommonOptions? GetOptions()
     {
         return Options;
     }
@@ -24,4 +27,3 @@ public abstract class VerbsFromOptionsFileConfiguration<TOptions> : IVerbsFromOp
         GetOptions().AsNonNull().InheritFrom(other.GetOptions().AsNonNull());
     }
 }
-

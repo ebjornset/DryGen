@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using YamlDotNet.Serialization.NamingConventions;
-using YamlDotNet.Serialization;
-using DryGen.Features.CSharpFromJsonSchema;
-using DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
+﻿using DryGen.Features.CSharpFromJsonSchema;
 using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
-using DryGen.Features.Mermaid.FromJsonSchema.ClassDiagram;
 using DryGen.Features.Mermaid.FromCsharp.ErDiagram;
+using DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
 using DryGen.Features.Mermaid.FromEfCore.ErDiagram;
+using DryGen.Features.Mermaid.FromJsonSchema.ClassDiagram;
 using DryGen.Features.Mermaid.FromJsonSchema.ErDiagram;
 using DryGen.Features.OptionsFromCommandline;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace DryGen.Features.VerbsFromOptionsFile;
 
@@ -37,14 +37,14 @@ internal static class VerbsFromOptionsFileOptionsDocumentsBuilder
             {
                 IDictionary<string, Type> valueMappings = new Dictionary<string, Type>
                 {
-                        { Constants.CsharpFromJsonSchema.Verb, typeof(CSharpFromJsonSchemaConfiguration) },
-                        { Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb, typeof(MermaidC4ComponentDiagramFromDotnetDepsJsonConfiguration) },
-                        { Constants.MermaidClassDiagramFromCsharp.Verb, typeof(MermaidClassDiagramFromCsharpConfiguration) },
-                        { Constants.MermaidClassDiagramFromJsonSchema.Verb, typeof(MermaidClassDiagramFromJsonSchemaConfiguration) },
-                        { Constants.MermaidErDiagramFromCsharp.Verb, typeof(MermaidErDiagramFromCsharpConfiguration) },
-                        { Constants.MermaidErDiagramFromEfCore.Verb, typeof(MermaidErDiagramFromEfCoreConfiguration) },
-                        { Constants.MermaidErDiagramFromJsonSchema.Verb, typeof(MermaidErDiagramFromJsonSchemaConfiguration) },
-                        { Constants.OptionsFromCommandline.Verb, typeof(OptionsFromCommandlineConfiguration) },
+                    { Constants.CsharpFromJsonSchema.Verb, typeof(CSharpFromJsonSchemaConfiguration) },
+                    { Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb, typeof(MermaidC4ComponentDiagramFromDotnetDepsJsonConfiguration) },
+                    { Constants.MermaidClassDiagramFromCsharp.Verb, typeof(MermaidClassDiagramFromCsharpConfiguration) },
+                    { Constants.MermaidClassDiagramFromJsonSchema.Verb, typeof(MermaidClassDiagramFromJsonSchemaConfiguration) },
+                    { Constants.MermaidErDiagramFromCsharp.Verb, typeof(MermaidErDiagramFromCsharpConfiguration) },
+                    { Constants.MermaidErDiagramFromEfCore.Verb, typeof(MermaidErDiagramFromEfCoreConfiguration) },
+                    { Constants.MermaidErDiagramFromJsonSchema.Verb, typeof(MermaidErDiagramFromJsonSchemaConfiguration) },
+                    { Constants.OptionsFromCommandline.Verb, typeof(OptionsFromCommandlineConfiguration) },
                 };
                 o.AddKeyValueTypeDiscriminator<IVerbsFromOptionsFileConfiguration>("verb", valueMappings);
             })

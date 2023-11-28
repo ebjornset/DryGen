@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Diagnostics.CodeAnalysis;
 using YamlDotNet.Serialization;
 

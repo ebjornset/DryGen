@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using YamlDotNet.Serialization;
 
 namespace DryGen.Features.OptionsFromCommandline
 {
@@ -19,7 +18,8 @@ namespace DryGen.Features.OptionsFromCommandline
             if (options.Verb == Constants.VerbsFromOptionsFile.Verb)
             {
                 sb.AppendLine("# There is one yaml document for each supported verb below. Uncomment the ones you need and delete the rest.").AppendLine("#");
-                var verbs = new[] {
+                var verbs = new[]
+                {
                     Constants.CsharpFromJsonSchema.Verb,
                     Constants.MermaidClassDiagramFromCsharp.Verb,
                     Constants.MermaidClassDiagramFromJsonSchema.Verb,

@@ -7,5 +7,6 @@ public interface IDiagramType
 {
     string Name { get; }
     Type Type { get; }
+
     bool IsRelatedToAny(IEnumerable<IDiagramType> types);
 }

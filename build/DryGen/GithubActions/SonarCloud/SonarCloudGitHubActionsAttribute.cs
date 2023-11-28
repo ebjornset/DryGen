@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
-using DryGen.GithubActions.DotNet;
+﻿using DryGen.GithubActions.DotNet;
 using DryGen.GithubActions.FailOnGitChanges;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.CI.GitHubActions.Configuration;
 using Nuke.Common.Execution;
+using System.Collections.Generic;
 
 namespace DryGen.GithubActions.SonarCloud;
 
 public class SonarCloudGitHubActionsAttribute : DotNetGitHubActionsAttribute
 {
-    public SonarCloudGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images) { }
+    public SonarCloudGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images)
+    {
+    }
 
     protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {

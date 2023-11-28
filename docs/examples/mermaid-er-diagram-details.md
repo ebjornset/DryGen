@@ -15,7 +15,9 @@ These examples shows how you can control the property and method information fro
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
+
 namespace DryGen.Templates.Mermaid;
+
 
 public class Customer
 {
@@ -23,6 +25,7 @@ public class Customer
     public string Name { get; set; }
     public ICollection<Order> Orders { get; set; }
 }
+
 
 public class Order
 {
@@ -32,6 +35,7 @@ public class Order
     public Customer Customer { get; set; }
     public ICollection<OrderLine> Lines { get; set; }
 }
+
 
 public class OrderLine
 {
@@ -43,6 +47,7 @@ public class OrderLine
     public Product Product { get; set; }
 }
 
+
 public class Product
 {
     public int Id { get; set; }
@@ -52,6 +57,7 @@ public class Product
     public ICollection<Stock> InStock { get; set; }
 }
 
+
 public class ProductCategory
 {
     public int Id { get; set; }
@@ -59,12 +65,14 @@ public class ProductCategory
     public ICollection<Product> Products { get; set; }
 }
 
+
 public class Warehouse
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public ICollection<Stock> ProductsInStock { get; set; }
 }
+
 
 public class Stock
 {
@@ -75,6 +83,7 @@ public class Stock
     public int Quantity { get; set; }
 }
 
+
 public class ExampleDbContext : DbContext
 {
     public DbSet<Customer> Customers { get; set; }
@@ -82,7 +91,11 @@ public class ExampleDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
-    public ExampleDbContext(DbContextOptions options) : base(options) { }
+
+    public ExampleDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Customer>().HasKey(x => x.Id);

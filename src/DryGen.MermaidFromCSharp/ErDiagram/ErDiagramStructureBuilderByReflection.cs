@@ -1,8 +1,8 @@
-﻿using System;
+﻿using DryGen.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DryGen.Core;
 
 namespace DryGen.MermaidFromCSharp.ErDiagram;
 

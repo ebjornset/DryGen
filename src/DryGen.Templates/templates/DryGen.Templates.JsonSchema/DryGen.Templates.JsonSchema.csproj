@@ -9,9 +9,9 @@
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 	</ItemGroup>
-	
-	<!-- 
-	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template. 
+
+	<!--
+	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template.
 	You can safely remove the two DryGenTemplatesBuild conditions below from a .csproj file generated with the template.
 	-->
 
@@ -26,7 +26,7 @@
 	</Target>
 
 	<Target Name="ExecDryGenBeforeBuild" AfterTargets="SetupDryGen" BeforeTargets="Build" Condition="Exists('$(DryGenInputFile)')">
-		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''"/>
+		<Exec Command="dotnet tool restore" Condition="'$(DryGenTemplatesBuild)' == ''" />
 		<!-- Prepare the template for inline generation of diagrams in the docs markdown file. -->
 		<Copy SourceFiles="./docs/templates/docs.md" DestinationFolder="./docs/generated" />
 		<!-- Generate C# code from the example json schema. -->
@@ -36,5 +36,4 @@
 		<!-- Generate the same Mermaid class diagram inside a markdown file -->
 		<Exec Command="$(DryGenToolCommandName) mermaid-class-diagram-from-json-schema -o ./docs/generated/docs.md -f ./options/mermaid-class-diagram-from-json-schema.yaml --replace-token-in-output-file .!.!.replace-token-for-mermaid-class-diagram-from-json-schema.!.!. -i $(DryGenInputFile)" />
 	</Target>
-
 </Project>

@@ -6,5 +6,7 @@ namespace DryGen.MermaidFromCSharp.TypeFilters;
 
 public class AnyChildFiltersAssemblyNameFilter : AnyChildFiltersFilter<string>, IAssemblyNameFilter
 {
-    public AnyChildFiltersAssemblyNameFilter(IReadOnlyList<IAssemblyNameFilter> children) : base(children) { }
+    public AnyChildFiltersAssemblyNameFilter(IReadOnlyList<IAssemblyNameFilter> children) : base(children)
+    {
+    }
 }

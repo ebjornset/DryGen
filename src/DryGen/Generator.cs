@@ -1,50 +1,52 @@
 ﻿using CommandLine;
 using CommandLine.Text;
+using DryGen.Core;
+using DryGen.CSharpFromJsonSchema;
+using DryGen.Features.CSharpFromJsonSchema;
+using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
+using DryGen.Features.Mermaid.FromCsharp.ErDiagram;
+using DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
+using DryGen.Features.Mermaid.FromEfCore.ErDiagram;
+using DryGen.Features.Mermaid.FromJsonSchema.ClassDiagram;
+using DryGen.Features.Mermaid.FromJsonSchema.ErDiagram;
+using DryGen.Features.OptionsFromCommandline;
+using DryGen.Features.VerbsFromOptionsFile;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using DryGen.MermaidFromCSharp.NameRewriters;
 using DryGen.MermaidFromCSharp.PropertyFilters;
 using DryGen.MermaidFromCSharp.TypeFilters;
+using DryGen.MermaidFromDotnetDepsJson;
+using DryGen.MermaidFromDotnetDepsJson.Filters;
+using DryGen.MermaidFromJsonSchema;
+using DryGen.Options;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using DryGen.CSharpFromJsonSchema;
-using DryGen.Options;
-using DryGen.MermaidFromJsonSchema;
-using System.Text;
-using DryGen.MermaidFromDotnetDepsJson;
-using DryGen.Core;
-using DryGen.MermaidFromDotnetDepsJson.Filters;
-using DryGen.Features.VerbsFromOptionsFile;
-using DryGen.Features.OptionsFromCommandline;
-using DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
-using DryGen.Features.Mermaid.FromJsonSchema.ClassDiagram;
-using DryGen.Features.Mermaid.FromJsonSchema.ErDiagram;
-using DryGen.Features.CSharpFromJsonSchema;
-using DryGen.Features.Mermaid.FromCsharp.ErDiagram;
-using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
-using DryGen.Features.Mermaid.FromEfCore.ErDiagram;
 
 namespace DryGen;
 
 public class Generator
 {
-    private readonly CommandLine.Parser parser;
+    private readonly Parser parser;
     private readonly TextWriter outWriter;
     private readonly TextWriter errorWriter;
     private readonly bool useAssemblyLoadContextDefault;
 
-    public Generator(TextWriter outWriter, TextWriter errorWriter) : this(outWriter, errorWriter, useAssemblyLoadContextDefault: false) { }
+    public Generator(TextWriter outWriter, TextWriter errorWriter) : this(outWriter, errorWriter, useAssemblyLoadContextDefault: false)
+    {
+    }
 
     public Generator(TextWriter outWriter, TextWriter errorWriter, bool useAssemblyLoadContextDefault)
     {
-        parser = new CommandLine.Parser(with =>
+        parser = new Parser(with =>
         {
             with.CaseInsensitiveEnumValues = true;
             with.HelpWriter = null;
@@ -70,18 +72,18 @@ public class Generator
             MermaidErDiagramFromJsonSchemaOptions,
             OptionsFromCommandlineOptions,
             VerbsFromOptionsFileOptions
-             >(args);
+            >(args);
         return parserResult.MapResult(
-          (CSharpFromJsonSchemaOptions options) => GenerateCSharpFromJsonSchema(options, args),
-          (MermaidC4ComponentDiagramFromDotnetDepsJsonOptions options) => GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(options, args),
-          (MermaidClassDiagramFromCsharpOptions options) => GenerateMermaidClassDiagramFromCsharp(options, args),
-          (MermaidClassDiagramFromJsonSchemaOptions options) => GenerateMermaidClassDiagramFromJsonSchema(options, args),
-          (MermaidErDiagramFromCsharpOptions options) => GenerateMermaidErDiagramFromCsharp(options, args),
-          (MermaidErDiagramFromEfCoreOptions options) => GenerateMermaidErDiagramFromEfCore(options, args),
-          (MermaidErDiagramFromJsonSchemaOptions options) => GenerateMermaidErDiagramFromJsonSchema(options, args),
-          (OptionsFromCommandlineOptions options) => GenerateOptionsFromCommandline(options, args),
-          (VerbsFromOptionsFileOptions options) => GenerateVerbsFromOptionsFile(options),
-          errors => DisplayHelp(parserResult));
+            (CSharpFromJsonSchemaOptions options) => GenerateCSharpFromJsonSchema(options, args),
+            (MermaidC4ComponentDiagramFromDotnetDepsJsonOptions options) => GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(options, args),
+            (MermaidClassDiagramFromCsharpOptions options) => GenerateMermaidClassDiagramFromCsharp(options, args),
+            (MermaidClassDiagramFromJsonSchemaOptions options) => GenerateMermaidClassDiagramFromJsonSchema(options, args),
+            (MermaidErDiagramFromCsharpOptions options) => GenerateMermaidErDiagramFromCsharp(options, args),
+            (MermaidErDiagramFromEfCoreOptions options) => GenerateMermaidErDiagramFromEfCore(options, args),
+            (MermaidErDiagramFromJsonSchemaOptions options) => GenerateMermaidErDiagramFromJsonSchema(options, args),
+            (OptionsFromCommandlineOptions options) => GenerateOptionsFromCommandline(options, args),
+            (VerbsFromOptionsFileOptions options) => GenerateVerbsFromOptionsFile(options),
+            errors => DisplayHelp(parserResult));
     }
 
     private int DisplayHelp<T>(ParserResult<T> result)
@@ -184,7 +186,6 @@ public class Generator
     }
 
     [ExcludeFromCodeCoverage] // At the moment we have no deprecated option, but we migth get some again in the future...
-#pragma warning disable IDE0051 // Remove unused private members
     private void WarnIfDeprecatedIsUsed(bool isDeprecatedOptionUsed, string deprecatedOption, string replacedByOption)
 #pragma warning restore IDE0051 // Remove unused private members
     {
@@ -289,27 +290,35 @@ public class Generator
                 case Constants.CsharpFromJsonSchema.Verb:
                     GenerateCSharpFromJsonSchema(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<CSharpFromJsonSchemaOptions>(), Array.Empty<string>());
                     break;
+
                 case Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb:
                     GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidC4ComponentDiagramFromDotnetDepsJsonOptions>(), Array.Empty<string>());
                     break;
+
                 case Constants.MermaidClassDiagramFromCsharp.Verb:
                     GenerateMermaidClassDiagramFromCsharp(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidClassDiagramFromCsharpOptions>(), Array.Empty<string>());
                     break;
+
                 case Constants.MermaidClassDiagramFromJsonSchema.Verb:
                     GenerateMermaidClassDiagramFromJsonSchema(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidClassDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
                     break;
+
                 case Constants.MermaidErDiagramFromCsharp.Verb:
                     GenerateMermaidErDiagramFromCsharp(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidErDiagramFromCsharpOptions>(), Array.Empty<string>());
                     break;
+
                 case Constants.MermaidErDiagramFromEfCore.Verb:
                     GenerateMermaidErDiagramFromEfCore(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidErDiagramFromEfCoreOptions>(), Array.Empty<string>());
                     break;
+
                 case Constants.MermaidErDiagramFromJsonSchema.Verb:
                     GenerateMermaidErDiagramFromJsonSchema(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidErDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
                     break;
+
                 case Constants.OptionsFromCommandline.Verb:
                     GenerateOptionsFromCommandline(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<OptionsFromCommandlineOptions>(), Array.Empty<string>());
                     break;
+
                 default:
                     throw new OptionsException($"Unsupported verb '{optionsDocument.GetConfiguration().Verb}' in document #{optionsDocument.DocumentNumber}");
             }
@@ -421,7 +430,7 @@ public class Generator
 
     private Assembly LoadAsseblyFromFile(string? inputFile)
     {
-        /// It seems like Assembly.Load from a file name will hold the file open, 
+        /// It seems like Assembly.Load from a file name will hold the file open,
         /// and thus our tests cannot clean up by deleting the tmp files they uses, so we read the file to memory our self...
         if (string.IsNullOrWhiteSpace(inputFile))
         {

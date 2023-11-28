@@ -46,5 +46,4 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonOptions : CommonInputFil
     [YamlMember(Alias = "exclude-assemblynames", ApplyNamingConventions = false)]
     [Option("exclude-assemblynames", Separator = ';', HelpText = "A '; separated' list of regular expressions for names of assemblies to exclude. (Default: none)")]
     public IEnumerable<string>? ExcludeAssemblyNames { get; set; }
-
 }

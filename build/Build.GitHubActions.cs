@@ -37,4 +37,5 @@ namespace DryGen.Build;
     On = new[] { GitHubActionsTrigger.WorkflowDispatch },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
 ]
-public partial class Build { }
+public partial class Build
+{ }

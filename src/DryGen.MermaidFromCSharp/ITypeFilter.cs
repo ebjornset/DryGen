@@ -3,4 +3,5 @@ using System;
 
 namespace DryGen.MermaidFromCSharp;
 
-public interface ITypeFilter : IFilter<Type> { }
+public interface ITypeFilter : IFilter<Type>
+{ }

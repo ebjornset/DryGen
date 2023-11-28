@@ -8,6 +8,7 @@ namespace DryGen.MermaidFromEfCore;
 public abstract class ModelElement
 {
     private readonly object element;
+
     protected ModelElement(object element)
     {
         CheckElementType(element);

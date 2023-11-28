@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NJsonSchema;
+using NJsonSchema.CodeGeneration.CSharp;
+using System;
 using System.IO;
 using System.Threading.Tasks;
-using NJsonSchema;
-using NJsonSchema.CodeGeneration.CSharp;
 
 namespace DryGen.CSharpFromJsonSchema;
 
