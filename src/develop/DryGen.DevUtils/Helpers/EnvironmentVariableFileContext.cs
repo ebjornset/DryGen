@@ -7,7 +7,7 @@ namespace DryGen.DevUtils.Helpers;
 
 public sealed class EnvironmentVariableFileContext : IDisposable
 {
-    private readonly IList<string> files = new List<string>();
+    private readonly List<string> files = new List<string>();
     private readonly EnvironmentVariableContext environmentVariableContext;
 
     public EnvironmentVariableFileContext(EnvironmentVariableContext environmentVariableContext)
@@ -17,7 +17,7 @@ public sealed class EnvironmentVariableFileContext : IDisposable
 
     public void WriteFileAsEnvironmentVariable(string content, string environmentVariable)
     {
-        environmentVariableContext.ValidateEnvironmentVariableForSet(environmentVariable);
+        EnvironmentVariableContext.ValidateEnvironmentVariableForSet(environmentVariable);
         var newOptionsFileName = Path.GetTempPath().GetRandomFileName();
         File.WriteAllText(newOptionsFileName, content);
         files.Add(newOptionsFileName);
@@ -26,7 +26,7 @@ public sealed class EnvironmentVariableFileContext : IDisposable
 
     public void AddFileAsEnvironmentVariable(string fileName, string environmentVariable)
     {
-        environmentVariableContext.ValidateEnvironmentVariableForSet(environmentVariable);
+        EnvironmentVariableContext.ValidateEnvironmentVariableForSet(environmentVariable);
         files.Add(fileName);
         environmentVariableContext.SetEnvironmentVariable(environmentVariable, fileName);
     }

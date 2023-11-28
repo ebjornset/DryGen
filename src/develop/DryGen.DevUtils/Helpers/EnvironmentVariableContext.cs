@@ -6,11 +6,11 @@ namespace DryGen.DevUtils.Helpers;
 
 public sealed class EnvironmentVariableContext : IDisposable
 {
-    private readonly IList<string> environmentVariables = new List<string>();
+    private readonly List<string> environmentVariables = new();
 
     public void SetEnvironmentVariable(string environmentVariable, string? value)
     {
-        ValidateEnvironmentVariableForSet(environmentVariable);
+        EnvironmentVariableContext.ValidateEnvironmentVariableForSet(environmentVariable);
         Environment.SetEnvironmentVariable(environmentVariable, value, EnvironmentVariableTarget.Process);
         environmentVariables.Add(environmentVariable);
     }
@@ -22,7 +22,7 @@ public sealed class EnvironmentVariableContext : IDisposable
     }
 
     [ExcludeFromCodeCoverage(Justification = "Just a sanity helper when writing test")]
-    public void ValidateEnvironmentVariableForSet(string environmentVariable)
+    public static void ValidateEnvironmentVariableForSet(string environmentVariable)
     {
         if (string.IsNullOrWhiteSpace(environmentVariable))
         {

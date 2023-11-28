@@ -93,7 +93,7 @@ internal static class VerbsFromOptionsFileOptionsDocumentsBuilder
     private static void CheckForDuplicates(List<VerbsFromOptionsFileOptionsDocument> optionsDocuments)
     {
         var duplicates = optionsDocuments.Where(x => !string.IsNullOrWhiteSpace(x.Configuration?.Name)).GroupBy(x => x.Configuration?.Name, x => x).Where(x => x.Count() > 1).ToList();
-        if (duplicates.Any())
+        if (duplicates.Count > 0)
         {
             var names = string.Join(", ", duplicates.Select(x => $"'{x.Key}'"));
             var message = $"duplicate name(s): {names}";
