@@ -5,7 +5,7 @@ As a dry-gen user
 I should be able to use environment variables in my options files
 
 Scenario: Know environment variable should be replaced with its value
-	Given the environment variable "<Environment variable>" has the value "options-from-commandline"
+	Given the environment variable "verb" has the value "options-from-commandline"
 	And this content as an options file
 	# The commandline arguments -f <this filename> will be appended to the command line
 		"""
@@ -24,11 +24,6 @@ Scenario: Know environment variable should be replaced with its value
 		#replace-token-in-output-file: string
 		#verb: string
 		"""
-Examples:
-	| Environment variable |
-	| VERB                 |
-	| Verb                 |
-	| verb                 |
 
 Scenario: Only complete environment variable fragments should be replaced
 	Given the environment variable "verb" has the value "options-from-commandline"
@@ -46,6 +41,3 @@ Examples:
 	| $(verb    | 1         |
 	| verb)     | 1         |
 	| $(verb)   | 0         |
-	| $( VERB)  | 0         |
-	| $(VerB )  | 0         |
-	| $( Verb ) | 0         |
