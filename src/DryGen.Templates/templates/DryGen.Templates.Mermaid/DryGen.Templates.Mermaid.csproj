@@ -28,6 +28,11 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+		<!-- If you want quick access to the dotnet tools configuration -->
+		<Content Include=".config\dotnet-tools.json" />
+	</ItemGroup>
+
 	<!--
 	The property DryGenTemplatesBuild is used during development of the dry-gen.mermaid template.
 	You can safely remove the two DryGenTemplatesBuild conditions below from a .csproj file generated with the template.
