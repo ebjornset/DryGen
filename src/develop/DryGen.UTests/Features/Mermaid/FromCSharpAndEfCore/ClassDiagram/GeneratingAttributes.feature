@@ -31,6 +31,50 @@ Scenario: Generates attributes for properties that has a getter
 		
 		"""
 
+Scenario: Generates attributes for properties of supported types
+	Given this C# source code
+		"""
+		using System;
+		namespace Test
+		{
+			public class Order
+			{
+				public object ObjectProp { get; }
+				public string StringProp { get; }
+				public char CharProp { get; }
+				public byte ByteProp { get; }
+				public int IntProp { get; }
+				public long LongProp { get; }
+				public decimal DecimalProp { get; }
+				public float FloatProp { get; }
+				public bool BoolProp { get; }
+				public DateTime DateTimeProp { get; }
+				public DateTimeOffset DateTimeOffsetProp { get; }
+				public byte[] ByteArrayProp { get; }
+			}
+		}
+		"""
+	When I generate a Class diagram
+	Then I should get this generated representation
+		"""
+		classDiagram
+			class Order {
+				+object ObjectProp
+				+string StringProp
+				+Char CharProp
+				+Byte ByteProp
+				+int IntProp
+				+long LongProp
+				+decimal DecimalProp
+				+float FloatProp
+				+bool BoolProp
+				+DateTime DateTimeProp
+				+DateTimeOffset DateTimeOffsetProp
+				+Blob ByteArrayProp
+			}
+		
+		"""
+
 Scenario: Generates attributes with visibility modifier for properties
 	Given this C# source code
 		"""

@@ -489,9 +489,12 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
 
     private static bool IsAttributePropertyType(IDictionary<Type, ClassDiagramClass> classLookup, PropertyInfo property)
     {
-        return property.CanRead
-            && !property.PropertyType.IsArray
-            && IsAttributePropertyType(classLookup, property.PropertyType);
+        if (property.CanRead
+            && IsAttributePropertyType(classLookup, property.PropertyType))
+        {
+            return property.PropertyType.IsAssignableFrom(typeof(byte[])) || !property.PropertyType.IsArray;
+        }
+        return false;
     }
 
     private static bool IsAttributePropertyType(IDictionary<Type, ClassDiagramClass> classLookup, Type propertyType)
@@ -551,6 +554,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             "Decimal" => "decimal",
             "Object" => "object",
             "Double" => "double",
+            "Byte[]" => "Blob",
             _ => typeName,
         };
     }
