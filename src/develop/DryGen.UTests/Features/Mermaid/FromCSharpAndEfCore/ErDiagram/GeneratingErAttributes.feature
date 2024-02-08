@@ -132,6 +132,7 @@ Scenario: Generates ER attributes for well known type properties
 				public string StringProp { get; set; }
 				public DateTime DateTimeProp { get; set; }
 				public DateTimeOffset DateTimeOffsetProp { get; set; }
+				public byte[] ByteArrayProp { get; set; }
 			}
 			public class TestDbContext: DbContext {
 				public DbSet<Order> Orders { get; set; }
@@ -149,6 +150,7 @@ Scenario: Generates ER attributes for well known type properties
 		erDiagram
 			Order {
 				bool BoolProp
+				blob ByteArrayProp
 				datetimeoffset DateTimeOffsetProp
 				datetime DateTimeProp
 				decimal DecimalProp

@@ -489,12 +489,9 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
 
     private static bool IsAttributePropertyType(IDictionary<Type, ClassDiagramClass> classLookup, PropertyInfo property)
     {
-        if (property.CanRead
-            && IsAttributePropertyType(classLookup, property.PropertyType))
-        {
-            return property.PropertyType.IsAssignableFrom(typeof(byte[])) || !property.PropertyType.IsArray;
-        }
-        return false;
+        return property.CanRead
+            && (!property.PropertyType.IsArray || property.PropertyType.IsAssignableFrom(typeof(byte[])))
+            && IsAttributePropertyType(classLookup, property.PropertyType);
     }
 
     private static bool IsAttributePropertyType(IDictionary<Type, ClassDiagramClass> classLookup, Type propertyType)
