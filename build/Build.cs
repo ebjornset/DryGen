@@ -267,7 +267,7 @@ public partial class Build : NukeBuild
                 (v, path) => v.SetTargetPath(path)));
         });
 
-    internal Target Dev_GlobalTool => _ => _
+    internal Target Dev_InstallGlobalTool => _ => _
         .DependsOn(Init)
         .DependsOn(Pack)
         .Executes(() =>
@@ -308,7 +308,7 @@ public partial class Build : NukeBuild
             DotNet($"new install \"{toolsPackageName}\"", logOutput: true, logInvocation: true);
         });
 
-    internal Target Dev_Docs => _ => _
+    internal Target Dev_StartDocsSite => _ => _
         .DependsOn(Init)
         .Executes(() =>
         {
