@@ -22,7 +22,7 @@ public static class ErDiagramExtensions
 
     public static bool IsErDiagramAttributePropertyType(this Type propertyType)
     {
-        if (propertyType.IsPrimitive || Array.Exists(nonPrivitiveAttributeTypes, x => x == propertyType))
+        if (propertyType.IsPrimitive || propertyType.IsEnum || Array.Exists(nonPrivitiveAttributeTypes, x => x == propertyType))
         {
             return true;
         }
@@ -42,7 +42,12 @@ public static class ErDiagramExtensions
     public static string GetErDiagramAttributeTypeName(this Type type)
     {
         var nullableUnderlyingType = Nullable.GetUnderlyingType(type);
-        var propertyTypename = (nullableUnderlyingType ?? type).Name;
+        var typeForName = nullableUnderlyingType ?? type;
+        if (typeForName.IsEnum)
+        {
+            typeForName = typeof(int);
+        }
+        var propertyTypename = typeForName.Name;
         var result = GetPropertyTypeName(propertyTypename);
         return result;
 

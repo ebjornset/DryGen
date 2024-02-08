@@ -167,6 +167,46 @@ Examples:
 	| Reflection        |
 	| EfCore            |
 
+Scenario: Generates ER attributes for enums
+	Given this C# source code
+		"""
+		using Microsoft.EntityFrameworkCore;
+		using System;
+		namespace Test
+		{
+			public enum Status 
+			{
+				InProgress = 1,
+				Completed = 99
+			}
+			public class Order
+			{
+				public Status OrderStatus { get; set; }
+			}
+			public class TestDbContext: DbContext {
+				public DbSet<Order> Orders { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+				protected override void OnModelCreating(ModelBuilder modelBuilder)
+		        {
+		            modelBuilder.Entity<Order>().HasNoKey();
+				}
+			}
+		}
+		"""
+	When I generate an ER diagram using '<Structure builder>'
+	Then I should get this generated representation
+		"""
+		erDiagram
+			Order {
+				int OrderStatus
+			}
+		
+		"""
+Examples:
+	| Structure builder |
+	| Reflection        |
+	| EfCore            |
+
 Scenario: Generates ER attributes with null comment for nullable well known type properties
 	Given this C# source code
 		"""
