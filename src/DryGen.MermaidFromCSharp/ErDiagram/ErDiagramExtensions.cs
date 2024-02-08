@@ -16,7 +16,7 @@ public static class ErDiagramExtensions
     {
         return property.CanRead
             && property.CanWrite
-            && !property.PropertyType.IsArray
+            && (!property.PropertyType.IsArray || property.PropertyType.IsAssignableFrom(typeof(byte[])))
             && property.PropertyType.IsErDiagramAttributePropertyType();
     }
 
@@ -54,6 +54,7 @@ public static class ErDiagramExtensions
                 "Int64" => "long",
                 "Single" => "float",
                 "Boolean" => "bool",
+                "Byte[]" => "blob",
                 _ => propertyTypename.ToLowerInvariant(),
             };
         }
@@ -93,6 +94,6 @@ public static class ErDiagramExtensions
         return cardinality == ErDiagramRelationshipCardinality.ZeroOrOne || cardinality == ErDiagramRelationshipCardinality.ExactlyOne;
     }
 
-    private static readonly Type[] nonPrivitiveAttributeTypes = { typeof(decimal), typeof(string), typeof(DateTime), typeof(DateTimeOffset), typeof(Guid) };
+    private static readonly Type[] nonPrivitiveAttributeTypes = { typeof(decimal), typeof(string), typeof(DateTime), typeof(DateTimeOffset), typeof(Guid), typeof(byte[]) };
     private static readonly Type[] collectionTypes = { typeof(IEnumerable<>), typeof(ICollection<>), typeof(IList<>) };
 }
