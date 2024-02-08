@@ -14,7 +14,7 @@ Beside the ["don't repeat yourself" (DRY) prinsiple](https://en.wikipedia.org/wi
 
 ### Development tools
 
-As an open source tool **"we're standing on the shoulder of giants"**, and we heavily rely on the hard work of others volunteers. Drygen would probably never have seen the light of day without these other execellent tools:
+As an open source tool **"we're standing on the shoulder of giants"**, and we heavily rely on the hard work of others volunteers. Drygen would probably never have seen the light of day without these other excellent tools:
 
 - The main developement tool is [.Net](https://dotnet.microsoft.com/){:target="\_blank"}, a free, cross-platform, and open source developer platform.
 - Github is used for our [code repository](https://github.com/ebjornset/DryGen){:target="\_blank"}, [issue tracker](https://github.com/ebjornset/DryGen/issues){:target="\_blank"}, [deployment tool](https://github.com/ebjornset/DryGen/actions){:target="\_blank"} and [documentation site](https://docs.drygen.dev/){:target="\_blank"}

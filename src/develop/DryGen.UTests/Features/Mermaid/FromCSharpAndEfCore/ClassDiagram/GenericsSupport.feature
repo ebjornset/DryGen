@@ -124,3 +124,19 @@ Scenario: Generates inheritance for generic types
 			ObjectShapeAndSquare --|> ShapeAndSquare~TShape,TSquare~
 
 		"""
+
+Scenario: Generic constraints referencing the declaring type should use the open type
+	Given this C# source code
+		"""
+		namespace Test
+		{
+			public class Shape<TShape> where TShape : Shape<TShape> {}
+		}
+		"""
+	When I generate a Class diagram
+	Then I should get this generated representation
+		"""
+		classDiagram
+			class Shape~TShape~
+
+		"""
