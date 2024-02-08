@@ -508,7 +508,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         return true;
     }
 
-    private static string GetDataType(Type type, INameRewriter? nameRewriter = null, string genericStartBracket = "~", string genericEndBracket = "~")
+    private static string GetDataType(Type type, INameRewriter? nameRewriter = null, string genericStartBracket = "~", string genericEndBracket = "~", HashSet<Type>? seenTypes = null)
     {
         if (type == typeof(void))
         {
@@ -520,7 +520,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         {
             if (type.IsGenericType)
             {
-                typeName = GetDataTypeForGenericType(type, genericStartBracket, genericEndBracket);
+                typeName = GetDataTypeForGenericType(type, genericStartBracket, genericEndBracket, seenTypes);
             }
             else
             {
@@ -555,19 +555,21 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         };
     }
 
-    private static string GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket)
+    private static string GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket, HashSet<Type>? seenTypes)
     {
+        seenTypes ??= new HashSet<Type>();
         string typeName;
         var sb = new StringBuilder();
         sb.Append(type.Name[..type.Name.IndexOf('`')]).Append(genericStartBracket);
         var delimiter = string.Empty;
+        seenTypes.Add(type);
         foreach (var genericArgument in type.GetGenericArguments())
         {
             sb.Append(delimiter);
             var genericParameterConstraints = GetGenericParameterConstraints(genericArgument);
             if (genericParameterConstraints.Length > 0)
             {
-                AppendGenericParameterConstraints(sb, genericParameterConstraints);
+                AppendGenericParameterConstraints(sb, genericParameterConstraints, seenTypes, genericArgument);
             }
             else
             {
@@ -575,6 +577,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             }
             delimiter = ",";
         }
+        seenTypes.Remove(type);
         sb.Append(genericEndBracket);
         typeName = sb.ToString();
         return typeName;
@@ -584,12 +587,14 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             return genericArgument.IsGenericParameter ? genericArgument.GetGenericParameterConstraints().ToArray() : Array.Empty<Type>();
         }
 
-        static void AppendGenericParameterConstraints(StringBuilder sb, Type[] genericParameterConstraints)
+        static void AppendGenericParameterConstraints(StringBuilder sb, Type[] genericParameterConstraints, HashSet<Type> seenTypes, Type genericArgument)
         {
             var constraintDelimiter = string.Empty;
             foreach (var genericParameterConstraint in genericParameterConstraints)
             {
-                sb.Append(constraintDelimiter).Append(GetDataType(type: genericParameterConstraint, genericStartBracket: "Of", genericEndBracket: string.Empty));
+                var type = seenTypes.Contains(genericParameterConstraint) ? genericArgument  : genericParameterConstraint;
+                var dataType = GetDataType(type: type, genericStartBracket: "Of", genericEndBracket: string.Empty, seenTypes: seenTypes);
+                sb.Append(constraintDelimiter).Append(dataType);
                 constraintDelimiter = "'";
             }
         }

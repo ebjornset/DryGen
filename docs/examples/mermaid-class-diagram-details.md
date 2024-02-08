@@ -56,9 +56,9 @@ classDiagram
 		-ClassDiagramFilters(IReadOnlyList~ITypeFilter~ filters) IReadOnlyList~ITypeFilter~
 		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, PropertyInfo property)$ bool
 		-IsAttributePropertyType(IDictionary~Type,ClassDiagramClass~ classLookup, Type propertyType)$ bool
-		-GetDataType(Type type, INameRewriter nameRewriter, string genericStartBracket, string genericEndBracket)$ string
+		-GetDataType(Type type, INameRewriter nameRewriter, string genericStartBracket, string genericEndBracket, HashSet~Type~ seenTypes)$ string
 		-GetTypeName(string typeName)$ string
-		-GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket)$ string
+		-GetDataTypeForGenericType(Type type, string genericStartBracket, string genericEndBracket, HashSet~Type~ seenTypes)$ string
 		-GetVisibility(MethodInfo methodInfo)$ string
 	}
 
@@ -162,9 +162,9 @@ classDiagram
 		-ClassDiagramFilters(1 param) IReadOnlyList~ITypeFilter~
 		-IsAttributePropertyType(2 params)$ bool
 		-IsAttributePropertyType(2 params)$ bool
-		-GetDataType(4 params)$ string
+		-GetDataType(5 params)$ string
 		-GetTypeName(1 param)$ string
-		-GetDataTypeForGenericType(3 params)$ string
+		-GetDataTypeForGenericType(4 params)$ string
 		-GetVisibility(1 param)$ string
 	}
 
