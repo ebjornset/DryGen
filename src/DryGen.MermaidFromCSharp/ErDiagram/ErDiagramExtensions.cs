@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace DryGen.MermaidFromCSharp.ErDiagram;
 
@@ -22,7 +24,7 @@ public static class ErDiagramExtensions
 
     public static bool IsErDiagramAttributePropertyType(this Type propertyType)
     {
-        if (propertyType.IsPrimitive || Array.Exists(nonPrivitiveAttributeTypes, x => x == propertyType))
+        if (propertyType.IsPrimitive || propertyType.IsEnum || Array.Exists(nonPrivitiveAttributeTypes, x => x == propertyType))
         {
             return true;
         }
@@ -42,20 +44,25 @@ public static class ErDiagramExtensions
     public static string GetErDiagramAttributeTypeName(this Type type)
     {
         var nullableUnderlyingType = Nullable.GetUnderlyingType(type);
-        var propertyTypename = (nullableUnderlyingType ?? type).Name;
-        var result = GetPropertyTypeName(propertyTypename);
+        var typeForName = nullableUnderlyingType ?? type;
+        if (typeForName.IsEnum)
+        {
+            typeForName = typeof(int);
+        }
+        var propertyTypeName = typeForName.Name;
+        var result = GetPropertyTypeName(propertyTypeName);
         return result;
 
-        static string GetPropertyTypeName(string propertyTypename)
+        static string GetPropertyTypeName(string propertyTypeName)
         {
-            return propertyTypename switch
+            return propertyTypeName switch
             {
                 "Int32" => "int",
                 "Int64" => "long",
                 "Single" => "float",
                 "Boolean" => "bool",
                 "Byte[]" => "blob",
-                _ => propertyTypename.ToLowerInvariant(),
+                _ => propertyTypeName.ToLowerInvariant(),
             };
         }
     }
@@ -92,6 +99,43 @@ public static class ErDiagramExtensions
     public static bool IsNotMany(this ErDiagramRelationshipCardinality cardinality)
     {
         return cardinality == ErDiagramRelationshipCardinality.ZeroOrOne || cardinality == ErDiagramRelationshipCardinality.ExactlyOne;
+    }
+
+    public static void AppendToEntities<TEntityType>(this Dictionary<Type, TEntityType> enumEntities, IList<TEntityType> entities) where TEntityType: ErDiagramEntity
+    {
+        foreach (var enumEntity in enumEntities.Values)
+        {
+            var attributeTypeName = typeof(int).GetErDiagramAttributeTypeName();
+            foreach (var field in enumEntity.Type.GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                var enumValue = field.GetRawConstantValue();
+                enumEntity.AddAttribute(new ErDiagramAttribute(attributeTypeName, field.Name, isNullable: false, isPrimaryKey: false, comments: enumValue?.ToString()));
+            }
+            entities.Add(enumEntity);
+        }
+    }
+
+    public static bool AddToEntityAsRelationshipIfEnum<TEntityType>(
+        this Type enumType, 
+        string attributeName, 
+        bool isNullable, 
+        ErDiagramEntity entity, 
+        Dictionary<Type, TEntityType> enumEntities, 
+        Func<Type, TEntityType> enumEntityFactory) where TEntityType : ErDiagramEntity
+    {
+        var isEnum = enumType.IsEnum;
+        if (isEnum)
+        {
+            if (!enumEntities.TryGetValue(enumType, out var toEntity))
+            {
+                toEntity = enumEntityFactory(enumType);
+                enumEntities[enumType] = toEntity;
+            }
+            var toCardinality = isNullable ? ErDiagramRelationshipCardinality.ZeroOrOne : ErDiagramRelationshipCardinality.ExactlyOne;
+            var label = attributeName != enumType.Name ? attributeName : string.Empty;
+            entity.AddRelationship(toEntity, ErDiagramRelationshipCardinality.ZeroOrMore, toCardinality, label, attributeName);
+        }
+        return isEnum;
     }
 
     private static readonly Type[] nonPrivitiveAttributeTypes = { typeof(decimal), typeof(string), typeof(DateTime), typeof(DateTimeOffset), typeof(Guid), typeof(byte[]) };

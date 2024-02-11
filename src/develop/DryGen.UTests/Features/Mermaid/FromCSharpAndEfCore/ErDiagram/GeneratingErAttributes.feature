@@ -26,8 +26,8 @@ Scenario: Generates ER attributes only for public properties
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -59,8 +59,8 @@ Scenario: Generates ER attributes only for properties with getter and setter
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -96,8 +96,8 @@ Scenario: Generates ER attributes only for non collection properties
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -138,8 +138,8 @@ Scenario: Generates ER attributes for well known type properties
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -167,6 +167,64 @@ Examples:
 	| Reflection        |
 	| EfCore            |
 
+Scenario: Generates ER attributes and relationship and entity for enum properties
+	Given this C# source code
+		"""
+		using Microsoft.EntityFrameworkCore;
+		using System;
+		namespace Test
+		{
+			public enum Status 
+			{
+				InProgress = 1,
+				Completed = 99
+			}
+			public class Order
+			{
+				public <Property type> Status { get; set; }
+			}
+			public class OrderLine
+			{
+				public <Property type> OrderLineStatus { get; set; }
+			}
+			public class TestDbContext: DbContext {
+				public DbSet<Order> Orders { get; set; }
+				public DbSet<OrderLine> OrderLines { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+				protected override void OnModelCreating(ModelBuilder modelBuilder)
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
+					modelBuilder.Entity<OrderLine>().HasNoKey();
+				}
+			}
+		}
+		"""
+	And the Er diagram relationship exclusion 'None'
+	When I generate an ER diagram using '<Structure builder>'
+	Then I should get this generated representation
+		"""
+		erDiagram
+			Order {
+				int Status <Attribute metadata>
+			}
+			OrderLine {
+				int OrderLineStatus <Attribute metadata>
+			}
+			Status {
+				int Completed "99"
+				int InProgress "1"
+			}
+			Order }o..<To cardinality> Status : ""
+			OrderLine }o..<To cardinality> Status : "OrderLineStatus"
+		
+		"""
+Examples:
+	| Structure builder | Property type | Attribute metadata | To cardinality |
+	| Reflection        | Status        | FK                 | \|\|           |
+	| Reflection        | Status?       | FK "Null"          | o\|            |
+	| EfCore            | Status        | FK                 | \|\|           |
+	| EfCore            | Status?       | FK "Null"          | o\|            |
+
 Scenario: Generates ER attributes with null comment for nullable well known type properties
 	Given this C# source code
 		"""
@@ -189,8 +247,8 @@ Scenario: Generates ER attributes with null comment for nullable well known type
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -233,8 +291,8 @@ Scenario: Generates ER attributes as PK for properties with key attribute
 				public DbSet<A> Aaaa { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            //modelBuilder.Entity<A>().HasNoKey();
+				{
+					//modelBuilder.Entity<A>().HasNoKey();
 				}
 			}
 		}

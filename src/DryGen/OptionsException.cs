@@ -13,7 +13,6 @@ namespace DryGen;
 
 [Serializable]
 #endif
-[ExcludeFromCodeCoverage]
 public sealed class OptionsException : Exception
 {
     public OptionsException(string message) : base(message)
@@ -21,10 +20,9 @@ public sealed class OptionsException : Exception
     }
 
 #if (NET6_0 || NET7_0)
-
+    [ExcludeFromCodeCoverage]
     private OptionsException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }
-
 #endif
 }

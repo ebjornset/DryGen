@@ -2,7 +2,7 @@
 
 public class ErDiagramAttribute
 {
-    public ErDiagramAttribute(string attributeType, string attributeName, bool isNullable, bool isPrimaryKey, bool isAlternateKey = false, bool isForeignKey = false)
+    public ErDiagramAttribute(string attributeType, string attributeName, bool isNullable, bool isPrimaryKey, bool isAlternateKey = false, bool isForeignKey = false, string? comments = null)
     {
         AttributeType = attributeType;
         AttributeName = attributeName;
@@ -10,6 +10,7 @@ public class ErDiagramAttribute
         IsPrimaryKey = isPrimaryKey;
         IsAlternateKey = isAlternateKey;
         IsForeignKey = isForeignKey;
+        Comments = comments;
     }
 
     public string AttributeType { get; }
@@ -18,4 +19,5 @@ public class ErDiagramAttribute
     public bool IsPrimaryKey { get; }
     public bool IsAlternateKey { get; }
     public bool IsForeignKey { get; }
+    public string? Comments { get; }
 }
