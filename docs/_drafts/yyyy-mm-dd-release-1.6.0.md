@@ -8,6 +8,7 @@ hero_height: is-fullwidth
 ---
 
 ### In this version
+- Added support for generating `enum` properties in `mermaid-er-diagram-from-csharp` and `mermaid-er-diagram-from-efcore`. Each enum type used as properties in entites are generated as its own entities with the enum values as attributes. Enum properties are generated as `int` attributes in the entity and as a relationship from the entity to the enum entity.
 - Added support for generating `byte[]` properties as `Blob` attributes in `mermaid-class-diagram-from-csharp`.
 - Added support for generating `byte[]` properties as `blob` attributes in `mermaid-er-diagram-from-csharp` and `mermaid-er-diagram-from-efcore`.
 - Fixed stack overflow exception that happended when running `mermaid-class-diagram-from-csharp` agains a generic type with a where constraint referencing the declaring type it self.
