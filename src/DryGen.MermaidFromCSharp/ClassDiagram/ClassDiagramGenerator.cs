@@ -19,6 +19,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
     private readonly bool excludeStaticAttributes;
     private readonly bool excludeStaticMethods;
     private readonly bool excludeMethodParams;
+    private readonly string? title;
 
     public ClassDiagramGenerator(
         ITypeLoader typeloader,
@@ -31,6 +32,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         excludeStaticAttributes = options.ExcludeStaticAttributes ?? default;
         excludeStaticMethods = options.ExcludeStaticMethods ?? default;
         excludeMethodParams = options.ExcludeMethodParams ?? default;
+        title = options.Title;
     }
 
     public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter, IDiagramFilter diagramFilter)
@@ -330,7 +332,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
 
     private string GenerateClassDiagramMermaid(IEnumerable<ClassDiagramClass> classDiagramClasses, INameRewriter? nameRewriter)
     {
-        var sb = new StringBuilder().AppendLine("classDiagram");
+        var sb = new StringBuilder().AppendDiagramTitle(title).AppendLine("classDiagram");
         AppendDirection(sb);
         AppendClasses(classDiagramClasses, nameRewriter, sb);
         AppendRelationships(classDiagramClasses, nameRewriter, sb);

@@ -26,6 +26,8 @@ internal class InternalCSharpFromJsonSchemaOptions : ICSharpFromJsonSchemaOption
 
     public string? InputFile => options.InputFile;
 
+    public string? Title => options.Title;
+
     public JsonSchemaFileFormat GetSchemaFileFormat()
     {
         return options.GetSchemaFileFormat();

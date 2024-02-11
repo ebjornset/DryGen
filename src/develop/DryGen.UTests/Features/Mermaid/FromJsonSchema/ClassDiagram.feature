@@ -98,3 +98,33 @@ Scenario: Should generate Mermaid class diagram with tree shaking from 'tree-sha
 			TestSchema --> "0..1" Order
 		
 		"""
+
+Scenario: Should generate Mermaid class diagram code with title
+	Given this json schema input file with the extension "yaml"
+		"""
+		$schema: https://json-schema.org/draft/2020-12/schema
+		id: https://drygen.dev/test-json-schemas/some.json
+		type: object
+		properties:
+		  prop1:
+		    type: string
+		additionalProperties: false
+		"""
+	And output is spesified as a command line argument
+	When I call the program with this command line arguments
+		| Arg                                    |
+		| mermaid-class-diagram-from-json-schema |
+		| --title                                |
+		| Diagram title                          |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		---
+		title: Diagram title
+		---
+		classDiagram
+			class ClassFromJsonSchema {
+				+string Prop1
+			}
+		
+		"""

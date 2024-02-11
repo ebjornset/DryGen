@@ -42,6 +42,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #replace-token-in-output-file: string
     #root-classname: string
     #schema-file-format: byextension | json | yaml
+    #title: string
 #---
 #configuration:
   #verb: mermaid-c4component-diagram-from-dotnet-deps-json
@@ -87,6 +88,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #name-replace-to: string
     #output-file: string
     #replace-token-in-output-file: string
+    #title: string
     #tree-shaking-roots: # List of string
     #- 
 #---
@@ -101,6 +103,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #replace-token-in-output-file: string
     #root-classname: string
     #schema-file-format: byextension | json | yaml
+    #title: string
     #tree-shaking-roots: # List of string
     #- 
 #---
@@ -126,6 +129,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #output-file: string
     #relationship-type-exclusion: none | all
     #replace-token-in-output-file: string
+    #title: string
     #tree-shaking-roots: # List of string
     #- 
 #---
@@ -151,6 +155,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #output-file: string
     #relationship-type-exclusion: none | all
     #replace-token-in-output-file: string
+    #title: string
     #tree-shaking-roots: # List of string
     #- 
 #---
@@ -166,6 +171,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #replace-token-in-output-file: string
     #root-classname: string
     #schema-file-format: byextension | json | yaml
+    #title: string
     #tree-shaking-roots: # List of string
     #- 
 #---

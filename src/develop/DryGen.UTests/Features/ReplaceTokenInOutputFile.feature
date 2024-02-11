@@ -62,5 +62,6 @@ Scenario: Should generate options for verb csharp-from-json-schema as 'replace-t
 		#replace-token-in-output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
+		#title: string
 		Some text after magic token
 		"""

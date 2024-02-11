@@ -6,6 +6,7 @@ public interface IFromJsonSchemaOptions : IInputFileOptions
 {
     JsonSchemaFileFormat? SchemaFileFormat { get; }
     string? RootClassname { get; }
+    string? Title { get; }
 
     JsonSchemaFileFormat GetSchemaFileFormat();
 }

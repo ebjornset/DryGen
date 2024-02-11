@@ -34,4 +34,8 @@ public abstract class MermaidFromCsharpBaseOptions : CommonInputFileOptions, IMe
     [YamlMember(Alias = "tree-shaking-roots", ApplyNamingConventions = false)]
     [Option("tree-shaking-roots", Separator = ';', HelpText = "A '; separated' list of regular expressions for types to keep as roots when tree shaking the resulting diagram.")]
     public IEnumerable<string>? TreeShakingRoots { get; set; }
+
+    [YamlMember(Alias = "title", ApplyNamingConventions = false)]
+    [Option("title", HelpText = "Diagram title.")]
+    public string? Title { get; set; }
 }

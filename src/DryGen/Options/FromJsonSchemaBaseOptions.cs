@@ -14,6 +14,10 @@ public abstract class FromJsonSchemaBaseOptions : CommonInputFileOptions, IFromJ
     [Option("root-classname", HelpText = "The classname for the class representing the schema it self. Default is the schema title, or 'ClassFromJsonSchema' if the schema has no title.")]
     public string? RootClassname { get; set; }
 
+    [YamlMember(Alias = "title", ApplyNamingConventions = false)]
+    [Option("title", HelpText = "Diagram title.")]
+    public string? Title { get; set; }
+
     public JsonSchemaFileFormat GetSchemaFileFormat()
     {
         return SchemaFileFormat ?? JsonSchemaFileFormat.ByExtension;

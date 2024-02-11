@@ -28,6 +28,7 @@ The verb 'mermaid-er-diagram-from-efcore' uses the following options.
 |--output-file|-o|string|Write the generated representation to this file.|
 |--relationship-type-exclusion||none / all|What kind of relationships should be excluded from the diagram?|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
+|--title||string|Diagram title.|
 |--tree-shaking-roots||List of string|A '; separated' list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
 {% include notification.html status="is-dark" 
@@ -58,6 +59,7 @@ Here is a template for an options file for 'mermaid-er-diagram-from-efcore'.
 #output-file: string
 #relationship-type-exclusion: none | all
 #replace-token-in-output-file: string
+#title: string
 #tree-shaking-roots: # List of string
 #- 
 ```

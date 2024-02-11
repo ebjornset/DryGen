@@ -30,6 +30,7 @@ The verb 'mermaid-class-diagram-from-csharp' uses the following options.
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
+|--title||string|Diagram title.|
 |--tree-shaking-roots||List of string|A '; separated' list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
 {% include notification.html status="is-dark" 
@@ -62,6 +63,7 @@ Here is a template for an options file for 'mermaid-class-diagram-from-csharp'.
 #name-replace-to: string
 #output-file: string
 #replace-token-in-output-file: string
+#title: string
 #tree-shaking-roots: # List of string
 #- 
 ```

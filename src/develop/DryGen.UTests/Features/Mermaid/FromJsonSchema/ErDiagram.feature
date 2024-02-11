@@ -102,10 +102,10 @@ Scenario: Should generate Mermaid Er diagram with tree shaking from 'tree-shakin
 		"""
 	And output is spesified as a command line argument
 	When I call the program with this command line arguments
-		| Arg                                    |
+		| Arg                                 |
 		| mermaid-er-diagram-from-json-schema |
-		| --tree-shaking-roots                   |
-		| ^Order$                                |
+		| --tree-shaking-roots                |
+		| ^Order$                             |
 	Then I should get exit code '0'
 	And I should get this generated representation file
 		"""
@@ -113,5 +113,28 @@ Scenario: Should generate Mermaid Er diagram with tree shaking from 'tree-shakin
 			Order
 			TestSchema
 			Order ||..|| TestSchema : ""
+		
+		"""
+
+Scenario: Should generate Mermaid ER diagram code with title
+	When I call the program with this command line arguments
+		| Arg                                 |
+		| mermaid-er-diagram-from-json-schema |
+		| --title                             |
+		| Diagram title                       |
+	Then I should get exit code '0'
+	And console out should contain the text
+		"""
+		---
+		title: Diagram title
+		---
+		erDiagram
+			ClassFromJsonSchema {
+				string Prop1
+			}
+			Test {
+				int Prop2
+			}
+			Test ||..|| ClassFromJsonSchema : ""
 		
 		"""
