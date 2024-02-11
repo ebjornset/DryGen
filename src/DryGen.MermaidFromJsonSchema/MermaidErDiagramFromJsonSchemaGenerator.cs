@@ -15,7 +15,8 @@ public class MermaidErDiagramFromJsonSchemaGenerator
             new ErDiagramStructureBuilderByReflection(),
             options.ExcludeAllAttributes == true ? ErDiagramAttributeTypeExclusion.All : ErDiagramAttributeTypeExclusion.None,
             ErDiagramAttributeDetailExclusions.None,
-            options.ExcludeAllRelationships == true ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None);
+            options.ExcludeAllRelationships == true ? ErDiagramRelationshipTypeExclusion.All : ErDiagramRelationshipTypeExclusion.None,
+            options.Title);
         string cSharpCode = await cSharpCodeGenerator.Generate(new InternalCSharpFromJsonSchemaOptions(options));
         var tempAssembly = cSharpCode.CompileCodeToMemory(ReferencedAssemblies.Get());
         var mermaid = mermaidErDiagramGenerator.Generate(tempAssembly, new ITypeFilter[0], new IPropertyFilter[0], nameRewriter: null, diagramFilter);

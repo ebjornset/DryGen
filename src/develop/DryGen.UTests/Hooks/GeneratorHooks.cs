@@ -29,13 +29,15 @@ public class GeneratorHooks
                                                         new ErDiagramStructureBuilderByReflection(),
                                                         ErDiagramAttributeTypeExclusion,
                                                         ErDiagramAttributeDetailExclusions,
-                                                        ErDiagrErDiagramRelationshipTypeExclusion),
+                                                        ErDiagrErDiagramRelationshipTypeExclusion,
+                                                        title: null),
                                                 "ErDiagramGeneratorByReflection");
         objectContainer.RegisterFactoryAs(oc => new ErDiagramGenerator(
                                                         new ErDiagramStructureBuilderByEfCore(),
                                                         ErDiagramAttributeTypeExclusion,
                                                         ErDiagramAttributeDetailExclusions,
-                                                        ErDiagrErDiagramRelationshipTypeExclusion),
+                                                        ErDiagrErDiagramRelationshipTypeExclusion,
+                                                        title: null),
                                                 "ErDiagramGeneratorByEfCore");
         objectContainer.RegisterFactoryAs(oc => new ClassDiagramGenerator(
                                                         oc.Resolve<ITypeLoader>(),

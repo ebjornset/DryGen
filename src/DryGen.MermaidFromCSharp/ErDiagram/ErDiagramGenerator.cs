@@ -12,12 +12,14 @@ public class ErDiagramGenerator : IErDiagramGenerator
     private readonly ErDiagramAttributeTypeExclusion attributeTypeExclusion;
     private readonly ErDiagramAttributeDetailExclusions attributeDetailExclusions;
     private readonly ErDiagramRelationshipTypeExclusion relationshipTypeExclusion;
+    private readonly string? title;
 
     public ErDiagramGenerator(IMermaidErDiagramFromCSharpOptions options) : this(
         options.StructureBuilder,
         options.AttributeTypeExclusion ?? ErDiagramAttributeTypeExclusion.None,
         options.AttributeDetailExclusions,
-        options.RelationshipTypeExclusion ?? ErDiagramRelationshipTypeExclusion.None
+        options.RelationshipTypeExclusion ?? ErDiagramRelationshipTypeExclusion.None,
+        options.Title
                                                                                 )
     { }
 
@@ -25,13 +27,15 @@ public class ErDiagramGenerator : IErDiagramGenerator
         IErDiagramStructureBuilder structureBuilder,
         ErDiagramAttributeTypeExclusion attributeTypeExclusion,
         ErDiagramAttributeDetailExclusions attributeDetailExclusions,
-        ErDiagramRelationshipTypeExclusion relationshipTypeExclusion
+        ErDiagramRelationshipTypeExclusion relationshipTypeExclusion,
+        string? title
                              )
     {
         this.structureBuilder = structureBuilder;
         this.attributeTypeExclusion = attributeTypeExclusion;
         this.attributeDetailExclusions = attributeDetailExclusions;
         this.relationshipTypeExclusion = relationshipTypeExclusion;
+        this.title = title;
     }
 
     public string Generate(Assembly assembly, IReadOnlyList<ITypeFilter> typeFilters, IReadOnlyList<IPropertyFilter> attributeFilters, INameRewriter? nameRewriter, IDiagramFilter diagramFilter)
@@ -44,7 +48,7 @@ public class ErDiagramGenerator : IErDiagramGenerator
 
     private string GenerateErDiagramMermaid(IEnumerable<ErDiagramEntity> entities)
     {
-        var sb = new StringBuilder().AppendLine("erDiagram");
+        var sb = new StringBuilder().AppendDiagramTitle(title).AppendLine("erDiagram");
         AppendEntitiesToDiagram(entities, sb);
         if (relationshipTypeExclusion != ErDiagramRelationshipTypeExclusion.All)
         {
@@ -125,7 +129,7 @@ public class ErDiagramGenerator : IErDiagramGenerator
             {
                 sb.Append(" \"Null\"");
             }
-            else if (! string.IsNullOrEmpty(attribute.Comments)) 
+            else if (!string.IsNullOrEmpty(attribute.Comments))
             {
                 sb.Append($" \"{attribute.Comments}\"");
             }

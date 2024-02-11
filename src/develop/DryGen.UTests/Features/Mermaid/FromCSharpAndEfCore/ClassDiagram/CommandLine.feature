@@ -474,3 +474,29 @@ Scenario: Should tree shake Class diagram from argument
 			class Order
 		
 		"""
+
+Scenario: Should add title to  Class diagram from argument
+	Given this C# source code compiled to a file
+	# The commandline argument -i <this assembly filename> will be appended to the command line
+		"""
+		namespace Test
+		{
+			public class Order {
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                               |
+		| mermaid-class-diagram-from-csharp |
+		| --title                           |
+		| Diagram title                     |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		---
+		title: Diagram title
+		---
+		classDiagram
+			class Order
+		
+		"""

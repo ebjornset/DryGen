@@ -194,3 +194,46 @@ Examples:
 	| Verb                           |
 	| mermaid-er-diagram-from-csharp |
 	| mermaid-er-diagram-from-efcore |
+
+Scenario: Should generate Mermaid ER diagram code with title
+	Given this C# source code compiled to a file
+	# The commandline argument -i <this assembly filename> will be appended to the command line
+		"""
+		using Microsoft.EntityFrameworkCore;
+		namespace Test
+		{
+			public class Order {
+			}
+			public class TestDbContext: DbContext {
+				public DbSet<Order> Orders { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+				protected override void OnModelCreating(ModelBuilder modelBuilder)
+		        {
+		            modelBuilder.Entity<Order>().HasNoKey();
+				}
+			}
+		}
+		"""
+	When I call the program with this command line arguments
+		| Arg                  |
+		| <Verb>               |
+		| --title              |
+		| Diagram title        |
+		| --include-namespaces |
+		| ^Test$               |
+		| --exclude-typenames  |
+		| ^TestDbContext$      |
+	Then I should get exit code '0'
+	And I should get this generated representation file
+		"""
+		---
+		title: Diagram title
+		---
+		erDiagram
+			Order
+		
+		"""
+Examples:
+	| Verb                           |
+	| mermaid-er-diagram-from-csharp |
+	| mermaid-er-diagram-from-efcore |

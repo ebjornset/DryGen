@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace DryGen.MermaidFromCSharp;
@@ -53,5 +54,14 @@ public static class Extensions
             .Replace(first, "(?<before>[^ ])(?<after>([A-Z][^A-Zs]))", "${before} ${after}", RegexOptions.Compiled, TimeSpan.FromSeconds(1))
             .Trim();
         return result.ToLower();
+    }
+
+    public static StringBuilder AppendDiagramTitle(this StringBuilder sb, string? title)
+    {
+        if (!string.IsNullOrEmpty(title))
+        {
+            sb.AppendLine("---").Append("title: ").AppendLine(title).AppendLine("---");
+        }
+        return sb;
     }
 }
