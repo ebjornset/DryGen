@@ -138,8 +138,8 @@ Scenario: Generates ER attributes for well known type properties
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -167,7 +167,7 @@ Examples:
 	| Reflection        |
 	| EfCore            |
 
-Scenario: Generates ER attributes for enums
+Scenario: Generates ER attributes and relationship and entity for enum properties
 	Given this C# source code
 		"""
 		using Microsoft.EntityFrameworkCore;
@@ -181,31 +181,49 @@ Scenario: Generates ER attributes for enums
 			}
 			public class Order
 			{
-				public Status OrderStatus { get; set; }
+				public <Property type> Status { get; set; }
+			}
+			public class OrderLine
+			{
+				public <Property type> OrderLineStatus { get; set; }
 			}
 			public class TestDbContext: DbContext {
 				public DbSet<Order> Orders { get; set; }
+				public DbSet<OrderLine> OrderLines { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
+					modelBuilder.Entity<OrderLine>().HasNoKey();
 				}
 			}
 		}
 		"""
+	And the Er diagram relationship exclusion 'None'
 	When I generate an ER diagram using '<Structure builder>'
 	Then I should get this generated representation
 		"""
 		erDiagram
 			Order {
-				int OrderStatus
+				int Status <Attribute metadata>
 			}
+			OrderLine {
+				int OrderLineStatus <Attribute metadata>
+			}
+			Status {
+				int Completed "99"
+				int InProgress "1"
+			}
+			Order }o..<To cardinality> Status : ""
+			OrderLine }o..<To cardinality> Status : "OrderLineStatus"
 		
 		"""
 Examples:
-	| Structure builder |
-	| Reflection        |
-	| EfCore            |
+	| Structure builder | Property type | Attribute metadata | To cardinality |
+	| Reflection        | Status        | FK                 | \|\|           |
+	| Reflection        | Status?       | FK "Null"          | o\|            |
+	#| EfCore            | Status        | FK                    | \|\|           |
+	#| EfCore            | Status?       | FK "Null"             | o\|            |
 
 Scenario: Generates ER attributes with null comment for nullable well known type properties
 	Given this C# source code

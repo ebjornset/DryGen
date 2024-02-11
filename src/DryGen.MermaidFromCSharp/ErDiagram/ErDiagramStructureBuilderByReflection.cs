@@ -1,6 +1,7 @@
 ﻿using DryGen.Core;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Reflection;
 
@@ -15,8 +16,9 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
         return entities;
     }
 
-    private void GeneratieErStructure(IReadOnlyList<ErDiagramEntity> entities, IReadOnlyList<IPropertyFilter> attributeFilters)
+    private void GeneratieErStructure(IList<ErDiagramEntity> entities, IReadOnlyList<IPropertyFilter> attributeFilters)
     {
+        var enumEntities = new Dictionary<Type, ErDiagramEntity>();
         var entityLookup = entities.ToDictionary(x => x.Type, x => x);
         foreach (var entity in entities)
         {
@@ -44,9 +46,12 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
                 {
                     var attributeType = property.GetErDiagramAttributeTypeName();
                     var attributeName = property.Name;
-                    var isNullable = Nullable.GetUnderlyingType(property.PropertyType) != null;
+                    var nullableUnderlyingType = Nullable.GetUnderlyingType(property.PropertyType);
+                    var isNullable = nullableUnderlyingType != null;
                     var isPrimaryKey = property.CustomAttributes.Any(x => x.IsKeyAttribute());
-                    entity.AddAttribute(new ErDiagramAttribute(attributeType, attributeName, isNullable, isPrimaryKey));
+                    var enumType = nullableUnderlyingType ?? propertyType;
+                    var isEnum = enumType.AddToEntityAsRelationshipIfEnum(attributeName, isNullable, entity, enumEntities);
+                    entity.AddAttribute(new ErDiagramAttribute(attributeType, attributeName, isNullable, isPrimaryKey, isForeignKey: isEnum));
                 }
             }
         }
@@ -54,5 +59,6 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
         {
             entity.RemoveBidirectionalRelationshipDuplicates();
         }
+        enumEntities.AppendToEntities(entities);
     }
 }

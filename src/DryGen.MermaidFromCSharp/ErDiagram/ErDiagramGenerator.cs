@@ -125,6 +125,10 @@ public class ErDiagramGenerator : IErDiagramGenerator
             {
                 sb.Append(" \"Null\"");
             }
+            else if (! string.IsNullOrEmpty(attribute.Comments)) 
+            {
+                sb.Append($" \"{attribute.Comments}\"");
+            }
         }
     }
 
