@@ -33,24 +33,26 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
             .Select(et => new EfCoreErEntity(nameRewriter?.Rewrite(et.ClrType.Name) ?? et.ClrType.Name, et))
             .OrderBy(nt => nt.Name)
             .ThenBy(nt => nt.Type.Name)
-            .ThenBy(nt => nt.Type.Namespace).ToArray();
+            .ThenBy(nt => nt.Type.Namespace).ToList();
         GenerateErStructure(result, attributeFilters);
         return result;
     }
 
-    private static void GenerateErStructure(IReadOnlyList<EfCoreErEntity> entities, IReadOnlyList<IPropertyFilter> attributeFilters)
+    private static void GenerateErStructure(IList<EfCoreErEntity> entities, IReadOnlyList<IPropertyFilter> attributeFilters)
     {
+        var enumEntities = new Dictionary<Type, EfCoreErEntity>();
         var entityLookup = entities.ToDictionary(x => x.Type, x => x);
         foreach (var entity in entities)
         {
-            GenerateErAttributes(attributeFilters, entity);
+            GenerateErAttributes(attributeFilters, entity, enumEntities);
             GenerateErRelationships(entityLookup, entity);
         }
+        enumEntities.AppendToEntities(entities);
     }
 
     private static void GenerateErRelationships(Dictionary<Type, EfCoreErEntity> entityLookup, EfCoreErEntity entity)
     {
-        foreach (var foreignKey in entity.EntityType.GetForeignKeys())
+        foreach (var foreignKey in entity.EntityType?.GetForeignKeys() ?? throw new TypeMemberException($"EntityType was null for entity '{entity.Name}'"))
         {
             // Generate relationships from the principal side, since it makes the diagram flow from the principals to the dependents
             var principalType = foreignKey.PrincipalEntityType.ClrType;
@@ -110,19 +112,23 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
         principalEntity.AddRelationship(entity, fromCardianlity, toCardianlity, label, propertyName, isIdentifying);
     }
 
-    private static void GenerateErAttributes(IReadOnlyList<IPropertyFilter> attributeFilters, EfCoreErEntity entity)
+    private static void GenerateErAttributes(IReadOnlyList<IPropertyFilter> attributeFilters, EfCoreErEntity entity, Dictionary<Type, EfCoreErEntity> enumEntities)
     {
-        foreach (var efProperty in entity.EntityType.GetProperties().Where(p => p?.PropertyInfo != null && attributeFilters.All(f => f.Accepts(p.PropertyInfo))))
+        foreach (var efProperty in entity.EntityType?.GetProperties().Where(p => p?.PropertyInfo != null && attributeFilters.All(f => f.Accepts(p.PropertyInfo))) 
+            ?? throw new TypeMemberException($"EntityType was null for entity '{entity.Name}'"))
         {
             var propertyType = efProperty.ClrType;
             if (propertyType.IsErDiagramAttributePropertyType())
             {
                 var attributeType = propertyType.GetErDiagramAttributeTypeName();
                 var attributeName = efProperty.Name;
-                var isNullable = Nullable.GetUnderlyingType(propertyType) != null;
+                var nullableUnderlyingType = Nullable.GetUnderlyingType(propertyType);
+                var isNullable = nullableUnderlyingType != null;
                 var isPrimaryKey = efProperty.IsPrimaryKey();
                 var isAlternateKey = !isPrimaryKey && efProperty.IsKey();
-                var isForeignKey = efProperty.IsForeignKey();
+                var enumType = nullableUnderlyingType ?? propertyType;
+                var isEnum = enumType.AddToEntityAsRelationshipIfEnum(attributeName, isNullable, entity, enumEntities, x => new EfCoreErEntity(x.Name, x));
+                var isForeignKey = efProperty.IsForeignKey() || isEnum;
                 entity.AddAttribute(new ErDiagramAttribute(attributeType, attributeName, isNullable, isPrimaryKey, isAlternateKey, isForeignKey));
             }
         }
@@ -246,7 +252,11 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
             EntityType = entityType;
         }
 
-        public ModelEntityType EntityType { get; }
+        public EfCoreErEntity(string name, Type type) : base(name, type)
+        {
+        }
+
+        public ModelEntityType? EntityType { get; }
     }
 
     private sealed class ModelEntityTypeEqualityComparer : IEqualityComparer<ModelEntityType>

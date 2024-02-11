@@ -26,8 +26,8 @@ Scenario: Generates ER attributes only for public properties
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -59,8 +59,8 @@ Scenario: Generates ER attributes only for properties with getter and setter
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -96,8 +96,8 @@ Scenario: Generates ER attributes only for non collection properties
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -222,8 +222,8 @@ Examples:
 	| Structure builder | Property type | Attribute metadata | To cardinality |
 	| Reflection        | Status        | FK                 | \|\|           |
 	| Reflection        | Status?       | FK "Null"          | o\|            |
-	#| EfCore            | Status        | FK                    | \|\|           |
-	#| EfCore            | Status?       | FK "Null"             | o\|            |
+	| EfCore            | Status        | FK                 | \|\|           |
+	| EfCore            | Status?       | FK "Null"          | o\|            |
 
 Scenario: Generates ER attributes with null comment for nullable well known type properties
 	Given this C# source code
@@ -247,8 +247,8 @@ Scenario: Generates ER attributes with null comment for nullable well known type
 				public DbSet<Order> Orders { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            modelBuilder.Entity<Order>().HasNoKey();
+				{
+					modelBuilder.Entity<Order>().HasNoKey();
 				}
 			}
 		}
@@ -291,8 +291,8 @@ Scenario: Generates ER attributes as PK for properties with key attribute
 				public DbSet<A> Aaaa { get; set; }
 				public TestDbContext(DbContextOptions options) : base(options) {}
 				protected override void OnModelCreating(ModelBuilder modelBuilder)
-		        {
-		            //modelBuilder.Entity<A>().HasNoKey();
+				{
+					//modelBuilder.Entity<A>().HasNoKey();
 				}
 			}
 		}

@@ -101,7 +101,7 @@ public static class ErDiagramExtensions
         return cardinality == ErDiagramRelationshipCardinality.ZeroOrOne || cardinality == ErDiagramRelationshipCardinality.ExactlyOne;
     }
 
-    public static void AppendToEntities(this Dictionary<Type, ErDiagramEntity> enumEntities, IList<ErDiagramEntity> entities)
+    public static void AppendToEntities<TEntityType>(this Dictionary<Type, TEntityType> enumEntities, IList<TEntityType> entities) where TEntityType: ErDiagramEntity
     {
         foreach (var enumEntity in enumEntities.Values)
         {
@@ -115,14 +115,20 @@ public static class ErDiagramExtensions
         }
     }
 
-    public static bool AddToEntityAsRelationshipIfEnum(this Type enumType, string attributeName, bool isNullable, ErDiagramEntity entity, Dictionary<Type, ErDiagramEntity> enumEntities)
+    public static bool AddToEntityAsRelationshipIfEnum<TEntityType>(
+        this Type enumType, 
+        string attributeName, 
+        bool isNullable, 
+        ErDiagramEntity entity, 
+        Dictionary<Type, TEntityType> enumEntities, 
+        Func<Type, TEntityType> enumEntityFactory) where TEntityType : ErDiagramEntity
     {
         var isEnum = enumType.IsEnum;
         if (isEnum)
         {
             if (!enumEntities.TryGetValue(enumType, out var toEntity))
             {
-                toEntity = new ErDiagramEntity(enumType.Name, enumType);
+                toEntity = enumEntityFactory(enumType);
                 enumEntities[enumType] = toEntity;
             }
             var toCardinality = isNullable ? ErDiagramRelationshipCardinality.ZeroOrOne : ErDiagramRelationshipCardinality.ExactlyOne;

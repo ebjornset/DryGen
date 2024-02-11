@@ -50,7 +50,7 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
                     var isNullable = nullableUnderlyingType != null;
                     var isPrimaryKey = property.CustomAttributes.Any(x => x.IsKeyAttribute());
                     var enumType = nullableUnderlyingType ?? propertyType;
-                    var isEnum = enumType.AddToEntityAsRelationshipIfEnum(attributeName, isNullable, entity, enumEntities);
+                    var isEnum = enumType.AddToEntityAsRelationshipIfEnum(attributeName, isNullable, entity, enumEntities, x => new ErDiagramEntity(x.Name, x));
                     entity.AddAttribute(new ErDiagramAttribute(attributeType, attributeName, isNullable, isPrimaryKey, isForeignKey: isEnum));
                 }
             }
