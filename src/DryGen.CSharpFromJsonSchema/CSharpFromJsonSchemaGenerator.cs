@@ -1,4 +1,5 @@
-﻿using NJsonSchema;
+﻿using DryGen.Core;
+using NJsonSchema;
 using NJsonSchema.CodeGeneration.CSharp;
 using System;
 using System.IO;
@@ -64,6 +65,7 @@ public class CSharpFromJsonSchemaGenerator
 
     private async Task<JsonSchema> LoadJsonSchemaFromFile(string? jsonSchemaFileName, JsonSchemaFileFormat jsonSchemaFileFormat)
     {
+        jsonSchemaFileName = jsonSchemaFileName.AsNonNull();
         var extension = Path.GetExtension(jsonSchemaFileName);
         if (jsonSchemaFileFormat == JsonSchemaFileFormat.Yaml
             || (jsonSchemaFileFormat == JsonSchemaFileFormat.ByExtension

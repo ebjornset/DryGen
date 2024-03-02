@@ -72,4 +72,13 @@ public static class Extensions
             return result;
         }
     }
+
+    public static T AsNonNull<T>(this T? value)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+        return value;
+    }
 }

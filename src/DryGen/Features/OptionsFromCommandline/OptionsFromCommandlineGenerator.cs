@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DryGen.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -84,7 +85,7 @@ namespace DryGen.Features.OptionsFromCommandline
             var yamleMemberProperties = optionsTypeFromVerb.GetYamlMemberProperties(excludeDeprecated: true);
             foreach (var property in yamleMemberProperties)
             {
-                var alias = property.GetYamlMemberAttributeAlias().AsNonNull();
+                var alias = property.AsNonNull().GetYamlMemberAttributeAlias().AsNonNull();
                 var propertyTypeInfo = property.PropertyType.GeneratePropertyTypeInfo(asYamlComment: true, indention);
                 optionList.Add($"{indention}#{alias}: {propertyTypeInfo}");
             }
