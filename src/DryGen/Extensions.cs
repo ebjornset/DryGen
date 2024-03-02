@@ -114,15 +114,6 @@ public static class Extensions
         return options as TOptions ?? throw new ArgumentException($"Cannot cast options '{options}' as '{typeof(TOptions)}'", nameof(options));
     }
 
-    public static T AsNonNull<T>(this T? value)
-    {
-        if (value == null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-        return value;
-    }
-
     public static string ReadOptionsFileWithEnviromentVariableReplacement(this string optionsFile)
     {
         var startIndex = 0;

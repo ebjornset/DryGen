@@ -1,4 +1,5 @@
-﻿using DryGen.Features.CSharpFromJsonSchema;
+﻿using DryGen.Core;
+using DryGen.Features.CSharpFromJsonSchema;
 using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
 using DryGen.Features.Mermaid.FromCsharp.ErDiagram;
 using DryGen.Features.Mermaid.FromDotnetDepsJson.C4ComponentDiagram;
