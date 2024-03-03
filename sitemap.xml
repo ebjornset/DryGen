@@ -77,10 +77,10 @@
 <loc>/about/</loc>
 </url>
 <url>
-<loc>/verbs/</loc>
+<loc>/examples/</loc>
 </url>
 <url>
-<loc>/examples/</loc>
+<loc>/verbs/</loc>
 </url>
 <url>
 <loc>/</loc>
@@ -129,10 +129,10 @@
 </url>
 <url>
 <loc>/about/specs/drygen-itests.html</loc>
-<lastmod>2023-11-28T20:47:41+00:00</lastmod>
+<lastmod>2024-03-03T09:14:37+00:00</lastmod>
 </url>
 <url>
 <loc>/about/specs/drygen-utests.html</loc>
-<lastmod>2023-11-28T20:47:40+00:00</lastmod>
+<lastmod>2024-03-03T09:14:36+00:00</lastmod>
 </url>
 </urlset>

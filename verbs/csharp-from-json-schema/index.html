@@ -235,6 +235,12 @@
       <td>byextension / json / yaml</td>
       <td>What format should be used when reading the schema file? ‘ByExtension’ (default) treats files with extension ‘yaml’ or ‘yml’ as yaml, others as json. Use ‘Yaml’ or ‘Json’ to force the format explicitly.</td>
     </tr>
+    <tr>
+      <td>–title</td>
+      <td> </td>
+      <td>string</td>
+      <td>Diagram title.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -269,6 +275,7 @@
 #replace-token-in-output-file: string
 #root-classname: string
 #schema-file-format: byextension | json | yaml
+#title: string
 </code></pre></div></div>
 <div x-data="{visible: true}">
     <div class="notification is-dark" x-show.transition.duration.300ms="visible">
