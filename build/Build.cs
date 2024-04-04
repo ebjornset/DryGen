@@ -10,7 +10,6 @@ using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Utilities.Collections;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -143,7 +142,7 @@ public partial class Build : NukeBuild
                      var workingDirectory = Path.Combine(templateProjectDirectory, "templates", templateProject);
                      DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
                      DotNetToolUpdate(c => c
-                         .SetPackageName("dry-gen")
+                         .SetPackageName(DrygenPackageName)
                          .AddSources(ArtifactsDirectory)
                          .SetProcessWorkingDirectory(workingDirectory)
                          .SetVersion(GitVersion.NuGetVersionV2)
@@ -186,7 +185,7 @@ public partial class Build : NukeBuild
                  var workingDirectory = GetProject("develop", "DryGen.ITests").Directory;
                  DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
                  DotNetToolUpdate(c => c
-                     .SetPackageName("dry-gen")
+                     .SetPackageName(DrygenPackageName)
                      .AddSources(ArtifactsDirectory)
                      .SetProcessWorkingDirectory(workingDirectory)
                      .SetVersion(GitVersion.NuGetVersionV2)
@@ -249,7 +248,7 @@ public partial class Build : NukeBuild
         {
             try
             {
-                DotNetToolUninstall(c => c.SetGlobal(true).SetPackageName("dry-gen").SetProcessLogOutput(false));
+                DotNetToolUninstall(c => c.SetGlobal(true).SetPackageName(DrygenPackageName).SetProcessLogOutput(false));
             }
             catch
             {
@@ -258,7 +257,7 @@ public partial class Build : NukeBuild
             var workingDirectory = GetProject("develop", "DryGen.ITests").Directory;
             DotNetToolInstall(c => c
                 .SetGlobal(true)
-                .SetPackageName("dry-gen")
+                .SetPackageName(DrygenPackageName)
                 .AddSources(ArtifactsDirectory)
                 .SetProcessWorkingDirectory(workingDirectory)
                 .SetVersion(GitVersion.NuGetVersionV2)
@@ -302,4 +301,5 @@ public partial class Build : NukeBuild
 
     private static AbsolutePath DocsDirectory => RootDirectory / "docs";
     private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
+    private const string DrygenPackageName = "dry-gen";
 }
