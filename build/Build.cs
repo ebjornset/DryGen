@@ -74,12 +74,15 @@ public partial class Build : NukeBuild
             IsVersionTag = GitRepository != null && (GitRepository.Branch?.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase) ?? false);
             Log.Information("ToolsDescription = '{ToolsDescription}'", ToolsDescription);
             Log.Information("TemplatesDescription = '{TemplatesDescription}'", TemplatesDescription);
+#pragma warning disable S6664
+            // S6664: Reduce the number of Information logging calls within this code block from 8 to the 2 allowed.
             Log.Information("Copyright = '{Copyright}'", Copyright);
             Log.Information("GitRepository = '{GitRepository}'", GitRepository);
             Log.Information("GitRepository.Branch = '{GitRepositoryBranch}'", GitRepository?.Branch);
             Log.Information("GitRepository.Tags = '{GitRepositoryTags}'", GitRepository?.Tags);
             Log.Information("IsVersionTag = '{IsVersionTag}'", IsVersionTag);
             Log.Information("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'", GitVersion.NuGetVersionV2);
+#pragma warning restore S6664
         });
 
     internal Target Restore => _ => _
