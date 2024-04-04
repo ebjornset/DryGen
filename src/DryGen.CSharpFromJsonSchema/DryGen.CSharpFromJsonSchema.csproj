@@ -7,7 +7,9 @@
 	<ItemGroup>
 		<PackageReference Include="NJsonSchema.CodeGeneration.CSharp" Version="11.0.0" />
 		<PackageReference Include="NJsonSchema.Yaml" Version="11.0.0" />
+		<!-- Workaround to fix https://github.com/ebjornset/DryGen/issues/94 begin -->
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="8.0.0" />
+		<!-- Workaround to fix https://github.com/ebjornset/DryGen/issues/94 end -->
 	</ItemGroup>
 
 	<ItemGroup>
