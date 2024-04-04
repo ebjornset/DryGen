@@ -1,5 +1,5 @@
 ﻿using DryGen.UTests.Helpers;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace DryGen.UTests.Steps;
 

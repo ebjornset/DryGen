@@ -73,7 +73,7 @@ public static class Extensions
         }
     }
 
-    public static T AsNonNull<T>(this T? value)
+    public static T AsNonNull<T>(this T? value) where T : class
     {
         if (value == null)
         {

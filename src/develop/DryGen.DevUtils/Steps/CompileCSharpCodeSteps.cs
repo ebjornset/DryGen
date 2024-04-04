@@ -1,5 +1,5 @@
 ﻿using DryGen.DevUtils.Helpers;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace DryGen.DevUtils.Steps;
 
@@ -13,19 +13,19 @@ public sealed class CompileCSharpCodeSteps
         this.assemblyContext = assemblyContext;
     }
 
-    [Given(@"this C\# source code")]
+    [Given(@"this C# source code")]
     public void GivenThisCSharpSourceCode(string code)
     {
         assemblyContext.CompileCodeToMemory(code);
     }
 
-    [Given(@"this C\# source code compiled to a file")]
+    [Given(@"this C# source code compiled to a file")]
     public void GivenThisCSourceCodeCompiledToAFile(string code)
     {
         assemblyContext.CompileCodeToFileAsInputFile(code);
     }
 
-    [Given(@"this C\# source code compiled to a file that is referenced as the environment variable ""([^""]*)""")]
+    [Given(@"this C# source code compiled to a file that is referenced as the environment variable ""([^""]*)""")]
     public void GivenThisCSourceCodeCompiledToAFileThatIsReferencedAsTheEnvironmentVariable(string enviromentVariable, string code)
     {
         assemblyContext.CompileCodeToFileAsEnvironmentVariable(code, enviromentVariable);

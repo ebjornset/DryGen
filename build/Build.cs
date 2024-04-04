@@ -10,7 +10,6 @@ using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Utilities.Collections;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -27,7 +26,7 @@ public partial class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-    public static int Main() => Execute<Build>(x => x.Clean, x => x.UTests, x => x.ITests, x => x.Docs, x => x.Specs);
+    public static int Main() => Execute<Build>(x => x.Clean, x => x.UTests, x => x.ITests, x => x.Docs);
 
     [Parameter("Configuration to build - Default is 'Release'")]
     internal readonly Configuration Configuration = Configuration.Release;
@@ -75,12 +74,15 @@ public partial class Build : NukeBuild
             IsVersionTag = GitRepository != null && (GitRepository.Branch?.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase) ?? false);
             Log.Information("ToolsDescription = '{ToolsDescription}'", ToolsDescription);
             Log.Information("TemplatesDescription = '{TemplatesDescription}'", TemplatesDescription);
+#pragma warning disable S6664
+            // S6664: Reduce the number of Information logging calls within this code block from 8 to the 2 allowed.
             Log.Information("Copyright = '{Copyright}'", Copyright);
             Log.Information("GitRepository = '{GitRepository}'", GitRepository);
             Log.Information("GitRepository.Branch = '{GitRepositoryBranch}'", GitRepository?.Branch);
             Log.Information("GitRepository.Tags = '{GitRepositoryTags}'", GitRepository?.Tags);
             Log.Information("IsVersionTag = '{IsVersionTag}'", IsVersionTag);
             Log.Information("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'", GitVersion.NuGetVersionV2);
+#pragma warning restore S6664
         });
 
     internal Target Restore => _ => _
@@ -108,14 +110,13 @@ public partial class Build : NukeBuild
 
     internal Target UTests => _ => _
         .DependsOn(Compile)
+        .Before(Pack)
         .Executes(() =>
         {
             DotNetTest(c => c
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
                 .SetDataCollector("XPlat Code Coverage")
-                .SetBlameHangTimeout("45sec")
-                .SetBlameHangDumpType("mini")
                 .CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
                     settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
         });
@@ -144,7 +145,7 @@ public partial class Build : NukeBuild
                      var workingDirectory = Path.Combine(templateProjectDirectory, "templates", templateProject);
                      DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
                      DotNetToolUpdate(c => c
-                         .SetPackageName("dry-gen")
+                         .SetPackageName(DrygenPackageName)
                          .AddSources(ArtifactsDirectory)
                          .SetProcessWorkingDirectory(workingDirectory)
                          .SetVersion(GitVersion.NuGetVersionV2)
@@ -180,13 +181,14 @@ public partial class Build : NukeBuild
     internal Target ITests => _ => _
              .DependsOn(Pack)
              .DependsOn(Init)
+             .Before(Docs)
              .Executes(() =>
              {
                  // Install the artifact as a local dotnet tool in the ITests project
                  var workingDirectory = GetProject("develop", "DryGen.ITests").Directory;
                  DotNet("new tool-manifest --force", workingDirectory: workingDirectory, logOutput: true, logInvocation: true);
                  DotNetToolUpdate(c => c
-                     .SetPackageName("dry-gen")
+                     .SetPackageName(DrygenPackageName)
                      .AddSources(ArtifactsDirectory)
                      .SetProcessWorkingDirectory(workingDirectory)
                      .SetVersion(GitVersion.NuGetVersionV2)
@@ -203,30 +205,6 @@ public partial class Build : NukeBuild
                                  .SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.RunAsTool", "some value")
                                  .SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.WorkingDirectory", workingDirectory))
                      , degreeOfParallelism: 4, completeOnFailure: true);
-             });
-
-    internal Target Specs => _ => _
-             .DependsOn(UTests)
-             .DependsOn(ITests)
-             .Executes(() =>
-             {
-                 DotNetToolUpdate(c => c.SetGlobal(true).SetPackageName("SpecFlow.Plus.LivingDoc.CLI"));
-                 var subprojectNames = new Dictionary<string, string> { { "UTests", "Unit tests" }, { "ITests", "Integration tests" } };
-                 foreach (var testProject in new[] { "UTests", "ITests" })
-                 {
-                     var arguments = new[]
-                     {
-                         "test-assembly",
-                         "--title",
-                         $"\"DryGen {subprojectNames[testProject]}\"",
-                         $"./**/*.{testProject}/bin/{Configuration}/net6.0/*.{testProject}.dll",
-                         "-t",
-                         $"./**/*.{testProject}/bin/{Configuration}/net6.0/.specflow.livingdoc.data.json",
-                         "--output",
-                         $"{DocsDirectory}/about/specs/drygen-{testProject.ToLowerInvariant()}.html",
-                     };
-                     ProcessTasks.StartProcess("livingdoc", arguments: string.Join(' ', arguments), logOutput: true, logInvocation: true).AssertZeroExitCode();
-                 }
              });
 
     internal Target Docs => _ => _
@@ -248,7 +226,6 @@ public partial class Build : NukeBuild
         .DependsOn(UTests)
         .DependsOn(ITests)
         .DependsOn(Docs)
-        .DependsOn(Specs)
         .DependsOn(Pack)
         .OnlyWhenDynamic(() => IsVersionTag)
         .Requires(() => NuGetSource)
@@ -274,7 +251,7 @@ public partial class Build : NukeBuild
         {
             try
             {
-                DotNetToolUninstall(c => c.SetGlobal(true).SetPackageName("dry-gen").SetProcessLogOutput(false));
+                DotNetToolUninstall(c => c.SetGlobal(true).SetPackageName(DrygenPackageName).SetProcessLogOutput(false));
             }
             catch
             {
@@ -283,7 +260,7 @@ public partial class Build : NukeBuild
             var workingDirectory = GetProject("develop", "DryGen.ITests").Directory;
             DotNetToolInstall(c => c
                 .SetGlobal(true)
-                .SetPackageName("dry-gen")
+                .SetPackageName(DrygenPackageName)
                 .AddSources(ArtifactsDirectory)
                 .SetProcessWorkingDirectory(workingDirectory)
                 .SetVersion(GitVersion.NuGetVersionV2)
@@ -327,4 +304,5 @@ public partial class Build : NukeBuild
 
     private static AbsolutePath DocsDirectory => RootDirectory / "docs";
     private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
+    private const string DrygenPackageName = "dry-gen";
 }

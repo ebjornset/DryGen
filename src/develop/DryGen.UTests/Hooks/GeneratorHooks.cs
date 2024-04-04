@@ -4,7 +4,7 @@ using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using DryGen.MermaidFromEfCore;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace DryGen.UTests.Hooks;
 
