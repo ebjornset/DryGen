@@ -1,7 +1,7 @@
 ﻿using DryGen.DevUtils.Helpers;
 using DryGen.MermaidFromCSharp.ClassDiagram;
 using DryGen.UTests.Helpers;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace DryGen.UTests.Steps;
 

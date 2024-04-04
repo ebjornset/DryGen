@@ -1,6 +1,6 @@
 ﻿using DryGen.UTests.Helpers;
 using FluentAssertions;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace DryGen.UTests.Steps;
 

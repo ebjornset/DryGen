@@ -179,6 +179,7 @@ public partial class Build : NukeBuild
     internal Target ITests => _ => _
              .DependsOn(Pack)
              .DependsOn(Init)
+             .Before(Docs)
              .Executes(() =>
              {
                  // Install the artifact as a local dotnet tool in the ITests project

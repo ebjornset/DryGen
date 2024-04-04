@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace DryGen.ITests.Steps;
 

@@ -4,8 +4,8 @@ using DryGen.UTests.Helpers;
 using FluentAssertions;
 using System.Collections.Generic;
 using System.Linq;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll;
+using Reqnroll.Assist;
 
 namespace DryGen.UTests.Steps;
 

@@ -3,7 +3,7 @@ using DryGen.UTests.Helpers;
 using FluentAssertions;
 using System;
 using System.IO;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace DryGen.UTests.Steps;
 
