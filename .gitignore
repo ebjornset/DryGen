@@ -402,3 +402,6 @@ vendor/
 
 # Nuke temporary files
 .nuke/temp
+
+# azd (Azure Developer CLI)
+.azure
