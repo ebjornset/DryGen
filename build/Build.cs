@@ -27,7 +27,7 @@ public partial class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-    public static int Main() => Execute<Build>(x => x.Clean, x => x.UTests, x => x.ITests, x => x.Docs, x => x.Specs);
+    public static int Main() => Execute<Build>(x => x.Clean, x => x.UTests, x => x.ITests, x => x.Docs);
 
     [Parameter("Configuration to build - Default is 'Release'")]
     internal readonly Configuration Configuration = Configuration.Release;
@@ -108,14 +108,13 @@ public partial class Build : NukeBuild
 
     internal Target UTests => _ => _
         .DependsOn(Compile)
+        .Before(Pack)
         .Executes(() =>
         {
             DotNetTest(c => c
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
                 .SetDataCollector("XPlat Code Coverage")
-                .SetBlameHangTimeout("45sec")
-                .SetBlameHangDumpType("mini")
                 .CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
                     settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
         });
@@ -205,30 +204,6 @@ public partial class Build : NukeBuild
                      , degreeOfParallelism: 4, completeOnFailure: true);
              });
 
-    internal Target Specs => _ => _
-             .DependsOn(UTests)
-             .DependsOn(ITests)
-             .Executes(() =>
-             {
-                 DotNetToolUpdate(c => c.SetGlobal(true).SetPackageName("SpecFlow.Plus.LivingDoc.CLI"));
-                 var subprojectNames = new Dictionary<string, string> { { "UTests", "Unit tests" }, { "ITests", "Integration tests" } };
-                 foreach (var testProject in new[] { "UTests", "ITests" })
-                 {
-                     var arguments = new[]
-                     {
-                         "test-assembly",
-                         "--title",
-                         $"\"DryGen {subprojectNames[testProject]}\"",
-                         $"./**/*.{testProject}/bin/{Configuration}/net6.0/*.{testProject}.dll",
-                         "-t",
-                         $"./**/*.{testProject}/bin/{Configuration}/net6.0/.specflow.livingdoc.data.json",
-                         "--output",
-                         $"{DocsDirectory}/about/specs/drygen-{testProject.ToLowerInvariant()}.html",
-                     };
-                     ProcessTasks.StartProcess("livingdoc", arguments: string.Join(' ', arguments), logOutput: true, logInvocation: true).AssertZeroExitCode();
-                 }
-             });
-
     internal Target Docs => _ => _
         .DependsOn(Init)
         .DependsOn(Compile)
@@ -248,7 +223,6 @@ public partial class Build : NukeBuild
         .DependsOn(UTests)
         .DependsOn(ITests)
         .DependsOn(Docs)
-        .DependsOn(Specs)
         .DependsOn(Pack)
         .OnlyWhenDynamic(() => IsVersionTag)
         .Requires(() => NuGetSource)
