@@ -241,7 +241,9 @@ public partial class Build : NukeBuild
             .SetSource(NuGetSource)
             .EnableNoSymbols()
             .CombineWith(packages,
-                (v, path) => v.SetTargetPath(path)));
+                (v, path) => v.SetTargetPath(path)),
+            degreeOfParallelism: 2
+            );
         });
 
     internal Target Dev_InstallGlobalTool => _ => _
