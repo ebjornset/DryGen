@@ -55,7 +55,7 @@ public partial class Build : NukeBuild
     internal static AbsolutePath SourceDirectory => RootDirectory / "src";
     internal static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     internal static AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
-    internal static AbsolutePath ArtifactsTempDirectory => RootDirectory / "temp";
+    internal static AbsolutePath ArtifactsTempDirectory => ArtifactsDirectory / "temp";
 
     internal Target Clean => _ => _
         .Before(Restore)
