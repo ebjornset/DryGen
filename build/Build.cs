@@ -32,7 +32,7 @@ public partial class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Release'")]
     internal readonly Configuration Configuration = Configuration.Release;
 
-    [Parameter("The Nuget source url")]
+    [Parameter("The Nuget source url", List = false)]
     internal readonly string NuGetSource = "https://api.nuget.org/v3/index.json";
 
     [Parameter("The api key to use when pushing to Nuget")]
@@ -55,7 +55,6 @@ public partial class Build : NukeBuild
     internal static AbsolutePath SourceDirectory => RootDirectory / "src";
     internal static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     internal static AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
-    internal static AbsolutePath ArtifactsTempDirectory => ArtifactsDirectory / "temp";
 
     internal Target Clean => _ => _
         .Before(Restore)
@@ -156,7 +155,7 @@ public partial class Build : NukeBuild
                  // Rebuild the templates before we create the package, to use the newly generated .config/dotnet-tools.json in the templates
                  DotNetBuild(s => s
                      .SetProjectFile(Solution.GetProject("DryGen.Templates"))
-                     .SetOutputDirectory(ArtifactsTempDirectory)
+                     .SetOutputDirectory(TemporaryDirectory)
                      .SetConfiguration(Configuration)
                      .SetAssemblyVersion(GitVersion.AssemblySemVer)
                      .SetFileVersion(GitVersion.AssemblySemFileVer)
