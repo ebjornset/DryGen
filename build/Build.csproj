@@ -14,6 +14,9 @@
 	<ItemGroup>
 		<PackageReference Include="Nuke.Common" Version="8.0.0" />
 		<PackageDownload Include="GitVersion.Tool" Version="[5.10.3]" />
+		<!-- Workaround to fix https://github.com/ebjornset/DryGen/issues/95 begin -->
+		<PackageReference Include="NuGet.Packaging" Version="6.9.1" />
+		<!-- Workaround to fix https://github.com/ebjornset/DryGen/issues/95 end -->
 	</ItemGroup>
 
 	<ItemGroup>

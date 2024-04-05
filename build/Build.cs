@@ -13,6 +13,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 namespace DryGen.Build;
@@ -72,17 +73,15 @@ public partial class Build : NukeBuild
             Authors = "Eirik Bjornset";
             Copyright = $"Copyright 2022-{DateTime.Today.Year} {Authors}";
             IsVersionTag = GitRepository != null && (GitRepository.Branch?.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase) ?? false);
-            Log.Information("ToolsDescription = '{ToolsDescription}'", ToolsDescription);
-            Log.Information("TemplatesDescription = '{TemplatesDescription}'", TemplatesDescription);
-#pragma warning disable S6664
-            // S6664: Reduce the number of Information logging calls within this code block from 8 to the 2 allowed.
-            Log.Information("Copyright = '{Copyright}'", Copyright);
-            Log.Information("GitRepository = '{GitRepository}'", GitRepository);
-            Log.Information("GitRepository.Branch = '{GitRepositoryBranch}'", GitRepository?.Branch);
-            Log.Information("GitRepository.Tags = '{GitRepositoryTags}'", GitRepository?.Tags);
-            Log.Information("IsVersionTag = '{IsVersionTag}'", IsVersionTag);
-            Log.Information("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'", GitVersion.NuGetVersionV2);
-#pragma warning restore S6664
+            Log.Information(new StringBuilder().AppendLine()
+            .AppendLine("ToolsDescription = '{ToolsDescription}'")
+            .AppendLine("TemplatesDescription = '{TemplatesDescription}")
+            .AppendLine("Copyright = '{Copyright}'")
+            .AppendLine("GitRepository = '{GitRepository}'")
+            .AppendLine("GitRepository.Branch = '{GitRepositoryBranch}'")
+            .AppendLine("GitRepository.Tags = '{GitRepositoryTags}'")
+            .AppendLine("IsVersionTag = '{IsVersionTag}'")
+            .AppendLine("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'").ToString(), ToolsDescription, TemplatesDescription, Copyright, GitRepository, GitRepository?.Branch, GitRepository?.Tags, IsVersionTag, GitVersion.NuGetVersionV2);
         });
 
     internal Target Restore => _ => _

@@ -15,6 +15,11 @@
 		<PackageReference Include="FluentAssertions" Version="6.12.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
 		<PackageReference Include="Reqnroll.xUnit" Version="1.0.1" />
+		<!-- Workaround to fix https://github.com/ebjornset/DryGen/issues/98 begin -->
+		<PackageReference Include="xunit.core" Version="2.7.0" />
+		<PackageReference Include="xunit.extensibility.execution" Version="2.7.0" />
+		<PackageReference Include="xunit.extensibility.core" Version="2.7.0" />
+		<!-- Workaround to fix https://github.com/ebjornset/DryGen/issues/98 end -->
 	</ItemGroup>
 
 	<ItemGroup>
