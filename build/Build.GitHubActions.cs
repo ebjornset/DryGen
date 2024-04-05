@@ -10,7 +10,7 @@ namespace DryGen.Build;
     GitHubActionsImage.UbuntuLatest,
     FetchDepth = 0,
     OnPullRequestBranches = new[] { "main" },
-    PublishArtifacts = false,
+    PublishArtifacts = true,
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" }),
 ]
 [SonarCloudGitHubActions(
