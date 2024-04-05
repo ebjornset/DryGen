@@ -54,7 +54,7 @@ jobs:
           dotnet tool update dotnet-reportgenerator-globaltool --global
       - name: Begin SonarCloud scan
         run:
-          dotnet-sonarscanner begin /k:"ebjornset_DryGen" /o:"ebjornset" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="./.sonarqubecoverage/SonarQube.xml"
+          dotnet-sonarscanner begin /k:"ebjornset_DryGen" /o:"ebjornset" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="./.sonarqubecoverage/SonarQube.xml"
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
         uses: actions/cache@v3
         with:
