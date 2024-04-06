@@ -1,41 +1,38 @@
+using DryGen.GithubActions.DotNet;
 using DryGen.GithubActions.GhPages;
 using DryGen.GithubActions.NugetPush;
-using DryGen.GithubActions.SonarCloud;
 using Nuke.Common.CI.GitHubActions;
 
 namespace DryGen.Build;
 
-[SonarCloudGitHubActions(
+[DotNetGitHubActions(
     name: "pr",
-    GitHubActionsImage.UbuntuLatest,
-    FetchDepth = 0,
     OnPullRequestBranches = new[] { "main" },
+    InvokedTargets = new[] { nameof(CiCd_PullRequest) },
     PublishArtifacts = true,
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" }),
-]
-[SonarCloudGitHubActions(
+    ImportSecrets = new[] { nameof(SonarToken) }
+)]
+[DotNetGitHubActions(
     name: "build",
-    GitHubActionsImage.UbuntuLatest,
-    FetchDepth = 0,
     OnPushBranches = new[] { "main" },
     OnWorkflowDispatchOptionalInputs = new[] { "dummy" },
+    InvokedTargets = new[] { nameof(CiCd_Build) },
     PublishArtifacts = true,
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
-]
+    ImportSecrets = new[] { nameof(SonarToken) }
+)]
 [NugetPushGitHubActions(
     name: "release",
-    GitHubActionsImage.UbuntuLatest,
-    FetchDepth = 0,
     OnPushTags = new[] { "v*.*.*" },
+    InvokedTargets = new[] { nameof(CiCd_Release) },
     PublishArtifacts = true,
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
-]
+    ImportSecrets = new[] { nameof(NuGetApiKey), nameof(SonarToken) }
+)]
 [GhPagesGitHubActions(
     name: "publish-docs",
-    GitHubActionsImage.UbuntuLatest,
-    FetchDepth = 0,
     On = new[] { GitHubActionsTrigger.WorkflowDispatch },
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
-]
+    InvokedTargets = new[] { nameof(CiCd_BuildDocs) },
+    PublishArtifacts = false
+)]
 public partial class Build
-{ }
+{
+}

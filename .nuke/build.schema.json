@@ -81,17 +81,27 @@
           "items": {
             "type": "string",
             "enum": [
+              "BuildDocs",
+              "CiCd_Build",
+              "CiCd_BuildDocs",
+              "CiCd_Default",
+              "CiCd_PullRequest",
+              "CiCd_Release",
               "Clean",
               "Compile",
+              "Default",
               "Dev_InstallGlobalTool",
               "Dev_InstallTemplates",
               "Dev_StartDocsSite",
-              "Docs",
+              "GenerateDocs",
+              "GitWorkingCopyShouldBeClean",
               "Init",
               "ITests",
               "Pack",
               "Push",
               "Restore",
+              "SonarCloudBegin",
+              "SonarCloudEnd",
               "UTests"
             ]
           }
@@ -100,23 +110,38 @@
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"
         },
+        "SonarToken": {
+          "type": "string",
+          "description": "The token to use when running SonarClound analyzis",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
         "Target": {
           "type": "array",
           "description": "List of targets to be invoked. Default is '{default_target}'",
           "items": {
             "type": "string",
             "enum": [
+              "BuildDocs",
+              "CiCd_Build",
+              "CiCd_BuildDocs",
+              "CiCd_Default",
+              "CiCd_PullRequest",
+              "CiCd_Release",
               "Clean",
               "Compile",
+              "Default",
               "Dev_InstallGlobalTool",
               "Dev_InstallTemplates",
               "Dev_StartDocsSite",
-              "Docs",
+              "GenerateDocs",
+              "GitWorkingCopyShouldBeClean",
               "Init",
               "ITests",
               "Pack",
               "Push",
               "Restore",
+              "SonarCloudBegin",
+              "SonarCloudEnd",
               "UTests"
             ]
           }

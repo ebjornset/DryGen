@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace DryGen.GithubActions.DotNet;
 
-public class DotNetGitHubActionsAttribute : GitHubActionsAttribute
+public class DotNetGitHubActionsAttribute : BaseActionsAttribute
 {
-    public DotNetGitHubActionsAttribute(string name, GitHubActionsImage image, params GitHubActionsImage[] images) : base(name, image, images)
+    public DotNetGitHubActionsAttribute(string name) : base(name)
     {
     }
 
