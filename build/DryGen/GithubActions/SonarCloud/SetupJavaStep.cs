@@ -10,7 +10,7 @@ public class SetupJavaStep : GitHubActionsStep
         writer.WriteLine("- name: Setup JDK (for SonarCloud)");
         using (writer.Indent())
         {
-            writer.WriteLine("uses: actions/setup-java@v3");
+            writer.WriteLine("uses: actions/setup-java@v4");
             writer.WriteLine("with:");
             using (writer.Indent())
             {
