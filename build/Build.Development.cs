@@ -12,7 +12,6 @@ namespace DryGen.Build;
 public partial class Build
 {
     internal Target Dev_InstallGlobalTool => _ => _
-        .DependsOn(Init)
         .DependsOn(Pack)
         .Executes(() =>
         {
@@ -36,7 +35,6 @@ public partial class Build
         });
 
     internal Target Dev_InstallTemplates => _ => _
-        .DependsOn(Init)
         .DependsOn(Pack)
         .Executes(() =>
         {

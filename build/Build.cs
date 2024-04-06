@@ -226,12 +226,12 @@ public partial class Build : NukeBuild
                 .SetApplicationArguments($"--root-directory {RootDirectory}")
                 .EnableNoBuild()
                 .SetNoLaunchProfile(true)
-                .SetProcessWorkingDirectory(RootDirectory)
-                     );
+            );
         });
 
     internal Target BuildDocs => _ => _
         .After(GenerateDocs)
+        .Before(Push)
         .Executes(() =>
         {
             ProcessTasks.StartProcess("bundle", arguments: string.Join(' ', "install", "--jobs=4", "--retry=3"), workingDirectory: DocsDirectory.ToString(), logOutput: true, logInvocation: true).AssertZeroExitCode();
@@ -239,17 +239,12 @@ public partial class Build : NukeBuild
         });
 
     internal Target Push => _ => _
-        .DependsOn(UTests)
-        .DependsOn(ITests)
-        .DependsOn(GenerateDocs)
-        .DependsOn(Pack)
-        .DependsOn(BuildDocs)
-        .Requires(() => GitRepository.IsOnVersionTag())
+        .DependsOn(Default)
+        .DependsOn(GitWorkingCopyShouldBeClean)
         .Requires(() => GitRepository.IsOnVersionTag())
         .Requires(() => NuGetSource)
         .Requires(() => NuGetApiKey)
         .Requires(() => Configuration.Equals(Configuration.Release))
-        .After(GitWorkingCopyShouldBeClean)
         .Executes(() =>
         {
             var packages = ArtifactsDirectory.GlobFiles("*.nupkg");

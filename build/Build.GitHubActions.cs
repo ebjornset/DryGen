@@ -33,6 +33,12 @@ namespace DryGen.Build;
     InvokedTargets = new[] { nameof(CiCd_BuildDocs) },
     PublishArtifacts = false
 )]
+[DotNetGitHubActions(
+    name: "tag-version",
+    OnWorkflowDispatchRequiredInputs = new[] { "version" },
+    InvokedTargets = new[] { nameof(CiCd_TagVersion) },
+    ImportSecrets = new[] { nameof(SonarToken) }
+)]
 public partial class Build
 {
 }
