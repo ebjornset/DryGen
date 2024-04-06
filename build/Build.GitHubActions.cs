@@ -7,6 +7,7 @@ namespace DryGen.Build;
 
 [DotNetGitHubActions(
     name: "pr",
+    needsJava: true,
     OnPullRequestBranches = new[] { "main" },
     InvokedTargets = new[] { nameof(CiCd_PullRequest) },
     PublishArtifacts = true,
@@ -14,6 +15,7 @@ namespace DryGen.Build;
 )]
 [DotNetGitHubActions(
     name: "build",
+    needsJava: true,
     OnPushBranches = new[] { "main" },
     OnWorkflowDispatchOptionalInputs = new[] { "dummy" },
     InvokedTargets = new[] { nameof(CiCd_Build) },
@@ -35,6 +37,7 @@ namespace DryGen.Build;
 )]
 [DotNetGitHubActions(
     name: "tag-version",
+    needsJava: false,
     OnWorkflowDispatchRequiredInputs = new[] { "version" },
     InvokedTargets = new[] { nameof(CiCd_TagVersion) },
     ImportSecrets = new[] { nameof(SonarToken) }

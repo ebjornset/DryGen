@@ -3,7 +3,7 @@ using Nuke.Common.Utilities;
 
 namespace DryGen.GithubActions.GhPages;
 
-public class GitHubActionsSetupRubyStep : GitHubActionsStep
+public class SetupRubyStep : GitHubActionsStep
 {
     public override void Write(CustomFileWriter writer)
     {

@@ -8,14 +8,17 @@ namespace DryGen.GithubActions.GhPages;
 
 public class GhPagesGitHubActionsAttribute : DotNetGitHubActionsAttribute
 {
-    public GhPagesGitHubActionsAttribute(string name) : base(name)
+    public GhPagesGitHubActionsAttribute(string name, bool needsJava = false) : base(name, needsJava)
     {
     }
 
     protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
         var job = base.GetJobs(image, relevantTargets);
-        job = GhPagesGitHubActionsJobSetup.ConfigureJob(job, rubyStepOffset: 2, prepareDocsForDeploymentStepOffset: 0);
+        var newSteps = new List<GitHubActionsStep>(job.Steps);
+        newSteps.Insert(newSteps.Count - 2, new SetupRubyStep());
+        newSteps.Insert(newSteps.Count - 0, new PrepareGeneratedDocsForDeploymentOnBranchGhPagesStep());
+        job.Steps = newSteps.ToArray();
         return job;
     }
 }

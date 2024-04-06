@@ -3,7 +3,7 @@ using Nuke.Common.Utilities;
 
 namespace DryGen.GithubActions.GhPages;
 
-public class GitHubActionsPrepareGeneratedDocsForDeploymentOnBranchGhPagesStep : GitHubActionsStep
+public class PrepareGeneratedDocsForDeploymentOnBranchGhPagesStep : GitHubActionsStep
 {
     public override void Write(CustomFileWriter writer)
     {

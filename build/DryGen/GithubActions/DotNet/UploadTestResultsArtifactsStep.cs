@@ -3,7 +3,7 @@ using Nuke.Common.Utilities;
 
 namespace DryGen.GithubActions.DotNet;
 
-public class GitHubActionsUploadTestResultsArtifactsStep : GitHubActionsStep
+public class UploadTestResultsArtifactsStep : GitHubActionsStep
 {
     public override void Write(CustomFileWriter writer)
     {

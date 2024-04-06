@@ -3,11 +3,11 @@ using Nuke.Common.Utilities;
 
 namespace DryGen.GithubActions.DotNet;
 
-public class GitHubActionsSetupDotNetStep : GitHubActionsStep
+public class SetupDotNetStep : GitHubActionsStep
 {
     public string Version { get; init; }
 
-    public GitHubActionsSetupDotNetStep(string version)
+    public SetupDotNetStep(string version)
     {
         Version = version;
     }
