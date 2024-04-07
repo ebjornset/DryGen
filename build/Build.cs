@@ -259,7 +259,7 @@ public partial class Build : NukeBuild
         .DependsOn(VerifyCleanWorkingCopyBeforeBuild)
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Requires(() => Version)
-        //.Requires(() => GitRepository.IsOnMainBranch())
+        .Requires(() => GitRepository.IsOnMainBranch())
         .Requires( ()=> ProperNextVersionNumber())
         .Requires(() => ReleaseNotesFromToday())
         .Before(Init)
@@ -276,8 +276,7 @@ public partial class Build : NukeBuild
         .DependsOn(VerifyCleanWorkingCopyAfterBuild)
         .Executes(() =>
         {
-            GitTasks.Git($"tag -d {Version.ToVersionTagName()}");
-            //GitTasks.Git($"push origin {Version.ToVersionTagName()}");
+            GitTasks.Git($"push origin {Version.ToVersionTagName()}");
         });
 
 
