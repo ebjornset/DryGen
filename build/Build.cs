@@ -46,17 +46,6 @@ public partial class Build : NukeBuild
     [GitRepository] internal readonly GitRepository GitRepository;
     [GitVersion] internal readonly GitVersion GitVersion;
 
-    internal string Copyright;
-    internal string Authors;
-    private const string ToolsDescription = "A dotnet tool to generate other representations of a piece of knowlege from one representation.";
-    private string TemplatesDescription;
-#pragma warning disable S1075 // URIs should not be hardcoded
-    private readonly string ProjectUrlInNugetPackage = "https://docs.drygen.dev/";
-#pragma warning restore S1075 // URIs should not be hardcoded
-
-    internal static AbsolutePath SourceDirectory => RootDirectory / "src";
-    internal static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-
     internal Target Default => _ => _
         .DependsOn(Clean)
         .DependsOn(UnitTests)
@@ -77,7 +66,6 @@ public partial class Build : NukeBuild
         .Executes(() =>
         {
             TemplatesDescription = $".Net templates that make getting started with [dry-gen]({ProjectUrlInNugetPackage}) easy.";
-            Authors = "Eirik Bjornset";
             Copyright = $"Copyright 2022-{DateTime.Today.Year} {Authors}";
             Log.Information(new StringBuilder().AppendLine()
             .AppendLine("ToolsDescription = '{ToolsDescription}'")
@@ -118,6 +106,7 @@ public partial class Build : NukeBuild
 
     internal Target UnitTests => _ => _
         .DependsOn(Compile)
+        .Produces(UnitTestsResultsDirectory)
         .Executes(() =>
         {
             DotNetTest(c => c
@@ -188,6 +177,7 @@ public partial class Build : NukeBuild
 
     internal Target IntegrationTests => _ => _
              .DependsOn(Pack)
+             .Produces(IntergrationTestsResultsDirectory)
              .Executes(() =>
              {
                  // Install the artifact as a local dotnet tool in the ITests project
@@ -275,6 +265,7 @@ public partial class Build : NukeBuild
         .Unlisted()
         .Requires(() => SonarToken)
         .After(Clean)
+        .After(Init)
         .Before(Restore)
         .Executes(() =>
         {
@@ -294,8 +285,7 @@ public partial class Build : NukeBuild
         .DependsOn(UnitTests)
         .DependsOn(IntegrationTests)
         .Requires(() => SonarToken)
-        .After(UnitTests)
-        .After(IntegrationTests)
+        .Before(GenerateDocs)
         .Executes(() =>
         {
             SonarScannerTasks.SonarScannerEnd(s => s
@@ -325,7 +315,19 @@ public partial class Build : NukeBuild
         }
     }
 
+    private static AbsolutePath SourceDirectory => RootDirectory / "src";
+    private static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     private static AbsolutePath DocsDirectory => RootDirectory / "docs";
     private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
+    private static AbsolutePath UnitTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.UTests" / "TestResults";
+    private static AbsolutePath IntergrationTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.ITests" / "TestResults";
+
+    private const string Authors = "Eirik Bjornset";
+    private const string ToolsDescription = "A dotnet tool to generate other representations of a piece of knowlege from one representation.";
     private const string DrygenPackageName = "dry-gen";
+#pragma warning disable S1075 // URIs should not be hardcoded
+    private const string ProjectUrlInNugetPackage = "https://docs.drygen.dev/";
+#pragma warning restore S1075 // URIs should not be hardcoded
+    private string Copyright;
+    private string TemplatesDescription;
 }

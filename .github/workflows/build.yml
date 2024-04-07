@@ -68,8 +68,18 @@ jobs:
         env:
           dummy: ${{ github.event.inputs.dummy }}
           SonarToken: ${{ secrets.SONAR_TOKEN }}
+      - name: 'Publish: TestResults'
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestResults
+          path: src/develop/DryGen.UTests/TestResults
       - name: 'Publish: artifacts'
         uses: actions/upload-artifact@v3
         with:
           name: artifacts
           path: artifacts
+      - name: 'Publish: TestResults'
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestResults
+          path: src/develop/DryGen.ITests/TestResults
