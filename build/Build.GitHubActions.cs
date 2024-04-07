@@ -1,41 +1,15 @@
+using DryGen.GithubActions.DotNet;
 using DryGen.GithubActions.GhPages;
 using DryGen.GithubActions.NugetPush;
-using DryGen.GithubActions.SonarCloud;
 using Nuke.Common.CI.GitHubActions;
 
 namespace DryGen.Build;
 
-[SonarCloudGitHubActions(
-    name: "pr",
-    GitHubActionsImage.UbuntuLatest,
-    FetchDepth = 0,
-    OnPullRequestBranches = new[] { "main" },
-    PublishArtifacts = false,
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" }),
-]
-[SonarCloudGitHubActions(
-    name: "build",
-    GitHubActionsImage.UbuntuLatest,
-    FetchDepth = 0,
-    OnPushBranches = new[] { "main" },
-    OnWorkflowDispatchOptionalInputs = new[] { "dummy" },
-    PublishArtifacts = true,
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
-]
-[NugetPushGitHubActions(
-    name: "release",
-    GitHubActionsImage.UbuntuLatest,
-    FetchDepth = 0,
-    OnPushTags = new[] { "v*.*.*" },
-    PublishArtifacts = true,
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
-]
-[GhPagesGitHubActions(
-    name: "publish-docs",
-    GitHubActionsImage.UbuntuLatest,
-    FetchDepth = 0,
-    On = new[] { GitHubActionsTrigger.WorkflowDispatch },
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" })
-]
+[DotNetGitHubActions(name: "pr", OnPullRequestBranches = new[] { "main" }, InvokedTargets = new[] { nameof(CiCd_Build) }, PublishArtifacts = true, ImportSecrets = new[] { nameof(SonarToken) })]
+[DotNetGitHubActions(name: "build", OnPushBranches = new[] { "main" }, OnWorkflowDispatchOptionalInputs = new[] { "dummy" }, InvokedTargets = new[] { nameof(CiCd_Build) }, PublishArtifacts = true, ImportSecrets = new[] { nameof(SonarToken) })]
+[DotNetGitHubActions(name: "tag-version", OnWorkflowDispatchRequiredInputs = new[] { "version" }, InvokedTargets = new[] { nameof(CiCd_TagVersion) }, PublishArtifacts = true, ImportSecrets = new[] { nameof(SonarToken) })]
+[NugetPushGitHubActions(name: "release", OnPushTags = new[] { "v*.*.*" }, InvokedTargets = new[] { nameof(CiCd_Release) }, PublishArtifacts = true, ImportSecrets = new[] { nameof(NuGetApiKey), nameof(SonarToken) })]
+[GhPagesGitHubActions(name: "publish-docs", On = new[] { GitHubActionsTrigger.WorkflowDispatch }, InvokedTargets = new[] { nameof(CiCd_BuildDocs) }, PublishArtifacts = false)]
 public partial class Build
-{ }
+{
+}

@@ -4,9 +4,13 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.PowerShell;
+using Nuke.Common.Tools.SonarScanner;
+using Nuke.Common.Utilities;
 using Nuke.Common.Utilities.Collections;
 using Serilog;
 using System;
@@ -18,74 +22,70 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 namespace DryGen.Build;
 
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "Only used for building the system, and is almost impossible to test")]
 [ShutdownDotNetAfterServerBuild]
 public partial class Build : NukeBuild
 {
-    /// Support plugins are available for:
-    ///   - JetBrains ReSharper        https://nuke.build/resharper
-    ///   - JetBrains Rider            https://nuke.build/rider
-    ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
-    ///   - Microsoft VSCode           https://nuke.build/vscode
-    public static int Main() => Execute<Build>(x => x.Clean, x => x.UTests, x => x.ITests, x => x.Docs);
+    public static int Main() => Execute<Build>(x => x.Default);
 
-    [Parameter("Configuration to build - Default is 'Release'")]
+    [Parameter("Configuration to build - NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source")]
     internal readonly Configuration Configuration = Configuration.Release;
 
-    [Parameter("The Nuget source url")]
+    [Parameter("The version number for the version tag. Must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. alpha, beta or prerelease", List = false)]
+    internal readonly string Version;
+
+    [Parameter("The Nuget source url", List = false)]
     internal readonly string NuGetSource = "https://api.nuget.org/v3/index.json";
 
-    [Parameter("The api key to use when pushing to Nuget")]
+    [Parameter("The api key to use when pushing to Nuget", List = false)]
     [Secret]
     internal readonly string NuGetApiKey;
+
+    [Parameter("The token to use when running SonarClound analyzis", List = false)]
+    [Secret]
+    internal readonly string SonarToken;
 
     [Solution] internal readonly Solution Solution;
     [GitRepository] internal readonly GitRepository GitRepository;
     [GitVersion] internal readonly GitVersion GitVersion;
 
-    internal string Copyright;
-    internal string Authors;
-    private string ToolsDescription;
-    private string TemplatesDescription;
-    internal bool IsVersionTag;
-#pragma warning disable S1075 // URIs should not be hardcoded
-    private readonly string ProjectUrlInNugetPackage = "https://docs.drygen.dev/";
-#pragma warning restore S1075 // URIs should not be hardcoded
+    internal Target Default => _ => _
+        .DependsOn(Clean)
+        .DependsOn(UnitTests)
+        .DependsOn(IntegrationTests)
+        .DependsOn(GenerateDocs)
+        ;
 
-    internal static AbsolutePath SourceDirectory => RootDirectory / "src";
-    internal static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-    internal static AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
-
+#pragma warning disable CA1822 // Mark members as static
     internal Target Clean => _ => _
-        .Before(Restore)
         .Executes(() =>
         {
             SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(x => x.DeleteDirectory());
             ArtifactsDirectory.CreateOrCleanDirectory();
-            SonarQubeCoverageDirectory.CreateOrCleanDirectory();
         });
+#pragma warning restore CA1822 // Mark members as static
 
     internal Target Init => _ => _
         .Executes(() =>
         {
-            ToolsDescription = "A dotnet tool to generate other representations of a piece of knowlege from one representation.";
             TemplatesDescription = $".Net templates that make getting started with [dry-gen]({ProjectUrlInNugetPackage}) easy.";
-            Authors = "Eirik Bjornset";
             Copyright = $"Copyright 2022-{DateTime.Today.Year} {Authors}";
-            IsVersionTag = GitRepository != null && (GitRepository.Branch?.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase) ?? false);
             Log.Information(new StringBuilder().AppendLine()
             .AppendLine("ToolsDescription = '{ToolsDescription}'")
             .AppendLine("TemplatesDescription = '{TemplatesDescription}")
             .AppendLine("Copyright = '{Copyright}'")
             .AppendLine("GitRepository = '{GitRepository}'")
             .AppendLine("GitRepository.Branch = '{GitRepositoryBranch}'")
-            .AppendLine("GitRepository.Tags = '{GitRepositoryTags}'")
-            .AppendLine("IsVersionTag = '{IsVersionTag}'")
-            .AppendLine("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'").ToString(), ToolsDescription, TemplatesDescription, Copyright, GitRepository, GitRepository?.Branch, GitRepository?.Tags, IsVersionTag, GitVersion.NuGetVersionV2);
+            .AppendLine("GitRepository.IsOnVersionTag = '{GitRepositoryIsOnVersionTag}'")
+            .AppendLine("GitRepository.IsOnMainBranch = '{GitRepositoryIsOnMainBranch}'")
+            .AppendLine("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'")
+            .AppendLine("GitVersion.MajorMinorPatch = '{GitVersionMajorMinorPatch}'")
+            .ToString(), ToolsDescription, TemplatesDescription, Copyright, GitRepository, GitRepository?.Branch, GitRepository?.IsOnVersionTag(), GitRepository?.IsOnMainBranch(), GitVersion.NuGetVersionV2, GitVersion.MajorMinorPatch);
         });
 
     internal Target Restore => _ => _
         .After(Clean)
+        .DependsOn(Init)
         .Executes(() =>
         {
             DotNetRestore(s => s.SetProjectFile(Solution));
@@ -93,7 +93,6 @@ public partial class Build : NukeBuild
 
     internal Target Compile => _ => _
         .DependsOn(Restore)
-        .DependsOn(Init)
         .Executes(() =>
         {
             DotNetBuild(s => s
@@ -107,22 +106,23 @@ public partial class Build : NukeBuild
                 .EnableNoRestore());
         });
 
-    internal Target UTests => _ => _
+    internal Target UnitTests => _ => _
         .DependsOn(Compile)
-        .Before(Pack)
+        .Produces(UnitTestsResultsDirectory)
         .Executes(() =>
         {
             DotNetTest(c => c
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
-                .SetDataCollector("XPlat Code Coverage")
+                .SetDataCollector("XPlat Code Coverage;Format=opencover")
                 .CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
                     settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
         });
 
     internal Target Pack => _ => _
-             .DependsOn(Init)
              .DependsOn(Compile)
+             .After(UnitTests)
+             .Produces(ArtifactsDirectory / "*.nupkg")
              .Executes(() =>
              {
                  DotNetPack(s => s
@@ -154,7 +154,7 @@ public partial class Build : NukeBuild
                  // Rebuild the templates before we create the package, to use the newly generated .config/dotnet-tools.json in the templates
                  DotNetBuild(s => s
                      .SetProjectFile(Solution.GetProject("DryGen.Templates"))
-                     .SetOutputDirectory(ArtifactsDirectory)
+                     .SetOutputDirectory(TemporaryDirectory)
                      .SetConfiguration(Configuration)
                      .SetAssemblyVersion(GitVersion.AssemblySemVer)
                      .SetFileVersion(GitVersion.AssemblySemFileVer)
@@ -177,10 +177,9 @@ public partial class Build : NukeBuild
                      .SetVersion(GitVersion.NuGetVersionV2));
              });
 
-    internal Target ITests => _ => _
+    internal Target IntegrationTests => _ => _
              .DependsOn(Pack)
-             .DependsOn(Init)
-             .Before(Docs)
+             .Produces(IntergrationTestsResultsDirectory)
              .Executes(() =>
              {
                  // Install the artifact as a local dotnet tool in the ITests project
@@ -197,7 +196,7 @@ public partial class Build : NukeBuild
                  DotNetTest(c => c
                      .SetConfiguration(Configuration)
                      .EnableNoBuild()
-                     .SetDataCollector("XPlat Code Coverage")
+                     .SetDataCollector("XPlat Code Coverage;Format=opencover")
                      .CombineWith(SourceDirectory.GlobFiles("**/*.ITests.csproj"), (settings, path) =>
                          settings
                              .SetProjectFile(path)
@@ -206,9 +205,10 @@ public partial class Build : NukeBuild
                      , degreeOfParallelism: 4, completeOnFailure: true);
              });
 
-    internal Target Docs => _ => _
-        .DependsOn(Init)
+    internal Target GenerateDocs => _ => _
+        .Requires(() => Configuration.Equals(Configuration.Release))
         .DependsOn(Compile)
+        .After(IntegrationTests)
         .Executes(() =>
         {
             DotNetRun(c => c
@@ -218,15 +218,23 @@ public partial class Build : NukeBuild
                 .SetApplicationArguments($"--root-directory {RootDirectory}")
                 .EnableNoBuild()
                 .SetNoLaunchProfile(true)
-                     );
+            );
         });
 
-    internal Target Push => _ => _
-        .DependsOn(UTests)
-        .DependsOn(ITests)
-        .DependsOn(Docs)
-        .DependsOn(Pack)
-        .OnlyWhenDynamic(() => IsVersionTag)
+    internal Target BuildDocs => _ => _
+        .After(GenerateDocs)
+        .Executes(() =>
+        {
+            ProcessTasks.StartProcess("bundle", arguments: string.Join(' ', "install", "--jobs=4", "--retry=3"), workingDirectory: DocsDirectory.ToString(), logOutput: true, logInvocation: true).AssertZeroExitCode();
+            ProcessTasks.StartProcess("bundle", arguments: string.Join(' ', "exec", "jekyll", "build"), workingDirectory: DocsDirectory.ToString(), logOutput: true, logInvocation: true).AssertZeroExitCode();
+        });
+
+    internal Target PushPackagesToNuget => _ => _
+        .Unlisted()
+        .DependsOn(Default)
+        .DependsOn(BuildDocs)
+        .DependsOn(VerifyCleanWorkingCopyAfterBuild)
+        .Requires(() => GitRepository.IsOnVersionTag())
         .Requires(() => NuGetSource)
         .Requires(() => NuGetApiKey)
         .Requires(() => Configuration.Equals(Configuration.Release))
@@ -240,59 +248,88 @@ public partial class Build : NukeBuild
             .SetSource(NuGetSource)
             .EnableNoSymbols()
             .CombineWith(packages,
-                (v, path) => v.SetTargetPath(path)));
+                (v, path) => v.SetTargetPath(path)),
+            degreeOfParallelism: 2
+            );
         });
 
-    internal Target Dev_InstallGlobalTool => _ => _
-        .DependsOn(Init)
-        .DependsOn(Pack)
+    internal Target TagVersion => _ => _
+        .Unlisted()
+        .After(Clean)
+        .DependsOn(VerifyCleanWorkingCopyBeforeBuild)
+        .Requires(() => Configuration.Equals(Configuration.Release))
+        .Requires(() => Version)
+        .Requires(() => GitRepository.IsOnMainBranch())
+        .Requires( ()=> ProperNextVersionNumber())
+        .Requires(() => ReleaseNotesFromToday())
+        .Before(Init)
         .Executes(() =>
         {
-            try
-            {
-                DotNetToolUninstall(c => c.SetGlobal(true).SetPackageName(DrygenPackageName).SetProcessLogOutput(false));
-            }
-            catch
-            {
-                // Noop, to prevent the build from stopping when dry-gen is not installed as a global tool (yet)
-            }
-            var workingDirectory = GetProject("develop", "DryGen.ITests").Directory;
-            DotNetToolInstall(c => c
-                .SetGlobal(true)
-                .SetPackageName(DrygenPackageName)
-                .AddSources(ArtifactsDirectory)
-                .SetProcessWorkingDirectory(workingDirectory)
-                .SetVersion(GitVersion.NuGetVersionV2)
-                .SetConfigFile(Path.Combine(Path.Combine(workingDirectory, "Properties"), "NuGet.Config"))
-                             );
+            GitTasks.Git($"tag {Version.ToVersionTagName()}");
         });
 
-    internal Target Dev_InstallTemplates => _ => _
-        .DependsOn(Init)
-        .DependsOn(Pack)
+    internal Target PushVersionTag => _ => _
+        .Unlisted()
+        .DependsOn(TagVersion)
+        .DependsOn(Default)
+        .DependsOn(BuildDocs)
+        .DependsOn(VerifyCleanWorkingCopyAfterBuild)
         .Executes(() =>
         {
-            try
-            {
-                DotNet("new uninstall dry-gen.templates", logOutput: false, logInvocation: false);
-            }
-            catch
-            {
-                // Noop, to prevent the build from stopping when dry-gen.templates is not installed as a template (yet)
-            }
-            var toolsPackageName = Path.Combine(ArtifactsDirectory, $"dry-gen.templates.{GitVersion.NuGetVersionV2}.nupkg");
-            DotNet($"new install \"{toolsPackageName}\"", logOutput: true, logInvocation: true);
+            GitTasks.Git($"push origin {Version.ToVersionTagName()}");
         });
 
-    internal Target Dev_StartDocsSite => _ => _
-        .DependsOn(Init)
+
+#pragma warning disable CA1822 // Mark members as static
+    internal Target VerifyCleanWorkingCopyBeforeBuild => _ => _
+        .Unlisted()
+        .Before(Clean)
+        .Before(Restore)
         .Executes(() =>
         {
-            DocsSiteDirectory.CreateOrCleanDirectory();
-            PowerShellTasks.PowerShell(
-                arguments: "Start-Process -FilePath \"bundle\" -ArgumentList \"exec jekyll serve --drafts --incremental\"",
-                workingDirectory: DocsDirectory
-                                      );
+            LogChangesAndFailIfGitWorkingCopyIsNotClean();
+        });
+
+    internal Target VerifyCleanWorkingCopyAfterBuild => _ => _
+        .Unlisted()
+        .After(GenerateDocs)
+        .After(BuildDocs)
+        .Executes(() =>
+        {
+            LogChangesAndFailIfGitWorkingCopyIsNotClean();
+        });
+#pragma warning restore CA1822 // Mark members as static
+
+    internal Target SonarCloudBegin => _ => _
+        .Unlisted()
+        .Requires(() => SonarToken)
+        .After(Clean)
+        .After(Init)
+        .Before(Restore)
+        .Executes(() =>
+        {
+            SonarScannerTasks.SonarScannerBegin(s => s
+                .SetProjectKey("ebjornset_DryGen")
+                .SetOrganization("ebjornset")
+                .SetVersion(GitVersion.MajorMinorPatch)
+                .SetServer("https://sonarcloud.io")
+                .SetToken(SonarToken)
+                .SetOpenCoverPaths("**/TestResults/**/coverage.opencover.xml")
+            );
+        });
+
+    internal Target SonarCloudEnd => _ => _
+        .Unlisted()
+        .DependsOn(SonarCloudBegin)
+        .DependsOn(UnitTests)
+        .DependsOn(IntegrationTests)
+        .Requires(() => SonarToken)
+        .Before(GenerateDocs)
+        .Executes(() =>
+        {
+            SonarScannerTasks.SonarScannerEnd(s => s
+                .SetToken(SonarToken)
+            );
         });
 
     private Project GetProject(string solutionFolderName, string projectName)
@@ -301,7 +338,61 @@ public partial class Build : NukeBuild
         return solutionFolder.GetProject(projectName) ?? throw new ArgumentException($"Project '{projectName}' noot found in solution folder '{solutionFolderName}'", nameof(projectName));
     }
 
+    private bool ProperNextVersionNumber()
+    {
+        // Here we can be smart and check that Version is the next possible SemVer version number as an improvement
+        // For now we just verifies that the git tag does not exist
+        var versionTagName = Version.ToVersionTagName();
+        var gitOutput = GitTasks.Git("tag --list", logOutput: false, logInvocation: false);
+        if (gitOutput.Any(x => string.Equals(x.Text, versionTagName, StringComparison.InvariantCultureIgnoreCase))) {
+            Log.Error("Version tag '{VersionTagName}' already exists!", versionTagName);
+            return false;
+        }
+        return true;
+    }
+
+    private bool ReleaseNotesFromToday()
+    {
+        var today = DateTime.Today.ToString("yyyy-MM-dd");
+        var releaseNotesFileName = $"{today}-release-{Version}.md";
+        if (!DocsPostsDirectory.ContainsFile(releaseNotesFileName))
+        {
+            Log.Error("Release notes '{ReleaseNotesFileName}' is mising!", DocsPostsDirectory / releaseNotesFileName);
+            return false;
+        }
+        return true;
+    }
+
+    private static void LogChangesAndFailIfGitWorkingCopyIsNotClean()
+    {
+        if (!GitTasks.GitHasCleanWorkingCopy())
+        {
+            const string message = "Git working copy is not clean!";
+            var sb = new StringBuilder().AppendLine(message).AppendLine();
+            var gitOutput = GitTasks.Git("status --short", logOutput: false, logInvocation: false);
+            foreach (var line in gitOutput)
+            {
+                sb.AppendLine(line.Text);
+            }
+            Log.Error(sb.ToString());
+            Assert.Fail(message);
+        }
+    }
+
+    private static AbsolutePath SourceDirectory => RootDirectory / "src";
+    private static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     private static AbsolutePath DocsDirectory => RootDirectory / "docs";
     private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
+    private static AbsolutePath DocsPostsDirectory => DocsDirectory / "_posts";
+    private static AbsolutePath UnitTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.UTests" / "TestResults";
+    private static AbsolutePath IntergrationTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.ITests" / "TestResults";
+
+    private const string Authors = "Eirik Bjornset";
+    private const string ToolsDescription = "A dotnet tool to generate other representations of a piece of knowlege from one representation.";
     private const string DrygenPackageName = "dry-gen";
+#pragma warning disable S1075 // URIs should not be hardcoded
+    private const string ProjectUrlInNugetPackage = "https://docs.drygen.dev/";
+#pragma warning restore S1075 // URIs should not be hardcoded
+    private string Copyright;
+    private string TemplatesDescription;
 }

@@ -9,22 +9,19 @@
 #
 #     - To trigger manual generation invoke:
 #
-#         nuke --generate-configuration GitHubActions_build --host GitHubActions
+#         nuke --generate-configuration GitHubActions_tag-version --host GitHubActions
 #
 # </auto-generated>
 # ------------------------------------------------------------------------------
 
-name: build
+name: tag-version
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
-      dummy:
-        description: "dummy"
-        required: false
+      version:
+        description: "version"
+        required: true
 
 jobs:
   ubuntu-latest:
@@ -63,10 +60,10 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
-      - name: 'Run: CiCd_Build'
-        run: ./build.cmd CiCd_Build
+      - name: 'Run: CiCd_TagVersion'
+        run: ./build.cmd CiCd_TagVersion
         env:
-          dummy: ${{ github.event.inputs.dummy }}
+          version: ${{ github.event.inputs.version }}
           SonarToken: ${{ secrets.SONAR_TOKEN }}
       - name: 'Publish: TestResults'
         uses: actions/upload-artifact@v3

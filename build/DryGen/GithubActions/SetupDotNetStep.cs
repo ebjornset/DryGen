@@ -1,13 +1,13 @@
 ﻿using Nuke.Common.CI.GitHubActions.Configuration;
 using Nuke.Common.Utilities;
 
-namespace DryGen.GithubActions.DotNet;
+namespace DryGen.GithubActions;
 
-public class GitHubActionsSetupDotNetStep : GitHubActionsStep
+public class SetupDotNetStep : GitHubActionsStep
 {
     public string Version { get; init; }
 
-    public GitHubActionsSetupDotNetStep(string version)
+    public SetupDotNetStep(string version)
     {
         Version = version;
     }
@@ -17,7 +17,7 @@ public class GitHubActionsSetupDotNetStep : GitHubActionsStep
         writer.WriteLine($"- name: Setup .Net {Version}");
         using (writer.Indent())
         {
-            writer.WriteLine("uses: actions/setup-dotnet@v3");
+            writer.WriteLine("uses: actions/setup-dotnet@v4");
             writer.WriteLine("with:");
             using (writer.Indent())
             {
