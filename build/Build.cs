@@ -76,12 +76,11 @@ public partial class Build : NukeBuild
             .AppendLine("Copyright = '{Copyright}'")
             .AppendLine("GitRepository = '{GitRepository}'")
             .AppendLine("GitRepository.Branch = '{GitRepositoryBranch}'")
-            .AppendLine("GitRepository.Tags = '{GitRepositoryTags}'")
             .AppendLine("GitRepository.IsOnVersionTag = '{GitRepositoryIsOnVersionTag}'")
             .AppendLine("GitRepository.IsOnMainBranch = '{GitRepositoryIsOnMainBranch}'")
             .AppendLine("GitVersion.NuGetVersionV2 = '{GitVersionNuGetVersionV2}'")
             .AppendLine("GitVersion.MajorMinorPatch = '{GitVersionMajorMinorPatch}'")
-            .ToString(), ToolsDescription, TemplatesDescription, Copyright, GitRepository, GitRepository?.Branch, GitRepository?.Tags, GitRepository?.IsOnVersionTag(), GitRepository?.IsOnMainBranch(), GitVersion.NuGetVersionV2, GitVersion.MajorMinorPatch);
+            .ToString(), ToolsDescription, TemplatesDescription, Copyright, GitRepository, GitRepository?.Branch, GitRepository?.IsOnVersionTag(), GitRepository?.IsOnMainBranch(), GitVersion.NuGetVersionV2, GitVersion.MajorMinorPatch);
         });
 
     internal Target Restore => _ => _
@@ -256,7 +255,7 @@ public partial class Build : NukeBuild
 
     internal Target TagVersion => _ => _
         .Unlisted()
-        //.DependsOn(VerifyCleanWorkingCopyBeforeBuild)
+        .DependsOn(VerifyCleanWorkingCopyBeforeBuild)
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Requires(() => Version)
         //.Requires(() => GitRepository.IsOnMainBranch())
@@ -265,16 +264,19 @@ public partial class Build : NukeBuild
         .Before(Init)
         .Executes(() =>
         {
+            GitTasks.Git($"tag {Version.ToVersionTagName()}");
         });
 
     internal Target PushVersionTag => _ => _
         .Unlisted()
         .DependsOn(TagVersion)
-        //.DependsOn(Default)
-        //.DependsOn(BuildDocs)
-        //.DependsOn(VerifyCleanWorkingCopyAfterBuild)
+        .DependsOn(Default)
+        .DependsOn(BuildDocs)
+        .DependsOn(VerifyCleanWorkingCopyAfterBuild)
         .Executes(() =>
         {
+            GitTasks.Git($"tag -d {Version.ToVersionTagName()}");
+            //GitTasks.Git($"push origin {Version.ToVersionTagName()}");
         });
 
 
