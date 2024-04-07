@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-social@1/bin/bulma-social.min.css">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Examples of how to control the Mermaid ER diagram detail level | DryGen</title>
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="Examples of how to control the Mermaid ER diagram detail level" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Examples of how to control the Mermaid ER diagram detail level" />
+<meta property="og:description" content="Examples of how to control the Mermaid ER diagram detail level" />
+<meta property="og:site_name" content="DryGen" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Examples of how to control the Mermaid ER diagram detail level" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Examples of how to control the Mermaid ER diagram detail level","headline":"Examples of how to control the Mermaid ER diagram detail level","url":"/examples/mermaid-er-diagram-details/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                DryGen
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/verbs/" class="navbar-item ">Verbs</a>
+                    
+                
+                    
+                    <a href="/examples/" class="navbar-item ">Examples</a>
+                    
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Releases</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-fullwidth  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Examples of how to control the Mermaid ER diagram detail level</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    
+
+<aside class="menu">
+
+    <p class="menu-label">dry-gen examples</p>
+    <ul class="menu-list">
+        
+        <li>
+            <a href="/examples/filtering-mermaid-diagram-content" class="">Filtering Mermaid diagram content</a>
+            
+        </li>
+        
+        <li>
+            <a href="/examples/mermaid-class-diagram-details" class="">Mermaid Class diagram details</a>
+            
+        </li>
+        
+        <li>
+            <a href="/examples/mermaid-er-diagram-details" class="">Mermaid ER diagram details</a>
+            
+        </li>
+            
+    </ul>
+
+</aside>
+                </div>
+                
+                <div class="column is-8">
+                    
+                    
+
+                    
+                    
+                    
+    
+    
+
+<div class="contents">
+    <div class="menu">
+        <p class="menu-label">Contents</p>
+        <ul class="menu-list">
+  <li><a href="#example-one-no-filtering">Example one: No filtering</a></li>
+  <li><a href="#example-two-control-what-attributes-are-displayed-with---attribute-type-exclusion">Example two: Control what attributes are displayed with <code class="language-plaintext highlighter-rouge">--attribute-type-exclusion</code></a></li>
+  <li><a href="#example-three-control-what-relationships-are-displayed-with---relationship-type-exclusion">Example three: Control what relationships are displayed with <code class="language-plaintext highlighter-rouge">--relationship-type-exclusion</code></a></li>
+  <li><a href="#example-four-hide-attribute-key-type-column-with---exclude-attribute-keytypes">Example four: Hide attribute key type column with <code class="language-plaintext highlighter-rouge">--exclude-attribute-keytypes</code></a></li>
+  <li><a href="#example-five-hide-attribute-comments-column-with---exclude-attribute-comments">Example five: Hide attribute comments column with <code class="language-plaintext highlighter-rouge">--exclude-attribute-comments</code></a></li>
+  <li><a href="#example-six-filter-out-attributes-with---exclude-propertynames">Example six: Filter out attributes with <code class="language-plaintext highlighter-rouge">--exclude-propertynames</code></a></li>
+</ul>
+    </div>
+</div>
+
+
+
+
+<div class="content">
+    <p>These examples shows how you can control the property and method information from your C# types that’s included in your Mermaid Class diagrams. Here we use an oversimplified model of an ordering system, and are generated from this C# code:</p>
+<details>
+  <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Microsoft.EntityFrameworkCore</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+
+<span class="k">namespace</span> <span class="nn">DryGen.Templates.Mermaid</span><span class="p">;</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Customer</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">ICollection</span><span class="p">&lt;</span><span class="n">Order</span><span class="p">&gt;</span> <span class="n">Orders</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Order</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">CustomerId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">bool</span><span class="p">?</span> <span class="n">IsCompleted</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">Customer</span> <span class="n">Customer</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">ICollection</span><span class="p">&lt;</span><span class="n">OrderLine</span><span class="p">&gt;</span> <span class="n">Lines</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">OrderLine</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">LineNumber</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Quantity</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">OrderId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">Order</span> <span class="n">Order</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">ProductId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">Product</span> <span class="n">Product</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Product</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">ProductCategoryId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">ProductCategory</span> <span class="n">ProductCategory</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">ICollection</span><span class="p">&lt;</span><span class="n">Stock</span><span class="p">&gt;</span> <span class="n">InStock</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ProductCategory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">ICollection</span><span class="p">&lt;</span><span class="n">Product</span><span class="p">&gt;</span> <span class="n">Products</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Warehouse</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">ICollection</span><span class="p">&lt;</span><span class="n">Stock</span><span class="p">&gt;</span> <span class="n">ProductsInStock</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Stock</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">ProductId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">Product</span> <span class="n">Product</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">WarehouseId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">Warehouse</span> <span class="n">Warehouse</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Quantity</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ExampleDbContext</span> <span class="p">:</span> <span class="n">DbContext</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">DbSet</span><span class="p">&lt;</span><span class="n">Customer</span><span class="p">&gt;</span> <span class="n">Customers</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">DbSet</span><span class="p">&lt;</span><span class="n">Order</span><span class="p">&gt;</span> <span class="n">Orders</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">DbSet</span><span class="p">&lt;</span><span class="n">Product</span><span class="p">&gt;</span> <span class="n">Products</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">DbSet</span><span class="p">&lt;</span><span class="n">ProductCategory</span><span class="p">&gt;</span> <span class="n">ProductCategories</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">DbSet</span><span class="p">&lt;</span><span class="n">Warehouse</span><span class="p">&gt;</span> <span class="n">Warehouses</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">ExampleDbContext</span><span class="p">(</span><span class="n">DbContextOptions</span> <span class="n">options</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnModelCreating</span><span class="p">(</span><span class="n">ModelBuilder</span> <span class="n">modelBuilder</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">modelBuilder</span><span class="p">.</span><span class="n">Entity</span><span class="p">&lt;</span><span class="n">Customer</span><span class="p">&gt;().</span><span class="nf">HasKey</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+        <span class="n">modelBuilder</span><span class="p">.</span><span class="n">Entity</span><span class="p">&lt;</span><span class="n">Order</span><span class="p">&gt;().</span><span class="nf">HasKey</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+        <span class="n">modelBuilder</span><span class="p">.</span><span class="n">Entity</span><span class="p">&lt;</span><span class="n">OrderLine</span><span class="p">&gt;().</span><span class="nf">HasKey</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="p">{</span> <span class="n">x</span><span class="p">.</span><span class="n">OrderId</span><span class="p">,</span> <span class="n">x</span><span class="p">.</span><span class="n">LineNumber</span> <span class="p">});</span>
+        <span class="n">modelBuilder</span><span class="p">.</span><span class="n">Entity</span><span class="p">&lt;</span><span class="n">Product</span><span class="p">&gt;().</span><span class="nf">HasKey</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+        <span class="n">modelBuilder</span><span class="p">.</span><span class="n">Entity</span><span class="p">&lt;</span><span class="n">ProductCategory</span><span class="p">&gt;().</span><span class="nf">HasKey</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+        <span class="n">modelBuilder</span><span class="p">.</span><span class="n">Entity</span><span class="p">&lt;</span><span class="n">Warehouse</span><span class="p">&gt;().</span><span class="nf">HasKey</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+        <span class="n">modelBuilder</span><span class="p">.</span><span class="n">Entity</span><span class="p">&lt;</span><span class="n">Stock</span><span class="p">&gt;().</span><span class="nf">HasKey</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="p">{</span> <span class="n">x</span><span class="p">.</span><span class="n">ProductId</span><span class="p">,</span> <span class="n">x</span><span class="p">.</span><span class="n">WarehouseId</span> <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+</details>
+<p> </p>
+<div x-data="{visible: true}">
+    <div class="notification is-dark" x-show.transition.duration.300ms="visible">
+        
+        <article class="media">
+            
+                <div class="media-left">
+                    <span class="icon"><i class="fas fa-exclamation-circle fa-lg"></i></span>
+                </div>
+            
+            <div class="media-content">
+                <div class="content"><p>The options <code class="language-plaintext highlighter-rouge">--name-replace-from</code> and <code class="language-plaintext highlighter-rouge">--name-replace-to</code> works the same way for Mermaid ER diagram as for class diagrams. Look at the example in the <a href="../mermaid-class-diagram-details/">Mermaid Class diagram details examples</a> for details.</p>
+</div>
+            </div>
+        </article>
+    </div>
+</div>
+
+<h3 id="example-one-no-filtering">Example one: No filtering</h3>
+<p>With no filtering there’s a one-to-one mapping from the structure of your C# types to the entities in the Mermaid ER diagram.</p>
+<h4 id="the-commandline">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-no-filtering.!.!.</code></p>
+<h4 id="the-resulting-mermaid-diagram">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">erDiagram
+	Customer {
+		int Id PK
+		string Name
+	}
+	Order {
+		int Id PK
+		int CustomerId FK
+		bool IsCompleted "Null"
+	}
+	OrderLine {
+		int OrderId PK
+		int LineNumber PK
+		int ProductId FK
+		int Quantity
+	}
+	Product {
+		int Id PK
+		int ProductCategoryId FK
+		string Name
+	}
+	ProductCategory {
+		int Id PK
+		string Name
+	}
+	Stock {
+		int ProductId PK
+		int WarehouseId PK
+		int Quantity
+	}
+	Warehouse {
+		int Id PK
+		string Name
+	}
+	Customer ||..o{ Order : ""
+	Order ||--o{ OrderLine : ""
+	Product ||--o{ Stock : ""
+	Product ||..o{ OrderLine : ""
+	ProductCategory ||..o{ Product : ""
+	Warehouse ||--o{ Stock : ""
+
+</code></pre>
+<h3 id="example-two-control-what-attributes-are-displayed-with---attribute-type-exclusion">Example two: Control what attributes are displayed with <code class="language-plaintext highlighter-rouge">--attribute-type-exclusion</code></h3>
+<p>In this example we have excluded the foreing key attributes, useful in diagrams where the relationships gives enough details anyway.</p>
+<h4 id="the-commandline-1">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-attribute-type-exclusion.!.!. --attribute-type-exclusion foreignkeys</code></p>
+<h4 id="the-resulting-mermaid-diagram-1">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">erDiagram
+	Customer {
+		int Id PK
+		string Name
+	}
+	Order {
+		int Id PK
+		bool IsCompleted "Null"
+	}
+	OrderLine {
+		int LineNumber PK
+		int Quantity
+	}
+	Product {
+		int Id PK
+		string Name
+	}
+	ProductCategory {
+		int Id PK
+		string Name
+	}
+	Stock {
+		int Quantity
+	}
+	Warehouse {
+		int Id PK
+		string Name
+	}
+	Customer ||..o{ Order : ""
+	Order ||--o{ OrderLine : ""
+	Product ||--o{ Stock : ""
+	Product ||..o{ OrderLine : ""
+	ProductCategory ||..o{ Product : ""
+	Warehouse ||--o{ Stock : ""
+
+</code></pre>
+<h3 id="example-three-control-what-relationships-are-displayed-with---relationship-type-exclusion">Example three: Control what relationships are displayed with <code class="language-plaintext highlighter-rouge">--relationship-type-exclusion</code></h3>
+<p>If you want a ER diagram that’s more like an entity listing, you can exclude all relationships.</p>
+<h4 id="the-commandline-2">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-relationship-type-exclusion.!.!. --relationship-type-exclusion all</code></p>
+<h4 id="the-resulting-mermaid-diagram-2">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">erDiagram
+	Customer {
+		int Id PK
+		string Name
+	}
+	Order {
+		int Id PK
+		int CustomerId FK
+		bool IsCompleted "Null"
+	}
+	OrderLine {
+		int OrderId PK
+		int LineNumber PK
+		int ProductId FK
+		int Quantity
+	}
+	Product {
+		int Id PK
+		int ProductCategoryId FK
+		string Name
+	}
+	ProductCategory {
+		int Id PK
+		string Name
+	}
+	Stock {
+		int ProductId PK
+		int WarehouseId PK
+		int Quantity
+	}
+	Warehouse {
+		int Id PK
+		string Name
+	}
+
+</code></pre>
+<h3 id="example-four-hide-attribute-key-type-column-with---exclude-attribute-keytypes">Example four: Hide attribute key type column with <code class="language-plaintext highlighter-rouge">--exclude-attribute-keytypes</code></h3>
+<p>You can hide the attribute’s key type (primary key and/or foreign key) information in situations where is not an important aspect of your diagram.</p>
+<h4 id="the-commandline-3">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-exclude-attribute-keytypes.!.!. --exclude-attribute-keytypes true</code></p>
+<h4 id="the-resulting-mermaid-diagram-3">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">erDiagram
+	Customer {
+		int Id
+		string Name
+	}
+	Order {
+		int Id
+		int CustomerId
+		bool IsCompleted "Null"
+	}
+	OrderLine {
+		int OrderId
+		int LineNumber
+		int ProductId
+		int Quantity
+	}
+	Product {
+		int Id
+		int ProductCategoryId
+		string Name
+	}
+	ProductCategory {
+		int Id
+		string Name
+	}
+	Stock {
+		int ProductId
+		int WarehouseId
+		int Quantity
+	}
+	Warehouse {
+		int Id
+		string Name
+	}
+	Customer ||..o{ Order : ""
+	Order ||--o{ OrderLine : ""
+	Product ||--o{ Stock : ""
+	Product ||..o{ OrderLine : ""
+	ProductCategory ||..o{ Product : ""
+	Warehouse ||--o{ Stock : ""
+
+</code></pre>
+<h3 id="example-five-hide-attribute-comments-column-with---exclude-attribute-comments">Example five: Hide attribute comments column with <code class="language-plaintext highlighter-rouge">--exclude-attribute-comments</code></h3>
+<p>You can hide the attribute’s comments in situations where is not an important aspect of your diagram.</p>
+<h4 id="the-commandline-4">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-exclude-attribute-comments.!.!. --exclude-attribute-comments true</code></p>
+<h4 id="the-resulting-mermaid-diagram-4">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">erDiagram
+	Customer {
+		int Id PK
+		string Name
+	}
+	Order {
+		int Id PK
+		int CustomerId FK
+		bool IsCompleted
+	}
+	OrderLine {
+		int OrderId PK
+		int LineNumber PK
+		int ProductId FK
+		int Quantity
+	}
+	Product {
+		int Id PK
+		int ProductCategoryId FK
+		string Name
+	}
+	ProductCategory {
+		int Id PK
+		string Name
+	}
+	Stock {
+		int ProductId PK
+		int WarehouseId PK
+		int Quantity
+	}
+	Warehouse {
+		int Id PK
+		string Name
+	}
+	Customer ||..o{ Order : ""
+	Order ||--o{ OrderLine : ""
+	Product ||--o{ Stock : ""
+	Product ||..o{ OrderLine : ""
+	ProductCategory ||..o{ Product : ""
+	Warehouse ||--o{ Stock : ""
+
+</code></pre>
+<h3 id="example-six-filter-out-attributes-with---exclude-propertynames">Example six: Filter out attributes with <code class="language-plaintext highlighter-rouge">--exclude-propertynames</code></h3>
+<p>If your C# code follows a convention where all entities have some pure technical properties, e.g. CreatedBy, CreatedAt, ModifiedBy and ModifiedAt, your diagram might be more focused if these properties are excluded. The same might be true if you uses synthetic generated identifiers in your entities.</p>
+
+<p>In this example we show how we can excluded syntetic generated identifiers from our model, both primary keys and forign keys, with <code class="language-plaintext highlighter-rouge">--exclude-propertynames .*Id$</code></p>
+<h4 id="the-commandline-5">The commandline</h4>
+<p><code class="language-plaintext highlighter-rouge">dry-gen mermaid-er-diagram-from-efcore --input-file src/develop/DryGen.Docs/bin/Release/net6.0/DryGen.Docs.dll --output-file docs/examples/mermaid-er-diagram-details.md --replace-token-in-output-file .!.!.replace-token-for-mermaid-er-diagram-details-example-exclude-propertynames.!.!. --exclude-propertynames .*Id$</code></p>
+<h4 id="the-resulting-mermaid-diagram-5">The resulting Mermaid diagram</h4>
+<pre><code class="language-mermaid">erDiagram
+	Customer {
+		string Name
+	}
+	Order {
+		bool IsCompleted "Null"
+	}
+	OrderLine {
+		int LineNumber PK
+		int Quantity
+	}
+	Product {
+		string Name
+	}
+	ProductCategory {
+		string Name
+	}
+	Stock {
+		int Quantity
+	}
+	Warehouse {
+		string Name
+	}
+	Customer ||..o{ Order : ""
+	Order ||--o{ OrderLine : ""
+	Product ||--o{ Stock : ""
+	Product ||..o{ OrderLine : ""
+	ProductCategory ||..o{ Product : ""
+	Warehouse ||--o{ Stock : ""
+
+</code></pre>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js"></script>
+
+<script>
+  // select <pre class="mermaid"> _and_ <pre><code class="language-mermaid">
+  document
+    .querySelectorAll("pre.mermaid, pre>code.language-mermaid")
+    .forEach(($el) => {
+      const $mermaidCode = $el.innerHTML;
+      // if the second selector got a hit, reference the parent <pre>
+      if ($el.tagName === "CODE") $el = $el.parentElement;
+      // put the Mermaid contents in the expected <div class="mermaid">
+      // plus keep the original contents in a nice <details>
+      $el.outerHTML = `<div class="mermaid">${$mermaidCode}</div>
+    <details>
+      <summary>The Mermaid code behind the diagram</summary>
+      <pre>${$mermaidCode}</pre>
+    </details>`;
+    });
+</script>
+
+
+</div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+        
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+        </div>
+    </div>
+</footer>
+
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts --></body>
+</html>

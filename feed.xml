@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2024-04-07T20:02:53+00:00</updated><id>/feed.xml</id><title type="html">DryGen</title><subtitle>A .Net tool to generate other representations of a piece of knowledge from one representation.</subtitle><entry><title type="html">Version 1.6.2 is released</title><link href="/2024/04/07/release-1.6.2/" rel="alternate" type="text/html" title="Version 1.6.2 is released" /><published>2024-04-07T00:00:00+00:00</published><updated>2024-04-07T00:00:00+00:00</updated><id>/2024/04/07/release-1.6.2</id><content type="html" xml:base="/2024/04/07/release-1.6.2/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<p>DryGen uses <a href="https://github.com/apps/mend-bolt-for-github">mend-bolt-for-github</a> to check for vulnerable dependencies.It has reported vulnerabilities in some of the 3rd party libraries we use.</p>
+
+<p>We are not sure if these actually apply to Drygen, but have updated the relevant libraries for the sake of safety.</p>
+
+<p>These are the vulnerabilities in question:</p>
+<ol>
+  <li><a href="https://www.mend.io/vulnerability-database/CVE-2024-0057">CVE-2024-0057</a></li>
+  <li><a href="https://www.mend.io/vulnerability-database/CVE-2019-0820">CVE-2019-0820</a></li>
+  <li><a href="https://www.mend.io/vulnerability-database/CVE-2019-0820">CVE-2019-0820</a></li>
+  <li><a href="https://www.mend.io/vulnerability-database/CVE-2018-8292">CVE-2018-8292</a></li>
+</ol>
+
+<p>Stay safe and have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.6.0 is released</title><link href="/2024/03/03/release-1.6.0/" rel="alternate" type="text/html" title="Version 1.6.0 is released" /><published>2024-03-03T00:00:00+00:00</published><updated>2024-03-03T00:00:00+00:00</updated><id>/2024/03/03/release-1.6.0</id><content type="html" xml:base="/2024/03/03/release-1.6.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+<ul>
+  <li>This release is withdrawn, it was taged from the wrong branch by a mistake. Use v1.6.1 instead.</li>
+</ul>
+
+<p>Sorry!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version This release is withdrawn, it was taged from the wrong branch by a mistake. Use v1.6.1 instead.]]></summary></entry><entry><title type="html">Version 1.6.1 is released</title><link href="/2024/03/03/release-1.6.1/" rel="alternate" type="text/html" title="Version 1.6.1 is released" /><published>2024-03-03T00:00:00+00:00</published><updated>2024-03-03T00:00:00+00:00</updated><id>/2024/03/03/release-1.6.1</id><content type="html" xml:base="/2024/03/03/release-1.6.1/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+<ul>
+  <li>Added support for generating <code class="language-plaintext highlighter-rouge">enum</code> properties in <code class="language-plaintext highlighter-rouge">mermaid-er-diagram-from-csharp</code> and <code class="language-plaintext highlighter-rouge">mermaid-er-diagram-from-efcore</code>. Each enum type used as a property in a type is generated as its own entity with the enum values as attributes. Enum properties are generated as <code class="language-plaintext highlighter-rouge">int</code> attributes in the entity and as a relationship from the entity to the enum entity.</li>
+  <li>Added support for generating <code class="language-plaintext highlighter-rouge">byte[]</code> properties as <code class="language-plaintext highlighter-rouge">Blob</code> attributes in <code class="language-plaintext highlighter-rouge">mermaid-class-diagram-from-csharp</code>.</li>
+  <li>Added support for generating <code class="language-plaintext highlighter-rouge">byte[]</code> properties as <code class="language-plaintext highlighter-rouge">blob</code> attributes in <code class="language-plaintext highlighter-rouge">mermaid-er-diagram-from-csharp</code> and <code class="language-plaintext highlighter-rouge">mermaid-er-diagram-from-efcore</code>.</li>
+  <li>Added support for title in mermaid class diagrams and er diagrams.</li>
+  <li>Fixed stack overflow exception that happended when running <code class="language-plaintext highlighter-rouge">mermaid-class-diagram-from-csharp</code> agains a generic type with a where constraint referencing the declaring type it self.</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version Added support for generating enum properties in mermaid-er-diagram-from-csharp and mermaid-er-diagram-from-efcore. Each enum type used as a property in a type is generated as its own entity with the enum values as attributes. Enum properties are generated as int attributes in the entity and as a relationship from the entity to the enum entity. Added support for generating byte[] properties as Blob attributes in mermaid-class-diagram-from-csharp. Added support for generating byte[] properties as blob attributes in mermaid-er-diagram-from-csharp and mermaid-er-diagram-from-efcore. Added support for title in mermaid class diagrams and er diagrams. Fixed stack overflow exception that happended when running mermaid-class-diagram-from-csharp agains a generic type with a where constraint referencing the declaring type it self.]]></summary></entry><entry><title type="html">Version 1.5.0 is released</title><link href="/2023/11/28/release-1.5.0/" rel="alternate" type="text/html" title="Version 1.5.0 is released" /><published>2023-11-28T00:00:00+00:00</published><updated>2023-11-28T00:00:00+00:00</updated><id>/2023/11/28/release-1.5.0</id><content type="html" xml:base="/2023/11/28/release-1.5.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<ul>
+  <li>Added support for executing several verbs in one run with the new verb <code class="language-plaintext highlighter-rouge">verbs-from-options-file</code>. Please see the <a href="/verbs/verbs-from-options-file/">verbs-from-options-file verb page</a> for usage details.</li>
+  <li>Added support for referencing environment variables in the options files. Please see the <a href="/verbs/">verbs page</a> for usage details.</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.4.0 is released</title><link href="/2023/11/16/release-1.4.0/" rel="alternate" type="text/html" title="Version 1.4.0 is released" /><published>2023-11-16T00:00:00+00:00</published><updated>2023-11-16T00:00:00+00:00</updated><id>/2023/11/16/release-1.4.0</id><content type="html" xml:base="/2023/11/16/release-1.4.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<ul>
+  <li>Added support for .Net 8, so drygen now supports .Net8, .Net 7 and .Net 6.<br />
+<strong>NB!</strong> Please note that support for .Net 7 will be removed when .Net 7 goes out of support from Microsoft.</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.3.1 is released</title><link href="/2023/10/31/release-1.3.1/" rel="alternate" type="text/html" title="Version 1.3.1 is released" /><published>2023-10-31T00:00:00+00:00</published><updated>2023-10-31T00:00:00+00:00</updated><id>/2023/10/31/release-1.3.1</id><content type="html" xml:base="/2023/10/31/release-1.3.1/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<h4 id="mermaid-class-diagrams">Mermaid class diagrams</h4>
+
+<p>Generate “emtpy” classes (without attributes or methods) without {}, e.g. like</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>classdiagram
+  class Foo
+</code></pre></div></div>
+
+<p>instead of</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>classdiagram
+  class Foo {
+  }
+</code></pre></div></div>
+
+<p>since the last syntax causes some versions of Mermaid to report <code class="language-plaintext highlighter-rouge">Syntax error in text</code></p>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.3.0 is released</title><link href="/2023/04/15/release-1.3.0/" rel="alternate" type="text/html" title="Version 1.3.0 is released" /><published>2023-04-15T00:00:00+00:00</published><updated>2023-04-15T00:00:00+00:00</updated><id>/2023/04/15/release-1.3.0</id><content type="html" xml:base="/2023/04/15/release-1.3.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<ul>
+  <li>New options <code class="language-plaintext highlighter-rouge">--include-assemblynames</code> and <code class="language-plaintext highlighter-rouge">--exclude-assemblynames</code> for the verb <a href="/verbs/mermaid-c4component-diagram-from-dotnet-deps-json/">mermaid-c4component-diagram-from-dotnet-deps-json</a>.</li>
+  <li>Removed all dependencies on external assemblies when generating Mermaid diagrams from C# code, to prevent version clashes that could happen if the user code is referencing other versions of any of these assemblies.</li>
+  <li>Loads user assemblies in a separate AssemblyLoadContext when generating Mermaid diagrams from C# code, to prevent a possible version clash on the Microsoft.Extensions.Primitives assembly.</li>
+  <li>Generate entity names for generic types with - instead of ` in Mermaid ER diagrams, since ` is illegal in the Mermaid ER syntax</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.2.0 is released</title><link href="/2023/04/11/release-1.2.0/" rel="alternate" type="text/html" title="Version 1.2.0 is released" /><published>2023-04-11T00:00:00+00:00</published><updated>2023-04-11T00:00:00+00:00</updated><id>/2023/04/11/release-1.2.0</id><content type="html" xml:base="/2023/04/11/release-1.2.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<ul>
+  <li>Generate <a href="https://mermaid.js.org/syntax/c4c.html#c4-component-diagram-c4component" target="\_blank">Mermaid C4 Component diagrams</a> from <a href="https://github.com/dotnet/cli/blob/master/Documentation/specs/runtime-configuration-file.md#appnamedepsjson" target="\_blank">.Net deps.json files</a>. Please see the <a href="/verbs/mermaid-c4component-diagram-from-dotnet-deps-json/">mermaid-c4component-diagram-from-dotnet-deps-json verb page</a> for usage details.</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.1.0 is released</title><link href="/2023/03/05/release-1.1.0/" rel="alternate" type="text/html" title="Version 1.1.0 is released" /><published>2023-03-05T00:00:00+00:00</published><updated>2023-03-05T00:00:00+00:00</updated><id>/2023/03/05/release-1.1.0</id><content type="html" xml:base="/2023/03/05/release-1.1.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<ul>
+  <li>.Net templates for easy integration of dry-gen into the development process using <a href="https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-targets" target="\_blank">MSBuild targets</a>, see <a href="/#developmentprocessintegration">Getting started</a>
+    <ul>
+      <li>Project template for generating Mermaid diagrams from C# code</li>
+      <li>Project template for generating C# code and Mermaid diagrams from json schemas</li>
+    </ul>
+  </li>
+  <li>Added the option <code class="language-plaintext highlighter-rouge">--include-exception-stacktrace</code> to help debug issues with <code class="language-plaintext highlighter-rouge">dry-gen</code> it self. NB! This option is only shown if an exception is trown during a <code class="language-plaintext highlighter-rouge">dry-gen</code> run.</li>
+  <li>Fixed issue where <code class="language-plaintext highlighter-rouge">dry-gen</code> would fail if passed an empty options file (or an options file with only blank lines or comments)</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry><entry><title type="html">Version 1.0.0 is released</title><link href="/2023/02/22/release-1.0.0/" rel="alternate" type="text/html" title="Version 1.0.0 is released" /><published>2023-02-22T00:00:00+00:00</published><updated>2023-02-22T00:00:00+00:00</updated><id>/2023/02/22/release-1.0.0</id><content type="html" xml:base="/2023/02/22/release-1.0.0/"><![CDATA[<h3 id="in-this-version">In this version</h3>
+
+<ul>
+  <li>.Net Core 3.1 is longer supported, since its no longer supported by Microsoft.</li>
+  <li>Removed the deprecated options for the <a href="/verbs/mermaid-er-diagram-from-csharp/">mermaid-er-diagram-from-csharp</a> and <a href="/verbs/mermaid-er-diagram-from-efcore/">mermaid-er-diagram-from-efcore</a> verbs; <code class="language-plaintext highlighter-rouge">exclude-all-attributes</code>, <code class="language-plaintext highlighter-rouge">exclude-foreignkey-attributes</code> and <code class="language-plaintext highlighter-rouge">exclude-all-relationships</code>. You should upgrade to using the <code class="language-plaintext highlighter-rouge">attribute-type-exclusion</code> and <code class="language-plaintext highlighter-rouge">relationship-type-exclusion</code> options instead.</li>
+  <li>The <a href="/verbs/mermaid-er-diagram-from-efcore/">mermaid-er-diagram-from-efcore</a> verb no longer depends on a spesific version of Entity Framework Core being present. The Ef Core assemblies and types are now loaded by reflection, so any version compatible with your .Net version should work.</li>
+</ul>
+
+<p>Have fun!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[In this version]]></summary></entry></feed>
