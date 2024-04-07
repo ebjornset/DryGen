@@ -31,6 +31,9 @@ public partial class Build : NukeBuild
     [Parameter("Configuration to build - NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source")]
     internal readonly Configuration Configuration = Configuration.Release;
 
+    [Parameter("The version number for the version tag. Must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. alpha, beta or prerelease", List = false)]
+    internal readonly string Version;
+
     [Parameter("The Nuget source url", List = false)]
     internal readonly string NuGetSource = "https://api.nuget.org/v3/index.json";
 
@@ -227,10 +230,11 @@ public partial class Build : NukeBuild
             ProcessTasks.StartProcess("bundle", arguments: string.Join(' ', "exec", "jekyll", "build"), workingDirectory: DocsDirectory.ToString(), logOutput: true, logInvocation: true).AssertZeroExitCode();
         });
 
-    internal Target Push => _ => _
+    internal Target PushPackagesToNuget => _ => _
+        .Unlisted()
         .DependsOn(Default)
         .DependsOn(BuildDocs)
-        .DependsOn(VerifyCleanWorkingCopy)
+        .DependsOn(VerifyCleanWorkingCopyAfterBuild)
         .Requires(() => GitRepository.IsOnVersionTag())
         .Requires(() => NuGetSource)
         .Requires(() => NuGetApiKey)
@@ -250,8 +254,41 @@ public partial class Build : NukeBuild
             );
         });
 
+    internal Target TagVersion => _ => _
+        .Unlisted()
+        //.DependsOn(VerifyCleanWorkingCopyBeforeBuild)
+        .Requires(() => Configuration.Equals(Configuration.Release))
+        .Requires(() => Version)
+        //.Requires(() => GitRepository.IsOnMainBranch())
+        .Requires( ()=> ProperNextVersionNumber())
+        .Requires(() => ReleaseNotesFromToday())
+        .Before(Init)
+        .Executes(() =>
+        {
+        });
+
+    internal Target PushVersionTag => _ => _
+        .Unlisted()
+        .DependsOn(TagVersion)
+        //.DependsOn(Default)
+        //.DependsOn(BuildDocs)
+        //.DependsOn(VerifyCleanWorkingCopyAfterBuild)
+        .Executes(() =>
+        {
+        });
+
+
 #pragma warning disable CA1822 // Mark members as static
-    internal Target VerifyCleanWorkingCopy => _ => _
+    internal Target VerifyCleanWorkingCopyBeforeBuild => _ => _
+        .Unlisted()
+        .Before(Clean)
+        .Before(Restore)
+        .Executes(() =>
+        {
+            LogChangesAndFailIfGitWorkingCopyIsNotClean();
+        });
+
+    internal Target VerifyCleanWorkingCopyAfterBuild => _ => _
         .Unlisted()
         .After(GenerateDocs)
         .After(BuildDocs)
@@ -299,6 +336,31 @@ public partial class Build : NukeBuild
         return solutionFolder.GetProject(projectName) ?? throw new ArgumentException($"Project '{projectName}' noot found in solution folder '{solutionFolderName}'", nameof(projectName));
     }
 
+    private bool ProperNextVersionNumber()
+    {
+        // Here we can be smart and check that Version is the next possible SemVer version number as an improvement
+        // For now we just verifies that the git tag does not exist
+        var versionTagName = Version.ToVersionTagName();
+        var gitOutput = GitTasks.Git("tag --list", logOutput: false, logInvocation: false);
+        if (gitOutput.Any(x => string.Equals(x.Text, versionTagName, StringComparison.InvariantCultureIgnoreCase))) {
+            Log.Error("Version tag '{VersionTagName}' already exists!", versionTagName);
+            return false;
+        }
+        return true;
+    }
+
+    private bool ReleaseNotesFromToday()
+    {
+        var today = DateTime.Today.ToString("yyyy-MM-dd");
+        var releaseNotesFileName = $"{today}-release-{Version}.md";
+        if (!DocsPostsDirectory.ContainsFile(releaseNotesFileName))
+        {
+            Log.Error("Release notes '{ReleaseNotesFileName}' is mising!", DocsPostsDirectory / releaseNotesFileName);
+            return false;
+        }
+        return true;
+    }
+
     private static void LogChangesAndFailIfGitWorkingCopyIsNotClean()
     {
         if (!GitTasks.GitHasCleanWorkingCopy())
@@ -319,6 +381,7 @@ public partial class Build : NukeBuild
     private static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     private static AbsolutePath DocsDirectory => RootDirectory / "docs";
     private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
+    private static AbsolutePath DocsPostsDirectory => DocsDirectory / "_posts";
     private static AbsolutePath UnitTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.UTests" / "TestResults";
     private static AbsolutePath IntergrationTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.ITests" / "TestResults";
 

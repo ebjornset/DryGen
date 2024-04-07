@@ -9,4 +9,9 @@ public static class Extensions
     {
         return repository.Branch?.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase) ?? false;
     }
+
+    public static string ToVersionTagName(this string version)
+    {
+        return $"v{version}";
+    }
 }

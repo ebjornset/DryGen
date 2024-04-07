@@ -97,12 +97,15 @@
               "Init",
               "IntegrationTests",
               "Pack",
-              "Push",
+              "PushPackagesToNuget",
+              "PushVersionTag",
               "Restore",
               "SonarCloudBegin",
               "SonarCloudEnd",
+              "TagVersion",
               "UnitTests",
-              "VerifyCleanWorkingCopy"
+              "VerifyCleanWorkingCopyAfterBuild",
+              "VerifyCleanWorkingCopyBeforeBuild"
             ]
           }
         },
@@ -137,12 +140,15 @@
               "Init",
               "IntegrationTests",
               "Pack",
-              "Push",
+              "PushPackagesToNuget",
+              "PushVersionTag",
               "Restore",
               "SonarCloudBegin",
               "SonarCloudEnd",
+              "TagVersion",
               "UnitTests",
-              "VerifyCleanWorkingCopy"
+              "VerifyCleanWorkingCopyAfterBuild",
+              "VerifyCleanWorkingCopyBeforeBuild"
             ]
           }
         },
@@ -155,6 +161,10 @@
             "Quiet",
             "Verbose"
           ]
+        },
+        "Version": {
+          "type": "string",
+          "description": "The version number for the version tag. Must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. alpha, beta or prerelease"
         }
       }
     }

@@ -12,7 +12,7 @@ public partial class Build
         .Requires(() => IsServerBuild)
         .DependsOn(Default)
         .DependsOn(BuildDocs)
-        .DependsOn(VerifyCleanWorkingCopy)
+        .DependsOn(VerifyCleanWorkingCopyAfterBuild)
         ;
 
     internal Target CiCd_Build => _ => _
@@ -30,13 +30,14 @@ public partial class Build
     internal Target CiCd_Release => _ => _
         .Unlisted()
         .DependsOn(CiCd_Build)
-        .DependsOn(Push)
+        .DependsOn(PushPackagesToNuget)
         ;
 
     internal Target CiCd_TagVersion => _ => _
         .Unlisted()
         .Requires(() => GitRepository.IsOnMainBranch())
         .DependsOn(CiCd_Build)
+        .DependsOn(PushVersionTag)
         ;
 
 #pragma warning restore CA1822  // Mark members as static
