@@ -55,6 +55,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+          publish_dir: ./docs/_site
         # If the Github Pages for the repository is configured correctly
         # the gh-pages branch should be published automatically within a minute or so...
