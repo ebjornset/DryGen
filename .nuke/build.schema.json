@@ -97,13 +97,13 @@
               "GenerateDocs",
               "GitWorkingCopyShouldBeClean",
               "Init",
-              "ITests",
+              "IntegrationTests",
               "Pack",
               "Push",
               "Restore",
               "SonarCloudBegin",
               "SonarCloudEnd",
-              "UTests"
+              "UnitTests"
             ]
           }
         },
@@ -138,13 +138,13 @@
               "GenerateDocs",
               "GitWorkingCopyShouldBeClean",
               "Init",
-              "ITests",
+              "IntegrationTests",
               "Pack",
               "Push",
               "Restore",
               "SonarCloudBegin",
               "SonarCloudEnd",
-              "UTests"
+              "UnitTests"
             ]
           }
         },

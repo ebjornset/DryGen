@@ -4,6 +4,7 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.GitVersion;
@@ -55,12 +56,11 @@ public partial class Build : NukeBuild
 
     internal static AbsolutePath SourceDirectory => RootDirectory / "src";
     internal static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-    internal static AbsolutePath SonarQubeCoverageDirectory => RootDirectory / ".sonarqubecoverage";
 
     internal Target Default => _ => _
         .DependsOn(Clean)
-        .DependsOn(UTests)
-        .DependsOn(ITests)
+        .DependsOn(UnitTests)
+        .DependsOn(IntegrationTests)
         .DependsOn(GenerateDocs)
         ;
 
@@ -70,7 +70,6 @@ public partial class Build : NukeBuild
         {
             SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(x => x.DeleteDirectory());
             ArtifactsDirectory.CreateOrCleanDirectory();
-            SonarQubeCoverageDirectory.CreateOrCleanDirectory();
         });
 #pragma warning restore CA1822 // Mark members as static
 
@@ -117,21 +116,21 @@ public partial class Build : NukeBuild
                 .EnableNoRestore());
         });
 
-    internal Target UTests => _ => _
+    internal Target UnitTests => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
             DotNetTest(c => c
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
-                .SetDataCollector("XPlat Code Coverage")
+                .SetDataCollector("XPlat Code Coverage;Format=opencover")
                 .CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
                     settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
         });
 
     internal Target Pack => _ => _
              .DependsOn(Compile)
-             .After(UTests)
+             .After(UnitTests)
              .Produces(ArtifactsDirectory / "*.nupkg")
              .Executes(() =>
              {
@@ -187,7 +186,7 @@ public partial class Build : NukeBuild
                      .SetVersion(GitVersion.NuGetVersionV2));
              });
 
-    internal Target ITests => _ => _
+    internal Target IntegrationTests => _ => _
              .DependsOn(Pack)
              .Executes(() =>
              {
@@ -205,7 +204,7 @@ public partial class Build : NukeBuild
                  DotNetTest(c => c
                      .SetConfiguration(Configuration)
                      .EnableNoBuild()
-                     .SetDataCollector("XPlat Code Coverage")
+                     .SetDataCollector("XPlat Code Coverage;Format=opencover")
                      .CombineWith(SourceDirectory.GlobFiles("**/*.ITests.csproj"), (settings, path) =>
                          settings
                              .SetProjectFile(path)
@@ -216,7 +215,7 @@ public partial class Build : NukeBuild
 
     internal Target GenerateDocs => _ => _
         .DependsOn(Compile)
-        .After(ITests)
+        .After(IntegrationTests)
         .Executes(() =>
         {
             DotNetRun(c => c
@@ -231,7 +230,6 @@ public partial class Build : NukeBuild
 
     internal Target BuildDocs => _ => _
         .After(GenerateDocs)
-        .Before(Push)
         .Executes(() =>
         {
             ProcessTasks.StartProcess("bundle", arguments: string.Join(' ', "install", "--jobs=4", "--retry=3"), workingDirectory: DocsDirectory.ToString(), logOutput: true, logInvocation: true).AssertZeroExitCode();
@@ -241,6 +239,7 @@ public partial class Build : NukeBuild
     internal Target Push => _ => _
         .DependsOn(Default)
         .DependsOn(GitWorkingCopyShouldBeClean)
+        .After(BuildDocs)
         .Requires(() => GitRepository.IsOnVersionTag())
         .Requires(() => NuGetSource)
         .Requires(() => NuGetApiKey)
@@ -275,6 +274,7 @@ public partial class Build : NukeBuild
     internal Target SonarCloudBegin => _ => _
         .Unlisted()
         .Requires(() => SonarToken)
+        .After(Clean)
         .Before(Restore)
         .Executes(() =>
         {
@@ -284,14 +284,15 @@ public partial class Build : NukeBuild
                 .SetVersion(GitVersion.MajorMinorPatch)
                 .SetServer("https://sonarcloud.io")
                 .SetToken(SonarToken)
+                .SetOpenCoverPaths("**/TestResults/**/coverage.opencover.xml")
             );
         });
 
     internal Target SonarCloudEnd => _ => _
         .Unlisted()
         .Requires(() => SonarToken)
-        .After(UTests)
-        .After(ITests)
+        .After(UnitTests)
+        .After(IntegrationTests)
         .Executes(() =>
         {
             SonarScannerTasks.SonarScannerEnd(s => s
