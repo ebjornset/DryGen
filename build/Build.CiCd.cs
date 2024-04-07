@@ -11,14 +11,8 @@ public partial class Build
         .Unlisted()
         .Requires(() => IsServerBuild)
         .DependsOn(Default)
-        .DependsOn(GitWorkingCopyShouldBeClean)
-        ;
-
-    internal Target CiCd_PullRequest => _ => _
-        .Unlisted()
-        .DependsOn(CiCd_Default)
-        .DependsOn(SonarCloudBegin)
-        .DependsOn(SonarCloudEnd)
+        .DependsOn(BuildDocs)
+        .DependsOn(VerifyCleanWorkingCopy)
         ;
 
     internal Target CiCd_Build => _ => _
@@ -31,23 +25,18 @@ public partial class Build
     internal Target CiCd_BuildDocs => _ => _
         .Unlisted()
         .DependsOn(CiCd_Default)
-        .DependsOn(BuildDocs)
         ;
 
     internal Target CiCd_Release => _ => _
         .Unlisted()
-        .DependsOn(CiCd_Default)
-        .DependsOn(SonarCloudBegin)
-        .DependsOn(SonarCloudEnd)
-        .DependsOn(BuildDocs)
+        .DependsOn(CiCd_Build)
         .DependsOn(Push)
         ;
 
     internal Target CiCd_TagVersion => _ => _
         .Unlisted()
         .Requires(() => GitRepository.IsOnMainBranch())
-        .DependsOn(CiCd_Default)
-        .DependsOn(BuildDocs)
+        .DependsOn(CiCd_Build)
         ;
 
 #pragma warning restore CA1822  // Mark members as static

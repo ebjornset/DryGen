@@ -38,7 +38,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.*
-      - name: Setup Ruby v 3.1 (for docs generation with Jekyll)
+      - name: Setup Ruby (for building docs with Jekyll)
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1

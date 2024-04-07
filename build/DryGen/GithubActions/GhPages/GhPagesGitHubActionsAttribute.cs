@@ -15,9 +15,10 @@ public class GhPagesGitHubActionsAttribute : DotNetGitHubActionsAttribute
     protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
     {
         var job = base.GetJobs(image, relevantTargets);
-        var newSteps = new List<GitHubActionsStep>(job.Steps);
-        newSteps.Insert(newSteps.Count - 2, new SetupRubyStep());
-        newSteps.Insert(newSteps.Count - 0, new PrepareGeneratedDocsForDeploymentOnBranchGhPagesStep());
+        var newSteps = new List<GitHubActionsStep>(job.Steps)
+        {
+            new PrepareGeneratedDocsForDeploymentOnBranchGhPagesStep()
+        };
         job.Steps = newSteps.ToArray();
         return job;
     }

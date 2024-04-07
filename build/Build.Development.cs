@@ -51,7 +51,7 @@ public partial class Build
         });
 
     internal Target Dev_StartDocsSite => _ => _
-        .DependsOn(Init)
+        .After(GenerateDocs)
         .Executes(() =>
         {
             DocsSiteDirectory.CreateOrCleanDirectory();

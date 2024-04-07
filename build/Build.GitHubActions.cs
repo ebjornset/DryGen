@@ -5,43 +5,11 @@ using Nuke.Common.CI.GitHubActions;
 
 namespace DryGen.Build;
 
-[DotNetGitHubActions(
-    name: "pr",
-    needsJava: true,
-    OnPullRequestBranches = new[] { "main" },
-    InvokedTargets = new[] { nameof(CiCd_PullRequest) },
-    PublishArtifacts = true,
-    ImportSecrets = new[] { nameof(SonarToken) }
-)]
-[DotNetGitHubActions(
-    name: "build",
-    needsJava: true,
-    OnPushBranches = new[] { "main" },
-    OnWorkflowDispatchOptionalInputs = new[] { "dummy" },
-    InvokedTargets = new[] { nameof(CiCd_Build) },
-    PublishArtifacts = true,
-    ImportSecrets = new[] { nameof(SonarToken) }
-)]
-[NugetPushGitHubActions(
-    name: "release",
-    OnPushTags = new[] { "v*.*.*" },
-    InvokedTargets = new[] { nameof(CiCd_Release) },
-    PublishArtifacts = true,
-    ImportSecrets = new[] { nameof(NuGetApiKey), nameof(SonarToken) }
-)]
-[GhPagesGitHubActions(
-    name: "publish-docs",
-    On = new[] { GitHubActionsTrigger.WorkflowDispatch },
-    InvokedTargets = new[] { nameof(CiCd_BuildDocs) },
-    PublishArtifacts = false
-)]
-[DotNetGitHubActions(
-    name: "tag-version",
-    needsJava: false,
-    OnWorkflowDispatchRequiredInputs = new[] { "version" },
-    InvokedTargets = new[] { nameof(CiCd_TagVersion) },
-    ImportSecrets = new[] { nameof(SonarToken) }
-)]
+[DotNetGitHubActions(name: "pr", OnPullRequestBranches = new[] { "main" }, InvokedTargets = new[] { nameof(CiCd_Build) }, PublishArtifacts = true, ImportSecrets = new[] { nameof(SonarToken) })]
+[DotNetGitHubActions(name: "build", OnPushBranches = new[] { "main" }, OnWorkflowDispatchOptionalInputs = new[] { "dummy" }, InvokedTargets = new[] { nameof(CiCd_Build) }, PublishArtifacts = true, ImportSecrets = new[] { nameof(SonarToken) })]
+[DotNetGitHubActions(name: "tag-version", OnWorkflowDispatchRequiredInputs = new[] { "version" }, InvokedTargets = new[] { nameof(CiCd_TagVersion) }, PublishArtifacts = true, ImportSecrets = new[] { nameof(SonarToken) })]
+[NugetPushGitHubActions(name: "release", OnPushTags = new[] { "v*.*.*" }, InvokedTargets = new[] { nameof(CiCd_Release) }, PublishArtifacts = true, ImportSecrets = new[] { nameof(NuGetApiKey), nameof(SonarToken) })]
+[GhPagesGitHubActions(name: "publish-docs", On = new[] { GitHubActionsTrigger.WorkflowDispatch }, InvokedTargets = new[] { nameof(CiCd_BuildDocs) }, PublishArtifacts = false)]
 public partial class Build
 {
 }

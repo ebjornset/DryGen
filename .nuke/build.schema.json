@@ -8,7 +8,7 @@
       "properties": {
         "Configuration": {
           "type": "string",
-          "description": "Configuration to build - Default is 'Release'",
+          "description": "Configuration to build - NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source",
           "enum": [
             "Debug",
             "Release"
@@ -85,7 +85,6 @@
               "CiCd_Build",
               "CiCd_BuildDocs",
               "CiCd_Default",
-              "CiCd_PullRequest",
               "CiCd_Release",
               "CiCd_TagVersion",
               "Clean",
@@ -95,7 +94,6 @@
               "Dev_InstallTemplates",
               "Dev_StartDocsSite",
               "GenerateDocs",
-              "GitWorkingCopyShouldBeClean",
               "Init",
               "IntegrationTests",
               "Pack",
@@ -103,7 +101,8 @@
               "Restore",
               "SonarCloudBegin",
               "SonarCloudEnd",
-              "UnitTests"
+              "UnitTests",
+              "VerifyCleanWorkingCopy"
             ]
           }
         },
@@ -126,7 +125,6 @@
               "CiCd_Build",
               "CiCd_BuildDocs",
               "CiCd_Default",
-              "CiCd_PullRequest",
               "CiCd_Release",
               "CiCd_TagVersion",
               "Clean",
@@ -136,7 +134,6 @@
               "Dev_InstallTemplates",
               "Dev_StartDocsSite",
               "GenerateDocs",
-              "GitWorkingCopyShouldBeClean",
               "Init",
               "IntegrationTests",
               "Pack",
@@ -144,7 +141,8 @@
               "Restore",
               "SonarCloudBegin",
               "SonarCloudEnd",
-              "UnitTests"
+              "UnitTests",
+              "VerifyCleanWorkingCopy"
             ]
           }
         },

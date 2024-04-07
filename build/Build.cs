@@ -28,17 +28,17 @@ public partial class Build : NukeBuild
 {
     public static int Main() => Execute<Build>(x => x.Default);
 
-    [Parameter("Configuration to build - Default is 'Release'")]
+    [Parameter("Configuration to build - NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source")]
     internal readonly Configuration Configuration = Configuration.Release;
 
     [Parameter("The Nuget source url", List = false)]
     internal readonly string NuGetSource = "https://api.nuget.org/v3/index.json";
 
-    [Parameter("The api key to use when pushing to Nuget")]
+    [Parameter("The api key to use when pushing to Nuget", List = false)]
     [Secret]
     internal readonly string NuGetApiKey;
 
-    [Parameter("The token to use when running SonarClound analyzis")]
+    [Parameter("The token to use when running SonarClound analyzis", List = false)]
     [Secret]
     internal readonly string SonarToken;
 
@@ -214,6 +214,7 @@ public partial class Build : NukeBuild
              });
 
     internal Target GenerateDocs => _ => _
+        .Requires(() => Configuration.Equals(Configuration.Release))
         .DependsOn(Compile)
         .After(IntegrationTests)
         .Executes(() =>
@@ -238,8 +239,8 @@ public partial class Build : NukeBuild
 
     internal Target Push => _ => _
         .DependsOn(Default)
-        .DependsOn(GitWorkingCopyShouldBeClean)
-        .After(BuildDocs)
+        .DependsOn(BuildDocs)
+        .DependsOn(VerifyCleanWorkingCopy)
         .Requires(() => GitRepository.IsOnVersionTag())
         .Requires(() => NuGetSource)
         .Requires(() => NuGetApiKey)
@@ -260,11 +261,10 @@ public partial class Build : NukeBuild
         });
 
 #pragma warning disable CA1822 // Mark members as static
-    internal Target GitWorkingCopyShouldBeClean => _ => _
+    internal Target VerifyCleanWorkingCopy => _ => _
         .Unlisted()
         .After(GenerateDocs)
         .After(BuildDocs)
-        .Before(Push)
         .Executes(() =>
         {
             LogChangesAndFailIfGitWorkingCopyIsNotClean();
@@ -290,6 +290,9 @@ public partial class Build : NukeBuild
 
     internal Target SonarCloudEnd => _ => _
         .Unlisted()
+        .DependsOn(SonarCloudBegin)
+        .DependsOn(UnitTests)
+        .DependsOn(IntegrationTests)
         .Requires(() => SonarToken)
         .After(UnitTests)
         .After(IntegrationTests)

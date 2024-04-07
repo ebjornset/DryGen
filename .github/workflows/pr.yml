@@ -41,11 +41,16 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.*
-      - name: Setup JDK (for SonarCloud)
+      - name: Setup Java (for SonarCloud)
         uses: actions/setup-java@v4
         with:
-          distribution: zulu
-          java-version: 17
+          distribution: temurin
+          java-version: 20
+          java-package: jre
+      - name: Setup Ruby (for building docs with Jekyll)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
         uses: actions/cache@v3
         with:
@@ -53,8 +58,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
-      - name: 'Run: CiCd_PullRequest'
-        run: ./build.cmd CiCd_PullRequest
+      - name: 'Run: CiCd_Build'
+        run: ./build.cmd CiCd_Build
         env:
           SonarToken: ${{ secrets.SONAR_TOKEN }}
       - name: 'Publish: artifacts'
