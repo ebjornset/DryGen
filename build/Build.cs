@@ -255,6 +255,7 @@ public partial class Build : NukeBuild
 
     internal Target TagVersion => _ => _
         .Unlisted()
+        .After(Clean)
         .DependsOn(VerifyCleanWorkingCopyBeforeBuild)
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Requires(() => Version)
