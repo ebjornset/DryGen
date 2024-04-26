@@ -1,0 +1,39 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern",
+      "template"
+    ],
+    "globalMetadata": {
+      "_appName": "DryGen",
+      "_appTitle": "DryGen",
+      "_enableSearch": true,
+      "_disableContribution": true,
+      "pdf": true
+    },
+    "sitemap": {
+      "baseUrl": "https://docs.drygen.dev",
+      "priority": 0.5,
+      "changefreq": "daily"
+    }    
+  }
+}

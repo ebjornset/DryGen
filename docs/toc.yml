@@ -1,0 +1,6 @@
+- name: Verbs
+  href: verbs/
+- name: Examples
+  href: examples/
+- name: About
+  href: about/
