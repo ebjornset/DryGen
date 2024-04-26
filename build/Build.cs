@@ -5,6 +5,7 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Coverlet;
+using Nuke.Common.Tools.DocFX;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.GitVersion;
@@ -28,10 +29,10 @@ public partial class Build : NukeBuild
 {
     public static int Main() => Execute<Build>(x => x.Default);
 
-    [Parameter("Configuration to build - NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source")]
+    [Parameter("Configuration to build. NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source.")]
     internal readonly Configuration Configuration = Configuration.Release;
 
-    [Parameter("The version number for the version tag. Must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. alpha, beta or prerelease", List = false)]
+    [Parameter("The version number for the version tag. Must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. 'alpha', 'beta' or 'prerelease'", List = false)]
     internal readonly string Version;
 
     [Parameter("The Nuget source url", List = false)]
@@ -54,6 +55,7 @@ public partial class Build : NukeBuild
         .DependsOn(UnitTests)
         .DependsOn(IntegrationTests)
         .DependsOn(GenerateDocs)
+        .DependsOn(BuildDocs)
         ;
 
 #pragma warning disable CA1822 // Mark members as static
@@ -225,8 +227,7 @@ public partial class Build : NukeBuild
         .After(GenerateDocs)
         .Executes(() =>
         {
-            ProcessTasks.StartProcess("bundle", arguments: string.Join(' ', "install", "--jobs=4", "--retry=3"), workingDirectory: DocsDirectory.ToString(), logOutput: true, logInvocation: true).AssertZeroExitCode();
-            ProcessTasks.StartProcess("bundle", arguments: string.Join(' ', "exec", "jekyll", "build"), workingDirectory: DocsDirectory.ToString(), logOutput: true, logInvocation: true).AssertZeroExitCode();
+            DocFXTasks.DocFXBuild(c => c.SetProcessWorkingDirectory(DocsDirectory));
         });
 
     internal Target PushPackagesToNuget => _ => _

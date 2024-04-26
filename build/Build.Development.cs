@@ -11,6 +11,9 @@ namespace DryGen.Build;
 
 public partial class Build
 {
+    [Parameter("The port to use when starting the docs site locally. Default = 8086")]
+    internal readonly int DocsPort = 8086;
+
     internal Target Dev_InstallGlobalTool => _ => _
         .DependsOn(Pack)
         .Executes(() =>
@@ -56,8 +59,8 @@ public partial class Build
         {
             DocsSiteDirectory.CreateOrCleanDirectory();
             PowerShellTasks.PowerShell(
-                arguments: "Start-Process -FilePath \"bundle\" -ArgumentList \"exec jekyll serve --drafts --incremental\"",
-                workingDirectory: DocsDirectory
+                arguments: "Start-Process -FilePath \"docfx\" -ArgumentList \"serve --port " + DocsPort +" --open-browser\" ",
+                workingDirectory: DocsSiteDirectory
                                       );
         });
 }
