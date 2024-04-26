@@ -83,7 +83,7 @@ public static class Program
 
     private static void GenerateVerbsMenu(string rootDirectory)
     {
-        var verbMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "verbs_menu.yml").AsLinuxPath();
+        var verbMenuPath = Path.Combine(rootDirectory.AsVerbsDirectory(), "toc.yml").AsLinuxPath();
         Console.WriteLine($"Generating verbs menu to \"{verbMenuPath}\"");
         using var verbMenuWriter = new StreamWriter(verbMenuPath);
         VerbMenuGenerator.Generate(verbMenuWriter);
@@ -92,7 +92,7 @@ public static class Program
     private static void GenerateExamplesMenu(string rootDirectory)
     {
         var examplesTemplateDirectory = rootDirectory.AsExamplesTemplatesDirectory();
-        var examplesMenuPath = Path.Combine(rootDirectory.AsDataDirectory(), "examples_menu.yml").AsLinuxPath();
+        var examplesMenuPath = Path.Combine(rootDirectory.AsExamplesDirectory(), "toc.yml").AsLinuxPath();
         Console.WriteLine($"Generating examples menu to \"{examplesMenuPath}\"");
         using var examplesMenuWriter = new StreamWriter(examplesMenuPath);
         ExamplesMenuGenerator.Generate(examplesMenuWriter, examplesTemplateDirectory);

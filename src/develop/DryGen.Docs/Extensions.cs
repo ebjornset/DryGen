@@ -39,11 +39,6 @@ public static class Extensions
         return Path.Combine(rootDirectory.AsDocsDirectory(), "verbs").AsLinuxPath();
     }
 
-    public static string AsDataDirectory(this string rootDirectory)
-    {
-        return Path.Combine(rootDirectory.AsDocsDirectory(), "_data").AsLinuxPath();
-    }
-
     public static string AsLinuxPath(this string path)
     {
         return path.Replace("\\", "/");
