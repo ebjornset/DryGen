@@ -29,6 +29,7 @@
       "_appTitle": "DryGen",
       "_enableSearch": true,
       "_disableContribution": true,
+      "_disableBreadcrumb": true,
       "pdf": true
     },
     "sitemap": {

@@ -1,14 +1,14 @@
 ---
 _disableToc: true
 ---
-
+# About
 The dry-gen tool is developed as an open source software project hosted on [Github](https://github.com/ebjornset/DryGen) under the [MIT licence](https://github.com/ebjornset/DryGen/blob/main/LICENSE.md).
 
-### Inspiration
+## Inspiration
 
 Beside the ["don't repeat yourself" (DRY) prinsiple](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), formulated in the book [The Pragmatic Programmer](https://en.wikipedia.org/wiki/The_Pragmatic_Programmer), [Mermaid (.js)](https://mermaid-js.github.io/mermaid/#/) is the main inspiration for dry-gen. Their documentation formats are so terse and simple that I was able to get my first diagram up and running in a few minutes by just typing plain text in my editor! Knowing a bit about C# reflection I realized that generating Mermaid diagrams from C# assemblies would be a managable task, and thus dry-gen was borned.
 
-### Development tools
+## Development tools
 
 As an open source tool **"we're standing on the shoulder of giants"**, and we heavily rely on the hard work of others volunteers. Drygen would probably never have seen the light of day without these other excellent tools:
 

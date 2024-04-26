@@ -1,12 +1,4 @@
----
-layout: page
-title: Verbs
-description: The verbs dry-gen supports
-show_sidebar: false
-menubar: verbs_menu
-hero_height: is-fullwidth
----
-
+# Verbs
 The menu on the left lists all the dry-gen verbs. Each of these pages will give you an overview of the verb's options and an options file template for the verb.
 
 {% include notification.html status="is-dark"

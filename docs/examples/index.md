@@ -1,11 +1,6 @@
 ---
-layout: page
-title: Examples
-description: Examples of dry-gen usage
-show_sidebar: false
-menubar: examples_menu
-hero_height: is-fullwidth
 ---
+# Examples
 The  menu on the left lists the dry-gen examples. Each of these pages will give you information on how to use the various dry-gen features. 
 
 {% include notification.html status="is-dark" message="
