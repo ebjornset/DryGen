@@ -6,7 +6,8 @@
           "**/*.{md,yml}"
         ],
         "exclude": [
-          "_site/**"
+          "_site/**",
+          "_templates/**"
         ]
       }
     ],
@@ -34,6 +35,6 @@
       "baseUrl": "https://docs.drygen.dev",
       "priority": 0.5,
       "changefreq": "daily"
-    }    
+    }
   }
 }
