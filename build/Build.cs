@@ -213,7 +213,7 @@ public partial class Build : NukeBuild
         .After(IntegrationTests)
         .Executes(() =>
         {
-            DocsGeneratedDirectory.CreateOrCleanDirectory();
+            DocsGeneratedDirectory.CreateOrCleanDirectory(recurse: true);
             DotNetRun(c => c
                 .SetProjectFile(GetProject("develop", "DryGen.Docs"))
                 .SetConfiguration(Configuration)
@@ -402,6 +402,7 @@ public partial class Build : NukeBuild
     private static AbsolutePath DocsMergedDirectory => DocsDirectory / "_merged";
     private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
     private static AbsolutePath DocsSrcDirectory => DocsDirectory / "src";
+    private static AbsolutePath DocsTemplatesDirectory => DocsDirectory / "templates";
     private static AbsolutePath DocsPostsDirectory => DocsDirectory / "_posts";
     private static AbsolutePath UnitTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.UTests" / "TestResults";
     private static AbsolutePath IntergrationTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.ITests" / "TestResults";

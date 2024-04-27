@@ -21,5 +21,7 @@ while($TRUE){
 	}
     $Date = Get-Date -format "yy-MM-dd hh:mm:ss"
 	Write-Output "$($Date) - '$($Result.Name)' has changed"
-	Start-Process -FilePath $Command -NoNewWindow -ArgumentList $Arguments
+	Start-Process -Wait -FilePath $Command -NoNewWindow -ArgumentList $Arguments
+    $Date = Get-Date -format "yy-MM-dd hh:mm:ss"
+	Write-Output "$($Date) - Finished after '$($Result.Name)' had changed"
 }

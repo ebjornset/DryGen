@@ -27,4 +27,10 @@ public static class Extensions
         }
         return path;
     }
+
+    public static string ToQuotedString(this string value)
+    {
+        return $"\"{value}\"";
+    }
+
 }

@@ -4,7 +4,9 @@ using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.PowerShell;
+using Serilog;
 using System.IO;
+using System.Text;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 namespace DryGen.Build;
@@ -59,12 +61,27 @@ public partial class Build
         .After(GenerateDocs)
         .Executes(() =>
         {
-            DocsSiteDirectory.CreateOrCleanDirectory();
+            DocsGeneratedDirectory.CreateDirectory();
+            DocsMergedDirectory.CreateDirectory();
+            DocsSiteDirectory.CreateDirectory();
+            WatchAndRun(DocsTemplatesDirectory, GetProject("develop", "DryGen.Docs").Directory / "bin" / "Release" / "net6.0" / "DryGen.Docs", "--root-directory", RootDirectory);
+            WatchAndRun(DocsGeneratedDirectory, "powershell", "Copy-Item", DocsGeneratedDirectory / "*", DocsMergedDirectory, "-Recurse", "-Force");
+            WatchAndRun(DocsSrcDirectory, "powershell", "Copy-Item", DocsSrcDirectory / "*", DocsMergedDirectory, "-Recurse", "-Force");
+            WatchAndRun(DocsMergedDirectory, "docfx", "build", DocsMergedDirectory / "docfx.json");
             PowerShellTasks.PowerShell(
-                arguments: "Start-Process -FilePath \"" + (BuildDirectory / "watch.ps1").ToString() + "\" -ArgumentList \"--Path\" ",
+                arguments: "Start-Process -FilePath docfx -ArgumentList \"serve --port " + DocsPort + " --open-browser\"",
                 workingDirectory: DocsSiteDirectory);
-            //PowerShellTasks.PowerShell(
-            //    arguments: "Start-Process -FilePath \"docfx\" -ArgumentList \"serve --port " + DocsPort + " --open-browser\" ",
-            //    workingDirectory: DocsSiteDirectory);
         });
+
+    private static void WatchAndRun(string path, string command, params string[] arguments)
+    {
+        var sb = new StringBuilder()
+            .Append("Start-Process -FilePath powershell -ArgumentList ")
+            .Append('"').Append(BuildDirectory / "watch.ps1").Append("\", ")
+            .Append("\" -Path ").Append(path).Append("\", ")
+            .Append("\" -Command ").Append(command).Append("\", ")
+            .Append("\" -Arguments ").Append(string.Join(',', arguments)).Append('"')
+            ;
+        PowerShellTasks.PowerShell(sb.ToString());
+    }
 }
