@@ -209,7 +209,7 @@ public partial class Build : NukeBuild
 
     internal Target GenerateDocs => _ => _
         .Requires(() => Configuration.Equals(Configuration.Release))
-        .DependsOn(Compile)
+        .After(Compile)
         .After(IntegrationTests)
         .Executes(() =>
         {

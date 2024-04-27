@@ -14,6 +14,8 @@ public partial class Build
     [Parameter("The port to use when starting the docs site locally. Default = 8086")]
     internal readonly int DocsPort = 8086;
 
+    private static AbsolutePath BuildDirectory => RootDirectory / "build";
+
     internal Target Dev_InstallGlobalTool => _ => _
         .DependsOn(Pack)
         .Executes(() =>
@@ -59,8 +61,10 @@ public partial class Build
         {
             DocsSiteDirectory.CreateOrCleanDirectory();
             PowerShellTasks.PowerShell(
-                arguments: "Start-Process -FilePath \"docfx\" -ArgumentList \"serve --port " + DocsPort +" --open-browser\" ",
-                workingDirectory: DocsSiteDirectory
-                                      );
+                arguments: "Start-Process -FilePath \"" + (BuildDirectory / "watch.ps1").ToString() + "\" -ArgumentList \"--Path\" ",
+                workingDirectory: DocsSiteDirectory);
+            //PowerShellTasks.PowerShell(
+            //    arguments: "Start-Process -FilePath \"docfx\" -ArgumentList \"serve --port " + DocsPort + " --open-browser\" ",
+            //    workingDirectory: DocsSiteDirectory);
         });
 }
