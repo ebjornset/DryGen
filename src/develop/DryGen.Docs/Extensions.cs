@@ -21,22 +21,27 @@ public static class Extensions
 
     public static string AsTemplatesDirectory(this string rootDirectory)
     {
-        return Path.Combine(rootDirectory.AsDocsDirectory(), "_templates").AsLinuxPath();
+        return Path.Combine(rootDirectory.AsDocsDirectory(), "templates").AsLinuxPath();
     }
 
-    public static string AsExamplesTemplatesDirectory(this string rootDirectory)
+    public static string AsGeneratedDirectory(this string rootDirectory)
+    {
+        return Path.Combine(rootDirectory.AsDocsDirectory(), "_generated").AsLinuxPath();
+    }
+
+    public static string AsTemplatesExamplesDirectory(this string rootDirectory)
     {
         return Path.Combine(rootDirectory.AsTemplatesDirectory(), "examples").AsLinuxPath();
     }
 
-    public static string AsExamplesDirectory(this string rootDirectory)
+    public static string AsGeneratedExamplesDirectoryCreated(this string rootDirectory)
     {
-        return Path.Combine(rootDirectory.AsDocsDirectory(), "examples").AsLinuxPath();
+        return Path.Combine(rootDirectory.AsGeneratedDirectory(), "examples").AsLinuxPath().CreateDirectories();
     }
 
-    public static string AsVerbsDirectory(this string rootDirectory)
+    public static string AsGeneratedVerbsDirectoryCreated(this string rootDirectory)
     {
-        return Path.Combine(rootDirectory.AsDocsDirectory(), "verbs").AsLinuxPath();
+        return Path.Combine(rootDirectory.AsGeneratedDirectory(), "verbs").AsLinuxPath().CreateDirectories();
     }
 
     public static string AsLinuxPath(this string path)
@@ -47,5 +52,11 @@ public static class Extensions
     public static string AsRelativePathOf(this string directory, string rootDirectory)
     {
         return Path.GetRelativePath(rootDirectory, directory).AsLinuxPath();
+    }
+
+    public static string CreateDirectories(this string path)
+    {
+        Directory.CreateDirectory(path);
+        return path;
     }
 }

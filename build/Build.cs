@@ -63,7 +63,7 @@ public partial class Build : NukeBuild
         .Executes(() =>
         {
             SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(x => x.DeleteDirectory());
-            ArtifactsDirectory.CreateOrCleanDirectory();
+            ArtifactsDirectory.CreateOrCleanDirectory(recurse: true);
         });
 #pragma warning restore CA1822 // Mark members as static
 
@@ -213,6 +213,7 @@ public partial class Build : NukeBuild
         .After(IntegrationTests)
         .Executes(() =>
         {
+            DocsGeneratedDirectory.CreateOrCleanDirectory();
             DotNetRun(c => c
                 .SetProjectFile(GetProject("develop", "DryGen.Docs"))
                 .SetConfiguration(Configuration)
@@ -227,7 +228,15 @@ public partial class Build : NukeBuild
         .After(GenerateDocs)
         .Executes(() =>
         {
-            DocFXTasks.DocFXBuild(c => c.SetProcessWorkingDirectory(DocsDirectory));
+            DocsMergedDirectory.CreateOrCleanDirectory(recurse: true);
+            DocsSiteDirectory.CreateOrCleanDirectory(recurse: true);
+            CopyToMergedDocs(DocsGeneratedDirectory);
+            CopyToMergedDocs(DocsSrcDirectory);
+            DocFXTasks.DocFXBuild(c => c
+                .SetProcessWorkingDirectory(DocsMergedDirectory)
+                .SetDisableGitFeatures(true)
+                .SetOutputFolder(DocsSiteDirectory)
+            );
         });
 
     internal Target PushPackagesToNuget => _ => _
@@ -261,7 +270,7 @@ public partial class Build : NukeBuild
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Requires(() => Version)
         .Requires(() => GitRepository.IsOnMainBranch())
-        .Requires( ()=> ProperNextVersionNumber())
+        .Requires(() => ProperNextVersionNumber())
         .Requires(() => ReleaseNotesFromToday())
         .Before(Init)
         .Executes(() =>
@@ -345,7 +354,8 @@ public partial class Build : NukeBuild
         // For now we just verifies that the git tag does not exist
         var versionTagName = Version.ToVersionTagName();
         var gitOutput = GitTasks.Git("tag --list", logOutput: false, logInvocation: false);
-        if (gitOutput.Any(x => string.Equals(x.Text, versionTagName, StringComparison.InvariantCultureIgnoreCase))) {
+        if (gitOutput.Any(x => string.Equals(x.Text, versionTagName, StringComparison.InvariantCultureIgnoreCase)))
+        {
             Log.Error("Version tag '{VersionTagName}' already exists!", versionTagName);
             return false;
         }
@@ -362,6 +372,11 @@ public partial class Build : NukeBuild
             return false;
         }
         return true;
+    }
+
+    private static void CopyToMergedDocs(AbsolutePath source)
+    {
+        PowerShellTasks.PowerShell("Copy-Item  -Path \"" + (source / "*").ToString() + "\" -Destination \"" + DocsMergedDirectory.ToString() + "\" -Recurse -Force");
     }
 
     private static void LogChangesAndFailIfGitWorkingCopyIsNotClean()
@@ -383,7 +398,10 @@ public partial class Build : NukeBuild
     private static AbsolutePath SourceDirectory => RootDirectory / "src";
     private static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     private static AbsolutePath DocsDirectory => RootDirectory / "docs";
+    private static AbsolutePath DocsGeneratedDirectory => DocsDirectory / "_generated";
+    private static AbsolutePath DocsMergedDirectory => DocsDirectory / "_merged";
     private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
+    private static AbsolutePath DocsSrcDirectory => DocsDirectory / "src";
     private static AbsolutePath DocsPostsDirectory => DocsDirectory / "_posts";
     private static AbsolutePath UnitTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.UTests" / "TestResults";
     private static AbsolutePath IntergrationTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.ITests" / "TestResults";

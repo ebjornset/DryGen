@@ -18,7 +18,7 @@ public sealed class ExamplesSteps : IDisposable
     {
         this.consoleContext = consoleContext;
         rootDirectory = Path.Combine(Path.GetTempPath(), $"dry-gen-test-root-directory-{Guid.NewGuid()}");
-        examplesTemplatesDirectory = rootDirectory.AsExamplesTemplatesDirectory();
+        examplesTemplatesDirectory = rootDirectory.AsTemplatesExamplesDirectory();
     }
 
     [Given(@"the examples template folder contains these files")]
@@ -48,14 +48,14 @@ public sealed class ExamplesSteps : IDisposable
     [When(@"I generate the examples file ""([^""]*)""")]
     public void WhenIGenerateTheExamplesFile(string fileName)
     {
-        Directory.CreateDirectory(rootDirectory.AsExamplesDirectory());
+        Directory.CreateDirectory(rootDirectory.AsGeneratedExamplesDirectoryCreated());
         ExamplesFileGenerator.Generate(rootDirectory, fileName);
     }
 
     [Then(@"the examples folder should containing the file ""([^""]*)"" with content")]
     public void ThenTheExamplesFolderShouldContainingTheFileWithContent(string fileName, string expectedFileContent)
     {
-        var expectedExamplesFile = Path.Combine(rootDirectory.AsExamplesDirectory(), fileName);
+        var expectedExamplesFile = Path.Combine(rootDirectory.AsGeneratedExamplesDirectoryCreated(), fileName);
         File.Exists(expectedExamplesFile).Should().BeTrue();
         var actualFileContent = File.ReadAllText(expectedExamplesFile);
         actualFileContent.Should().Be(expectedFileContent);

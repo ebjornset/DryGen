@@ -5,15 +5,14 @@
         "files": [
           "**/*.{md,yml}"
         ],
-        "exclude": [
-          "_templates/**"
-        ]
+        "exclude": "README.md"
       }
     ],
     "resource": [
       {
         "files": [
-          "images/**"
+          "CNAME",
+          "README.md"
         ]
       }
     ],

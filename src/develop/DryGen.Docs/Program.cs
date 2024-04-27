@@ -66,7 +66,7 @@ public static class Program
 
     private static string GetOutputFile(string rootDirectory, ExamplesGeneratorData generatorData)
     {
-        return Path.Combine(rootDirectory.AsExamplesDirectory(), generatorData.OutputFile.ToLowerInvariant()).AsLinuxPath();
+        return Path.Combine(rootDirectory.AsGeneratedExamplesDirectoryCreated(), generatorData.OutputFile.ToLowerInvariant()).AsLinuxPath();
     }
 
     private static void GenerateVerbsMarkdown(string rootDirectory)
@@ -74,7 +74,7 @@ public static class Program
         var verbs = typeof(Generator).Assembly.GetTypes().Where(x => x.HasVerbAttribute()).Select(x => x.GetVerb());
         foreach (var verb in verbs.OrderBy(x => x))
         {
-            var verbMarkdownPath = Path.Combine(rootDirectory.AsVerbsDirectory(), $"{verb}.md").AsLinuxPath();
+            var verbMarkdownPath = Path.Combine(rootDirectory.AsGeneratedVerbsDirectoryCreated(), $"{verb}.md").AsLinuxPath();
             Console.WriteLine($"Generating verb markdown for '{verb}' to \"{verbMarkdownPath}\"");
             using var verbMarkdownWriter = new StreamWriter(verbMarkdownPath);
             VerbMarkdowGenerator.Generate(verb, verbMarkdownWriter);
@@ -83,7 +83,7 @@ public static class Program
 
     private static void GenerateVerbsMenu(string rootDirectory)
     {
-        var verbMenuPath = Path.Combine(rootDirectory.AsVerbsDirectory(), "toc.yml").AsLinuxPath();
+        var verbMenuPath = Path.Combine(rootDirectory.AsGeneratedVerbsDirectoryCreated(), "toc.yml").AsLinuxPath();
         Console.WriteLine($"Generating verbs menu to \"{verbMenuPath}\"");
         using var verbMenuWriter = new StreamWriter(verbMenuPath);
         VerbMenuGenerator.Generate(verbMenuWriter);
@@ -91,8 +91,8 @@ public static class Program
 
     private static void GenerateExamplesMenu(string rootDirectory)
     {
-        var examplesTemplateDirectory = rootDirectory.AsExamplesTemplatesDirectory();
-        var examplesMenuPath = Path.Combine(rootDirectory.AsExamplesDirectory(), "toc.yml").AsLinuxPath();
+        var examplesTemplateDirectory = rootDirectory.AsTemplatesExamplesDirectory();
+        var examplesMenuPath = Path.Combine(rootDirectory.AsGeneratedExamplesDirectoryCreated(), "toc.yml").AsLinuxPath();
         Console.WriteLine($"Generating examples menu to \"{examplesMenuPath}\"");
         using var examplesMenuWriter = new StreamWriter(examplesMenuPath);
         ExamplesMenuGenerator.Generate(examplesMenuWriter, examplesTemplateDirectory);
@@ -100,8 +100,8 @@ public static class Program
 
     private static void GenerateExamplesFilesFromTemplates(string rootDirectory)
     {
-        var examplesTemplatesDirectory = rootDirectory.AsExamplesTemplatesDirectory();
-        var examplesDirectory = rootDirectory.AsExamplesDirectory();
+        var examplesTemplatesDirectory = rootDirectory.AsTemplatesExamplesDirectory();
+        var examplesDirectory = rootDirectory.AsGeneratedExamplesDirectoryCreated();
         foreach (var exampleTemplateFile in Directory.GetFiles(examplesTemplatesDirectory).Select(x => Path.GetFileName(x)))
         {
             Console.WriteLine($"Generating examples from template file \"{exampleTemplateFile}\" in directory \"{examplesTemplatesDirectory}\" to \"{examplesDirectory}\"");
@@ -136,8 +136,8 @@ public static class Program
 
     private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string rootDirectory, string assemblyDirectory)
     {
-        var inputFile = Path.GetRelativePath(rootDirectory, Path.Combine(assemblyDirectory, generatorData.InputFile)).Replace("\\", "/");
-        var outputFile = Path.GetRelativePath(rootDirectory, GetOutputFile(rootDirectory, generatorData)).Replace("\\", "/");
+        var inputFile = Path.GetRelativePath(rootDirectory, Path.Combine(assemblyDirectory, generatorData.InputFile)).AsLinuxPath();
+        var outputFile = Path.GetRelativePath(rootDirectory, GetOutputFile(rootDirectory, generatorData)).AsLinuxPath();
         var result = new List<string>
         {
             generatorData.Verb,

@@ -1,4 +1,6 @@
 ﻿using Nuke.Common.Git;
+using Nuke.Common.IO;
+using Nuke.Common.Utilities.Collections;
 using System;
 
 namespace DryGen.Build;
@@ -13,5 +15,16 @@ public static class Extensions
     public static string ToVersionTagName(this string version)
     {
         return $"v{version}";
+    }
+
+    public static AbsolutePath CreateOrCleanDirectory(this AbsolutePath path, bool recurse)
+    {
+        path.CreateOrCleanDirectory();
+        if (recurse)
+        {
+            path.GlobDirectories("**").ForEach(x => x.DeleteDirectory());
+            path.CreateDirectory();
+        }
+        return path;
     }
 }
