@@ -28,11 +28,10 @@ public static class VerbMarkdowGenerator
               .Append(optionMetadata.Description.AsMarkdownTableCellValue()).AppendLine("|");
         }
         sb.AppendLine()
-          .AppendLine("{% include notification.html status=\"is-dark\" ")
-          .AppendLine("message=\"You can always get information about this verb's options by running the command ")
-          .AppendLine()
-          .Append("`dry-gen ").Append(verb).AppendLine(" --help`.\"")
-          .AppendLine("%}")
+          .AppendLine(">[!TIP]")
+          .AppendLine(">You can always get information about this verb's options by running the command")
+          .AppendLine(">")
+          .Append(">`dry-gen ").Append(verb).AppendLine(" --help`")
           .AppendLine("## Options file template")
           .Append("Here is a template for an options file for '").Append(verb).AppendLine("'. ")
           .AppendLine("```");
@@ -40,11 +39,10 @@ public static class VerbMarkdowGenerator
         new Generator(optionTemplateWriter, optionTemplateWriter).Run(new[] { "options-from-commandline", "--verb", verb });
         sb.AppendLine(optionTemplateWriter.ToString())
           .AppendLine("```")
-          .AppendLine("{% include notification.html status=\"is-dark\" ")
-          .AppendLine("message=\"You can generate the same template your self with the command ")
-          .AppendLine()
-          .Append("`dry-gen options-from-commandline --verb ").Append(verb).AppendLine("`\"")
-          .AppendLine("%}");
+          .AppendLine(">[!TIP]")
+          .AppendLine(">You can generate the same template your self with the command")
+          .AppendLine(">")
+          .Append(">`dry-gen options-from-commandline --verb ").Append(verb).AppendLine("`");
         writer.Write(sb.ToString());
     }
 }

@@ -11,11 +11,10 @@ The verb uses the following options.
 |---|---|---|---|
 |--options-file|-f|string|Read options from this file.|
 
-{% include notification.html status="is-dark" 
-message="You can always get information about this verb's options by running the command 
-
-`dry-gen verbs-from-options-file --help`."
-%}
+>[!TIP]
+>You can always get information about this verb's options by running the command
+>
+>`dry-gen verbs-from-options-file --help`
 ## Options file template
 Here is a template for an options file for 'verbs-from-options-file'. 
 ```
@@ -179,8 +178,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #replace-token-in-output-file: string
     #verb: string
 ```
-{% include notification.html status="is-dark" 
-message="You can generate the same template your self with the command 
-
-`dry-gen options-from-commandline --verb verbs-from-options-file`"
-%}
+>[!TIP]
+>You can generate the same template your self with the command
+>
+>`dry-gen options-from-commandline --verb verbs-from-options-file`

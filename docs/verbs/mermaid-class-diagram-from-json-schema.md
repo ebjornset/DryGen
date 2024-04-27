@@ -19,11 +19,10 @@ The verb uses the following options.
 |--title||string|Diagram title.|
 |--tree-shaking-roots||List of string|A '; separated' list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
 
-{% include notification.html status="is-dark" 
-message="You can always get information about this verb's options by running the command 
-
-`dry-gen mermaid-class-diagram-from-json-schema --help`."
-%}
+>[!TIP]
+>You can always get information about this verb's options by running the command
+>
+>`dry-gen mermaid-class-diagram-from-json-schema --help`
 ## Options file template
 Here is a template for an options file for 'mermaid-class-diagram-from-json-schema'. 
 ```
@@ -40,8 +39,7 @@ Here is a template for an options file for 'mermaid-class-diagram-from-json-sche
 #tree-shaking-roots: # List of string
 #- 
 ```
-{% include notification.html status="is-dark" 
-message="You can generate the same template your self with the command 
-
-`dry-gen options-from-commandline --verb mermaid-class-diagram-from-json-schema`"
-%}
+>[!TIP]
+>You can generate the same template your self with the command
+>
+>`dry-gen options-from-commandline --verb mermaid-class-diagram-from-json-schema`

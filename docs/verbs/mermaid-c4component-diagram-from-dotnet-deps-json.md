@@ -23,11 +23,10 @@ The verb uses the following options.
 |--shape-in-row||int32|Value for the parameter $c4ShapeInRow in UpdateLayoutConfig, used to arrange the diagram layout. (Default: 4)|
 |--title||string|Diagram title. (Default is composed from main assembly and .Net runtime information)|
 
-{% include notification.html status="is-dark" 
-message="You can always get information about this verb's options by running the command 
-
-`dry-gen mermaid-c4component-diagram-from-dotnet-deps-json --help`."
-%}
+>[!TIP]
+>You can always get information about this verb's options by running the command
+>
+>`dry-gen mermaid-c4component-diagram-from-dotnet-deps-json --help`
 ## Options file template
 Here is a template for an options file for 'mermaid-c4component-diagram-from-dotnet-deps-json'. 
 ```
@@ -49,8 +48,7 @@ Here is a template for an options file for 'mermaid-c4component-diagram-from-dot
 #shape-in-row: int32
 #title: string
 ```
-{% include notification.html status="is-dark" 
-message="You can generate the same template your self with the command 
-
-`dry-gen options-from-commandline --verb mermaid-c4component-diagram-from-dotnet-deps-json`"
-%}
+>[!TIP]
+>You can generate the same template your self with the command
+>
+>`dry-gen options-from-commandline --verb mermaid-c4component-diagram-from-dotnet-deps-json`
