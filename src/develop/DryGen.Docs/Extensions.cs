@@ -41,7 +41,7 @@ public static class Extensions
 
 	public static string AsTemplatesReleaseNotesDirectory(this string rootDirectory)
 	{
-		return Path.Combine(rootDirectory.AsTemplatesDirectory(), "releases").AsLinuxPath();
+		return Path.Combine(rootDirectory.AsTemplatesDirectory(), "releasenotes").AsLinuxPath();
 	}
 
 	public static string AsGeneratedExamplesDirectoryCreated(this string rootDirectory)
