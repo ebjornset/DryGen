@@ -365,10 +365,10 @@ public partial class Build : NukeBuild
     private bool ReleaseNotesFromToday()
     {
         var today = DateTime.Today.ToString("yyyy-MM-dd");
-        var releaseNotesFileName = $"{today}-release-{Version}.md";
-        if (!DocsPostsDirectory.ContainsFile(releaseNotesFileName))
+        var releaseNotesFileName = $"{today}-v-{Version}.md";
+        if (!DocsTemplatesReleaseNotesDirectory.ContainsFile(releaseNotesFileName))
         {
-            Log.Error("Release notes '{ReleaseNotesFileName}' is mising!", DocsPostsDirectory / releaseNotesFileName);
+            Log.Error("Release notes '{ReleaseNotesFileName}' is mising!", DocsTemplatesReleaseNotesDirectory / releaseNotesFileName);
             return false;
         }
         return true;
@@ -403,7 +403,7 @@ public partial class Build : NukeBuild
     private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
     private static AbsolutePath DocsSrcDirectory => DocsDirectory / "src";
     private static AbsolutePath DocsTemplatesDirectory => DocsDirectory / "templates";
-    private static AbsolutePath DocsPostsDirectory => DocsDirectory / "_posts";
+	private static AbsolutePath DocsTemplatesReleaseNotesDirectory => DocsTemplatesDirectory / "releasenotes";
     private static AbsolutePath UnitTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.UTests" / "TestResults";
     private static AbsolutePath IntergrationTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.ITests" / "TestResults";
 
