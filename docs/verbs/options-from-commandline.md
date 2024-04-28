@@ -16,6 +16,7 @@ The verb 'options-from-commandline' uses the following options.
 |---|---|---|---|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+|--output-template||string|Template text for controlling the final output. Use ${DryGenOutput} to include the generated representation in the result|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 |--verb||string|The dryg-gen verb to generate options for.|
 
@@ -31,6 +32,7 @@ Here is a template for an options file for 'options-from-commandline'.
 # dry-gen options for verb 'options-from-commandline'
 #
 #output-file: string
+#output-template: string
 #replace-token-in-output-file: string
 #verb: string
 ```

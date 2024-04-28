@@ -23,6 +23,7 @@ The verb 'mermaid-c4component-diagram-from-dotnet-deps-json' uses the following 
 |--input-file|-i|string|Full path to the input file to generate a new representation for.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+|--output-template||string|Template text for controlling the final output. Use ${DryGenOutput} to include the generated representation in the result|
 |--relation-level||all / interboundary / intraboundary / none|What types of dependencies should be included as relations in the diagram? (Default: all)|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 |--shape-in-row||int32|Value for the parameter $c4ShapeInRow in UpdateLayoutConfig, used to arrange the diagram layout. (Default: 4)|
@@ -49,6 +50,7 @@ Here is a template for an options file for 'mermaid-c4component-diagram-from-dot
 #- 
 #input-file: string
 #output-file: string
+#output-template: string
 #relation-level: all | interboundary | intraboundary | none
 #replace-token-in-output-file: string
 #shape-in-row: int32

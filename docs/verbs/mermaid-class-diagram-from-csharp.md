@@ -29,6 +29,7 @@ The verb 'mermaid-class-diagram-from-csharp' uses the following options.
 |--name-replace-to||string|The string to replace with in all class/entity names.|
 |--options-file|-f|string|Read options from this file.|
 |--output-file|-o|string|Write the generated representation to this file.|
+|--output-template||string|Template text for controlling the final output. Use ${DryGenOutput} to include the generated representation in the result|
 |--replace-token-in-output-file||string|Replace this token in the output file with the generated representation instead of just writing the generated representation to the specified output file.|
 |--title||string|Diagram title.|
 |--tree-shaking-roots||List of string|A '; separated' list of regular expressions for types to keep as roots when tree shaking the resulting diagram.|
@@ -62,6 +63,7 @@ Here is a template for an options file for 'mermaid-class-diagram-from-csharp'.
 #name-replace-from: string
 #name-replace-to: string
 #output-file: string
+#output-template: string
 #replace-token-in-output-file: string
 #title: string
 #tree-shaking-roots: # List of string

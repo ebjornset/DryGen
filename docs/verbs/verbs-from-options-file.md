@@ -15,6 +15,7 @@ The verb 'verbs-from-options-file' uses the following options.
 |Option|Alias|Type|Description|
 |---|---|---|---|
 |--options-file|-f|string|Read options from this file.|
+|--output-template||string|Template text for controlling the final output. Use ${DryGenOutput} to include the generated representation in the result|
 
 {% include notification.html status="is-dark" 
 message="You can always get information about this verb's options by running the command 
@@ -39,6 +40,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #input-file: string
     #namespace: string
     #output-file: string
+    #output-template: string
     #replace-token-in-output-file: string
     #root-classname: string
     #schema-file-format: byextension | json | yaml
@@ -59,6 +61,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #- 
     #input-file: string
     #output-file: string
+    #output-template: string
     #relation-level: all | interboundary | intraboundary | none
     #replace-token-in-output-file: string
     #shape-in-row: int32
@@ -87,6 +90,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #name-replace-from: string
     #name-replace-to: string
     #output-file: string
+    #output-template: string
     #replace-token-in-output-file: string
     #title: string
     #tree-shaking-roots: # List of string
@@ -100,6 +104,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #direction: default | bt | tb | lr | rl
     #input-file: string
     #output-file: string
+    #output-template: string
     #replace-token-in-output-file: string
     #root-classname: string
     #schema-file-format: byextension | json | yaml
@@ -127,6 +132,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #name-replace-from: string
     #name-replace-to: string
     #output-file: string
+    #output-template: string
     #relationship-type-exclusion: none | all
     #replace-token-in-output-file: string
     #title: string
@@ -153,6 +159,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #name-replace-from: string
     #name-replace-to: string
     #output-file: string
+    #output-template: string
     #relationship-type-exclusion: none | all
     #replace-token-in-output-file: string
     #title: string
@@ -168,6 +175,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
     #exclude-all-relationships: true|false
     #input-file: string
     #output-file: string
+    #output-template: string
     #replace-token-in-output-file: string
     #root-classname: string
     #schema-file-format: byextension | json | yaml
@@ -181,6 +189,7 @@ Here is a template for an options file for 'verbs-from-options-file'.
   #inherit-options-from: string #optional, name of another yaml document with the same verb in this file.
   #options:
     #output-file: string
+    #output-template: string
     #replace-token-in-output-file: string
     #verb: string
 ```
