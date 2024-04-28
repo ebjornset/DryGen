@@ -127,7 +127,7 @@ public static class Program
 	private static void GenerateReleaseNotestToc(string rootDirectory)
 	{
 		var releaseNotestTemplateDirectory = rootDirectory.AsTemplatesReleaseNotesDirectory();
-		GenerateToc(rootDirectory.AsGeneratedReleaseNotesDirectoryCreated(), "release notes", tocWriter => ReleaseNotesTocGenerator.Generate(tocWriter, releaseNotestTemplateDirectory));
+		GenerateToc(rootDirectory.AsGeneratedReleaseNotesDirectoryCreated(), "release notes", tocWriter => ReleaseNotesTocGenerator.Generate(tocWriter, releaseNotestTemplateDirectory, DateTime.Today));
 	}
 
 	private static void GenerateExamplesToc(string rootDirectory)
@@ -162,7 +162,7 @@ public static class Program
 		foreach (var releaseNotesTemplateFile in Directory.GetFiles(releaseNotesTemplatesDirectory).Select(x => Path.GetFileName(x)))
 		{
 			Console.WriteLine($"Generating release notes from template file \"{releaseNotesTemplateFile}\" in directory \"{releaseNotesTemplatesDirectory}\" to \"{releaseNotesDirectory}\"");
-			ReleaseNotesFileGenerator.Generate(rootDirectory, releaseNotesTemplateFile);
+			ReleaseNotesFileGenerator.Generate(rootDirectory, releaseNotesTemplateFile, DateTime.Today);
 		}
 	}
 

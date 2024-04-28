@@ -12,12 +12,16 @@ public sealed class ReleaseNotesSteps
 {
 	private readonly ConsoleContext consoleContext;
 	private readonly RootDirectoryContext rootDirectoryContext;
+	private readonly ExceptionContext exceptionContext;
+	private readonly TodayContext todayContext;
 	private readonly string releaseNotesTemplatesDirectory;
 
-	public ReleaseNotesSteps(ConsoleContext consoleContext, RootDirectoryContext rootDirectoryContext)
+	public ReleaseNotesSteps(ConsoleContext consoleContext, RootDirectoryContext rootDirectoryContext, ExceptionContext exceptionContext, TodayContext todayContext)
 	{
 		this.consoleContext = consoleContext;
 		this.rootDirectoryContext = rootDirectoryContext;
+		this.exceptionContext = exceptionContext;
+		this.todayContext = todayContext;
 		releaseNotesTemplatesDirectory = rootDirectoryContext.BuldSubDirectory(rootDirectory => rootDirectory.AsTemplatesReleaseNotesDirectory());
 	}
 
@@ -40,13 +44,13 @@ public sealed class ReleaseNotesSteps
 	[When(@"I generate the release notes TOC")]
 	public void WhenIGenerateTheReleaseNotesToc()
 	{
-		ReleaseNotesTocGenerator.Generate(consoleContext.OutWriter, releaseNotesTemplatesDirectory);
+		exceptionContext.HarvestExceptionFrom(() => ReleaseNotesTocGenerator.Generate(consoleContext.OutWriter, releaseNotesTemplatesDirectory, todayContext.Today));
 	}
 
 	[When(@"I generate the release notes file ""([^""]*)""")]
 	public void WhenIGenerateTheReleaseNotesFile(string fileName)
 	{
-		ReleaseNotesFileGenerator.Generate(rootDirectoryContext.RootDirectory, fileName);
+		exceptionContext.HarvestExceptionFrom(() => ReleaseNotesFileGenerator.Generate(rootDirectoryContext.RootDirectory, fileName, todayContext.Today));
 	}
 
 	[Then(@"the release notes folder should contain the file ""([^""]*)"" with content")]

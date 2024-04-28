@@ -20,7 +20,16 @@ public class ExceptionContext
         return default;
     }
 
-    public void ExpectExceptionContainingTheText(string text)
+	public void HarvestExceptionFrom(Action action)
+	{
+		HarvestExceptionFrom(() =>
+		{
+			action();
+			return true;
+		});
+	}
+
+	public void ExpectExceptionContainingTheText(string text)
     {
         Exception.Should().NotBeNull();
         Exception?.Message.Should().Contain(text);
