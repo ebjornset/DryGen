@@ -31,6 +31,7 @@ public static class Program
 		GenerateExamplesToc(rootDirectory);
 		GenerateExamplesFilesFromTemplates(rootDirectory);
 		GenerateReleaseNotestToc(rootDirectory);
+		GenerateReleasNotestFilesFromTemplates(rootDirectory);
 		var result = 0;
 		string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 		var generator = new Generator(Console.Out, Console.Error, useAssemblyLoadContextDefault: true);
@@ -151,6 +152,17 @@ public static class Program
 		{
 			Console.WriteLine($"Generating examples from template file \"{exampleTemplateFile}\" in directory \"{examplesTemplatesDirectory}\" to \"{examplesDirectory}\"");
 			ExamplesFileGenerator.Generate(rootDirectory, exampleTemplateFile);
+		}
+	}
+
+	private static void GenerateReleasNotestFilesFromTemplates(string rootDirectory)
+	{
+		var releaseNotesTemplatesDirectory = rootDirectory.AsTemplatesReleaseNotesDirectory();
+		var releaseNotesDirectory = rootDirectory.AsGeneratedReleaseNotesDirectoryCreated();
+		foreach (var releaseNotesTemplateFile in Directory.GetFiles(releaseNotesTemplatesDirectory).Select(x => Path.GetFileName(x)))
+		{
+			Console.WriteLine($"Generating release notes from template file \"{releaseNotesTemplateFile}\" in directory \"{releaseNotesTemplatesDirectory}\" to \"{releaseNotesDirectory}\"");
+			ReleaseNotesFileGenerator.Generate(rootDirectory, releaseNotesTemplateFile);
 		}
 	}
 

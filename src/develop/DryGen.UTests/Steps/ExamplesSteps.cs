@@ -37,8 +37,8 @@ public sealed class ExamplesSteps
         File.WriteAllText(examplesTemplateFile, fileContent);
     }
 
-    [When(@"I generate the examples menu")]
-    public void WhenIGenerateTheExamplesMenu()
+    [When(@"I generate the examples TOC")]
+    public void WhenIGenerateTheExamplesToc()
     {
         ExamplesTocGenerator.Generate(consoleContext.OutWriter, examplesTemplatesDirectory);
     }
@@ -49,11 +49,11 @@ public sealed class ExamplesSteps
         ExamplesFileGenerator.Generate(rootDirectoryContext.RootDirectory, fileName);
     }
 
-    [Then(@"the examples folder should containing the file ""([^""]*)"" with content")]
-    public void ThenTheExamplesFolderShouldContainingTheFileWithContent(string fileName, string expectedFileContent)
+    [Then(@"the examples folder should contain the file ""([^""]*)"" with content")]
+    public void ThenTheExamplesFolderShouldContainTheFileWithContent(string fileName, string expectedFileContent)
     {
-        var expectedExamplesFile = Path.Combine(rootDirectoryContext.RootDirectory.AsGeneratedExamplesDirectoryCreated(), fileName);
-        File.Exists(expectedExamplesFile).Should().BeTrue();
+        var expectedExamplesFile = Path.Combine(rootDirectoryContext.RootDirectory.AsGeneratedExamplesDirectoryCreated(), fileName).AsLinuxPath();
+        File.Exists(expectedExamplesFile).Should().BeTrue(expectedExamplesFile);
         var actualFileContent = File.ReadAllText(expectedExamplesFile);
         actualFileContent.Should().Be(expectedFileContent);
     }
