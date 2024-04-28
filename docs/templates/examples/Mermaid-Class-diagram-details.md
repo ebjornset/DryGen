@@ -13,15 +13,9 @@ These examples shows how you can control the property and method information fro
 
 Sometimes a C# type can contain quite a few methods and or properties, and thus can look quite complex in a Mermaid class diagram.
 
-### The commandline
+.!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering-commandline.!.!.
 
-`.!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
-```mermaid
 .!.!.replace-token-for-mermaid-class-diagram-details-example-no-filtering.!.!.
-```
 
 ## Example 2: Make more high level diagrams with `--method-level` and `--attribute-level`
 
@@ -32,15 +26,9 @@ If you want a more high level diagram, you can suppress methods by their visibil
 
 In this example we only show the public methods.
 
-### The commandline
+.!.!.replace-token-for-mermaid-class-diagram-details-example-method-level-commandline.!.!.
 
-`.!.!.replace-token-for-mermaid-class-diagram-details-example-method-level-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
-```mermaid
 .!.!.replace-token-for-mermaid-class-diagram-details-example-method-level.!.!.
-```
 
 ## Example 3: Focus on the domain's structure with `--exclude-static-methods` and `--exclude-static-attributes`
 
@@ -49,29 +37,17 @@ Sometimes your class diagram are all about the structure of a domain. Since stat
 >[!TIP]
 >You can also exclude any static attibutes with `--exclude-static-attributes`, but these tends to be seldomly used.
 
-### The commandline
+.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods-commandline.!.!.
 
-`.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
-```mermaid
 .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-static-methods.!.!.
-```
 
 ## Example 4: Simplify method signatures with `--exclude-method-params`
 
 Use `--exclude-method-params` if you want a simpler diagram without details about all the methods parameters.
 
-### The commandline
+.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params-commandline.!.!.
 
-`.!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
-```mermaid
 .!.!.replace-token-for-mermaid-class-diagram-details-example-exclude-method-params.!.!.
-```
 
 ## Example 5: Hiding naming conventions with `--name-replace-from` and `--name-replace-to`
 
@@ -82,12 +58,6 @@ In this example we hides the `^ClassDiagram.*` convention for all the ClassDiagr
 >[!NOTE]
 >Here we only also exclude all attibutes and methods with `attribute-level none --method-level none`, to make the resulting diagram more focused on the class names.
 
-### The commandline
+.!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace-commandline.!.!.
 
-`.!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
-```mermaid
 .!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace.!.!.
-```

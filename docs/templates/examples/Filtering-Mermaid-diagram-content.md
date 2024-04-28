@@ -19,15 +19,9 @@ The `--direction` option used in the examples are choosen by trial and error.
 
 Most C# codebases will soon contain a lot of types, so a class diagram without any filters can be far to detailed to be of any practical use.
 
-### The commandline
+.!.!.replace-token-for-mermaid-diagram-filter-example-no-filtering-commandline.!.!.
 
-`.!.!.replace-token-for-mermaid-diagram-filter-example-no-filtering-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
-```mermaid
 .!.!.replace-token-for-mermaid-diagram-filter-example-no-filtering.!.!.
-```
 
 ## Example 2: Filtering with `--tree-shaking-roots`
 
@@ -35,18 +29,12 @@ Use `--tree-shaking-roots` if you want a diagram with just the C# types with a r
  
 In this example we show all the dry-gen types related to the interface `ITypeFilter`.
 
-### The commandline
-
-`.!.!.replace-token-for-mermaid-diagram-filter-example-tree-shaking-roots-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
 >[!NOTE]
 >This diagram contains more or less all the C# types implementing the filtering capabilities we look at in these examples.
- 
-```mermaid
+
+.!.!.replace-token-for-mermaid-diagram-filter-example-tree-shaking-roots-commandline.!.!.
+
 .!.!.replace-token-for-mermaid-diagram-filter-example-tree-shaking-roots.!.!.
-```
 
 ## Example 3: Filtering with `--include-namespaces`
 
@@ -54,18 +42,12 @@ Use `--include-namespaces` if you want a diagram with all C# types in one or mor
 
 In this example we show all the dry-gen types in the namespace `DryGen.MermaidFromCSharp.ClassDiagram`.
 
-### The commandline
-
-`.!.!.replace-token-for-mermaid-diagram-filter-example-include-namespaces-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
 >[!NOTE]
 >This diagram contains more or less all the C# types implementing the capabilities to generate Mermaid Class diagrams.
 
-```mermaid
+.!.!.replace-token-for-mermaid-diagram-filter-example-include-namespaces-commandline.!.!.
+
 .!.!.replace-token-for-mermaid-diagram-filter-example-include-namespaces.!.!.
-```
 
 ## Example 4: Filtering with `--include-typenames`
 
@@ -73,18 +55,12 @@ Use `--include-typenames` if you want a diagram with all C# types where the type
 
 In this example we show all the dry-gen types where the type name matches the regex `.*ClassDiagram.*`.
 
-### The commandline
-
-`.!.!.replace-token-for-mermaid-diagram-filter-example-include-typenames-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
 >[!NOTE]
 >This diagram contains more or less the same C# types as in the previous example. That is just a coincidence, and happens since all the types for generating Mermaid class diagrams have the same naming convention **and** are grouped in the same name space.
 
-```mermaid
+.!.!.replace-token-for-mermaid-diagram-filter-example-include-typenames-commandline.!.!.
+
 .!.!.replace-token-for-mermaid-diagram-filter-example-include-typenames.!.!.
-```
 
 ## Example 5: Filtering with `--exclude-typenames`
 
@@ -92,15 +68,9 @@ Use `--exclude-typenames` if you want a diagram with all C# types except those w
 
 In this example we show all the dry-gen types where the type name does not match the regex `.*ClassDiagram.*`.
 
-### The commandline
-
-`.!.!.replace-token-for-mermaid-diagram-filter-example-exclude-typenames-commandline.!.!.`
-
-### The resulting Mermaid diagram
-
 >[!NOTE]
 >This diagram contains most of the dry-gen C# types except those in the previous examples two and four.
 
-```mermaid
+.!.!.replace-token-for-mermaid-diagram-filter-example-exclude-typenames-commandline.!.!.
+
 .!.!.replace-token-for-mermaid-diagram-filter-example-exclude-typenames.!.!.
-```

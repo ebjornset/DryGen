@@ -151,7 +151,7 @@ public class Generator
         return existingRepresentation;
     }
 
-    private static string BuildResultReprersentationFromOutputTemplate(string rawRepresentation, string? outputTemplate)
+	public static string BuildResultReprersentationFromOutputTemplate(string rawRepresentation, string? outputTemplate)
     {
         if (string.IsNullOrWhiteSpace(outputTemplate))
         {
