@@ -6,7 +6,8 @@ It's inspired by the ["Don't repeat yourself" (DRY) prinsiple](https://en.wikipe
 
 Beeing a .Net tool (with tool name `dry-gen`), you'll need a [.NET SDK](https://dotnet.microsoft.com/en-us/download) installed on your machine to use it. With a .Net SDK in place `dry-gen` is installed and used like any other [.Net tool](https://aka.ms/global-tools).
 
-**A little warning befor you start**: As with all .Net tools, you run `dry-gen` as an application with full trust, so make sure you know exactly where you write your output files.
+>[!WARNING]
+>As with all .Net tools, you run `dry-gen` as an application with full trust, so make sure you know exactly where you write your output files.
 
 ## Installation
 
