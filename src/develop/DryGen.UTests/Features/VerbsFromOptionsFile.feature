@@ -23,6 +23,7 @@ Scenario: Should generate output from one yaml document in the options file
 		# dry-gen options for verb 'options-from-commandline'
 		#
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#verb: string
 		"""
@@ -53,11 +54,13 @@ Scenario: Should generate output from two yaml documents in the options file
 		# dry-gen options for verb 'options-from-commandline'
 		#
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#verb: string#
 		# dry-gen options for verb 'options-from-commandline'
 		#
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#verb: string
 		"""

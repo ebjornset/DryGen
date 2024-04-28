@@ -59,6 +59,7 @@ Scenario: Should generate options for verb csharp-from-json-schema as 'replace-t
 		#input-file: string
 		#namespace: string
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
