@@ -31,7 +31,7 @@
       "_enableSearch": true,
       "_disableContribution": true,
       "_disableBreadcrumb": true,
-      "pdf": true
+      "pdf": false
     },
     "sitemap": {
       "baseUrl": "https://docs.drygen.dev",
