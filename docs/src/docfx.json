@@ -31,6 +31,7 @@
       "_enableSearch": true,
       "_disableContribution": true,
       "_disableBreadcrumb": true,
+      "_lang": "en",
       "pdf": false
     },
     "sitemap": {

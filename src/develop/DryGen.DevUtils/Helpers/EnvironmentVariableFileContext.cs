@@ -7,7 +7,7 @@ namespace DryGen.DevUtils.Helpers;
 
 public sealed class EnvironmentVariableFileContext : IDisposable
 {
-    private readonly List<string> files = new List<string>();
+    private readonly List<string> files = new();
     private readonly EnvironmentVariableContext environmentVariableContext;
 
     public EnvironmentVariableFileContext(EnvironmentVariableContext environmentVariableContext)

@@ -26,10 +26,11 @@ public static class Program
 		{
 			throw new ArgumentException($"Root directory '{rootDirectory}' does not exist!");
 		}
-		GenerateVerbsMenu(rootDirectory);
+		GenerateVerbsToc(rootDirectory);
 		GenerateVerbsMarkdown(rootDirectory);
-		GenerateExamplesMenu(rootDirectory);
+		GenerateExamplesToc(rootDirectory);
 		GenerateExamplesFilesFromTemplates(rootDirectory);
+		GenerateReleaseNotestToc(rootDirectory);
 		var result = 0;
 		string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 		var generator = new Generator(Console.Out, Console.Error, useAssemblyLoadContextDefault: true);
@@ -117,21 +118,29 @@ public static class Program
 		}
 	}
 
-	private static void GenerateVerbsMenu(string rootDirectory)
+	private static void GenerateVerbsToc(string rootDirectory)
 	{
-		var verbMenuPath = Path.Combine(rootDirectory.AsGeneratedVerbsDirectoryCreated(), "toc.yml").AsLinuxPath();
-		Console.WriteLine($"Generating verbs menu to \"{verbMenuPath}\"");
-		using var verbMenuWriter = new StreamWriter(verbMenuPath);
-		VerbMenuGenerator.Generate(verbMenuWriter);
+		GenerateToc(rootDirectory.AsGeneratedVerbsDirectoryCreated(), "verbs", tocWriter => VerbTocGenerator.Generate(tocWriter));
 	}
 
-	private static void GenerateExamplesMenu(string rootDirectory)
+	private static void GenerateReleaseNotestToc(string rootDirectory)
+	{
+		var releaseNotestTemplateDirectory = rootDirectory.AsTemplatesReleaseNotesDirectory();
+		GenerateToc(rootDirectory.AsGeneratedReleaseNotesDirectoryCreated(), "release notes", tocWriter => ReleaseNotesTocGenerator.Generate(tocWriter, releaseNotestTemplateDirectory));
+	}
+
+	private static void GenerateExamplesToc(string rootDirectory)
 	{
 		var examplesTemplateDirectory = rootDirectory.AsTemplatesExamplesDirectory();
-		var examplesMenuPath = Path.Combine(rootDirectory.AsGeneratedExamplesDirectoryCreated(), "toc.yml").AsLinuxPath();
-		Console.WriteLine($"Generating examples menu to \"{examplesMenuPath}\"");
-		using var examplesMenuWriter = new StreamWriter(examplesMenuPath);
-		ExamplesMenuGenerator.Generate(examplesMenuWriter, examplesTemplateDirectory);
+		GenerateToc(rootDirectory.AsGeneratedExamplesDirectoryCreated(), "examples", tocWriter => ExamplesTocGenerator.Generate(tocWriter, examplesTemplateDirectory));
+	}
+
+	private static void GenerateToc(string tocDirectory, string tocName, Action<TextWriter> tocBuilder)
+	{
+		var tocPath = Path.Combine(tocDirectory, "toc.yml").AsLinuxPath();
+		Console.WriteLine($"Generating {tocName} TOC to \"{tocPath}\"");
+		using var tocWriter = new StreamWriter(tocPath);
+		tocBuilder(tocWriter);
 	}
 
 	private static void GenerateExamplesFilesFromTemplates(string rootDirectory)

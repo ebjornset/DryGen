@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DryGen.Docs;
 
-public static class ExamplesMenuGenerator
+public static class ExamplesTocGenerator
 {
 	public static void Generate(TextWriter writer, string examplesTemplatesDirectory)
 	{

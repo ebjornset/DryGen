@@ -2,5 +2,7 @@
   href: verbs/
 - name: Examples
   href: examples/
+- name: Releases
+  href: releases/
 - name: About
   href: about/

@@ -39,7 +39,12 @@ public static class Extensions
         return Path.Combine(rootDirectory.AsTemplatesDirectory(), "examples").AsLinuxPath();
     }
 
-    public static string AsGeneratedExamplesDirectoryCreated(this string rootDirectory)
+	public static string AsTemplatesReleaseNotesDirectory(this string rootDirectory)
+	{
+		return Path.Combine(rootDirectory.AsTemplatesDirectory(), "releases").AsLinuxPath();
+	}
+
+	public static string AsGeneratedExamplesDirectoryCreated(this string rootDirectory)
     {
         return Path.Combine(rootDirectory.AsGeneratedDirectory(), "examples").AsLinuxPath().CreateDirectories();
     }
@@ -47,6 +52,11 @@ public static class Extensions
 	public static string AsGeneratedIncludeExamplesDirectoryCreated(this string rootDirectory)
 	{
 		return Path.Combine(rootDirectory.AsGeneratedIncludeDirectory(), "examples").AsLinuxPath().CreateDirectories();
+	}
+
+	public static string AsGeneratedReleaseNotesDirectoryCreated(this string rootDirectory)
+	{
+		return Path.Combine(rootDirectory.AsGeneratedDirectory(), "releases").AsLinuxPath().CreateDirectories();
 	}
 
 	public static string AsGeneratedVerbsDirectoryCreated(this string rootDirectory)
