@@ -78,9 +78,10 @@ public partial class Build
         var sb = new StringBuilder()
             .Append("Start-Process -FilePath powershell -ArgumentList ")
             .Append('"').Append(BuildDirectory / "watch.ps1").Append("\", ")
-            .Append("\" -Path ").Append(path).Append("\", ")
-            .Append("\" -Command ").Append(command).Append("\", ")
-            .Append("\" -Arguments ").Append(string.Join(',', arguments)).Append('"')
+            .Append("\"-Path ").Append(path).Append("\", ")
+            .Append("\"-Command ").Append(command).Append("\", ")
+            .Append("\"-RunAtStartup\", ")
+            .Append("\"-Arguments ").Append(string.Join(',', arguments)).Append('"')
             ;
         PowerShellTasks.PowerShell(sb.ToString());
     }
