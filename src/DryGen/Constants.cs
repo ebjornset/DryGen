@@ -7,6 +7,7 @@ public static class Constants
     public const string OutputFileOption = "output-file";
     public const string OptionsFileOption = "options-file";
     public const string ReplaceTokenInOutputFile = "replace-token-in-output-file";
+    public const string OutputTemplate = "output-template";
 
     public static class MermaidClassDiagramFromCsharp
     {

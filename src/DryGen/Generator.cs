@@ -131,7 +131,7 @@ public class Generator
                     existingRepresentation = ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(resultRepresentation, options.OutputFile, options.ReplaceTokenInOutputFile);
                 }
             }
-            var resultReprersentation = resultFunc(options);
+            var resultReprersentation = BuildResultReprersentationFromOutputTemplate(resultFunc(options), options.OutputTemplate);
             WriteGeneratedRepresentationToConsoleOrFile(options, resultReprersentation, existingRepresentation);
             return 0;
         });
@@ -150,6 +150,16 @@ public class Generator
         }
         return existingRepresentation;
     }
+
+    private static string BuildResultReprersentationFromOutputTemplate(string rawRepresentation, string? outputTemplate)
+    {
+        if (string.IsNullOrWhiteSpace(outputTemplate))
+        {
+            outputTemplate = "${DryGenOutput}";
+        }
+        return outputTemplate.Replace("${DryGenOutput}", rawRepresentation);
+    }
+
 
     private int ExecuteWithExceptionHandlingAndHelpDisplay<TOptions>(TOptions options, Func<TOptions, int> verbFunc) where TOptions : BaseOptions
     {
