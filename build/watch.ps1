@@ -12,8 +12,8 @@ $Watcher.Path = $Path
 $Watcher.IncludeSubdirectories = $true
 $Watcher.EnableRaisingEvents = $false
 $Watcher.NotifyFilter = [System.IO.NotifyFilters]::LastWrite -bOr [System.IO.NotifyFilters]::FileName
-Write-Output "Watches for changed files in '$($Path)', including sub directories"
-Write-Output "Will run '$($Command)' with Arguments '$($Arguments)' "
+Write-Output "Watches for changed files under '$($Path)' and trigger the command:"
+Write-Output "$($Command) $($Arguments)"
 while($TRUE){
 	$Result = $Watcher.WaitForChanged([System.IO.WatcherChangeTypes]::Changed -bOr [System.IO.WatcherChangeTypes]::Renamed -bOr [System.IO.WatcherChangeTypes]::Created, 1000);
 	if($Result.TimedOut){
