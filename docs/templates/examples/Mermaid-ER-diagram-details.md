@@ -7,7 +7,7 @@ These examples shows how you can control the property and method information fro
 [!code-csharp[](../_include/Example.cs)]
 
 >[!TIP]
->The options `--name-replace-from` and `--name-replace-to` works the same way for Mermaid ER diagram as for class diagrams. Look at the example in the [Mermaid Class diagram details examples](./mermaid-class-diagram-details.html) for details.
+>The options `--name-replace-from` and `--name-replace-to` works the same way for Mermaid ER diagram as for class diagrams. Look at the example in the [Mermaid Class diagram details examples](./mermaid-class-diagram-details.md) for details.
 
 ### Example 1: No filtering
 With no filtering there's a one-to-one mapping from the structure of your C# types to the entities in the Mermaid ER diagram.
@@ -59,4 +59,3 @@ In this example we show how we can excluded syntetic generated identifiers from 
 ```mermaid
 .!.!.replace-token-for-mermaid-er-diagram-details-example-exclude-propertynames.!.!.
 ```
-{% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}

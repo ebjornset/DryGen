@@ -5,7 +5,10 @@
         "files": [
           "**/*.{md,yml}"
         ],
-        "exclude": "README.md"
+        "exclude": [
+          "README.md",
+          "_include/**/*"
+        ]
       }
     ],
     "resource": [

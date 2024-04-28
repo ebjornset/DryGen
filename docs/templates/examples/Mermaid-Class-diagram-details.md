@@ -7,7 +7,7 @@
 These examples shows how you can control the property and method information from your C# types that's included in your Mermaid Class diagrams. Most of the examples uses one singe dry-gen C# type, the ClassDiagramGenerator, to make it easier to see the effect of the example's option.
 
 >[!TIP]
->The option `--exclude-propertynames` works the same way for Mermaid class diagram as for Er diagrams. Look at the example in the [Mermaid ER diagram details examples](./mermaid-er-diagram-details.html) for details.
+>The option `--exclude-propertynames` works the same way for Mermaid class diagram as for Er diagrams. Look at the example in the [Mermaid ER diagram details examples](./mermaid-er-diagram-details.md) for details.
 
 ### Example 1: No filtering
 
@@ -91,5 +91,3 @@ In this example we hides the `^ClassDiagram.*` convention for all the ClassDiagr
 ```mermaid
 .!.!.replace-token-for-mermaid-class-diagram-details-example-name-replace.!.!.
 ```
-
-{% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}

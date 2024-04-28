@@ -7,8 +7,8 @@ These examples shows how you can control what C# types that will be included in 
 Here we will only focus on the Class diagrams, but the filtering capabilities are the same for ER diagrams, so you can use the same filters for those diagrams.
 
 In the following examples we exclude most of the diagram content details, to make it easier to follow the examples.
-[The Mermaid Class diagram details examples](./mermaid-class-diagram-details.html) digs into more details on how to control the content details in your Mermaid Class diagrams and
-[the Mermaid ER diagram details examples](./mermaid-er-diagram-details.html) does the same for Mermaid Er diagrams.
+[The Mermaid Class diagram details examples](./mermaid-class-diagram-details.md) digs into more details on how to control the content details in your Mermaid Class diagrams and
+[the Mermaid ER diagram details examples](./mermaid-er-diagram-details.md) does the same for Mermaid Er diagrams.
 
 All these examples uses `DryGen.MermaidFromCSharp.dll` (the assembly for generating Mermaid diagram from C# code using reflection ) as `--input-file`.
 They also uses the same `--output-file` options, to give you an idea of how to control the generated representation by using the highlighted options.
@@ -104,5 +104,3 @@ In this example we show all the dry-gen types where the type name does not match
 ```mermaid
 .!.!.replace-token-for-mermaid-diagram-filter-example-exclude-typenames.!.!.
 ```
-
-{% include convert-fenced-mermaid-code-blocks-to-mermaid-div-script.html %}
