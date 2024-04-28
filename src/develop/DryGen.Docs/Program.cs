@@ -42,7 +42,7 @@ public static class Program
             }
             ReplaceCommandlineInExample(rootDirectory, assemblyDirectory, generator, generatorData);
         }
-        ReplaceErDigramExampleCodeInExample(rootDirectory, generator);
+		GenerateErDigramExampleCodeInIncludeExampleCs(rootDirectory);
         return result;
     }
 
@@ -59,17 +59,22 @@ public static class Program
     {
         var commandline = BuildExamplesGeneratorCommandline(generatorData, rootDirectory, assemblyDirectory);
         var examplesCommandLine = $"dry-gen {string.Join(' ', commandline)}";
-        var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(rootDirectory, generatorData), generatorData.ReplaceToken.AsCommandLineReplaceToken(), verbose: false);
+        var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetGeneratedExamplesOutputFile(rootDirectory, generatorData), generatorData.ReplaceToken.AsCommandLineReplaceToken(), verbose: false);
         var generatedRepresentation = existingRepresentation.Replace(generatorData.ReplaceToken.AsCommandLineReplaceToken(), examplesCommandLine);
-        File.WriteAllText(GetOutputFile(rootDirectory, generatorData), generatedRepresentation);
+        File.WriteAllText(GetGeneratedExamplesOutputFile(rootDirectory, generatorData), generatedRepresentation);
     }
 
-    private static string GetOutputFile(string rootDirectory, ExamplesGeneratorData generatorData)
+    private static string GetGeneratedExamplesOutputFile(string rootDirectory, ExamplesGeneratorData generatorData)
     {
         return Path.Combine(rootDirectory.AsGeneratedExamplesDirectoryCreated(), generatorData.OutputFile.ToLowerInvariant()).AsLinuxPath();
     }
 
-    private static void GenerateVerbsMarkdown(string rootDirectory)
+	private static string GetGeneratedIncludeExamplesOutputFile(string rootDirectory, ExamplesGeneratorData generatorData)
+	{
+		return Path.Combine(rootDirectory.AsGeneratedIncludeExamplesDirectoryCreated(), generatorData.OutputFile.ToLowerInvariant()).AsLinuxPath();
+	}
+
+	private static void GenerateVerbsMarkdown(string rootDirectory)
     {
         var verbs = typeof(Generator).Assembly.GetTypes().Where(x => x.HasVerbAttribute()).Select(x => x.GetVerb());
         foreach (var verb in verbs.OrderBy(x => x))
@@ -137,7 +142,7 @@ public static class Program
     private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string rootDirectory, string assemblyDirectory)
     {
         var inputFile = Path.GetRelativePath(rootDirectory, Path.Combine(assemblyDirectory, generatorData.InputFile)).AsLinuxPath();
-        var outputFile = Path.GetRelativePath(rootDirectory, GetOutputFile(rootDirectory, generatorData)).AsLinuxPath();
+        var outputFile = Path.GetRelativePath(rootDirectory, GetGeneratedExamplesOutputFile(rootDirectory, generatorData)).AsLinuxPath();
         var result = new List<string>
         {
             generatorData.Verb,
@@ -155,19 +160,15 @@ public static class Program
         return result.ToArray();
     }
 
-    private static void ReplaceErDigramExampleCodeInExample(string rootDirectory, Generator generator)
+    private static void GenerateErDigramExampleCodeInIncludeExampleCs(string rootDirectory)
     {
         var generatorData = new ExamplesGeneratorData
         {
-            OutputFile = "mermaid-er-diagram-details.md",
-            ReplaceToken = "mermaid-er-diagram-details-example-code",
+            OutputFile = "example.cs",
         };
         var exampleCodeFile = Path.Combine(rootDirectory, "src", "DryGen.Templates", "templates", "DryGen.Templates.Mermaid", "Example.cs");
-        var exampleCode = File.ReadAllText(exampleCodeFile).Replace("[ExcludeFromCodeCoverage(Justification = \"Just example code\")]", string.Empty).Replace("using System.Diagnostics.CodeAnalysis;", string.Empty);
-        var replaceToken = generatorData.ReplaceToken.AsGeneratedRepresentationReplaceToken();
-        var existingRepresentation = generator.ReadExistingRepresentationFromOutputFileAndValidateReplaceToken(generatorData.Verb, GetOutputFile(rootDirectory, generatorData), replaceToken, verbose: false);
-        var generatedRepresentation = existingRepresentation.Replace(replaceToken, exampleCode);
-        File.WriteAllText(GetOutputFile(rootDirectory, generatorData), generatedRepresentation);
+        var generatedRepresentation = File.ReadAllText(exampleCodeFile).Replace("[ExcludeFromCodeCoverage(Justification = \"Just example code\")]", null).Replace("using System.Diagnostics.CodeAnalysis;", null);
+        File.WriteAllText(GetGeneratedIncludeExamplesOutputFile(rootDirectory, generatorData), generatedRepresentation);
     }
 
     private static ExamplesGeneratorData GetExamplesGeneratorDataForFilteringMermaidDiagramContent(string replaceTopic, string[] additionalOptions)

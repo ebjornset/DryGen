@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
 namespace DryGen.Templates.Mermaid;
-
 [ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Customer
 {
@@ -11,7 +9,6 @@ public class Customer
     public string Name { get; set; }
     public ICollection<Order> Orders { get; set; }
 }
-
 [ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Order
 {
@@ -21,7 +18,6 @@ public class Order
     public Customer Customer { get; set; }
     public ICollection<OrderLine> Lines { get; set; }
 }
-
 [ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class OrderLine
 {
@@ -32,7 +28,6 @@ public class OrderLine
     public int ProductId { get; set; }
     public Product Product { get; set; }
 }
-
 [ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Product
 {
@@ -42,7 +37,6 @@ public class Product
     public ProductCategory ProductCategory { get; set; }
     public ICollection<Stock> InStock { get; set; }
 }
-
 [ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class ProductCategory
 {
@@ -50,7 +44,6 @@ public class ProductCategory
     public string Name { get; set; }
     public ICollection<Product> Products { get; set; }
 }
-
 [ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Warehouse
 {
@@ -58,7 +51,6 @@ public class Warehouse
     public string Name { get; set; }
     public ICollection<Stock> ProductsInStock { get; set; }
 }
-
 [ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class Stock
 {
@@ -68,7 +60,6 @@ public class Stock
     public Warehouse Warehouse { get; set; }
     public int Quantity { get; set; }
 }
-
 [ExcludeFromCodeCoverage(Justification = "Just example code")]
 public class ExampleDbContext : DbContext
 {

@@ -29,7 +29,12 @@ public static class Extensions
         return Path.Combine(rootDirectory.AsDocsDirectory(), "_generated").AsLinuxPath();
     }
 
-    public static string AsTemplatesExamplesDirectory(this string rootDirectory)
+	public static string AsGeneratedIncludeDirectory(this string rootDirectory)
+	{
+		return Path.Combine(rootDirectory.AsGeneratedDirectory(), "_include").AsLinuxPath();
+	}
+
+	public static string AsTemplatesExamplesDirectory(this string rootDirectory)
     {
         return Path.Combine(rootDirectory.AsTemplatesDirectory(), "examples").AsLinuxPath();
     }
@@ -39,7 +44,12 @@ public static class Extensions
         return Path.Combine(rootDirectory.AsGeneratedDirectory(), "examples").AsLinuxPath().CreateDirectories();
     }
 
-    public static string AsGeneratedVerbsDirectoryCreated(this string rootDirectory)
+	public static string AsGeneratedIncludeExamplesDirectoryCreated(this string rootDirectory)
+	{
+		return Path.Combine(rootDirectory.AsGeneratedIncludeDirectory(), "examples").AsLinuxPath().CreateDirectories();
+	}
+
+	public static string AsGeneratedVerbsDirectoryCreated(this string rootDirectory)
     {
         return Path.Combine(rootDirectory.AsGeneratedDirectory(), "verbs").AsLinuxPath().CreateDirectories();
     }

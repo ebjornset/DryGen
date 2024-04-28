@@ -13,6 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.UTests", "src\develo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{032040CA-2A5F-4F54-9C26-DEED72309B05}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		.whitesource = .whitesource
 		build.cmd = build.cmd
@@ -71,7 +72,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.Templates", "src\Dry
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.MermaidFromDotnetDepsJson", "src\DryGen.MermaidFromDotnetDepsJson\DryGen.MermaidFromDotnetDepsJson.csproj", "{A290A6FD-4C54-4A59-9515-FB257401C728}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryGen.CodeCompiler", "src\DryGen.CodeCompiler\DryGen.CodeCompiler.csproj", "{E6B50599-A234-40C1-8D16-9679D975C4C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DryGen.CodeCompiler", "src\DryGen.CodeCompiler\DryGen.CodeCompiler.csproj", "{E6B50599-A234-40C1-8D16-9679D975C4C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
