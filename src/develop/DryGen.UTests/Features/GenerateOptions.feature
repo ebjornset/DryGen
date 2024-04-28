@@ -35,6 +35,7 @@ Scenario: Should generate options for verb csharp-from-json-schema
 		#input-file: string
 		#namespace: string
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
@@ -71,6 +72,7 @@ Scenario: Should generate options for verb mermaid-class-diagram-from-csharp
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#title: string
 		#tree-shaking-roots: # List of string
@@ -92,6 +94,7 @@ Scenario: Should generate options for verb mermaid-class-diagram-from-json-schem
 		#direction: default | bt | tb | lr | rl
 		#input-file: string
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
@@ -127,6 +130,7 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-csharp
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#output-template: string
 		#relationship-type-exclusion: none | all
 		#replace-token-in-output-file: string
 		#title: string
@@ -161,6 +165,7 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-efcore
 		#name-replace-from: string
 		#name-replace-to: string
 		#output-file: string
+		#output-template: string
 		#relationship-type-exclusion: none | all
 		#replace-token-in-output-file: string
 		#title: string
@@ -184,6 +189,7 @@ Scenario: Should generate options for verb mermaid-er-diagram-from-json-schema
 		#exclude-all-relationships: true|false
 		#input-file: string
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#root-classname: string
 		#schema-file-format: byextension | json | yaml
@@ -205,6 +211,7 @@ Scenario: Should generate options for verb options-from-commandline
 		# dry-gen options for verb 'options-from-commandline'
 		#
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#verb: string
 		"""
@@ -233,6 +240,7 @@ Scenario: Should generate options for verb verbs-from-options-file
 		    #input-file: string
 		    #namespace: string
 		    #output-file: string
+		    #output-template: string
 		    #replace-token-in-output-file: string
 		    #root-classname: string
 		    #schema-file-format: byextension | json | yaml
@@ -253,6 +261,7 @@ Scenario: Should generate options for verb verbs-from-options-file
 		    #- 
 		    #input-file: string
 		    #output-file: string
+		    #output-template: string
 		    #relation-level: all | interboundary | intraboundary | none
 		    #replace-token-in-output-file: string
 		    #shape-in-row: int32
@@ -281,6 +290,7 @@ Scenario: Should generate options for verb verbs-from-options-file
 		    #name-replace-from: string
 		    #name-replace-to: string
 		    #output-file: string
+		    #output-template: string
 		    #replace-token-in-output-file: string
 		    #title: string
 		    #tree-shaking-roots: # List of string
@@ -294,6 +304,7 @@ Scenario: Should generate options for verb verbs-from-options-file
 		    #direction: default | bt | tb | lr | rl
 		    #input-file: string
 		    #output-file: string
+		    #output-template: string
 		    #replace-token-in-output-file: string
 		    #root-classname: string
 		    #schema-file-format: byextension | json | yaml
@@ -321,6 +332,7 @@ Scenario: Should generate options for verb verbs-from-options-file
 		    #name-replace-from: string
 		    #name-replace-to: string
 		    #output-file: string
+		    #output-template: string
 		    #relationship-type-exclusion: none | all
 		    #replace-token-in-output-file: string
 		    #title: string
@@ -347,6 +359,7 @@ Scenario: Should generate options for verb verbs-from-options-file
 		    #name-replace-from: string
 		    #name-replace-to: string
 		    #output-file: string
+		    #output-template: string
 		    #relationship-type-exclusion: none | all
 		    #replace-token-in-output-file: string
 		    #title: string
@@ -362,6 +375,7 @@ Scenario: Should generate options for verb verbs-from-options-file
 		    #exclude-all-relationships: true|false
 		    #input-file: string
 		    #output-file: string
+		    #output-template: string
 		    #replace-token-in-output-file: string
 		    #root-classname: string
 		    #schema-file-format: byextension | json | yaml
@@ -375,6 +389,7 @@ Scenario: Should generate options for verb verbs-from-options-file
 		  #inherit-options-from: string #optional, name of another yaml document with the same verb in this file.
 		  #options:
 		    #output-file: string
+		    #output-template: string
 		    #replace-token-in-output-file: string
 		    #verb: string
 		"""

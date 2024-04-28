@@ -21,6 +21,7 @@ Scenario: Know environment variable should be replaced with its value
 		# dry-gen options for verb 'options-from-commandline'
 		#
 		#output-file: string
+		#output-template: string
 		#replace-token-in-output-file: string
 		#verb: string
 		"""
