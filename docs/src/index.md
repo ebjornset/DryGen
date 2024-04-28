@@ -11,13 +11,13 @@ Beeing a .Net tool (with tool name `dry-gen`), you'll need a [.NET SDK](https://
 
 ## Installation
 
-#### As a global tool
+### As a global tool
 
 ```
 dotnet tool install --global dry-gen
 ```
 
-#### As a local tool
+### As a local tool
 
 ```
 dotnet new tool-manifest # if you haven't set up the .Net tools for this project already.
@@ -30,17 +30,17 @@ You invoke DryGen from the commandline as `dry-gen` when its installed as a glob
 
 The general structure of the command line is `dry-gen <verb> [options]`
 
-##### Verb
+### Verb
 
 The verb defines your target and source representation. The supported verbs are using the pattern `<target-representation>-from-<source-representation>`, e.g. `mermaid-class-diagram-from-csharp`. Execute `dry-gen` without any parameters to get a list of the supported verbs.
 
-##### Options
+### Options
 
 The options are spesific to each verb, and are used to fine tune the result representation. Most options uses the standard long notation of `--<option-name>`, e.g. `--input-file`. Some options also supports the shorthand notation of `-<letter>`, e.g. `-i` for input file, but we suggest you use the long format. Execute `dry-gen <verb> --help` to get the list of options for a specific verb, e.g. `dry-gen mermaid-class-diagram-from-csharp --help`
 
-##### Explore the dry-gen features
+### Explore the dry-gen features
 
-Head over to the [verbs page](/verbs) to see the list of verbs dry-gen supports, or take a look at [our examples](/examples).
+Head over to the [verbs page](/verbs/index.html) to see the list of verbs dry-gen supports, or take a look at [our examples](/examples/index.html).
 
 ## Development process integration
 
