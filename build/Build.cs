@@ -9,7 +9,7 @@ using Nuke.Common.Tools.DocFX;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.GitVersion;
-using Nuke.Common.Tools.PowerShell;
+using Nuke.Common.Tools.Pwsh;
 using Nuke.Common.Tools.SonarScanner;
 using Nuke.Common.Utilities;
 using Nuke.Common.Utilities.Collections;
@@ -376,7 +376,9 @@ public partial class Build : NukeBuild
 
     private static void CopyToMergedDocs(AbsolutePath source)
     {
-        PowerShellTasks.PowerShell("Copy-Item  -Path \"" + (source / "*").ToString() + "\" -Destination \"" + DocsMergedDirectory.ToString() + "\" -Recurse -Force");
+		PwshTasks.Pwsh(c => c
+			.SetCommand("Copy-Item  -Path \"" + (source / "*").ToString() + "\" -Destination \"" + DocsMergedDirectory.ToString() + "\" -Recurse -Force")
+		);
     }
 
     private static void LogChangesAndFailIfGitWorkingCopyIsNotClean()

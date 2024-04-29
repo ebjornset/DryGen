@@ -3,8 +3,8 @@ using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
-using Nuke.Common.Tools.PowerShell;
 using Serilog;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -58,31 +58,59 @@ public partial class Build
         });
 
     internal Target Dev_StartDocsSite => _ => _
-        .After(GenerateDocs)
+        .After(BuildDocs)
         .Executes(() =>
         {
             DocsGeneratedDirectory.CreateDirectory();
             DocsMergedDirectory.CreateDirectory();
             DocsSiteDirectory.CreateDirectory();
-            WatchAndRun(DocsTemplatesDirectory, GetProject("develop", "DryGen.Docs").Directory / "bin" / "Release" / "net6.0" / "DryGen.Docs", "--root-directory", RootDirectory);
-            WatchAndRun(DocsGeneratedDirectory, "powershell", "Copy-Item", DocsGeneratedDirectory / "*", DocsMergedDirectory, "-Recurse", "-Force");
-            WatchAndRun(DocsSrcDirectory, "powershell", "Copy-Item", DocsSrcDirectory / "*", DocsMergedDirectory, "-Recurse", "-Force");
-            WatchAndRun(DocsMergedDirectory, "docfx", "build", DocsMergedDirectory / "docfx.json");
-            PowerShellTasks.PowerShell(
-                arguments: "Start-Process -FilePath docfx -ArgumentList \"serve --port " + DocsPort + " --open-browser\"",
-                workingDirectory: DocsSiteDirectory);
-        });
+			WatchAndRun(DocsTemplatesDirectory, GetProject("develop", "DryGen.Docs").Directory / "bin" / "Release" / "net6.0" / "DryGen.Docs", "--root-directory", RootDirectory);
+			WatchAndCopy(DocsGeneratedDirectory, DocsMergedDirectory);
+			WatchAndCopy(DocsSrcDirectory, DocsMergedDirectory);
+			WatchAndRun(DocsMergedDirectory, "docfx", "build", DocsMergedDirectory / "docfx.json");
+			StartProcess("docfx", "serve --open-browser --port " + DocsPort, DocsSiteDirectory);
+		});
 
     private static void WatchAndRun(string path, string command, params string[] arguments)
     {
         var sb = new StringBuilder()
-            .Append("Start-Process -FilePath powershell -ArgumentList ")
-            .Append('"').Append(BuildDirectory / "watch.ps1").Append("\", ")
-            .Append("\"-Path ").Append(path).Append("\", ")
-            .Append("\"-Command ").Append(command).Append("\", ")
-            .Append("\"-RunAtStartup\", ")
-            .Append("\"-Arguments ").Append(string.Join(',', arguments)).Append('"')
+            .Append("-Command ")
+            .Append('"').Append(BuildDirectory / "watch.ps1")
+            .Append("  -Path ").Append(path)
+            .Append(" -Command ").Append(command)
+            .Append(" -RunAtStartup")
+            .Append(" -Arguments ").Append(string.Join(',', arguments)).Append('"')
             ;
-        PowerShellTasks.PowerShell(sb.ToString());
-    }
+		StartProcess("pwsh", sb.ToString());
+	}
+
+	private static void WatchAndCopy(string path, string destination)
+	{
+		var sb = new StringBuilder()
+			.Append("-Command ")
+			.Append('"').Append(BuildDirectory / "watch-and-copy.ps1")
+			.Append("  -Path ").Append(path)
+			.Append(" -Destination ").Append(destination)
+			.Append(" -RunAtStartup\"")
+			;
+		StartProcess("pwsh", sb.ToString());
+	}
+
+	private static void StartProcess(string fileName, string arguments, string workingDirectoy = null)
+	{
+		var processStartInfo = new ProcessStartInfo
+		{
+			FileName = fileName,
+			Arguments = arguments,
+			WindowStyle = ProcessWindowStyle.Minimized,
+			UseShellExecute = true,
+		};
+		Log.Debug("{FileName} {Arguments}", fileName, arguments);
+		if (workingDirectoy != null )
+		{
+			processStartInfo.WorkingDirectory = workingDirectoy;
+			Log.Debug("@{WorkingDirectoy}", workingDirectoy);
+		}
+		Process.Start(processStartInfo);
+	}
 }
