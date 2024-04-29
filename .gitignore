@@ -387,7 +387,7 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 
-# SpecFlow generated test files
+# Reqnroll generated test files
 *.feature.cs
 
 # Coverlet SonarQube coverarge report
@@ -395,10 +395,6 @@ FodyWeavers.xsd
 
 # SonarQube stuff
 .sonarqube/
-
-# For the Github action that generate the Jekyll site (peaceiris/actions-gh-pages)
-_site/
-vendor/
 
 # Nuke temporary files
 .nuke/temp

@@ -1,0 +1,43 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "README.md",
+          "_include/**/*"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "CNAME",
+          "README.md"
+        ]
+      }
+    ],
+    "output": "../_site",
+    "template": [
+      "default",
+      "modern",
+      "template"
+    ],
+    "globalMetadata": {
+      "_appName": "DryGen",
+      "_appTitle": "DryGen",
+      "_enableSearch": true,
+      "_disableContribution": true,
+      "_disableBreadcrumb": true,
+      "_lang": "en",
+      "pdf": false
+    },
+    "sitemap": {
+      "baseUrl": "https://docs.drygen.dev",
+      "priority": 0.5,
+      "changefreq": "daily"
+    }
+  }
+}

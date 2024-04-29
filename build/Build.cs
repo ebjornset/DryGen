@@ -5,10 +5,11 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Coverlet;
+using Nuke.Common.Tools.DocFX;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.GitVersion;
-using Nuke.Common.Tools.PowerShell;
+using Nuke.Common.Tools.Pwsh;
 using Nuke.Common.Tools.SonarScanner;
 using Nuke.Common.Utilities;
 using Nuke.Common.Utilities.Collections;
@@ -28,10 +29,10 @@ public partial class Build : NukeBuild
 {
     public static int Main() => Execute<Build>(x => x.Default);
 
-    [Parameter("Configuration to build - NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source")]
+    [Parameter("Configuration to build. NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source.")]
     internal readonly Configuration Configuration = Configuration.Release;
 
-    [Parameter("The version number for the version tag. Must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. alpha, beta or prerelease", List = false)]
+    [Parameter("The version number for the version tag. Must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. 'alpha', 'beta' or 'prerelease'", List = false)]
     internal readonly string Version;
 
     [Parameter("The Nuget source url", List = false)]
@@ -54,6 +55,7 @@ public partial class Build : NukeBuild
         .DependsOn(UnitTests)
         .DependsOn(IntegrationTests)
         .DependsOn(GenerateDocs)
+        .DependsOn(BuildDocs)
         ;
 
 #pragma warning disable CA1822 // Mark members as static
@@ -61,7 +63,7 @@ public partial class Build : NukeBuild
         .Executes(() =>
         {
             SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(x => x.DeleteDirectory());
-            ArtifactsDirectory.CreateOrCleanDirectory();
+            ArtifactsDirectory.CreateOrCleanDirectory(recurse: true);
         });
 #pragma warning restore CA1822 // Mark members as static
 
@@ -207,10 +209,11 @@ public partial class Build : NukeBuild
 
     internal Target GenerateDocs => _ => _
         .Requires(() => Configuration.Equals(Configuration.Release))
-        .DependsOn(Compile)
+        .After(Compile)
         .After(IntegrationTests)
         .Executes(() =>
         {
+            DocsGeneratedDirectory.CreateOrCleanDirectory(recurse: true);
             DotNetRun(c => c
                 .SetProjectFile(GetProject("develop", "DryGen.Docs"))
                 .SetConfiguration(Configuration)
@@ -225,8 +228,15 @@ public partial class Build : NukeBuild
         .After(GenerateDocs)
         .Executes(() =>
         {
-            ProcessTasks.StartProcess("bundle", arguments: string.Join(' ', "install", "--jobs=4", "--retry=3"), workingDirectory: DocsDirectory.ToString(), logOutput: true, logInvocation: true).AssertZeroExitCode();
-            ProcessTasks.StartProcess("bundle", arguments: string.Join(' ', "exec", "jekyll", "build"), workingDirectory: DocsDirectory.ToString(), logOutput: true, logInvocation: true).AssertZeroExitCode();
+            DocsMergedDirectory.CreateOrCleanDirectory(recurse: true);
+            DocsSiteDirectory.CreateOrCleanDirectory(recurse: true);
+            CopyToMergedDocs(DocsGeneratedDirectory);
+            CopyToMergedDocs(DocsSrcDirectory);
+            DocFXTasks.DocFXBuild(c => c
+                .SetProcessWorkingDirectory(DocsMergedDirectory)
+                .SetDisableGitFeatures(true)
+                .SetOutputFolder(DocsSiteDirectory)
+            );
         });
 
     internal Target PushPackagesToNuget => _ => _
@@ -260,7 +270,7 @@ public partial class Build : NukeBuild
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Requires(() => Version)
         .Requires(() => GitRepository.IsOnMainBranch())
-        .Requires( ()=> ProperNextVersionNumber())
+        .Requires(() => ProperNextVersionNumber())
         .Requires(() => ReleaseNotesFromToday())
         .Before(Init)
         .Executes(() =>
@@ -344,7 +354,8 @@ public partial class Build : NukeBuild
         // For now we just verifies that the git tag does not exist
         var versionTagName = Version.ToVersionTagName();
         var gitOutput = GitTasks.Git("tag --list", logOutput: false, logInvocation: false);
-        if (gitOutput.Any(x => string.Equals(x.Text, versionTagName, StringComparison.InvariantCultureIgnoreCase))) {
+        if (gitOutput.Any(x => string.Equals(x.Text, versionTagName, StringComparison.InvariantCultureIgnoreCase)))
+        {
             Log.Error("Version tag '{VersionTagName}' already exists!", versionTagName);
             return false;
         }
@@ -354,13 +365,20 @@ public partial class Build : NukeBuild
     private bool ReleaseNotesFromToday()
     {
         var today = DateTime.Today.ToString("yyyy-MM-dd");
-        var releaseNotesFileName = $"{today}-release-{Version}.md";
-        if (!DocsPostsDirectory.ContainsFile(releaseNotesFileName))
+        var releaseNotesFileName = $"{today}-v-{Version}.md";
+        if (!DocsTemplatesReleaseNotesDirectory.ContainsFile(releaseNotesFileName))
         {
-            Log.Error("Release notes '{ReleaseNotesFileName}' is mising!", DocsPostsDirectory / releaseNotesFileName);
+            Log.Error("Release notes '{ReleaseNotesFileName}' is mising!", DocsTemplatesReleaseNotesDirectory / releaseNotesFileName);
             return false;
         }
         return true;
+    }
+
+    private static void CopyToMergedDocs(AbsolutePath source)
+    {
+		PwshTasks.Pwsh(c => c
+			.SetCommand("Copy-Item  -Path \"" + (source / "*").ToString() + "\" -Destination \"" + DocsMergedDirectory.ToString() + "\" -Recurse -Force")
+		);
     }
 
     private static void LogChangesAndFailIfGitWorkingCopyIsNotClean()
@@ -382,8 +400,12 @@ public partial class Build : NukeBuild
     private static AbsolutePath SourceDirectory => RootDirectory / "src";
     private static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     private static AbsolutePath DocsDirectory => RootDirectory / "docs";
+    private static AbsolutePath DocsGeneratedDirectory => DocsDirectory / "_generated";
+    private static AbsolutePath DocsMergedDirectory => DocsDirectory / "_merged";
     private static AbsolutePath DocsSiteDirectory => DocsDirectory / "_site";
-    private static AbsolutePath DocsPostsDirectory => DocsDirectory / "_posts";
+    private static AbsolutePath DocsSrcDirectory => DocsDirectory / "src";
+    private static AbsolutePath DocsTemplatesDirectory => DocsDirectory / "templates";
+	private static AbsolutePath DocsTemplatesReleaseNotesDirectory => DocsTemplatesDirectory / "releasenotes";
     private static AbsolutePath UnitTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.UTests" / "TestResults";
     private static AbsolutePath IntergrationTestsResultsDirectory => SourceDirectory / "develop" / "DryGen.ITests" / "TestResults";
 

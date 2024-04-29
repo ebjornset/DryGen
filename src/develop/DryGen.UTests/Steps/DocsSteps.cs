@@ -17,7 +17,7 @@ public sealed class DocsSteps
     [When(@"I generate the docs verb menu")]
     public void WhenIGenerateTheDocsVerbMenu()
     {
-        VerbMenuGenerator.Generate(consoleContext.OutWriter);
+        VerbTocGenerator.Generate(consoleContext.OutWriter);
     }
 
     [When(@"I generate the docs markdown for the verb ""([^""]*)""")]
