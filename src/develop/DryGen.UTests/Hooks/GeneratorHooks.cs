@@ -1,10 +1,10 @@
-﻿using BoDi;
-using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
+﻿using DryGen.Features.Mermaid.FromCsharp.ClassDiagram;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ClassDiagram;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using DryGen.MermaidFromEfCore;
 using Reqnroll;
+using Reqnroll.BoDi;
 
 namespace DryGen.UTests.Hooks;
 

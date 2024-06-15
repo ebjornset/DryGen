@@ -1,10 +1,10 @@
-﻿using BoDi;
-using DryGen.DevUtils.Helpers;
+﻿using DryGen.DevUtils.Helpers;
 using DryGen.MermaidFromCSharp.ErDiagram;
 using DryGen.UTests.Helpers;
 using DryGen.UTests.Hooks;
 using System;
 using Reqnroll;
+using Reqnroll.BoDi;
 
 namespace DryGen.UTests.Steps;
 

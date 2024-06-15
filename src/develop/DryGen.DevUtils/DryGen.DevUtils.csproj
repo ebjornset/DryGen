@@ -14,7 +14,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="[6.*,7.0)" Condition="'$(TargetFramework)' == 'net6.0'" />
 		<PackageReference Include="FluentAssertions" Version="6.12.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-		<PackageReference Include="Reqnroll.xUnit" Version="1.0.1" />
+		<PackageReference Include="Reqnroll.xUnit" Version="2.0.3" />
 		<!-- Workaround to fix https://github.com/ebjornset/DryGen/issues/98 begin -->
 		<PackageReference Include="xunit.core" Version="2.8.1" />
 		<PackageReference Include="xunit.extensibility.execution" Version="2.8.1" />
