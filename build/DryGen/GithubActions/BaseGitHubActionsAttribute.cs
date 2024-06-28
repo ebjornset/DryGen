@@ -20,7 +20,6 @@ public abstract class BaseGitHubActionsAttribute : GitHubActionsAttribute
     {
         var job = base.GetJobs(image, relevantTargets);
         var newSteps = new List<GitHubActionsStep>(job.Steps);
-        newSteps.Insert(1, new SetupRubyStep());
         if (needsJava)
         {
             newSteps.Insert(1, new SetupJavaStep());

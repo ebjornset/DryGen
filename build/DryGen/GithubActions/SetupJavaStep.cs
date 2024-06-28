@@ -1,6 +1,5 @@
 ﻿using Nuke.Common.CI.GitHubActions.Configuration;
 using Nuke.Common.Utilities;
-using Octokit;
 
 namespace DryGen.GithubActions;
 
