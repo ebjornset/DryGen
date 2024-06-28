@@ -11,7 +11,6 @@ public partial class Build
         .Unlisted()
         .Requires(() => IsServerBuild)
         .DependsOn(Default)
-        .DependsOn(BuildDocs)
         .DependsOn(VerifyCleanWorkingCopyAfterBuild)
         ;
 
