@@ -11,7 +11,7 @@
 		<PackageReference Include="Fluid.Core" Version="2.10.0" />
 		<!-- Workaround to fix https://github.com/ebjornset/DryGen/issues/94 end -->
 		<!-- Workaround to fix https://app.snyk.io/org/ebjornset/project/9210ae75-d52a-4b87-b686-923835100c0d#issue-SNYK-DOTNET-SYSTEMTEXTENCODINGSWEB-1253267 begin -->
-		<PackageReference Include="System.Text.Json" Version="8.0.3" />
+		<PackageReference Include="System.Text.Json" Version="8.0.4" />
 		<PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" />
 		<!-- Workaround to fix https://app.snyk.io/org/ebjornset/project/9210ae75-d52a-4b87-b686-923835100c0d#issue-SNYK-DOTNET-SYSTEMTEXTENCODINGSWEB-1253267 end -->
 	</ItemGroup>
