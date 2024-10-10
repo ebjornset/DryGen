@@ -251,7 +251,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         return result;
     }
 
-    private void FillDiagramStructureElementWithInternalExternalBoundaries(DiagramStructure result, IEnumerable<Dependency> dependencies)
+    private static void FillDiagramStructureElementWithInternalExternalBoundaries(DiagramStructure result, IEnumerable<Dependency> dependencies)
     {
         var internalAssembliesBoundary = new ContainerBoundary("Internal assemblies", dontSuppress: false);
         var externalDependenciesBoundary = new ContainerBoundary("External dependencies", dontSuppress: false);

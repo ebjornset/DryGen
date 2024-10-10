@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DryGen.CSharpFromJsonSchema;
 
-public class CSharpFromJsonSchemaGenerator
+public static class CSharpFromJsonSchemaGenerator
 {
-    public async Task<string> Generate(ICSharpFromJsonSchemaOptions options)
+    public static async Task<string> Generate(ICSharpFromJsonSchemaOptions options)
     {
         var jsonSchema = await LoadJsonSchemaFromFile(options.InputFile, options.GetSchemaFileFormat());
         RemoveSynteticSchemaProperty(jsonSchema);
@@ -63,7 +63,7 @@ public class CSharpFromJsonSchemaGenerator
         }
     }
 
-    private async Task<JsonSchema> LoadJsonSchemaFromFile(string? jsonSchemaFileName, JsonSchemaFileFormat jsonSchemaFileFormat)
+    private static async Task<JsonSchema> LoadJsonSchemaFromFile(string? jsonSchemaFileName, JsonSchemaFileFormat jsonSchemaFileFormat)
     {
         jsonSchemaFileName = jsonSchemaFileName.AsNonNull();
         var extension = Path.GetExtension(jsonSchemaFileName);

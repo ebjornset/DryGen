@@ -35,7 +35,7 @@ internal class Dependency : BaseModelElement
         RuntimeDependencyRefs = runtimeDependencyRefs;
     }
 
-    private IReadOnlyList<DependencyRef> LoadDependencyRefs(JsonObject targetPropertyObject)
+    private static IReadOnlyList<DependencyRef> LoadDependencyRefs(JsonObject targetPropertyObject)
     {
         if (!targetPropertyObject.TryGetPropertyObject("dependencies", out var dependenciesObject) || dependenciesObject == null || dependenciesObject.Count == 0)
         {
@@ -52,7 +52,7 @@ internal class Dependency : BaseModelElement
         return dependencyRefs;
     }
 
-    private string FindTechnology(JsonObject dependencyObject)
+    private static string FindTechnology(JsonObject dependencyObject)
     {
         if (dependencyObject.TryGetPropertyObject("native", out var nativeObject) && nativeObject?.Count > 0)
         {

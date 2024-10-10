@@ -67,12 +67,11 @@ public class JsonSchemaSteps
 
     private void LoadJsonSchemaFromFile(JsonSchemaFileFormat jsonSchemaFileFormat)
     {
-        var generator = new CSharpFromJsonSchemaGenerator();
         var options = new CSharpFromJsonSchemaOptions
         {
             InputFile = inputFileContext.InputFileName,
             SchemaFileFormat = jsonSchemaFileFormat
         };
-        generatedRepresentationContext.GeneratedRepresentation = exceptionContext.HarvestExceptionFrom(() => generator.Generate(options).Result);
+        generatedRepresentationContext.GeneratedRepresentation = exceptionContext.HarvestExceptionFrom(() => CSharpFromJsonSchemaGenerator.Generate(options).Result);
     }
 }
