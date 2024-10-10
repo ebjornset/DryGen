@@ -29,7 +29,7 @@
       "_appName": "DryGen",
       "_appTitle": "DryGen",
       "_appLogoPath": "images/drygen-compressed.svg",
-      "_appFaviconPath": "images/favicon-32x32.png",
+      "_appFaviconPath": "images/favicon-32x32-transparent.png",
       "_enableSearch": true,
       "_enableNewTab": true,
       "_disableContribution": true,
