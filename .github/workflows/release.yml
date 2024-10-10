@@ -26,17 +26,13 @@ jobs:
     name: ubuntu-latest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Setup .Net 6.0.*
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.0.*
-      - name: Setup .Net 7.0.*
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 7.0.*
       - name: Setup .Net 8.0.*
         uses: actions/setup-dotnet@v4
         with:
@@ -52,7 +48,7 @@ jobs:
         with:
           ruby-version: 3.1
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             .nuke/temp
@@ -63,21 +59,6 @@ jobs:
         env:
           NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
           SonarToken: ${{ secrets.SONAR_TOKEN }}
-      - name: 'Publish: TestResults'
-        uses: actions/upload-artifact@v3
-        with:
-          name: TestResults
-          path: src/develop/DryGen.UTests/TestResults
-      - name: 'Publish: artifacts'
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifacts
-          path: artifacts
-      - name: 'Publish: TestResults'
-        uses: actions/upload-artifact@v3
-        with:
-          name: TestResults
-          path: src/develop/DryGen.ITests/TestResults
       - name: Prepare generated docs for deployment on branch gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:

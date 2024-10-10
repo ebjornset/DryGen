@@ -25,7 +25,7 @@ public abstract class BaseGitHubActionsAttribute : GitHubActionsAttribute
         {
             newSteps.Insert(1, new SetupJavaStep());
         }
-        foreach (var version in new[] { "8.0.*", "7.0.*", "6.0.*" })
+        foreach (var version in new[] { "8.0.*", "6.0.*" })
         {
             newSteps.Insert(1, new SetupDotNetStep(version));
         }

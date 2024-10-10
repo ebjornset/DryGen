@@ -1,64 +1,120 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "$ref": "#/definitions/build",
-  "title": "Build Schema",
+  "properties": {
+    "Configuration": {
+      "type": "string",
+      "description": "Configuration to build. NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source",
+      "enum": [
+        "Debug",
+        "Release"
+      ]
+    },
+    "DocsPort": {
+      "type": "integer",
+      "description": "The port to use when starting the docs site locally. Default = 8086",
+      "format": "int32"
+    },
+    "NuGetApiKey": {
+      "type": "string",
+      "description": "The api key to use when pushing to Nuget",
+      "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+    },
+    "NuGetSource": {
+      "type": "string",
+      "description": "The Nuget source url"
+    },
+    "Solution": {
+      "type": "string",
+      "description": "Path to a solution file that is automatically loaded"
+    },
+    "SonarToken": {
+      "type": "string",
+      "description": "The token to use when running SonarClound analyzis",
+      "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+    },
+    "Version": {
+      "type": "string",
+      "description": "The version number for the version tag. Must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. 'alpha', 'beta' or 'prerelease'"
+    }
+  },
   "definitions": {
-    "build": {
-      "type": "object",
+    "Host": {
+      "type": "string",
+      "enum": [
+        "AppVeyor",
+        "AzurePipelines",
+        "Bamboo",
+        "Bitbucket",
+        "Bitrise",
+        "GitHubActions",
+        "GitLab",
+        "Jenkins",
+        "Rider",
+        "SpaceAutomation",
+        "TeamCity",
+        "Terminal",
+        "TravisCI",
+        "VisualStudio",
+        "VSCode"
+      ]
+    },
+    "ExecutableTarget": {
+      "type": "string",
+      "enum": [
+        "BuildDocs",
+        "CiCd_Build",
+        "CiCd_BuildDocs",
+        "CiCd_Default",
+        "CiCd_Release",
+        "CiCd_TagVersion",
+        "Clean",
+        "Compile",
+        "Default",
+        "Dev_InstallGlobalTool",
+        "Dev_InstallTemplates",
+        "Dev_StartDocsSite",
+        "GenerateDocs",
+        "Init",
+        "IntegrationTests",
+        "Pack",
+        "PushPackagesToNuget",
+        "PushVersionTag",
+        "Restore",
+        "SonarCloudBegin",
+        "SonarCloudEnd",
+        "TagVersion",
+        "UnitTests",
+        "VerifyCleanWorkingCopyAfterBuild",
+        "VerifyCleanWorkingCopyBeforeBuild"
+      ]
+    },
+    "Verbosity": {
+      "type": "string",
+      "description": "",
+      "enum": [
+        "Verbose",
+        "Normal",
+        "Minimal",
+        "Quiet"
+      ]
+    },
+    "NukeBuild": {
       "properties": {
-        "Configuration": {
-          "type": "string",
-          "description": "Configuration to build. NB! Default is 'Release' both for local and server build, so GenerateDocs always uses the same source",
-          "enum": [
-            "Debug",
-            "Release"
-          ]
-        },
         "Continue": {
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
-        },
-        "DocsPort": {
-          "type": "integer",
-          "description": "The port to use when starting the docs site locally. Default = 8086"
         },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
         },
         "Host": {
-          "type": "string",
           "description": "Host for execution. Default is 'automatic'",
-          "enum": [
-            "AppVeyor",
-            "AzurePipelines",
-            "Bamboo",
-            "Bitbucket",
-            "Bitrise",
-            "GitHubActions",
-            "GitLab",
-            "Jenkins",
-            "Rider",
-            "SpaceAutomation",
-            "TeamCity",
-            "Terminal",
-            "TravisCI",
-            "VisualStudio",
-            "VSCode"
-          ]
+          "$ref": "#/definitions/Host"
         },
         "NoLogo": {
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
-        },
-        "NuGetApiKey": {
-          "type": "string",
-          "description": "The api key to use when pushing to Nuget",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
-        },
-        "NuGetSource": {
-          "type": "string",
-          "description": "The Nuget source url"
         },
         "Partition": {
           "type": "string",
@@ -83,94 +139,22 @@
           "type": "array",
           "description": "List of targets to be skipped. Empty list skips all dependencies",
           "items": {
-            "type": "string",
-            "enum": [
-              "BuildDocs",
-              "CiCd_Build",
-              "CiCd_BuildDocs",
-              "CiCd_Default",
-              "CiCd_Release",
-              "CiCd_TagVersion",
-              "Clean",
-              "Compile",
-              "Default",
-              "Dev_InstallGlobalTool",
-              "Dev_InstallTemplates",
-              "Dev_StartDocsSite",
-              "GenerateDocs",
-              "Init",
-              "IntegrationTests",
-              "Pack",
-              "PushPackagesToNuget",
-              "PushVersionTag",
-              "Restore",
-              "SonarCloudBegin",
-              "SonarCloudEnd",
-              "TagVersion",
-              "UnitTests",
-              "VerifyCleanWorkingCopyAfterBuild",
-              "VerifyCleanWorkingCopyBeforeBuild"
-            ]
+            "$ref": "#/definitions/ExecutableTarget"
           }
-        },
-        "Solution": {
-          "type": "string",
-          "description": "Path to a solution file that is automatically loaded"
-        },
-        "SonarToken": {
-          "type": "string",
-          "description": "The token to use when running SonarClound analyzis",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "Target": {
           "type": "array",
           "description": "List of targets to be invoked. Default is '{default_target}'",
           "items": {
-            "type": "string",
-            "enum": [
-              "BuildDocs",
-              "CiCd_Build",
-              "CiCd_BuildDocs",
-              "CiCd_Default",
-              "CiCd_Release",
-              "CiCd_TagVersion",
-              "Clean",
-              "Compile",
-              "Default",
-              "Dev_InstallGlobalTool",
-              "Dev_InstallTemplates",
-              "Dev_StartDocsSite",
-              "GenerateDocs",
-              "Init",
-              "IntegrationTests",
-              "Pack",
-              "PushPackagesToNuget",
-              "PushVersionTag",
-              "Restore",
-              "SonarCloudBegin",
-              "SonarCloudEnd",
-              "TagVersion",
-              "UnitTests",
-              "VerifyCleanWorkingCopyAfterBuild",
-              "VerifyCleanWorkingCopyBeforeBuild"
-            ]
+            "$ref": "#/definitions/ExecutableTarget"
           }
         },
         "Verbosity": {
-          "type": "string",
           "description": "Logging verbosity during build execution. Default is 'Normal'",
-          "enum": [
-            "Minimal",
-            "Normal",
-            "Quiet",
-            "Verbose"
-          ]
-        },
-        "Version": {
-          "type": "string",
-          "description": "The version number for the version tag. Must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. 'alpha', 'beta' or 'prerelease'"
+          "$ref": "#/definitions/Verbosity"
         }
       }
     }
-  }
+  },
+  "$ref": "#/definitions/NukeBuild"
 }
