@@ -16,7 +16,7 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
         return entities;
     }
 
-    private void GeneratieErStructure(IList<ErDiagramEntity> entities, IReadOnlyList<IPropertyFilter> attributeFilters)
+    private static void GeneratieErStructure(IList<ErDiagramEntity> entities, IReadOnlyList<IPropertyFilter> attributeFilters)
     {
         var enumEntities = new Dictionary<Type, ErDiagramEntity>();
         var entityLookup = entities.ToDictionary(x => x.Type, x => x);

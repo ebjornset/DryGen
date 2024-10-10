@@ -249,8 +249,7 @@ public class Generator
     {
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "C# code", options =>
         {
-            var generator = new CSharpFromJsonSchemaGenerator();
-            return generator.Generate(options).Result;
+            return CSharpFromJsonSchemaGenerator.Generate(options).Result;
         });
     }
 
@@ -268,9 +267,8 @@ public class Generator
     {
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid ER diagram", options =>
         {
-            var generator = new MermaidErDiagramFromJsonSchemaGenerator();
             var treeShakingDiagramFilter = GetMermaidDiagramTreeShakingFilter(options.TreeShakingRoots);
-            return generator.Generate(options, treeShakingDiagramFilter).Result;
+            return MermaidErDiagramFromJsonSchemaGenerator.Generate(options, treeShakingDiagramFilter).Result;
         });
     }
 

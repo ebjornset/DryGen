@@ -43,7 +43,7 @@ public class TreeShakingDiagramFilter : IDiagramFilter
         return result.OrderBy(x => x.Name);
     }
 
-    private IEnumerable<IDiagramType> GetNonRootedTypes<TDiagramType>(IEnumerable<TDiagramType> allTypes, IEnumerable<TDiagramType> rootedTypes) where TDiagramType : IDiagramType
+    private static IEnumerable<IDiagramType> GetNonRootedTypes<TDiagramType>(IEnumerable<TDiagramType> allTypes, IEnumerable<TDiagramType> rootedTypes) where TDiagramType : IDiagramType
     {
         return allTypes.Except(rootedTypes).Cast<IDiagramType>();
     }
