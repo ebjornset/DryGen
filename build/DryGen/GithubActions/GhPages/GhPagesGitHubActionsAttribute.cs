@@ -17,7 +17,7 @@ public class GhPagesGitHubActionsAttribute : DotNetGitHubActionsAttribute
         var job = base.GetJobs(image, relevantTargets);
         var newSteps = new List<GitHubActionsStep>(job.Steps)
         {
-            new PrepareGeneratedDocsForDeploymentOnBranchGhPagesStep()
+            new UploadGeneratedDocsAsGhPagesArtifactStep()
         };
         job.Steps = newSteps.ToArray();
         return job;

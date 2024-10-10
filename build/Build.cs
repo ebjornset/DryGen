@@ -59,15 +59,17 @@ public partial class Build : NukeBuild
         ;
 
 #pragma warning disable CA1822 // Mark members as static
-    internal Target Clean => _ => _
+#pragma warning disable S2325 // Methods and properties that don't access instance data should be static
+	internal Target Clean => _ => _
         .Executes(() =>
         {
             SourceDirectory.GlobDirectories("**/bin", "**/obj", "**/TestResults").ForEach(x => x.DeleteDirectory());
             ArtifactsDirectory.CreateOrCleanDirectory(recurse: true);
         });
+#pragma warning restore S2325 // Methods and properties that don't access instance data should be static
 #pragma warning restore CA1822 // Mark members as static
 
-    internal Target Init => _ => _
+	internal Target Init => _ => _
         .Executes(() =>
         {
             TemplatesDescription = $".Net templates that make getting started with [dry-gen]({ProjectUrlInNugetPackage}) easy.";
