@@ -41,7 +41,7 @@ public class TypeLoaderByReflection : ITypeLoader
         }
     }
 
-    private IReadOnlyList<ITypeFilter> WrapWithGlobalFilters(IReadOnlyList<ITypeFilter>? filters)
+    private static IReadOnlyList<ITypeFilter> WrapWithGlobalFilters(IReadOnlyList<ITypeFilter>? filters)
     {
         var result = new List<ITypeFilter>
         {
