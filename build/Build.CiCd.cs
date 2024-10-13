@@ -11,7 +11,8 @@ public partial class Build
         .Unlisted()
         .Requires(() => IsServerBuild)
         .DependsOn(Default)
-        .DependsOn(VerifyCleanWorkingCopyAfterBuild)
+		.DependsOn(SetupToolChain)
+		.DependsOn(VerifyCleanWorkingCopyAfterBuild)
         ;
 
     internal Target CiCd_Build => _ => _
