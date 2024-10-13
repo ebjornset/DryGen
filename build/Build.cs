@@ -234,6 +234,7 @@ public partial class Build : NukeBuild
 		.DependsOn(Init)
 		.After(GenerateDocs)
 		.After(SetupDocfx)
+		.After(SetupPwsh)
 		.Executes(() =>
 		{
 			DocsMergedDirectory.CreateOrCleanDirectory(recurse: true);
