@@ -8,18 +8,19 @@ namespace DryGen.GithubActions.GhPages;
 
 public class GhPagesGitHubActionsAttribute : DotNetGitHubActionsAttribute
 {
-    public GhPagesGitHubActionsAttribute(string name, bool needsJava = false) : base(name, needsJava)
-    {
-    }
+	public GhPagesGitHubActionsAttribute(string name, bool needsJava = false) : base(name, needsJava)
+	{
+	}
 
-    protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
-    {
-        var job = base.GetJobs(image, relevantTargets);
-        var newSteps = new List<GitHubActionsStep>(job.Steps)
-        {
-            new UploadGeneratedDocsAsGhPagesArtifactStep()
-        };
-        job.Steps = newSteps.ToArray();
-        return job;
-    }
+	protected override GitHubActionsJob GetJobs(GitHubActionsImage image, IReadOnlyCollection<ExecutableTarget> relevantTargets)
+	{
+		var job = base.GetJobs(image, relevantTargets);
+		var newSteps = new List<GitHubActionsStep>(job.Steps)
+		{
+			new UploadGeneratedDocsAsGhPagesArtifactStep(),
+			new DeployGeneratedDocsAsGhPagesArtifactStep(),
+		};
+		job.Steps = newSteps.ToArray();
+		return job;
+	}
 }
