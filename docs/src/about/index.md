@@ -15,7 +15,7 @@ As an open source tool **"we're standing on the shoulder of giants"**, and we he
 - The main developement tool is [.Net](https://dotnet.microsoft.com/), a free, cross-platform, and open source developer platform.
 - Github is used for our [code repository](https://github.com/ebjornset/DryGen), [issue tracker](https://github.com/ebjornset/DryGen/issues), [deployment tool](https://github.com/ebjornset/DryGen/actions) and [documentation site](https://docs.drygen.dev/)
 - We use [SonarCloud](https://sonarcloud.io/project/overview?id=ebjornset_DryGen) (free for open source projects) as our static code analysis tool.
-- We use [Mend bolt](https://www.mend.io/free-developer-tools/bolt/) (free for open source projects) as our security alerts and compliance tool.
+- We use [Mend bolt](https://www.mend.io/free-developer-tools/bolt/) (free for open source projects) and [Snyk](https://snyk.io/) as our security alerts and compliance tools.
 - The [documentation site](https://docs.drygen.dev/) is generated at deploy time using the [docfx](https://dotnet.github.io/docfx/) engine.
 - As a commandline tool, we rely heavily on the [Command Line Parser Library](https://github.com/commandlineparser/commandline).
 - [YamlDotNet](https://github.com/aaubry/YamlDotNet) is used to implement the `--options-file` option.
@@ -23,4 +23,4 @@ As an open source tool **"we're standing on the shoulder of giants"**, and we he
 - We use [Nuke](https://nuke.build/) as our build tool, and to generate our [Github actions](https://github.com/ebjornset/DryGen/actions).
 - We use [xunit.net](https://xunit.net/) as our test running framework
 - [Fluent Assertions](https://fluentassertions.com/) is used to assert the code is doing what we expects.
-- All out tests are written as [Behavioral specifications](https://en.wikipedia.org/wiki/Behavior-driven_development#Behavioral_specifications) using [Reqnroll](https://reqnroll.net/).
+- Most of the tests are written as [Behavioral specifications](https://en.wikipedia.org/wiki/Behavior-driven_development#Behavioral_specifications) using [Reqnroll](https://reqnroll.net/).
