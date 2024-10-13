@@ -1,4 +1,6 @@
-﻿namespace DryGen.MermaidFromCSharp.NameRewriters;
+﻿using DryGen.Core;
+
+namespace DryGen.MermaidFromCSharp.NameRewriters;
 
 public class ReplaceNameRewriter : INameRewriter
 {
@@ -7,13 +9,13 @@ public class ReplaceNameRewriter : INameRewriter
 
     public ReplaceNameRewriter(string replace, string replacement)
     {
-        this.replace = replace;
+        this.replace = replace.AsNonNull();
         this.replacement = replacement;
     }
 
     public string Rewrite(string name)
     {
-        var result = replace?.Length == 0 ? name : name.Replace(replace, replacement);
+        var result = replace.Length == 0 ? name : name.Replace(replace, replacement);
         return result;
     }
 }

@@ -241,7 +241,7 @@ public class Generator
             }
 
             var generator = new MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator(options, assemblyNameFilters);
-            return generator.Generate(options.InputFile).Result;
+            return generator.Generate(options.InputFile.AsNonNull()).Result;
         });
     }
 

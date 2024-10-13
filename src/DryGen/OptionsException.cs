@@ -1,16 +1,13 @@
 ﻿using System;
+
+#if (NET6_0)
 using System.Diagnostics.CodeAnalysis;
-
-#if (NET6_0 || NET7_0)
-
 using System.Runtime.Serialization;
-
 #endif
 
 namespace DryGen;
 
-#if (NET6_0 || NET7_0)
-
+#if (NET6_0)
 [Serializable]
 #endif
 public sealed class OptionsException : Exception
@@ -19,7 +16,7 @@ public sealed class OptionsException : Exception
     {
     }
 
-#if (NET6_0 || NET7_0)
+#if (NET6_0)
     [ExcludeFromCodeCoverage]
     private OptionsException(SerializationInfo info, StreamingContext context) : base(info, context)
     {

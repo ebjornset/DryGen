@@ -11,6 +11,6 @@ public class IncludeNamespaceTypeFilter : AbstractStringRegexFilter, ITypeFilter
 
     public bool Accepts(Type type)
     {
-        return DoesAccept(type.Namespace);
+        return DoesAccept(type.Namespace.AsNonNull());
     }
 }

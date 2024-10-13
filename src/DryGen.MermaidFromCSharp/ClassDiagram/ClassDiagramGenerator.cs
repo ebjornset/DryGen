@@ -1,4 +1,5 @@
-﻿using DryGen.MermaidFromCSharp.TypeFilters;
+﻿using DryGen.Core;
+using DryGen.MermaidFromCSharp.TypeFilters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -313,7 +314,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             var visibility = GetVisibility(methodInfo);
             var isStatic = methodInfo.IsStatic;
             var isAbstract = methodInfo.IsAbstract;
-            var parameters = methodInfo.GetParameters().Select(x => new ClassDiagramMethodParameter(GetDataType(x.ParameterType), x.Name)).ToList();
+            var parameters = methodInfo.GetParameters().Select(x => new ClassDiagramMethodParameter(GetDataType(x.ParameterType), x.Name.AsNonNull())).ToList();
             classDiagramClass.AddMethod(new ClassDiagramMethod(returnTypeType, methodName, visibility, isStatic, isAbstract, parameters, methodInfo));
         }
     }
