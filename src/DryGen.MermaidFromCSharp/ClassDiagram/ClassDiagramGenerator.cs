@@ -68,7 +68,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         }
     }
 
-    private static IEnumerable<ClassDiagramClass> ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(IEnumerable<ClassDiagramClass> classDiagramClasses)
+    private static ClassDiagramClass[] ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(IEnumerable<ClassDiagramClass> classDiagramClasses)
     {
         var classLookup = classDiagramClasses.ToDictionary(x => x.Type, x => x);
         var removedExtensionClasses = new List<ClassDiagramClass>();
@@ -483,7 +483,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             && !methodName.Contains(">g__");
     }
 
-    private static IReadOnlyList<ITypeFilter> ClassDiagramFilters(IReadOnlyList<ITypeFilter> filters)
+    private static List<ITypeFilter> ClassDiagramFilters(IReadOnlyList<ITypeFilter> filters)
     {
         var result = new List<ITypeFilter> { new ExcludeNonPublicClassTypeFilter(), new ExcludeSystemObjectAndSystemEnumTypeFilter(), new ExcludeClosedGenericTypeTypeFilter() };
         result.AddRange(filters);
