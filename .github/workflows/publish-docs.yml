@@ -18,6 +18,9 @@ name: publish-docs
 
 on: [workflow_dispatch]
 
+permissions:
+  id-token: write
+
 jobs:
   ubuntu-latest:
     name: ubuntu-latest
