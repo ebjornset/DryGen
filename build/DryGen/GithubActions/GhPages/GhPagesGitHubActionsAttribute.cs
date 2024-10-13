@@ -8,7 +8,7 @@ namespace DryGen.GithubActions.GhPages;
 
 public class GhPagesGitHubActionsAttribute : DotNetGitHubActionsAttribute
 {
-	public GhPagesGitHubActionsAttribute(string name, bool needsJava = false) : base(name, needsJava)
+	public GhPagesGitHubActionsAttribute(string name) : base(name)
 	{
 	}
 
