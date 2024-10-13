@@ -26,7 +26,7 @@ public class TypeLoaderByReflection : ITypeLoader
             .ThenBy(nt => nt.Type.Name)
             .ThenBy(nt => nt.Type.Namespace).ToArray();
 
-        static void AddClassHierarchy(IReadOnlyList<ITypeFilter>? typeFilters, Dictionary<Type, Type> classLookup, Type type)
+        static void AddClassHierarchy(IReadOnlyList<ITypeFilter>? typeFilters, Dictionary<Type, Type> classLookup, Type? type)
         {
             if (type == null || classLookup.ContainsKey(type) || typeFilters?.Any(filter => !filter.Accepts(type)) == true)
             {
@@ -41,7 +41,7 @@ public class TypeLoaderByReflection : ITypeLoader
         }
     }
 
-    private static IReadOnlyList<ITypeFilter> WrapWithGlobalFilters(IReadOnlyList<ITypeFilter>? filters)
+    private static List<ITypeFilter> WrapWithGlobalFilters(IReadOnlyList<ITypeFilter>? filters)
     {
         var result = new List<ITypeFilter>
         {

@@ -146,7 +146,7 @@ public class ClassDiagramClass : NamedType
         return Relationships.Any(x => x.RelationsshipType == ClassDiagramRelationshipType.Dependency && x.To == to);
     }
 
-    private ClassDiagramRelationship FindNonBidirectionalAssociationToThisThatMatchesThisAssociation(ClassDiagramClass to)
+    private ClassDiagramRelationship? FindNonBidirectionalAssociationToThisThatMatchesThisAssociation(ClassDiagramClass to)
     {
         return to.Relationships.FirstOrDefault(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Association && !x.IsBidirectional);
     }

@@ -136,7 +136,7 @@ public class ErDiagramGenerator : IErDiagramGenerator
         }
     }
 
-    private static IReadOnlyList<ITypeFilter> ErDiagramFilters(IReadOnlyList<ITypeFilter> filters)
+    private static List<ITypeFilter> ErDiagramFilters(IReadOnlyList<ITypeFilter> filters)
     {
         var result = new List<ITypeFilter> { new ExcludeAbstractClassTypeFilter(), new ExcludeNonPublicClassTypeFilter(), new ExcludeEnumTypeFilter(), new ExcludeSystemObjectTypeFilter() };
         result.AddRange(filters);

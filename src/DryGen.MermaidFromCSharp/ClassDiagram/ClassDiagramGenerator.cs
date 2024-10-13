@@ -1,4 +1,5 @@
-﻿using DryGen.MermaidFromCSharp.TypeFilters;
+﻿using DryGen.Core;
+using DryGen.MermaidFromCSharp.TypeFilters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -67,7 +68,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         }
     }
 
-    private static IEnumerable<ClassDiagramClass> ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(IEnumerable<ClassDiagramClass> classDiagramClasses)
+    private static ClassDiagramClass[] ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(IEnumerable<ClassDiagramClass> classDiagramClasses)
     {
         var classLookup = classDiagramClasses.ToDictionary(x => x.Type, x => x);
         var removedExtensionClasses = new List<ClassDiagramClass>();
@@ -313,7 +314,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             var visibility = GetVisibility(methodInfo);
             var isStatic = methodInfo.IsStatic;
             var isAbstract = methodInfo.IsAbstract;
-            var parameters = methodInfo.GetParameters().Select(x => new ClassDiagramMethodParameter(GetDataType(x.ParameterType), x.Name)).ToList();
+            var parameters = methodInfo.GetParameters().Select(x => new ClassDiagramMethodParameter(GetDataType(x.ParameterType), x.Name.AsNonNull())).ToList();
             classDiagramClass.AddMethod(new ClassDiagramMethod(returnTypeType, methodName, visibility, isStatic, isAbstract, parameters, methodInfo));
         }
     }
@@ -482,7 +483,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             && !methodName.Contains(">g__");
     }
 
-    private static IReadOnlyList<ITypeFilter> ClassDiagramFilters(IReadOnlyList<ITypeFilter> filters)
+    private static List<ITypeFilter> ClassDiagramFilters(IReadOnlyList<ITypeFilter> filters)
     {
         var result = new List<ITypeFilter> { new ExcludeNonPublicClassTypeFilter(), new ExcludeSystemObjectAndSystemEnumTypeFilter(), new ExcludeClosedGenericTypeTypeFilter() };
         result.AddRange(filters);

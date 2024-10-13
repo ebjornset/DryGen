@@ -2,7 +2,7 @@
 
 public class DotNetGitHubActionsAttribute : BaseGitHubActionsAttribute
 {
-    public DotNetGitHubActionsAttribute(string name, bool needsJava = true) : base(name, needsJava)
+    public DotNetGitHubActionsAttribute(string name) : base(name)
     {
     }
 }

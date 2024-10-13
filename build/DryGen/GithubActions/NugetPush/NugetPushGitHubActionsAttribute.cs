@@ -3,7 +3,7 @@ namespace DryGen.GithubActions.NugetPush;
 
 public class NugetPushGitHubActionsAttribute : GhPagesGitHubActionsAttribute
 {
-    public NugetPushGitHubActionsAttribute(string name) : base(name, needsJava: true)
+    public NugetPushGitHubActionsAttribute(string name) : base(name)
     {
     }
 }

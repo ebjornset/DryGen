@@ -42,16 +42,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.*
-      - name: Setup Java (for SonarCloud)
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 20
-          java-package: jre
-      - name: Setup Ruby (for building docs with Jekyll)
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
         uses: actions/cache@v4
         with:

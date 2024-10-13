@@ -37,16 +37,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.*
-      - name: Setup Java (for SonarCloud)
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 20
-          java-package: jre
-      - name: Setup Ruby (for building docs with Jekyll)
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
         uses: actions/cache@v4
         with:
@@ -59,10 +49,9 @@ jobs:
         env:
           NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
           SonarToken: ${{ secrets.SONAR_TOKEN }}
-      - name: Prepare generated docs for deployment on branch gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload generated docs as github-pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/_site
-        # If the Github Pages for the repository is configured correctly
-        # the gh-pages branch should be published automatically within a minute or so...
+          path: ./docs/_site
+      - name: Deploy generated docs github-pages artifact
+        uses: actions/deploy-pages@v4

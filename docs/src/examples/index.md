@@ -1,5 +1,3 @@
----
----
 # Examples
 The  menu on the left lists the dry-gen examples. Each of these pages will give you information on how to use the various dry-gen features. 
 

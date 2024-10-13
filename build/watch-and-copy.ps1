@@ -1,4 +1,4 @@
-# Watch for file changes in a directory, and executea command when a file is changed or renamed
+# Watch for file changes in a directory, and copy files when a file is changed or renamed
 param(
 	[Parameter(Mandatory)]
 	[string]$Path,

@@ -34,14 +34,14 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         this.assemblyNameFilters = assemblyNameFilters?.Any() == true ? assemblyNameFilters : Array.Empty<IAssemblyNameFilter>();
     }
 
-    public async Task<string> Generate(string? inputFile)
+    public async Task<string> Generate(string inputFile)
     {
         var target = await LoadValidTargetJson(inputFile);
         var diagramStructure = CreateDiagramStructure(target);
         return GenerateDiagram(target, diagramStructure);
     }
 
-    private async Task<Target> LoadValidTargetJson(string? inputFile)
+    private async Task<Target> LoadValidTargetJson(string inputFile)
     {
         var depsJsonText = await File.ReadAllTextAsync(inputFile);
         var depsJson = JsonNode.Parse(depsJsonText)?.AsObject();

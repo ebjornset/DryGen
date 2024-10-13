@@ -2,8 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<!-- We only target net6.0, since that's the only target version of the docs we run during the Nuke build -->
-		<TargetFrameworks>net6.0</TargetFrameworks>
+		<TargetFrameworks>net6.0;net8.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 

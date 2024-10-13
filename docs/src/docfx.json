@@ -1,13 +1,13 @@
 {
   "build": {
+    "disableGitFeatures": true,
     "content": [
       {
         "files": [
           "**/*.{md,yml}"
         ],
         "exclude": [
-          "README.md",
-          "_include/**/*"
+          "README.md"
         ]
       }
     ],
@@ -15,7 +15,8 @@
       {
         "files": [
           "CNAME",
-          "README.md"
+          "README.md",
+          "images/**"
         ]
       }
     ],
@@ -28,7 +29,10 @@
     "globalMetadata": {
       "_appName": "DryGen",
       "_appTitle": "DryGen",
+      "_appLogoPath": "images/drygen-compressed.svg",
+      "_appFaviconPath": "images/favicon-32x32-transparent.png",
       "_enableSearch": true,
+      "_enableNewTab": true,
       "_disableContribution": true,
       "_disableBreadcrumb": true,
       "_lang": "en",
