@@ -242,7 +242,7 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
                 return type;
             }
         }
-        throw new TypeLoadException($"Could not load Ef Code type '{name}'");
+        throw new TypeLoadException($"Could not load Ef Core type '{name}'");
     }
 
     private sealed class EfCoreErEntity : ErDiagramEntity
