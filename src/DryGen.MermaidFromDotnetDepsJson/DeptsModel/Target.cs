@@ -22,7 +22,7 @@ internal class Target : BaseModelElement
         return new Target(targetObject, id, findTechnologies, assemblyNameFilters);
     }
 
-    private IReadOnlyList<Dependency> LoadDependencies(JsonObject targetObject, bool findTechnology, IReadOnlyList<IAssemblyNameFilter> assemblyNameFilters)
+    private List<Dependency> LoadDependencies(JsonObject targetObject, bool findTechnology, IReadOnlyList<IAssemblyNameFilter> assemblyNameFilters)
     {
         var enumerator = targetObject.GetEnumerator();
         var runtimeDependencies = new List<Dependency>();
@@ -42,7 +42,7 @@ internal class Target : BaseModelElement
             runtimeDependencies.Add(dependency);
             isMainAssembly = false;
         }
-        if (!runtimeDependencies.Any())
+        if (runtimeDependencies.Count == 0)
         {
             throw $"Found no non empty runtime dependencies in target '{Id}'.".ToInvalidContentException();
         }
