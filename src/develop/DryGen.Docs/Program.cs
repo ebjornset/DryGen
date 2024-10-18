@@ -9,7 +9,6 @@ using System.Reflection;
 namespace DryGen.Docs;
 
 [ExcludeFromCodeCoverage] // We run this from nuke docs, so we are not to worried about the code coverage at the moment...
-#pragma warning disable CA1861 //Avoid constant arrays as arguments
 public static class Program
 {
 	public static int Main(string[] args)
@@ -169,6 +168,7 @@ public static class Program
 
 	private static IEnumerable<ExamplesGeneratorData> BuildExamplesGeneratorData()
 	{
+#pragma warning disable CA1861 //Avoid constant arrays as arguments
 		return new[]
 		{
 			GetExamplesGeneratorDataForFilteringMermaidDiagramContent("no-filtering", new[] {"--attribute-level", "none", "--method-level", "none", "--direction", "RL" }),
@@ -190,6 +190,7 @@ public static class Program
 			GetExamplesGeneratorDataForMermaidErDiagramDetails("exclude-attribute-comments", new [] { "--exclude-attribute-comments", "true" }),
 			GetExamplesGeneratorDataForMermaidErDiagramDetails("exclude-propertynames", new [] { "--exclude-propertynames", ".*Id$" }),
 		};
+#pragma warning restore CA1861
 	}
 
 	private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string rootDirectory, string assemblyDirectory)
@@ -286,4 +287,3 @@ public static class Program
 		public string RootDirectory { get; set; }
 	}
 }
-#pragma warning restore CA1861
