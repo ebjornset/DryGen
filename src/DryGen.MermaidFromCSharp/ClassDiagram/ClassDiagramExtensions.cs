@@ -115,6 +115,6 @@ public static class ClassDiagramExtensions
 
     public static bool IsExtensionMethod(this MethodInfo methodInfo)
     {
-        return methodInfo.IsStatic && methodInfo.GetParameters().Any() && methodInfo.CustomAttributes.Any(x => x.AttributeType == typeof(ExtensionAttribute));
+        return methodInfo.IsStatic && methodInfo.GetParameters().Length > 0 && methodInfo.CustomAttributes.Any(x => x.AttributeType == typeof(ExtensionAttribute));
     }
 }
