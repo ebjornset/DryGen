@@ -77,9 +77,8 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             foreach (var extensionMethod in extensionClass.Methods.Where(x => x.MethodInfo.IsExtensionMethod()).ToArray())
             {
                 var extendedType = extensionMethod.MethodInfo.GetParameters()[0].ParameterType;
-                if (classLookup.ContainsKey(extendedType))
+                if (classLookup.TryGetValue(extendedType, out var extendedClass))
                 {
-                    var extendedClass = classLookup[extendedType];
                     extensionClass.PromoteMethodToExtendedClass(extensionMethod, extendedClass);
                 }
             }
@@ -163,7 +162,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             && classLookup.ContainsKey(type.GetGenericArguments()[0]);
     }
 
-    private static void GenerateClassInheritanceOrRealizationForInterfaces(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
+    private static void GenerateClassInheritanceOrRealizationForInterfaces(Dictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
     {
         foreach (var directInterface in classDiagramClass.Type.GetDirectInterfaces().Where(directInterface => classLookup.ContainsKey(directInterface)))
         {
@@ -225,13 +224,13 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
 
     private static void AddDependency(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass, Type parameterType)
     {
-        if (classLookup.ContainsKey(parameterType))
+        if (classLookup.TryGetValue(parameterType, out var classLookupParameterType))
         {
             classDiagramClass.AddRelationship(
                 ClassDiagramRelationshipCardinality.Unspecified,
                 ClassDiagramRelationshipType.Dependency,
                 ClassDiagramRelationshipCardinality.Unspecified,
-                classLookup[parameterType], string.Empty, string.Empty);
+				classLookupParameterType, string.Empty, string.Empty);
         }
         else if (parameterType.IsGenericType)
         {
