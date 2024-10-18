@@ -10,12 +10,12 @@ namespace DryGen.MermaidFromJsonSchema;
 
 public class MermaidClassDiagramFromJsonSchemaGenerator
 {
-    public async Task<string> Generate(IMermaidClassDiagramFromJsonSchemaOptions options, IDiagramFilter diagramFilter)
+    public static async Task<string> Generate(IMermaidClassDiagramFromJsonSchemaOptions options, IDiagramFilter diagramFilter)
     {
         var mermaidClassDiagramGenerator = new ClassDiagramGenerator(new TypeLoaderByReflection(), new MermaidClassDiagramFromCSharpOptions { Direction = options.Direction, Title = options.Title });
         string cSharpCode = await CSharpFromJsonSchemaGenerator.Generate(new InternalCSharpFromJsonSchemaOptions(options));
         var tempAssembly = cSharpCode.CompileCodeToMemory(ReferencedAssemblies.Get());
-        var mermaid = mermaidClassDiagramGenerator.Generate(tempAssembly, new ITypeFilter[0], new IPropertyFilter[0], nameRewriter: null, diagramFilter);
+        var mermaid = mermaidClassDiagramGenerator.Generate(tempAssembly, Array.Empty<ITypeFilter>(), Array.Empty<IPropertyFilter>(), nameRewriter: null, diagramFilter);
         return mermaid;
     }
 
