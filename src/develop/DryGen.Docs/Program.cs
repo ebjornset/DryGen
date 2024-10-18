@@ -166,7 +166,7 @@ public static class Program
 		}
 	}
 
-	private static IEnumerable<ExamplesGeneratorData> BuildExamplesGeneratorData()
+	private static ExamplesGeneratorData[] BuildExamplesGeneratorData()
 	{
 #pragma warning disable CA1861 //Avoid constant arrays as arguments
 		return new[]
