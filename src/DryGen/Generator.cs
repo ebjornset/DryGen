@@ -257,9 +257,8 @@ public class Generator
     {
         return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "Mermaid class diagram", options =>
         {
-            var generator = new MermaidClassDiagramFromJsonSchemaGenerator();
             var treeShakingDiagramFilter = GetMermaidDiagramTreeShakingFilter(options.TreeShakingRoots);
-            return generator.Generate(options, treeShakingDiagramFilter).Result;
+            return MermaidClassDiagramFromJsonSchemaGenerator.Generate(options, treeShakingDiagramFilter).Result;
         });
     }
 
