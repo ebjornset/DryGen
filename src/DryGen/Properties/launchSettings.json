@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "DryGen": {
-      "commandName": "Project",
-      "commandLineArgs": "verbs-from-options-file -f  C:/TEMP/drygen_debug.yaml",
-    }
-  }
-}
