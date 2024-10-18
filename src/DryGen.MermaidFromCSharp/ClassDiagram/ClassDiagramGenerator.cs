@@ -376,8 +376,8 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             if (classContentBuilder.Length > 0)
             {
                 sb.AppendLine(" {");
-                sb.Append(classContentBuilder.ToString());
-                sb.Append("\t").Append("}");
+                sb.Append(classContentBuilder);
+                sb.Append('\t').Append('}');
             }
             sb.AppendLine();
         }
@@ -399,7 +399,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         foreach (var attribute in classDiagramClass.Attributes)
         {
-            sb.Append("\t").Append("\t").Append(attribute.Visibility).Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
+            sb.Append('\t').Append('\t').Append(attribute.Visibility).Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
             if (attribute.IsStatic)
             {
                 sb.Append('$');
@@ -412,7 +412,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         foreach (var method in classDiagramClass.Methods)
         {
-            sb.Append("\t").Append("\t").Append(method.Visibility).Append(method.MethodName).Append('(');
+            sb.Append('\t').Append('\t').Append(method.Visibility).Append(method.MethodName).Append('(');
             if (excludeMethodParams)
             {
                 AppedParamsSummaryToClassMethod(sb, method);
@@ -468,7 +468,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             {
                 var dataTypeFrom = GetDataType(classDiagramClass.Type, nameRewriter);
                 var dataTypeTo = GetDataType(relationship.To.Type, nameRewriter);
-                sb.Append("\t").Append(dataTypeFrom).Append(relationship.GetRelationshipPattern()).Append(dataTypeTo).AppendLine(relationship.GetRelationshipLabel());
+                sb.Append('\t').Append(dataTypeFrom).Append(relationship.GetRelationshipPattern()).Append(dataTypeTo).AppendLine(relationship.GetRelationshipLabel());
             }
         }
     }
