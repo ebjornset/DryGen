@@ -170,7 +170,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
             GetAllBoundaryDependencies(boundaryDependencies, (ContainerBoundary)diagramElement);
             result.Add(boundaryDependencies);
         }
-        if (unboundariedDependencies.Any())
+        if (unboundariedDependencies.Count > 0)
         {
             result.Insert(0, unboundariedDependencies);
         }
@@ -324,12 +324,7 @@ public class MermaidC4ComponentDiagramFromDotnetDepsJsonGenerator
         {
             var dotIndex = dependency.Name.Length > startIndex ? dependency.Name.IndexOf('.', startIndex) : -1;
             var groupName = dotIndex > startIndex ? dependency.Name[..dotIndex] : dependency.Name;
-            List<Dependency> groupList;
-            if (groups.ContainsKey(groupName))
-            {
-                groupList = groups[groupName];
-            }
-            else
+            if (!groups.TryGetValue(groupName, out var groupList))
             {
                 groupList = new List<Dependency>();
                 childrenLists.Add((groupName, groupList));
