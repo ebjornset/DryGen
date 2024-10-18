@@ -166,8 +166,9 @@ public static class Program
 		}
 	}
 
-	private static IEnumerable<ExamplesGeneratorData> BuildExamplesGeneratorData()
+	private static ExamplesGeneratorData[] BuildExamplesGeneratorData()
 	{
+#pragma warning disable CA1861 //Avoid constant arrays as arguments
 		return new[]
 		{
 			GetExamplesGeneratorDataForFilteringMermaidDiagramContent("no-filtering", new[] {"--attribute-level", "none", "--method-level", "none", "--direction", "RL" }),
@@ -189,6 +190,7 @@ public static class Program
 			GetExamplesGeneratorDataForMermaidErDiagramDetails("exclude-attribute-comments", new [] { "--exclude-attribute-comments", "true" }),
 			GetExamplesGeneratorDataForMermaidErDiagramDetails("exclude-propertynames", new [] { "--exclude-propertynames", ".*Id$" }),
 		};
+#pragma warning restore CA1861
 	}
 
 	private static string[] BuildExamplesGeneratorCommandline(ExamplesGeneratorData generatorData, string rootDirectory, string assemblyDirectory)

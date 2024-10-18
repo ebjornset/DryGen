@@ -77,9 +77,8 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             foreach (var extensionMethod in extensionClass.Methods.Where(x => x.MethodInfo.IsExtensionMethod()).ToArray())
             {
                 var extendedType = extensionMethod.MethodInfo.GetParameters()[0].ParameterType;
-                if (classLookup.ContainsKey(extendedType))
+                if (classLookup.TryGetValue(extendedType, out var extendedClass))
                 {
-                    var extendedClass = classLookup[extendedType];
                     extensionClass.PromoteMethodToExtendedClass(extensionMethod, extendedClass);
                 }
             }
@@ -163,7 +162,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             && classLookup.ContainsKey(type.GetGenericArguments()[0]);
     }
 
-    private static void GenerateClassInheritanceOrRealizationForInterfaces(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
+    private static void GenerateClassInheritanceOrRealizationForInterfaces(Dictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
     {
         foreach (var directInterface in classDiagramClass.Type.GetDirectInterfaces().Where(directInterface => classLookup.ContainsKey(directInterface)))
         {
@@ -225,13 +224,13 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
 
     private static void AddDependency(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass, Type parameterType)
     {
-        if (classLookup.ContainsKey(parameterType))
+        if (classLookup.TryGetValue(parameterType, out var classLookupParameterType))
         {
             classDiagramClass.AddRelationship(
                 ClassDiagramRelationshipCardinality.Unspecified,
                 ClassDiagramRelationshipType.Dependency,
                 ClassDiagramRelationshipCardinality.Unspecified,
-                classLookup[parameterType], string.Empty, string.Empty);
+				classLookupParameterType, string.Empty, string.Empty);
         }
         else if (parameterType.IsGenericType)
         {
@@ -376,8 +375,8 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             if (classContentBuilder.Length > 0)
             {
                 sb.AppendLine(" {");
-                sb.Append(classContentBuilder.ToString());
-                sb.Append("\t").Append("}");
+                sb.Append(classContentBuilder);
+                sb.Append('\t').Append('}');
             }
             sb.AppendLine();
         }
@@ -399,7 +398,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         foreach (var attribute in classDiagramClass.Attributes)
         {
-            sb.Append("\t").Append("\t").Append(attribute.Visibility).Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
+            sb.Append('\t').Append('\t').Append(attribute.Visibility).Append(attribute.AttributeType).Append(' ').Append(attribute.AttributeName);
             if (attribute.IsStatic)
             {
                 sb.Append('$');
@@ -412,7 +411,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
     {
         foreach (var method in classDiagramClass.Methods)
         {
-            sb.Append("\t").Append("\t").Append(method.Visibility).Append(method.MethodName).Append('(');
+            sb.Append('\t').Append('\t').Append(method.Visibility).Append(method.MethodName).Append('(');
             if (excludeMethodParams)
             {
                 AppedParamsSummaryToClassMethod(sb, method);
@@ -468,7 +467,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
             {
                 var dataTypeFrom = GetDataType(classDiagramClass.Type, nameRewriter);
                 var dataTypeTo = GetDataType(relationship.To.Type, nameRewriter);
-                sb.Append("\t").Append(dataTypeFrom).Append(relationship.GetRelationshipPattern()).Append(dataTypeTo).AppendLine(relationship.GetRelationshipLabel());
+                sb.Append('\t').Append(dataTypeFrom).Append(relationship.GetRelationshipPattern()).Append(dataTypeTo).AppendLine(relationship.GetRelationshipLabel());
             }
         }
     }

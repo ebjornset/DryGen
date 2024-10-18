@@ -2,6 +2,7 @@
 using DryGen.CSharpFromJsonSchema;
 using DryGen.MermaidFromCSharp;
 using DryGen.MermaidFromCSharp.ErDiagram;
+using System;
 using System.Threading.Tasks;
 
 namespace DryGen.MermaidFromJsonSchema;
@@ -18,7 +19,7 @@ public static class MermaidErDiagramFromJsonSchemaGenerator
             options.Title);
         string cSharpCode = await CSharpFromJsonSchemaGenerator.Generate(new InternalCSharpFromJsonSchemaOptions(options));
         var tempAssembly = cSharpCode.CompileCodeToMemory(ReferencedAssemblies.Get());
-        var mermaid = mermaidErDiagramGenerator.Generate(tempAssembly, new ITypeFilter[0], new IPropertyFilter[0], nameRewriter: null, diagramFilter);
+        var mermaid = mermaidErDiagramGenerator.Generate(tempAssembly, Array.Empty<ITypeFilter>(), Array.Empty<IPropertyFilter>(), nameRewriter: null, diagramFilter);
         return mermaid;
     }
 }

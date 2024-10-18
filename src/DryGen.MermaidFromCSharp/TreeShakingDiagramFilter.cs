@@ -7,7 +7,7 @@ namespace DryGen.MermaidFromCSharp;
 
 public class TreeShakingDiagramFilter : IDiagramFilter
 {
-    private readonly ITypeFilter? treeShakingRootsFilter;
+    private readonly AnyChildFiltersTypeFilter? treeShakingRootsFilter;
 
     public TreeShakingDiagramFilter(IReadOnlyList<ITypeFilter>? treeShakingRoots)
     {
@@ -25,7 +25,7 @@ public class TreeShakingDiagramFilter : IDiagramFilter
         }
 
         var result = types.Where(x => treeShakingRootsFilter.Accepts(x.Type)).ToList();
-        if (!result.Any())
+        if (result.Count == 0)
         {
             return Array.Empty<TDiagramType>();
         }

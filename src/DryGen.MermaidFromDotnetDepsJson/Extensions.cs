@@ -1,6 +1,5 @@
 ﻿using DryGen.Core;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Text.Json.Nodes;
 
 namespace DryGen.MermaidFromDotnetDepsJson;
@@ -43,7 +42,7 @@ internal static class Extensions
     [ExcludeFromCodeCoverage] // Sanity check for unexpected structure. Havent been able to make this fail, but still there might exist such cases...
     internal static void CheckForChildren(this JsonObject jsonObject)
     {
-        if (!jsonObject.Any())
+        if (jsonObject.Count == 0)
         {
             throw $"'{jsonObject.GetPath()}' has unexpected Count '{jsonObject.Count}'.".ToInvalidContentException();
         }
