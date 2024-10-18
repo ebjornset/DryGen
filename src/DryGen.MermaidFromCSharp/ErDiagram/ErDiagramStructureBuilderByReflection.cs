@@ -1,7 +1,6 @@
 ﻿using DryGen.Core;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Reflection;
 
@@ -25,9 +24,8 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
             foreach (var property in entity.Type.GetProperties().Where(p => attributeFilters.All(f => f.Accepts(p))))
             {
                 var propertyType = property.PropertyType;
-                if (entityLookup.ContainsKey(propertyType))
+                if (entityLookup.TryGetValue(propertyType, out var fromEntity))
                 {
-                    var fromEntity = entityLookup[propertyType];
                     var label = property.Name.Replace(fromEntity.Name, string.Empty).ToLower();
                     fromEntity.AddRelationship(entity, ErDiagramRelationshipCardinality.ExactlyOne, ErDiagramRelationshipCardinality.ExactlyOne, label, property.Name);
                 }
@@ -36,9 +34,8 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
                     && propertyType.GetGenericArguments().Length == 1)
                 {
                     var genericArgumentPropertyType = propertyType.GetGenericArguments()[0];
-                    if (entityLookup.ContainsKey(genericArgumentPropertyType))
+                    if (entityLookup.TryGetValue(genericArgumentPropertyType, out var toEntity))
                     {
-                        var toEntity = entityLookup[genericArgumentPropertyType];
                         entity.AddRelationship(toEntity, ErDiagramRelationshipCardinality.ExactlyOne, ErDiagramRelationshipCardinality.ZeroOrMore, string.Empty, property.Name);
                     }
                 }
