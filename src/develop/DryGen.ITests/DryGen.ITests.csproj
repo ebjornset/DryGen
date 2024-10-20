@@ -17,6 +17,9 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<!-- Fix for https://security.snyk.io/vuln/SNYK-DOTNET-SYSTEMTEXTJSON-8168848 - begin -->
+		<PackageReference Include="System.Text.Json" Version="8.0.5" />
+		<!-- Fix for https://security.snyk.io/vuln/SNYK-DOTNET-SYSTEMTEXTJSON-8168848 - end -->
 	</ItemGroup>
 
 	<ItemGroup>
