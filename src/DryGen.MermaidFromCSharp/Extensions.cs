@@ -46,17 +46,22 @@ public static class Extensions
                 propertyName = propertyName[..^endCandidate.Length];
             }
         }
-        // Rexex code from https://dotnetfiddle.net/VBuoy7
-        var first = Regex
-            .Replace(propertyName, "(?<before>[^A-Z])(?<after>([A-Z]))", "${before} ${after}", RegexOptions.Compiled, TimeSpan.FromSeconds(1))
-            .Trim();
-        var result = Regex
-            .Replace(first, "(?<before>[^ ])(?<after>([A-Z][^A-Zs]))", "${before} ${after}", RegexOptions.Compiled, TimeSpan.FromSeconds(1))
-            .Trim();
-        return result.ToLower();
+        return propertyName.ToNormalizedRelationshipLabel();
     }
 
-    public static StringBuilder AppendDiagramTitle(this StringBuilder sb, string? title)
+	public static string ToNormalizedRelationshipLabel(this string relationshipLabel)
+	{
+		// Rexex code from https://dotnetfiddle.net/VBuoy7
+		var first = Regex
+			.Replace(relationshipLabel, "(?<before>[^A-Z])(?<after>([A-Z]))", "${before} ${after}", RegexOptions.Compiled, TimeSpan.FromSeconds(1))
+			.Trim();
+		var result = Regex
+			.Replace(first, "(?<before>[^ ])(?<after>([A-Z][^A-Zs]))", "${before} ${after}", RegexOptions.Compiled, TimeSpan.FromSeconds(1))
+			.Trim();
+		return result.ToLower();
+	}
+
+	public static StringBuilder AppendDiagramTitle(this StringBuilder sb, string? title)
     {
         if (!string.IsNullOrEmpty(title))
         {

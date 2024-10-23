@@ -17,7 +17,7 @@ public abstract class ModelElement
 
     protected abstract Type ElementType { get; }
 
-    protected TType GetElementMandatoryPropertyValue<TType>(string propertyName)
+    internal protected TType GetElementMandatoryPropertyValue<TType>(string propertyName)
     {
         var result = GetElementOptionalPropertyValue<TType>(propertyName);
         return result ?? throw new TypeMemberException($"'{typeof(TType).FullName}' return null for mandatory property '{propertyName}'");
@@ -37,17 +37,17 @@ public abstract class ModelElement
 
     protected PropertyInfo GetElementPropertyInfo(string propertyName)
     {
-        var propertyInfo = ModelElement.GetPropertyInfoFromType(ElementType, propertyName);
+        var propertyInfo = GetPropertyInfoFromType(ElementType, propertyName);
         return propertyInfo ?? throw new TypeMemberException($"'{ElementType.FullName}' does not have a property named '{propertyName}'");
     }
 
-    protected TType GetElementMandatoryMethodValue<TType>(string methodName)
+    internal protected TType GetElementMandatoryMethodValue<TType>(string methodName)
     {
         var result = GetElementOptionalMethodValue<TType>(methodName);
         return result ?? throw new TypeMemberException($"'{typeof(TType).FullName}' return null for mandatory method '{methodName}'");
     }
 
-    protected TType? GetElementOptionalMethodValue<TType>(string methodName)
+	internal protected TType? GetElementOptionalMethodValue<TType>(string methodName)
     {
         var methodInfo = GetElementMethodInfo(methodName);
         var result = methodInfo.Invoke(element, null);
@@ -61,7 +61,7 @@ public abstract class ModelElement
 
     protected MethodInfo GetElementMethodInfo(string methodName)
     {
-        var methodInfo = ModelElement.GetMethodInfoFromType(ElementType, methodName);
+        var methodInfo = GetMethodInfoFromType(ElementType, methodName);
         return methodInfo ?? throw new TypeMemberException($"'{ElementType.FullName}' does not have a method named '{methodName}'");
     }
 
@@ -75,13 +75,13 @@ public abstract class ModelElement
         if (propertyInfo != null) { return propertyInfo; }
         foreach (var allInterface in type.GetInterfaces())
         {
-            propertyInfo = ModelElement.GetPropertyInfoFromType(allInterface, propertyName);
+            propertyInfo = GetPropertyInfoFromType(allInterface, propertyName);
             if (propertyInfo != null)
             {
                 return propertyInfo;
             }
         }
-        return ModelElement.GetPropertyInfoFromType(type.BaseType, propertyName);
+        return GetPropertyInfoFromType(type.BaseType, propertyName);
     }
 
     private static MethodInfo? GetMethodInfoFromType(Type? type, string methodName)
@@ -94,13 +94,13 @@ public abstract class ModelElement
         if (methodInfo != null) { return methodInfo; }
         foreach (var allInterface in type.GetInterfaces())
         {
-            methodInfo = ModelElement.GetMethodInfoFromType(allInterface, methodName);
+            methodInfo = GetMethodInfoFromType(allInterface, methodName);
             if (methodInfo != null)
             {
                 return methodInfo;
             }
         }
-        return ModelElement.GetMethodInfoFromType(type.BaseType, methodName);
+        return GetMethodInfoFromType(type.BaseType, methodName);
     }
 
     [ExcludeFromCodeCoverage] // Just a guard rail for unexpected structures
@@ -125,4 +125,5 @@ public abstract class ModelElement
     protected const string IForeignKeyTypeName = "Microsoft.EntityFrameworkCore.Metadata.IForeignKey";
     protected const string INavigationTypeName = "Microsoft.EntityFrameworkCore.Metadata.INavigation";
     protected const string IPropertyTypeName = "Microsoft.EntityFrameworkCore.Metadata.IProperty";
+	protected const string RuntimeKeyTypeName = "Microsoft.EntityFrameworkCore.Metadata.RuntimeKey";
 }
