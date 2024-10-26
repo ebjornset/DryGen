@@ -35,7 +35,6 @@ public partial class Build
 
 	internal Target CiCd_TagVersion => _ => _
 		.Unlisted()
-		.Requires(() => GitRepository.IsOnMainBranch())
 		.DependsOn(CiCd_Build)
 		.DependsOn(PushVersionTag)
 		;

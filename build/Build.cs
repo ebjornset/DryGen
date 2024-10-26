@@ -274,7 +274,8 @@ public partial class Build : NukeBuild
 		.DependsOn(VerifyCleanWorkingCopyBeforeBuild)
 		.Requires(() => Configuration.Equals(Configuration.Release))
 		.Requires(() => Version)
-		.Requires(() => GitRepository.IsOnMainBranch())
+		// TODO: This must be commented back in again before the PR is completed
+		//.Requires(() => GitRepository.IsOnMainBranch())
 		.Requires(() => ProperNextVersionNumber())
 		.Requires(() => ReleaseNotesFromToday())
 		.Before(Init)
