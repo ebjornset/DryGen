@@ -106,16 +106,32 @@ public class ErDiagramStructureBuilderByEfCore : IErDiagramStructureBuilder
 
 	private static void GenerateErRelationshipManyToMany(Dictionary<Type, EfCoreErEntity> entityLookup, EfCoreErEntity entity)
 	{
+		/*
+		Ef Core materializes each many-to-many relationship as a Dictionary<string, object>. 
+		In the model this is presented as an IEntity with one Property for each primary key from both side of the relation.
+		So if the firste entity has three properties in the key and the second has two we will get five properties.
+		Each property exposes an undelying ForeignKey with the targent entity type as the PrincipalEntityType. 
+		*/
 		var properties = entity.GetEntityType().GetProperties().ToArray();
-		var firstForeignKey = properties[0].GetElementMandatoryMethodValue<IEnumerable<object>>("GetContainingForeignKeys").Select(x => new ModelForeignKey(x)).Single();
-		var firstPrincipalType = firstForeignKey.PrincipalEntityType.ClrType;
-		var secondForeignKey = properties[^1].GetElementMandatoryMethodValue<IEnumerable<object>>("GetContainingForeignKeys").Select(x => new ModelForeignKey(x)).Single();
-		var secondPrincipalType = secondForeignKey.PrincipalEntityType.ClrType;
-		if (entityLookup.TryGetValue(firstPrincipalType, out var firstPrincipalEntity) && entityLookup.TryGetValue(secondPrincipalType, out var secondPrincipalEntity))
+		// Use the first property to find the first entity
+		var firstEntityProperty = properties[0];
+		var firstEntityForeignKey = firstEntityProperty.GetElementMandatoryMethodValue<IEnumerable<object>>("GetContainingForeignKeys").Select(x => new ModelForeignKey(x)).Single();
+		var firstEntityPrincipalType = firstEntityForeignKey.PrincipalEntityType.ClrType;
+		// Use the last property to find the second entity
+		var secondEntityProperty = properties[^1];
+		var secondEntityForeignKey = secondEntityProperty.GetElementMandatoryMethodValue<IEnumerable<object>>("GetContainingForeignKeys").Select(x => new ModelForeignKey(x)).Single();
+		var secondEntityPrincipalType = secondEntityForeignKey.PrincipalEntityType.ClrType;
+		// We make the relationship if the types on both ends are not filtered out of the entity list.
+		if (entityLookup.TryGetValue(firstEntityPrincipalType, out var firstPrincipalEntity) && entityLookup.TryGetValue(secondEntityPrincipalType, out var secondPrincipalEntity))
 		{
-			var secondPrincipalKeyPropertyName = new ModelRuntimeKey(secondForeignKey.GetElementMandatoryPropertyValue<object>("PrincipalKey")).Properties[0].Name;
-			var secondForeignKeyPropertyName = secondForeignKey.Properties[0].Name;
+			// These properies are named like $"{nameof(<property name for the collection property>)}{nameof(<key property in target entity>)}"
+			// E.g. for a collection named RelatedTo where the target enityt has the key property Id, this property is named RelatedToId
+			var secondForeignKeyPropertyName = secondEntityProperty.Name;
+			// We must use the same property to find the key name in the referenced entity, as we used to find the entity (the last one)
+			var secondPrincipalKeyPropertyName = new ModelRuntimeKey(secondEntityForeignKey.GetElementMandatoryPropertyValue<object>("PrincipalKey")).Properties[^1].Name;
+			// To make the realtion label we must strip of the name of the key property in the target entity from the end of the property name, and normalize the result
 			var label = secondForeignKeyPropertyName.EndsWith(secondPrincipalKeyPropertyName) ? secondForeignKeyPropertyName[..^secondPrincipalKeyPropertyName.Length].ToNormalizedRelationshipLabel() : string.Empty;
+			// Create the relationship
 			firstPrincipalEntity.AddRelationship(secondPrincipalEntity, ErDiagramRelationshipCardinality.ZeroOrMore, ErDiagramRelationshipCardinality.ZeroOrMore, label, string.Empty, isIdentifying: false);
 		}
 	}
