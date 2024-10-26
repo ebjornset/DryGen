@@ -51,6 +51,4 @@ jobs:
         env:
           version: ${{ github.event.inputs.version }}
           SonarToken: ${{ secrets.SONAR_TOKEN }}
-        with:
-          github_token: ${{ secrets.TAG_VERSION_TOKEN }}
 
