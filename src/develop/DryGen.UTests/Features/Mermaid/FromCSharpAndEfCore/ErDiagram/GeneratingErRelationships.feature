@@ -330,3 +330,157 @@ Examples:
 	| Structure builder |
 	| Reflection        |
 	| EfCore            |
+
+Scenario: Generates many to many relationship with only one property in the key
+	Given this C# source code
+		"""
+		using Microsoft.EntityFrameworkCore;
+		using System.Collections.Generic;
+		namespace Test
+		{
+			public class MyEntityOne
+			{
+				public int Id { get; set; }
+				public ICollection<MyEntityTwo> RelatedTo { get; } = [];
+			}
+			public class MyEntityTwo
+			{
+				public int Id { get; set; }
+				public ICollection<MyEntityOne> RelatedFrom { get; } = [];
+			}
+			public class TestDbContext: DbContext {
+				public DbSet<MyEntityOne> MyEntityOnes { get; set; }
+				public DbSet<MyEntityTwo> MyEntityTwos { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+			}
+		}
+		"""
+	When I generate an ER diagram using '<Structure builder>'
+	Then I should get this generated representation
+		"""
+		erDiagram
+			MyEntityOne
+			MyEntityTwo
+			MyEntityOne }o..o{ MyEntityTwo : "related to"
+
+		"""
+Examples:
+	| Structure builder |
+	#| Reflection        |
+	| EfCore            |
+
+Scenario: Generates many to many relationship with several properties in the key
+	Given this C# source code
+		"""
+		using Microsoft.EntityFrameworkCore;
+		using System.Collections.Generic;
+		namespace Test
+		{
+			public class MyEntityOne
+			{
+				public int IdOne { get; set; }
+				public int IdTwo { get; set; }
+				public ICollection<MyEntityTwo> RelatedTo { get; } = [];
+			}
+			public class MyEntityTwo
+			{
+				public int IdOne { get; set; }
+				public int IdTwo { get; set; }
+				public int IdThree { get; set; }
+				public ICollection<MyEntityOne> RelatedFrom { get; } = [];
+			}
+			public class TestDbContext: DbContext {
+				public DbSet<MyEntityOne> MyEntityOnes { get; set; }
+				public DbSet<MyEntityTwo> MyEntityTwos { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+				protected override void OnModelCreating(ModelBuilder modelBuilder)
+				{
+					modelBuilder.Entity<MyEntityOne>().HasKey(x => new { x.IdOne, x.IdTwo });
+					modelBuilder.Entity<MyEntityTwo>().HasKey(x => new { x.IdOne, x.IdTwo, x.IdThree });
+				}
+			}
+		}
+		"""
+	When I generate an ER diagram using '<Structure builder>'
+	Then I should get this generated representation
+		"""
+		erDiagram
+			MyEntityOne
+			MyEntityTwo
+			MyEntityOne }o..o{ MyEntityTwo : "related to"
+
+		"""
+Examples:
+	| Structure builder |
+	#| Reflection        |
+	| EfCore            |
+
+Scenario: Generates self referencing many to many relationship with only one property in the key
+	Given this C# source code
+		"""
+		using Microsoft.EntityFrameworkCore;
+		using System.Collections.Generic;
+		namespace Test
+		{
+			public class MyEntity
+			{
+				public int Id { get; set; }
+				public ICollection<MyEntity> RelatedTo { get; } = [];
+				public ICollection<MyEntity> RelatedFrom { get; } = [];
+			}
+			public class TestDbContext: DbContext {
+				public DbSet<MyEntity> MyEntities { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+			}
+		}
+		"""
+	When I generate an ER diagram using '<Structure builder>'
+	Then I should get this generated representation
+		"""
+		erDiagram
+			MyEntity
+			MyEntity }o..o{ MyEntity : "related to"
+
+		"""
+Examples:
+	| Structure builder |
+	#| Reflection        |
+	| EfCore            |
+
+Scenario: Generates self referencing many to many relationship with several properties in the key
+	Given this C# source code
+		"""
+		using Microsoft.EntityFrameworkCore;
+		using System.Collections.Generic;
+		namespace Test
+		{
+			public class MyEntity
+			{
+				public int IdOne { get; set; }
+				public int IdTwo { get; set; }
+				public int IdThree { get; set; }
+				public ICollection<MyEntity> RelatedTo { get; } = [];
+				public ICollection<MyEntity> RelatedFrom { get; } = [];
+			}
+			public class TestDbContext: DbContext {
+				public DbSet<MyEntity> MyEntities { get; set; }
+				public TestDbContext(DbContextOptions options) : base(options) {}
+				protected override void OnModelCreating(ModelBuilder modelBuilder)
+				{
+					modelBuilder.Entity<MyEntity>().HasKey(x => new { x.IdOne, x.IdTwo, x.IdThree });
+				}
+			}
+		}
+		"""
+	When I generate an ER diagram using '<Structure builder>'
+	Then I should get this generated representation
+		"""
+		erDiagram
+			MyEntity
+			MyEntity }o..o{ MyEntity : "related to"
+
+		"""
+Examples:
+	| Structure builder |
+	#| Reflection        |
+	| EfCore            |

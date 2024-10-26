@@ -633,3 +633,27 @@ Scenario: Generates ER relations with labels when the property name and type nam
 			Product "0..1" o-- "*" Order : main product in
 		
 		"""
+
+Scenario: Generates self referencing many to many relationship. WIP
+	Given this C# source code
+		"""
+		using System.Collections.Generic;
+		namespace Test
+		{
+			public class MyClass
+			{
+				public ICollection<MyClass> MyClassesOne { get; } = [];
+				public ICollection<MyClass> MyClassesTwo { get; } = [];
+			}
+		}
+		"""
+	When I generate a Class diagram
+	Then I should get this generated representation
+		"""
+		classDiagram
+			class MyClass
+			MyClass *-- "*" MyClass : my classes one
+			MyClass *-- "*" MyClass : my classes two
+
+		"""
+
