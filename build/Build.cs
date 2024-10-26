@@ -287,8 +287,9 @@ public partial class Build : NukeBuild
 	internal Target PushVersionTag => _ => _
 		.Unlisted()
 		.DependsOn(TagVersion)
-		.DependsOn(Default)
-		.DependsOn(BuildDocs)
+		// TODO: This must be commented back in again before the PR is completed
+		//.DependsOn(Default)
+		//.DependsOn(BuildDocs)
 		.DependsOn(VerifyCleanWorkingCopyAfterBuild)
 		.Executes(() =>
 		{

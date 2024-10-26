@@ -14,7 +14,8 @@ public static class Extensions
 
     public static string ToVersionTagName(this string version)
     {
-        return $"v{version}";
+		// TODO: This must be commented back in again before the PR is completed
+		return $"test-{version}";
     }
 
     public static AbsolutePath CreateOrCleanDirectory(this AbsolutePath path, bool recurse)

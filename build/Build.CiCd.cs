@@ -35,7 +35,8 @@ public partial class Build
 
 	internal Target CiCd_TagVersion => _ => _
 		.Unlisted()
-		.DependsOn(CiCd_Build)
+		// TODO: This must be commented back in again before the PR is completed
+		//.DependsOn(CiCd_Build)
 		.DependsOn(PushVersionTag)
 		;
 
