@@ -9,7 +9,7 @@
 	-->
 	<Target Name="SetupDryGenTemplatesBuild" BeforeTargets="CoreBuild">
 		<PropertyGroup Condition="'$(TargetFramework)' == ''">
-			<TargetFramework >net6.0</TargetFramework>
+			<TargetFramework >net8.0</TargetFramework>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(DryGenTemplatesRunAsTool)' == ''">
 			<DryGenToolCommandName>dotnet --roll-forward minor ../../../DryGen/bin/$(Configuration)/$(TargetFramework)/DryGen.dll</DryGenToolCommandName>

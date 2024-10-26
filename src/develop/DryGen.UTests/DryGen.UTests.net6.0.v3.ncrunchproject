@@ -1,8 +1,0 @@
-﻿<ProjectConfiguration>
-	<Settings>
-		<AdditionalFilesToIncludeForProject>
-			<Value>Features\**.*</Value>
-		</AdditionalFilesToIncludeForProject>
-		<PreloadReferencedAssemblies>True</PreloadReferencedAssemblies>
-	</Settings>
-</ProjectConfiguration>
