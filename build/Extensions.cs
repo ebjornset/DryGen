@@ -7,31 +7,30 @@ namespace DryGen.Build;
 
 public static class Extensions
 {
-    public static bool IsOnVersionTag(this GitRepository repository)
-    {
-        return repository.Branch?.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase) ?? false;
-    }
+	public static bool IsOnVersionTag(this GitRepository repository)
+	{
+		return repository.Branch?.Contains("refs/tags/v", StringComparison.InvariantCultureIgnoreCase) ?? false;
+	}
 
-    public static string ToVersionTagName(this string version)
-    {
-		// TODO: This must be commented back in again before the PR is completed
-		return $"test-{version}";
-    }
+	public static string ToVersionTagName(this string version)
+	{
+		return $"v{version}";
+	}
 
-    public static AbsolutePath CreateOrCleanDirectory(this AbsolutePath path, bool recurse)
-    {
-        path.CreateOrCleanDirectory();
-        if (recurse)
-        {
-            path.GlobDirectories("**").ForEach(x => x.DeleteDirectory());
-            path.CreateDirectory();
-        }
-        return path;
-    }
+	public static AbsolutePath CreateOrCleanDirectory(this AbsolutePath path, bool recurse)
+	{
+		path.CreateOrCleanDirectory();
+		if (recurse)
+		{
+			path.GlobDirectories("**").ForEach(x => x.DeleteDirectory());
+			path.CreateDirectory();
+		}
+		return path;
+	}
 
-    public static string ToQuotedString(this string value)
-    {
-        return $"\"{value}\"";
-    }
+	public static string ToQuotedString(this string value)
+	{
+		return $"\"{value}\"";
+	}
 
 }

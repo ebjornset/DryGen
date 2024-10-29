@@ -1,5 +1,4 @@
 ﻿using Nuke.Common;
-using Nuke.Common.Git;
 
 namespace DryGen.Build;
 
@@ -35,10 +34,8 @@ public partial class Build
 
 	internal Target CiCd_TagVersion => _ => _
 		.Unlisted()
-		// TODO: This must be commented back in again before the PR is completed
-		//.DependsOn(CiCd_Build)
+		.DependsOn(CiCd_Build)
 		.DependsOn(PushVersionTag)
 		;
-
 #pragma warning restore CA1822  // Mark members as static
 }

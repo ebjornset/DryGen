@@ -274,8 +274,7 @@ public partial class Build : NukeBuild
 		.DependsOn(VerifyCleanWorkingCopyBeforeBuild)
 		.Requires(() => Configuration.Equals(Configuration.Release))
 		.Requires(() => Version)
-		// TODO: This must be commented back in again before the PR is completed
-		//.Requires(() => GitRepository.IsOnMainBranch())
+		.Requires(() => GitRepository.IsOnMainBranch())
 		.Requires(() => ProperNextVersionNumber())
 		.Requires(() => ReleaseNotesFromToday())
 		.Before(Init)
@@ -287,9 +286,7 @@ public partial class Build : NukeBuild
 	internal Target PushVersionTag => _ => _
 		.Unlisted()
 		.DependsOn(TagVersion)
-		// TODO: This must be commented back in again before the PR is completed
-		//.DependsOn(Default)
-		//.DependsOn(BuildDocs)
+		.DependsOn(Default)
 		.DependsOn(VerifyCleanWorkingCopyAfterBuild)
 		.Executes(() =>
 		{
