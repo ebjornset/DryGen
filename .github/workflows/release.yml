@@ -21,10 +21,15 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  id-token: write
+  pages: write
+
 jobs:
   ubuntu-latest:
     name: ubuntu-latest
     runs-on: ubuntu-latest
+    environment: github-pages
     steps:
       - uses: actions/checkout@v4
         with:
