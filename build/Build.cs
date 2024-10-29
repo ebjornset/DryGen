@@ -287,7 +287,6 @@ public partial class Build : NukeBuild
 		.Unlisted()
 		.DependsOn(TagVersion)
 		.DependsOn(Default)
-		.DependsOn(BuildDocs)
 		.DependsOn(VerifyCleanWorkingCopyAfterBuild)
 		.Executes(() =>
 		{
