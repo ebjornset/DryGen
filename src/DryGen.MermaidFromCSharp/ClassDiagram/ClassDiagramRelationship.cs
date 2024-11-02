@@ -27,4 +27,11 @@ public class ClassDiagramRelationship
     public string Label { get; set; }
     public string PropertyName { get; }
     public bool IsBidirectional { get; set; }
+
+    public void MergeAsManyToManyWith(ClassDiagramRelationship backRelationship) {
+        FromCardinality = ClassDiagramRelationshipCardinality.ZeroOrMore;
+        RelationsshipType = ClassDiagramRelationshipType.Association;
+        IsBidirectional = true;
+        To.RemoveRelationship(backRelationship);  
+    }
 }
