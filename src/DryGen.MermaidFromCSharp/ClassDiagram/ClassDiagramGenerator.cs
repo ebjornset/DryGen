@@ -66,6 +66,10 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         {
             classDiagramClass.RemoveBidirectionalRelationshipDuplicates();
         }
+        foreach (var classDiagramClass in classDiagramClasses)
+        {
+            classDiagramClass.MergeTwoOneToManyIntoOneMayToMany();
+        }
     }
 
     private static ClassDiagramClass[] ConvertExtensionMethodsToInstanceMethodsOnKnownTypes(IEnumerable<ClassDiagramClass> classDiagramClasses)

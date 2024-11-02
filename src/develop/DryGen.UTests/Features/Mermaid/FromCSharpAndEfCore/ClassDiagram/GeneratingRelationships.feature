@@ -634,7 +634,33 @@ Scenario: Generates ER relations with labels when the property name and type nam
 		
 		"""
 
-Scenario: Generates self referencing many to many relationship. WIP
+Scenario: Generates many to many relationship
+	Given this C# source code
+		"""
+		using System.Collections.Generic;
+		namespace Test
+		{
+			public class MyClassOne
+			{
+				public ICollection<MyClassTwo> AssociatedTo { get; } = [];
+			}
+			public class MyClassTwo
+			{
+				public ICollection<MyClassOne> AssociatedFrom { get; } = [];
+			}
+		}
+		"""
+	When I generate a Class diagram
+	Then I should get this generated representation
+		"""
+		classDiagram
+			class MyClassOne
+			class MyClassTwo
+			MyClassOne "*" <--> "*" MyClassTwo : associated to
+
+		"""
+
+Scenario: Generates self referencing many to many relationship.
 	Given this C# source code
 		"""
 		using System.Collections.Generic;
@@ -642,8 +668,8 @@ Scenario: Generates self referencing many to many relationship. WIP
 		{
 			public class MyClass
 			{
-				public ICollection<MyClass> MyClassesOne { get; } = [];
-				public ICollection<MyClass> MyClassesTwo { get; } = [];
+				public ICollection<MyClass> AssociatedTo { get; } = [];
+				public ICollection<MyClass> AssociatedFrom { get; } = [];
 			}
 		}
 		"""
@@ -652,8 +678,6 @@ Scenario: Generates self referencing many to many relationship. WIP
 		"""
 		classDiagram
 			class MyClass
-			MyClass *-- "*" MyClass : my classes one
-			MyClass *-- "*" MyClass : my classes two
+			MyClass "*" <--> "*" MyClass : associated to
 
 		"""
-

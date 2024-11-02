@@ -72,12 +72,35 @@ public class ClassDiagramClass : NamedType
         relationships.Add(relationShip);
     }
 
+    public void RemoveRelationship(ClassDiagramRelationship relationship) {
+        relationships?.Remove(relationship);
+    }
+
     public void RemoveBidirectionalRelationshipDuplicates()
     {
         relationships.RemoveAll(r =>
             r.RelationsshipType == ClassDiagramRelationshipType.Association &&
                 !r.IsBidirectional &&
                 r.To.Relationships.Any(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Aggregation));
+    }
+
+    public void MergeTwoOneToManyIntoOneMayToMany()
+    {
+        bool wasModified;
+        do
+        {
+            // Must use an outer loop since a self referencing many to many will modify the relationships collection and the enumeration will crash
+            wasModified = false;
+            foreach (var relationship in relationships.Where(x => x.RelationsshipType == ClassDiagramRelationshipType.Composition && !x.IsBidirectional)) {
+                var backRelationship = relationship.To.Relationships.FirstOrDefault(x => x.To == this && x.RelationsshipType == ClassDiagramRelationshipType.Composition && x != relationship);
+                if (backRelationship == null) {
+                    continue;
+                }
+                relationship.MergeAsManyToManyWith(backRelationship);
+                wasModified = true;
+                break;
+            }
+        } while (wasModified);
     }
 
     internal void PromoteMethodToExtendedClass(ClassDiagramMethod method, ClassDiagramClass classDiagramClass)

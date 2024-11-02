@@ -1,3 +1,24 @@
 {
-  "sarif-viewer.connectToGithubCodeScanning": "off"
+	"sarif-viewer.connectToGithubCodeScanning": "off",
+	"explorer.fileNesting.enabled": true,
+	"explorer.fileNesting.patterns": {
+		// shows *.feature.cs files as nested items
+		"*.feature": "${capture}.feature.cs"
+	},
+	"files.exclude": {
+		// excludes compilation result
+		"**/obj/": true,
+		"**/bin/": true
+	},
+	"cucumber.glue": [
+		// sets the location of the step definition classes
+		"src/develop/DryGen.*/Steps/**/*.cs"
+	],
+	"cucumber.features": [
+		// sets the location of the feature files
+		"src/develop/DryGen.*/Features/**/*.feature"
+  ],
+"dotnet.automaticallySyncWithActiveItem": true,
+"csharp.preview.improvedLaunchExperience": true,
+"dotnet.automaticallyCreateSolutionInWorkspace": false
 }
