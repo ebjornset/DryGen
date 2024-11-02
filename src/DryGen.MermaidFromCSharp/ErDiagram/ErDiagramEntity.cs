@@ -34,8 +34,13 @@ public class ErDiagramEntity : NamedType
 
     public void AddRelationship(ErDiagramEntity to, ErDiagramRelationshipCardinality fromCardinality, ErDiagramRelationshipCardinality toCardinality, string label, string propertyName, bool isIdentifying = false)
     {
-        var relationShip = new ErDiagramRelationship(to, fromCardinality, toCardinality, label, propertyName, isIdentifying);
-        relationships.Add(relationShip);
+        var relationship = new ErDiagramRelationship(to, fromCardinality, toCardinality, label, propertyName, isIdentifying);
+        relationships.Add(relationship);
+    }
+
+    public void RemoveRelationship(ErDiagramRelationship relationship)
+    {
+        relationships.Remove(relationship);
     }
 
     public void RemoveBidirectionalRelationshipDuplicates()
@@ -45,6 +50,25 @@ public class ErDiagramEntity : NamedType
             && string.IsNullOrEmpty(r.Label)
             && (GetRelationships().Any(x => x != r && x.To == r.To)
                 || r.To.GetRelationships().Any(x => x.To == this)));
+    }
+
+public void MergeTwoOneToManyIntoOneMayToMany()
+    {
+        bool wasModified;
+        do
+        {
+            // Must use an outer loop since a self referencing many to many will modify the relationships collection and the enumeration will crash
+            wasModified = false;
+            foreach (var relationship in relationships.Where(x => x.FromCardinality == ErDiagramRelationshipCardinality.ExactlyOne && x.ToCardinality == ErDiagramRelationshipCardinality.ZeroOrMore && ! x.IsIdenifying)) {
+                var backRelationship = relationship.To.Relationships.FirstOrDefault(x => x.To == this && x.FromCardinality == ErDiagramRelationshipCardinality.ExactlyOne && x.ToCardinality == ErDiagramRelationshipCardinality.ZeroOrMore && ! x.IsIdenifying && x != relationship);
+                if (backRelationship == null) {
+                    continue;
+                }
+                relationship.MergeAsManyToManyWith(backRelationship);
+                wasModified = true;
+                break;
+            }
+        } while (wasModified);
     }
 
     protected override bool IsRelatedTo(IDiagramType type)
