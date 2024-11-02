@@ -104,6 +104,26 @@ Scenario: Print usage to console error without exception stacktrace info when --
 	And I should find the text " at " in console error
 	But I should not find the text "NB! You can also add --include-exception-stacktrace to get the stack trace for the exception" in console error
 
+Scenario: Print usage to console error without exception stacktrace info when --include-exception-stacktrace is used and an exception is thrown from verbs-from-options-file
+# Uses an invalid verb in options-from-commandline to trigger an exception
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: options-from-commandline
+		  options:
+		    verb: invalid-verb
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+		| --include-exception-stacktrace |
+	Then I should get exit code '1'
+	And I should find the text "ERROR:" in console error
+	And I should find the text "Rerun the command with --help to get more help information" in console error
+	And I should find the text " at " in console error
+	But I should not find the text "NB! You can also add --include-exception-stacktrace to get the stack trace for the exception" in console error
+
 Scenario: Print usage to console error without exception stacktrace info when an well known exception is thrown
 Given this .Net depts json input file
 		"""

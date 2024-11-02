@@ -273,10 +273,7 @@ public class Generator
 
     private int GenerateOptionsFromCommandline(OptionsFromCommandlineOptions options, string[] args)
     {
-        return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "dry-gen options", options =>
-        {
-            return OptionsFromCommandlineGenerator.Generate(options);
-        });
+        return ExecuteWithOptionsFromFileExceptionHandlingAndHelpDisplay(options, args, "dry-gen options", OptionsFromCommandlineGenerator.Generate);
     }
 
     private int GenerateVerbsFromOptionsFile(VerbsFromOptionsFileOptions options)
@@ -284,53 +281,33 @@ public class Generator
         return ExecuteWithExceptionHandlingAndHelpDisplay(options, options =>
         {
             var optionsDocuments = VerbsFromOptionsFileOptionsDocumentsBuilder.BuildOptionsDocuments(options);
-            GenerateFromOptionsDocuments(optionsDocuments);
-            return 0;
+            return GenerateFromOptionsDocuments(optionsDocuments);
         });
     }
 
-    private void GenerateFromOptionsDocuments(IEnumerable<VerbsFromOptionsFileOptionsDocument> optionsDocuments)
+    private int GenerateFromOptionsDocuments(IEnumerable<VerbsFromOptionsFileOptionsDocument> optionsDocuments)
     {
+        var exitCode = 0;
         foreach (var optionsDocument in optionsDocuments)
         {
-            switch (optionsDocument.GetConfiguration().Verb)
-            {
-                case Constants.CsharpFromJsonSchema.Verb:
-                    GenerateCSharpFromJsonSchema(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<CSharpFromJsonSchemaOptions>(), Array.Empty<string>());
-                    break;
-
-                case Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb:
-                    GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidC4ComponentDiagramFromDotnetDepsJsonOptions>(), Array.Empty<string>());
-                    break;
-
-                case Constants.MermaidClassDiagramFromCsharp.Verb:
-                    GenerateMermaidClassDiagramFromCsharp(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidClassDiagramFromCsharpOptions>(), Array.Empty<string>());
-                    break;
-
-                case Constants.MermaidClassDiagramFromJsonSchema.Verb:
-                    GenerateMermaidClassDiagramFromJsonSchema(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidClassDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
-                    break;
-
-                case Constants.MermaidErDiagramFromCsharp.Verb:
-                    GenerateMermaidErDiagramFromCsharp(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidErDiagramFromCsharpOptions>(), Array.Empty<string>());
-                    break;
-
-                case Constants.MermaidErDiagramFromEfCore.Verb:
-                    GenerateMermaidErDiagramFromEfCore(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidErDiagramFromEfCoreOptions>(), Array.Empty<string>());
-                    break;
-
-                case Constants.MermaidErDiagramFromJsonSchema.Verb:
-                    GenerateMermaidErDiagramFromJsonSchema(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidErDiagramFromJsonSchemaOptions>(), Array.Empty<string>());
-                    break;
-
-                case Constants.OptionsFromCommandline.Verb:
-                    GenerateOptionsFromCommandline(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<OptionsFromCommandlineOptions>(), Array.Empty<string>());
-                    break;
-
-                default:
-                    throw new OptionsException($"Unsupported verb '{optionsDocument.GetConfiguration().Verb}' in document #{optionsDocument.DocumentNumber}");
+            var currentIterationExitCode = 0;
+			currentIterationExitCode = optionsDocument.GetConfiguration().Verb switch
+			{
+				Constants.CsharpFromJsonSchema.Verb => GenerateCSharpFromJsonSchema(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<CSharpFromJsonSchemaOptions>(), []),
+				Constants.MermaidC4ComponentDiagramFromDotnetDepsJson.Verb => GenerateMermaidC4ComponentDiagramFromDotnetDepsJson(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidC4ComponentDiagramFromDotnetDepsJsonOptions>(), []),
+				Constants.MermaidClassDiagramFromCsharp.Verb => GenerateMermaidClassDiagramFromCsharp(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidClassDiagramFromCsharpOptions>(), []),
+				Constants.MermaidClassDiagramFromJsonSchema.Verb => GenerateMermaidClassDiagramFromJsonSchema(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidClassDiagramFromJsonSchemaOptions>(), []),
+				Constants.MermaidErDiagramFromCsharp.Verb => GenerateMermaidErDiagramFromCsharp(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidErDiagramFromCsharpOptions>(), []),
+				Constants.MermaidErDiagramFromEfCore.Verb => GenerateMermaidErDiagramFromEfCore(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidErDiagramFromEfCoreOptions>(), []),
+				Constants.MermaidErDiagramFromJsonSchema.Verb => GenerateMermaidErDiagramFromJsonSchema(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<MermaidErDiagramFromJsonSchemaOptions>(), []),
+				Constants.OptionsFromCommandline.Verb => GenerateOptionsFromCommandline(optionsDocument.GetConfiguration().GetOptions().AsNonNullOptions<OptionsFromCommandlineOptions>(), []),
+				_ => throw new OptionsException($"Unsupported verb '{optionsDocument.GetConfiguration().Verb}' in document #{optionsDocument.DocumentNumber}"),
+			};
+			if (currentIterationExitCode > 0) {
+                exitCode = currentIterationExitCode;
             }
         }
+        return exitCode;
     }
 
     private TOptions GetOptionsFromFileWithCommandlineOptionsAsOverrides<TOptions>(TOptions commandlineOptions, string[] args) where TOptions : CommonOptions
