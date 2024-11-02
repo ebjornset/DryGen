@@ -19,9 +19,14 @@ public class ErDiagramRelationship
     }
 
     public ErDiagramEntity To { get; }
-    public ErDiagramRelationshipCardinality FromCardinality { get; }
+    public ErDiagramRelationshipCardinality FromCardinality { get; private set; }
     public ErDiagramRelationshipCardinality ToCardinality { get; }
     public string Label { get; }
     internal string PropertyName { get; }
     public bool IsIdenifying { get; }
+
+    public void MergeAsManyToManyWith(ErDiagramRelationship backRelationship) {
+        FromCardinality = ErDiagramRelationshipCardinality.ZeroOrMore;
+        To.RemoveRelationship(backRelationship);
+    }
 }

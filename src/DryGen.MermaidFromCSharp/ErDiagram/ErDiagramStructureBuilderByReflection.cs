@@ -36,7 +36,8 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
                     var genericArgumentPropertyType = propertyType.GetGenericArguments()[0];
                     if (entityLookup.TryGetValue(genericArgumentPropertyType, out var toEntity))
                     {
-                        entity.AddRelationship(toEntity, ErDiagramRelationshipCardinality.ExactlyOne, ErDiagramRelationshipCardinality.ZeroOrMore, string.Empty, property.Name);
+                        var label = property.Name.Contains(toEntity.Name) ? string.Empty : property.Name.ToNormalizedRelationshipLabel();
+                        entity.AddRelationship(toEntity, ErDiagramRelationshipCardinality.ExactlyOne, ErDiagramRelationshipCardinality.ZeroOrMore, label, property.Name);
                     }
                 }
                 else if (property.IsErDiagramAttributePropertyType())
@@ -55,6 +56,10 @@ public class ErDiagramStructureBuilderByReflection : TypeLoaderByReflection, IEr
         foreach (var entity in entities.Reverse())
         {
             entity.RemoveBidirectionalRelationshipDuplicates();
+        }
+        foreach (var entity in entities)
+        {
+            entity.MergeTwoOneToManyIntoOneMayToMany();
         }
         enumEntities.AppendToEntities(entities);
     }

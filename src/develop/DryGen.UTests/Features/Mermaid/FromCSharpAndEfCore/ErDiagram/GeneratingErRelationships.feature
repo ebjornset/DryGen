@@ -366,7 +366,7 @@ Scenario: Generates many to many relationship with only one property in the key
 		"""
 Examples:
 	| Structure builder |
-	#| Reflection        |
+	| Reflection        |
 	| EfCore            |
 
 Scenario: Generates many to many relationship with several properties in the key
@@ -412,7 +412,7 @@ Scenario: Generates many to many relationship with several properties in the key
 		"""
 Examples:
 	| Structure builder |
-	#| Reflection        |
+	| Reflection        |
 	| EfCore            |
 
 Scenario: Generates self referencing many to many relationship with only one property in the key
@@ -444,7 +444,7 @@ Scenario: Generates self referencing many to many relationship with only one pro
 		"""
 Examples:
 	| Structure builder |
-	#| Reflection        |
+	| Reflection        |
 	| EfCore            |
 
 Scenario: Generates self referencing many to many relationship with several properties in the key
@@ -482,5 +482,5 @@ Scenario: Generates self referencing many to many relationship with several prop
 		"""
 Examples:
 	| Structure builder |
-	#| Reflection        |
+	| Reflection        |
 	| EfCore            |
