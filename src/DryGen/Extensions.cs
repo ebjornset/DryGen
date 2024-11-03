@@ -70,7 +70,7 @@ public static class Extensions
         var optionsTypes = typeof(Extensions).Assembly.GetTypes().Where(type => VerbAttributeMatches(type, verb)).ToList();
         if (optionsTypes.Count == 0)
         {
-            throw new OptionsException($"Unknown verb '{nameof(verb)}'");
+            throw new OptionsException($"Unknown verb '{verb}'");
         }
         return optionsTypes.Single();
     }

@@ -85,6 +85,9 @@ internal static class VerbsFromOptionsFileOptionsDocumentsBuilder
                 throw new OptionsException($"'configuration.options' is mandatory in document #{documentNumber}");
             }
             optionsDocument.DocumentNumber = documentNumber;
+            if (options.IncludeExceptionStackTrace) {
+                optionsDocument.GetConfiguration().GetOptions().AsNonNull().IncludeExceptionStackTrace = true;
+            }
             optionsDocuments.Add(optionsDocument);
             yamlParser.TryConsume<DocumentEnd>(out _);
         }

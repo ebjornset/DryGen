@@ -125,6 +125,22 @@ Scenario: Should fail for unknown 'verb' in a yaml document with 'options'
 	Then I should get exit code '1'
 	And I should find the text "Unknown 'verb' in document #1" in console error
 
+Scenario: Should fail when executing a 'verb' fails
+# Uses an invalid verb in options-from-commandline to trigger an exception
+	Given this content as an options file
+	# The commandline arguments -f <this filename> will be appended to the command line
+		"""
+		configuration:
+		  verb: options-from-commandline
+		  options:
+		    verb: invalid-verb
+		"""
+	When I call the program with this command line arguments
+		| Arg                     |
+		| verbs-from-options-file |
+	Then I should get exit code '1'
+	And I should find the text "Unknown verb 'invalid-verb'" in console error
+
 Scenario: Should generate output with the verb 'mermaid-c4component-diagram-from-dotnet-deps-json' in the options file
 	Given this content as an options file
 	# The commandline arguments -f <this filename> will be appended to the command line
