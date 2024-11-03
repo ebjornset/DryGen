@@ -32,10 +32,14 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.TAG_VERSION_TOKEN }}
-      - name: Setup .Net 8.0.*
+      - name: Setup .Net 8.0.403
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.*
+          dotnet-version: 8.0.403
+      - name: Setup .Net 9.0.100-rc.2.24474.11
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.100-rc.2.24474.11
       - name: 'Cache: .nuke/temp, ~/.nuget/packages'
         uses: actions/cache@v4
         with:

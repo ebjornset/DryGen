@@ -6,8 +6,27 @@
   "name": "dry-gen: Generate C# code from json schema before build",
   "shortName": "dry-gen.jsonschema",
   "sourceName": "DryGen.Templates.JsonSchema",
+  "preferNameDirectory": true,
   "tags": {
     "language": "C#",
     "type": "project"
-  }
+  },
+	"symbols": {
+		"framework": {
+			"type": "parameter",
+			"datatype": "choice",
+			"defaultValue": "net9.0",
+			"choices": [
+				{
+					"choice": "net8.0",
+					"description": "Target .Net 8"
+				},
+				{
+					"choice": "net9.0",
+					"description": "Target .Net 9"
+				}
+			],
+			"replaces": "net8.0;net9.0"
+		}
+	}
 }

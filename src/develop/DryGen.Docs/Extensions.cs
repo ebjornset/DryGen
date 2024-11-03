@@ -108,37 +108,51 @@ public static class Extensions
 	{
 		var versionNumber = releaseNotesFileName.GetVersionNumber();
 		var versionNumberParts = versionNumber.Split('.');
-		if (versionNumberParts.Length < 3 || versionNumberParts.Length > 4)
+		if (versionNumberParts.Length != 3)
 		{
-			ThrowVersionNuUmberException();
+			ThrowVersionNumberException(releaseNotesFileName, versionNumber);
 		}
 		for (var i = 0; i < versionNumberParts.Length; i++)
 		{
-			if (versionNumberParts.Length == 4 && i == 2)
+			if (i == 2)
 			{
 				var patchParts = versionNumberParts[i].Split('-');
-				if (patchParts.Length != 2)
-				{
-					ThrowVersionNuUmberException();
+				if (patchParts.Length > 1) {
+					if (patchParts.Length > 2)
+					{
+						ThrowVersionNumberException(releaseNotesFileName, versionNumber);
+					}
+					if (patchParts[1].Length < 5) {
+						ThrowVersionNumberException(releaseNotesFileName, versionNumber);
+					}
+					CheckInteger(patchParts[1][^4..], releaseNotesFileName, versionNumber);
+					CheckNonInteger(patchParts[1].Substring(patchParts[1].Length -5, 1), releaseNotesFileName, versionNumber);
+					continue;
 				}
-				CheckInteger(patchParts[0]);
-				continue;
 			}
-			CheckInteger(versionNumberParts[i]);
+			CheckInteger(versionNumberParts[i], releaseNotesFileName, versionNumber);
 		}
+	}
 
-		void CheckInteger(string value)
+	private static void CheckInteger(string value, string releaseNotesFileName, string versionNumber)
+	{
+		if (!int.TryParse(value, out _))
 		{
-			if (!int.TryParse(value, out _))
-			{
-				ThrowVersionNuUmberException();
-			}
+			ThrowVersionNumberException(releaseNotesFileName, versionNumber);
 		}
+	}
 
-		void ThrowVersionNuUmberException()
+	private static void CheckNonInteger(string value, string releaseNotesFileName, string versionNumber)
+	{
+		if (int.TryParse(value, out _))
 		{
-			throw new FileNameException(releaseNotesFileName, $"'{versionNumber}' is not a valid version number. {validVersionNumberText}");
+			ThrowVersionNumberException(releaseNotesFileName, versionNumber);
 		}
+	}
+
+	private static void ThrowVersionNumberException(string releaseNotesFileName, string versionNumber)
+	{
+		throw new FileNameException(releaseNotesFileName, $"'{versionNumber}' is not a valid version number. {validVersionNumberText}");
 	}
 
 	private static void ValidateExtensionLengthAndV(this string releaseNotesFileName)
@@ -183,6 +197,6 @@ public static class Extensions
 	private const string nextReleaseFileNamePrefix = "yyyy-MM-dd";
 	private const string nextReleaseFileName = "yyyy-MM-dd-v-x.y.z.md";
 	private const string validFileNameText = "The file name must be 'yyyy-MM-dd-v-x.y.z.md' or on the format '<yyyy-MM-dd>-v-<x.y.z>.md', where <yyyy-MM-dd> is a date (NB! Not in the future) and <x.y.z> is a valid version number!";
-	private const string validVersionNumberText = "It must be on the format a[.b[.c[-<prerelease name>.d]]], where a, b, c and d are integers and <prerelease name> describes the prerelease, e.g. 'alpha', 'beta' or 'prerelease'";
+	private const string validVersionNumberText = "It must be on the format a[.b[.c[-<prerelease name>dddd]]], where a, b and c are integers and <prerelease name> describes the prerelease, e.g. 'alpha', 'beta' or 'prerelease', and dddd is a four digit integer";
 	private static readonly int nextReleaseFileNameLength = nextReleaseFileName.Length;
 }

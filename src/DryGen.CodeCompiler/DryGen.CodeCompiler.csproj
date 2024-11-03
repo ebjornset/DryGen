@@ -1,11 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0-3.final" />
+		<!-- Fix for "error NU1903: Warning As Error: Package 'System.Net.Http' 4.3.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-7jgj-8wvc-jh57 " begin -->
+		<PackageReference Include="System.Net.Http" Version="4.3.4" />
+		<!-- Fix for "error NU1903: Warning As Error: Package 'System.Net.Http' 4.3.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-7jgj-8wvc-jh57 " end -->
+		<!-- Fix for "error NU1903: Warning As Error: Package 'System.Text.RegularExpressions' 4.3.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-cmhx-cq75-c4mj " begin -->
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+		<!-- Fix for "error NU1903: Warning As Error: Package 'System.Text.RegularExpressions' 4.3.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-cmhx-cq75-c4mj " end -->
 	</ItemGroup>
 
 	<ItemGroup>
