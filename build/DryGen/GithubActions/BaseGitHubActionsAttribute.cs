@@ -17,7 +17,7 @@ public abstract class BaseGitHubActionsAttribute : GitHubActionsAttribute
     {
         var job = base.GetJobs(image, relevantTargets);
         var newSteps = new List<GitHubActionsStep>(job.Steps);
-        foreach (var version in new[] { "8.0.*" })
+        foreach (var version in new[] {"9.0.100-rc.2.24474.11", "8.0.403" })
         {
             newSteps.Insert(1, new SetupDotNetStep(version));
         }

@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
-		<TargetFrameworks>net8.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 		<PackageId>dry-gen.templates</PackageId>
 		<Title>DryGen Templates</Title>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -30,16 +30,16 @@
 	-->
 	<Target Name="BuildTemplates" BeforeTargets="Build">
 		<Message Text="Building template DryGen.Templates.JsonSchema" Importance="High" />
-		<Exec Command="dotnet build ./templates/DryGen.Templates.JsonSchema/  --configuration $(Configuration)" />
+		<Exec Command="dotnet build ./templates/DryGen.Templates.JsonSchema/  --configuration $(Configuration) --framework net9.0" Condition="'$(TargetFramework)' == 'net9.0'"/>
 		<Message Text="Building template DryGen.Templates.Mermaid" Importance="High" />
-		<Exec Command="dotnet build ./templates/DryGen.Templates.Mermaid/  --configuration $(Configuration)" />
+		<Exec Command="dotnet build ./templates/DryGen.Templates.Mermaid/  --configuration $(Configuration) --framework net9.0" Condition="'$(TargetFramework)' == 'net9.0'"/>
 	</Target>
 
 	<Target Name="CleanTemplates" AfterTargets="Clean">
 		<Message Text="Cleaning template DryGen.Templates.JsonSchema" Importance="High" />
-		<Exec Command="dotnet clean ./templates/DryGen.Templates.JsonSchema/  --configuration $(Configuration)" />
+		<Exec Command="dotnet clean ./templates/DryGen.Templates.JsonSchema/  --configuration $(Configuration) --framework net9.0" Condition="'$(TargetFramework)' == 'net9.0'"/>
 		<Message Text="Cleaning template DryGen.Templates.Mermaid" Importance="High" />
-		<Exec Command="dotnet clean ./templates/DryGen.Templates.Mermaid/  --configuration $(Configuration)" />
+		<Exec Command="dotnet clean ./templates/DryGen.Templates.Mermaid/  --configuration $(Configuration) --framework net9.0" Condition="'$(TargetFramework)' == 'net9.0'"/>
 	</Target>
 
 </Project>
