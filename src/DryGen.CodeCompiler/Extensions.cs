@@ -17,7 +17,7 @@ public static class Extensions
         using var ms = new MemoryStream();
         csharpCode.CompileCodeToStream(assemblyName, ms, referencedAssemblies);
         ms.Seek(0, SeekOrigin.Begin);
-        Assembly assembly = Assembly.Load(ms.ToArray());
+        var assembly = Assembly.Load(ms.ToArray());
         return assembly;
     }
 
@@ -55,12 +55,12 @@ public static class Extensions
             syntaxTrees: new[] { syntaxTree },
             references: references,
             options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-        EmitResult compilationResult = compilation.Emit(stream);
-        ThrowExceptionIfCompilationFailed(compilationResult);
+        var compilationResult = compilation.Emit(stream);
+        compilationResult.ThrowExceptionIfCompilationFailed();
     }
 
     [ExcludeFromCodeCoverage] //This should in theory never happen in a normal test run, only when we develop new tests that compiles C# code
-    private static void ThrowExceptionIfCompilationFailed(EmitResult compilationResult)
+    private static void ThrowExceptionIfCompilationFailed(this EmitResult compilationResult)
     {
         if (!compilationResult.Success)
         {
