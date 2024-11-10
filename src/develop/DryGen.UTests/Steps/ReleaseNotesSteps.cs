@@ -4,6 +4,7 @@ using System.IO;
 using Reqnroll;
 using DryGen.DevUtils.Helpers;
 using FluentAssertions;
+using DryGen.Core;
 
 namespace DryGen.UTests.Steps;
 

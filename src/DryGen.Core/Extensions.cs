@@ -78,4 +78,10 @@ public static class Extensions
 		ArgumentNullException.ThrowIfNull(value);
 		return value;
 	}
+
+	public static string AsLinuxPath(this string path)
+	{
+		return path.Replace("\\", "/");
+	}
+
 }

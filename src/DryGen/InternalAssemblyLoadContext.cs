@@ -12,15 +12,15 @@ internal class InternalAssemblyLoadContext : AssemblyLoadContext
 
 	private AssemblyLoadContext AssemblyLoadContext => useAssemblyLoadContextDefault ? Default : this;
 
-	internal InternalAssemblyLoadContext(string inputFile, bool useAssemblyLoadContextDefault)
+	internal InternalAssemblyLoadContext(string inputFile, bool useAssemblyLoadContextDefault, AspNetCoreSharedFolderResolver aspNetCoreSharedFolderResolver)
 	{
 		this.inputFile = inputFile;
 		this.useAssemblyLoadContextDefault = useAssemblyLoadContextDefault;
 		var inputDirectory = Path.GetDirectoryName(inputFile) ?? throw new OptionsException($"Could not determine directory from inputFile '{inputFile}'");
-		var runtimeDirectory = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
-		var aspNetCoreDirectoryApp = runtimeDirectory.Replace("Microsoft.NETCore.App", "Microsoft.AspNetCore.App");
-		var aspNetCoreDirectoryAll = runtimeDirectory.Replace("Microsoft.NETCore.App", "Microsoft.AspNetCore.All");
-		searchDirectories = new[] { inputDirectory, aspNetCoreDirectoryApp, aspNetCoreDirectoryAll, runtimeDirectory };
+		var aspNetCoreDirectoryApp = aspNetCoreSharedFolderResolver.Resolve();
+		searchDirectories = string.IsNullOrEmpty(aspNetCoreDirectoryApp)
+			? [inputDirectory, aspNetCoreSharedFolderResolver.DotNetRuntimeDirectory]
+			: [inputDirectory, aspNetCoreDirectoryApp, aspNetCoreSharedFolderResolver.DotNetRuntimeDirectory];
 	}
 
 	internal Assembly Load()
@@ -35,7 +35,7 @@ internal class InternalAssemblyLoadContext : AssemblyLoadContext
 	{
 		foreach (var extension in new[] { ".dll", ".exe" })
 		{
-			foreach(var loadDirectory in searchDirectories)
+			foreach (var loadDirectory in searchDirectories)
 			{
 				var assemblyFileName = $"{loadDirectory}{Path.DirectorySeparatorChar}{assemblyName.Name}{extension}";
 				if (File.Exists(assemblyFileName))
