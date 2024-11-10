@@ -46,7 +46,7 @@ public class JsonSchemaSteps
     [When(@"I load the json schema from a file forcing the schema format ""([^""]*)""")]
     public void WhenILoadTheJsonSchemaFromAFileForcingTheSchemaFormat(string forcedSchemaFormat)
     {
-        var jsonSchemaFileFormat = (JsonSchemaFileFormat)Enum.Parse(typeof(JsonSchemaFileFormat), forcedSchemaFormat, true);
+        var jsonSchemaFileFormat = Enum.Parse<JsonSchemaFileFormat>(forcedSchemaFormat, true);
         CreateAndLoadTestJsonFile("forced", jsonSchemaFileFormat);
     }
 

@@ -43,13 +43,13 @@ public sealed class ErDiagramGeneratorSteps
     [Given(@"the Er diagram attribute type exclusion '([^']*)'")]
     public void GivenTheErDiagramAttributeTypeExclusion(string typeExclusion)
     {
-        generatorHooks.ErDiagramAttributeTypeExclusion = (ErDiagramAttributeTypeExclusion)Enum.Parse(typeof(ErDiagramAttributeTypeExclusion), typeExclusion);
+        generatorHooks.ErDiagramAttributeTypeExclusion = Enum.Parse<ErDiagramAttributeTypeExclusion>(typeExclusion);
     }
 
     [Given(@"the Er diagram relationship exclusion '([^']*)'")]
     public void GivenTheErDiagramRelationshipExclusion(string level)
     {
-        generatorHooks.ErDiagrErDiagramRelationshipTypeExclusion = (ErDiagramRelationshipTypeExclusion)Enum.Parse(typeof(ErDiagramRelationshipTypeExclusion), level);
+        generatorHooks.ErDiagrErDiagramRelationshipTypeExclusion = Enum.Parse<ErDiagramRelationshipTypeExclusion>(level);
     }
 
     [When(@"I generate an ER diagram using reflection")]
@@ -81,7 +81,7 @@ public sealed class ErDiagramGeneratorSteps
     [When(@"I generate an ER diagram using '([^']*)'")]
     public void WhenIGenerateAnERDiagramUsing(string structureBuilder)
     {
-        var structureBuilderType = (ErStructureBuilderType)Enum.Parse(typeof(ErStructureBuilderType), structureBuilder);
+        var structureBuilderType = Enum.Parse<ErStructureBuilderType>(structureBuilder);
         if (structureBuilderType == ErStructureBuilderType.Reflection)
         {
             WhenIGenerateAnERDiagramUsingReflection();
