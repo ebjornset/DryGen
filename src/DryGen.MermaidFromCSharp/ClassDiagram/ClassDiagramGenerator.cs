@@ -94,7 +94,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         return classDiagramClasses.Except(removedExtensionClasses).ToArray();
     }
 
-    private static void GenerateClassAssociationsCompositionsAndAggregations(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
+    private static void GenerateClassAssociationsCompositionsAndAggregations(Dictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
     {
         foreach (var property in classDiagramClass.Type.GetProperties(
             BindingFlags.Instance |
@@ -179,7 +179,7 @@ public class ClassDiagramGenerator : IClassDiagramGenerator
         }
     }
 
-    private static void GenerateClassInheritanceForBaseType(IDictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
+    private static void GenerateClassInheritanceForBaseType(Dictionary<Type, ClassDiagramClass> classLookup, ClassDiagramClass classDiagramClass)
     {
         if (classDiagramClass.Type.IsInterface)
         {

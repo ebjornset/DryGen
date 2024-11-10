@@ -57,10 +57,7 @@ public static class CSharpFromJsonSchemaGenerator
     {
         // Hack to get rid of the syntetic $schema property we must use if we want additionalProperties = false in the topmost object
         const string schemaPropertyName = "$schema";
-        if (jsonSchema.Properties.ContainsKey(schemaPropertyName))
-        {
-            jsonSchema.Properties.Remove(schemaPropertyName);
-        }
+        jsonSchema.Properties.Remove(schemaPropertyName);
     }
 
     private static async Task<JsonSchema> LoadJsonSchemaFromFile(string? jsonSchemaFileName, JsonSchemaFileFormat jsonSchemaFileFormat)

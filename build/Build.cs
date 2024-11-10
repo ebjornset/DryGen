@@ -118,12 +118,15 @@ public partial class Build : NukeBuild
 		.Produces(UnitTestsResultsDirectory)
 		.Executes(() =>
 		{
-			DotNetTest(c => c
-				.SetConfiguration(Configuration)
-				.EnableNoBuild()
-				.SetDataCollector("XPlat Code Coverage;Format=opencover")
-				.CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
-					settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
+			foreach (var dotNetVersion in DotNetVersions) {
+				DotNetTest(c => c
+					.SetConfiguration(Configuration)
+					.SetFramework(dotNetVersion)
+					.EnableNoBuild()
+					.SetDataCollector("XPlat Code Coverage;Format=opencover")
+					.CombineWith(SourceDirectory.GlobFiles("**/*.UTests.csproj"), (settings, path) =>
+						settings.SetProjectFile(path)), degreeOfParallelism: 4, completeOnFailure: true);
+			}
 		});
 
 	internal Target Pack => _ => _
@@ -200,16 +203,19 @@ public partial class Build : NukeBuild
 					 .SetConfigFile(Path.Combine(Path.Combine(workingDirectory, "Properties"), "NuGet.Config"))
 								 );
 				 // Run the ITests in "dotnet tool" mode
-				 DotNetTest(c => c
-					 .SetConfiguration(Configuration)
-					 .EnableNoBuild()
-					 .SetDataCollector("XPlat Code Coverage;Format=opencover")
-					 .CombineWith(SourceDirectory.GlobFiles("**/*.ITests.csproj"), (settings, path) =>
-						 settings
-							 .SetProjectFile(path)
-								 .SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.RunAsTool", "some value")
-								 .SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.WorkingDirectory", workingDirectory))
-					 , degreeOfParallelism: 4, completeOnFailure: true);
+				 foreach (var dotNetVersion in DotNetVersions) {
+					DotNetTest(c => c
+						.SetConfiguration(Configuration)
+						.SetFramework(dotNetVersion)
+						.EnableNoBuild()
+						.SetDataCollector("XPlat Code Coverage;Format=opencover")
+						.CombineWith(SourceDirectory.GlobFiles("**/*.ITests.csproj"), (settings, path) =>
+							settings
+								.SetProjectFile(path)
+									.SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.RunAsTool", "some value")
+									.SetProcessEnvironmentVariable("DryGen.ITests.ToolInvocationSteps.WorkingDirectory", workingDirectory))
+						, degreeOfParallelism: 4, completeOnFailure: true);
+				 }
 			 });
 
 	internal Target GenerateDocs => _ => _
@@ -445,4 +451,5 @@ public partial class Build : NukeBuild
 	private const string PwshVersion = "7.4.5";
 	private const string DocfxPackageName = "docfx";
 	private const string DocfxVersion = "2.77.0";
+	private readonly string[] DotNetVersions = ["net8.0", "net9.0"];
 }

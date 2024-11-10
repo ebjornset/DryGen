@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using DryGen.Core;
 
 namespace DryGen.Docs;
 
@@ -66,11 +67,6 @@ public static class Extensions
 	public static string AsGeneratedVerbsDirectoryCreated(this string rootDirectory)
 	{
 		return Path.Combine(rootDirectory.AsGeneratedDirectory(), "verbs").AsLinuxPath().CreateDirectories();
-	}
-
-	public static string AsLinuxPath(this string path)
-	{
-		return path.Replace("\\", "/");
 	}
 
 	public static string AsRelativePathOf(this string directory, string rootDirectory)

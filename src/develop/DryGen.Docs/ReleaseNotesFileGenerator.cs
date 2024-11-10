@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using DryGen.Core;
 
 namespace DryGen.Docs;
 

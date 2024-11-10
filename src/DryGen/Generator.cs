@@ -421,7 +421,7 @@ public class Generator
         {
             throw new OptionsException("Input file must be specified as the option -i/--input-file on the command line, or as input-file in the option file.");
         }
-        return new InternalAssemblyLoadContext(inputFile, useAssemblyLoadContextDefault).Load();
+        return new InternalAssemblyLoadContext(inputFile, useAssemblyLoadContextDefault, new AspNetCoreSharedFolderResolver()).Load();
     }
 
     private static TreeShakingDiagramFilter GetMermaidDiagramTreeShakingFilter(IEnumerable<string>? treeShakingRoots)
