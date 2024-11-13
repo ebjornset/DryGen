@@ -17,10 +17,10 @@
 		<PackageDownload Include="dotnet-sonarscanner" Version="[8.0.3]" />
 		<PackageDownload Include="GitVersion.Tool" Version="[5.10.3]" />
 		<!-- Fix for https://security.snyk.io/vuln/SNYK-DOTNET-SYSTEMFORMATSASN1-7443633 - begin -->
-		<PackageReference Include="System.Formats.Asn1" Version="9.0.0-rc.2.24473.5" />
+		<PackageReference Include="System.Formats.Asn1" Version="9.0.0" />
 		<!-- Fix for https://security.snyk.io/vuln/SNYK-DOTNET-SYSTEMFORMATSASN1-7443633 - end -->
 		<!-- Fix for "System.PlatformNotSupportedException: BinaryFormatter serialization and deserialization have been removed" - begin -->
-		<PackageReference Include="System.Runtime.Serialization.Formatters" Version="9.0.0-rc.2.24473.5" />
+		<PackageReference Include="System.Runtime.Serialization.Formatters" Version="9.0.0" />
 		<!-- Fix for "System.PlatformNotSupportedException: BinaryFormatter serialization and deserialization have been removed" - end -->
 	</ItemGroup>
 
